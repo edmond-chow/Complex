@@ -15,7 +15,7 @@ namespace ComplexTestingConsole
 		///
 		/// Base
 		///
-		static const wchar_t* TestingConsole[];
+		static constexpr const wchar_t* TestingConsole[] { L"Exit", L"Complex Testing Console", L"Quaternion Testing Console", L"Octonion Testing Console" };
 		static std::size_t Index;
 	public:
 		static std::wstring GetTitle();
@@ -45,7 +45,6 @@ namespace ComplexTestingConsole
 	///
 	/// Base
 	///
-	const wchar_t* Base::TestingConsole[]{ L"Exit", L"Complex Testing Console", L"Quaternion Testing Console", L"Octonion Testing Console"};
 	std::size_t Base::Index{ std::extent_v<decltype(Base::TestingConsole)> - 1 };
 	std::wstring Base::GetTitle() { return TestingConsole[Index]; };
 	std::wstring Base::GetStartupLine()
