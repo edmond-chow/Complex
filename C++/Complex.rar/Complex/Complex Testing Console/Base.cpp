@@ -45,7 +45,7 @@ namespace ComplexTestingConsole
 	///
 	/// Base
 	///
-	std::size_t Base::Index{ std::extent_v<decltype(Base::TestingConsole)> - 1 };
+	std::size_t Base::Index = std::extent_v<decltype(Base::TestingConsole)> - 1;
 	std::wstring Base::GetTitle() { return TestingConsole[Index]; };
 	std::wstring Base::GetStartupLine()
 	{
