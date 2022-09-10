@@ -1,0 +1,410 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|ARM">
+      <Configuration>Debug</Configuration>
+      <Platform>ARM</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|ARM">
+      <Configuration>Release</Configuration>
+      <Platform>ARM</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|ARM64">
+      <Configuration>Debug</Configuration>
+      <Platform>ARM64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|ARM64">
+      <Configuration>Release</Configuration>
+      <Platform>ARM64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x86">
+      <Configuration>Debug</Configuration>
+      <Platform>x86</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x86">
+      <Configuration>Release</Configuration>
+      <Platform>x86</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{8ff6caa4-b6bf-4814-9ecd-2b47c7cf9f7d}</ProjectGuid>
+    <Keyword>Linux</Keyword>
+    <RootNamespace>Complex_Testing_Console</RootNamespace>
+    <MinimumVisualStudioVersion>15.0</MinimumVisualStudioVersion>
+    <ApplicationType>Linux</ApplicationType>
+    <ApplicationTypeRevision>1.0</ApplicationTypeRevision>
+    <TargetLinuxPlatform>Generic</TargetLinuxPlatform>
+    <LinuxProjectType>{2238F9CD-F817-4ECC-BD14-2524D2669B35}</LinuxProjectType>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'" Label="Configuration">
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <RemoteRootDir>~/projects/$(SolutionName)</RemoteRootDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'" Label="Configuration">
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <RemoteRootDir>~/projects/$(SolutionName)</RemoteRootDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'" Label="Configuration">
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <RemoteRootDir>~/projects/$(SolutionName)</RemoteRootDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'" Label="Configuration">
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <RemoteRootDir>~/projects/$(SolutionName)</RemoteRootDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <RemoteRootDir>~/projects/$(SolutionName)</RemoteRootDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <RemoteRootDir>~/projects/$(SolutionName)</RemoteRootDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'" Label="Configuration">
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <RemoteRootDir>~/projects/$(SolutionName)</RemoteRootDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'" Label="Configuration">
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <RemoteRootDir>~/projects/$(SolutionName)</RemoteRootDir>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings" />
+  <ImportGroup Label="Shared" />
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
+    <OutDir>$(ProjectDir)\bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)\obj\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
+    <OutDir>$(ProjectDir)\bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)\obj\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
+    <OutDir>$(ProjectDir)\bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)\obj\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
+    <OutDir>$(ProjectDir)\bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)\obj\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>$(ProjectDir)\bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)\obj\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>$(ProjectDir)\bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)\obj\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
+    <OutDir>$(ProjectDir)\bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)\obj\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
+    <OutDir>$(ProjectDir)\bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)\obj\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemGroup>
+    <ClCompile Include="Base Extension.cpp" />
+    <ClCompile Include="Base.cpp" />
+    <ClCompile Include="Module.cpp" />
+    <ClCompile Include="Module2.cpp" />
+    <ClCompile Include="Module3.cpp" />
+    <ClCompile Include="SedenionMod.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Base Extension.h" />
+    <ClInclude Include="Base.h" />
+    <ClInclude Include="Module.h" />
+    <ClInclude Include="Module2.h" />
+    <ClInclude Include="Module3.h" />
+    <ClInclude Include="SedenionMod.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="icons8-browse-page.ico" />
+  </ItemGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
+    <ClCompile>
+      <PreprocessorDefinitions>ARM;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)\Complex\export\;$(SolutionDir)\Complex 2.0\export\;$(SolutionDir)\Complex 3.0\export\;$(SolutionDir)\Sedenion\export\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <CppLanguageStandard>c++20</CppLanguageStandard>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>$(SolutionDir)\Complex\bin\$(Platform)\$(Configuration)\;$(SolutionDir)\Complex 2.0\bin\$(Platform)\$(Configuration)\;$(SolutionDir)\Complex 3.0\bin\$(Platform)\$(Configuration)\;$(SolutionDir)\Sedenion\bin\$(Platform)\$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <LibraryDependencies>Complex;Complex 2.0;Complex 3.0;Sedenion;%(LibraryDependencies)</LibraryDependencies>
+    </Link>
+    <PreBuildEvent>
+      <Command>copy /Y "$(SolutionDir)\Complex\bin\$(Platform)\$(Configuration)\libComplex.so" "$(OutDir)\libComplex.so"
+copy /Y "$(SolutionDir)\Complex 2.0\bin\$(Platform)\$(Configuration)\libComplex 2.0.so" "$(OutDir)\libComplex 2.0.so"
+copy /Y "$(SolutionDir)\Complex 3.0\bin\$(Platform)\$(Configuration)\libComplex 3.0.so" "$(OutDir)\libComplex 3.0.so"
+copy /Y "$(SolutionDir)\Sedenion\bin\$(Platform)\$(Configuration)\libSedenion.so" "$(OutDir)\libSedenion.so"
+</Command>
+      <AdditionalSourcesToCopyMapping>
+      </AdditionalSourcesToCopyMapping>
+    </PreBuildEvent>
+    <PostBuildEvent>
+      <AdditionalSourcesToCopyMapping>$(SolutionDir)\Complex\bin\$(Platform)\$(Configuration)\libComplex.so:=projects/$(SolutionName)/$(ProjectName)/bin/$(Platform)/$(Configuration)/libComplex.so;$(SolutionDir)\Complex 2.0\bin\$(Platform)\$(Configuration)\libComplex 2.0.so:=projects/$(SolutionName)/$(ProjectName)/bin/$(Platform)/$(Configuration)/libComplex 2.0.so;$(SolutionDir)\Complex 3.0\bin\$(Platform)\$(Configuration)\libComplex 3.0.so:=projects/$(SolutionName)/$(ProjectName)/bin/$(Platform)/$(Configuration)/libComplex 3.0.so;$(SolutionDir)\Sedenion\bin\$(Platform)\$(Configuration)\libSedenion.so:=projects/$(SolutionName)/$(ProjectName)/bin/$(Platform)/$(Configuration)/libSedenion.so</AdditionalSourcesToCopyMapping>
+    </PostBuildEvent>
+    <RemotePreBuildEvent>
+      <Command>
+      </Command>
+      <AdditionalSourcesToCopyMapping>
+      </AdditionalSourcesToCopyMapping>
+    </RemotePreBuildEvent>
+    <RemotePostBuildEvent>
+      <AdditionalSourcesToCopyMapping>
+      </AdditionalSourcesToCopyMapping>
+    </RemotePostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
+    <ClCompile>
+      <PreprocessorDefinitions>ARM64;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)\Complex\export\;$(SolutionDir)\Complex 2.0\export\;$(SolutionDir)\Complex 3.0\export\;$(SolutionDir)\Sedenion\export\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <CppLanguageStandard>c++20</CppLanguageStandard>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>$(SolutionDir)\Complex\bin\$(Platform)\$(Configuration)\;$(SolutionDir)\Complex 2.0\bin\$(Platform)\$(Configuration)\;$(SolutionDir)\Complex 3.0\bin\$(Platform)\$(Configuration)\;$(SolutionDir)\Sedenion\bin\$(Platform)\$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <LibraryDependencies>Complex;Complex 2.0;Complex 3.0;Sedenion;%(LibraryDependencies)</LibraryDependencies>
+    </Link>
+    <PreBuildEvent>
+      <Command>copy /Y "$(SolutionDir)\Complex\bin\$(Platform)\$(Configuration)\libComplex.so" "$(OutDir)\libComplex.so"
+copy /Y "$(SolutionDir)\Complex 2.0\bin\$(Platform)\$(Configuration)\libComplex 2.0.so" "$(OutDir)\libComplex 2.0.so"
+copy /Y "$(SolutionDir)\Complex 3.0\bin\$(Platform)\$(Configuration)\libComplex 3.0.so" "$(OutDir)\libComplex 3.0.so"
+copy /Y "$(SolutionDir)\Sedenion\bin\$(Platform)\$(Configuration)\libSedenion.so" "$(OutDir)\libSedenion.so"
+</Command>
+      <AdditionalSourcesToCopyMapping>
+      </AdditionalSourcesToCopyMapping>
+    </PreBuildEvent>
+    <PostBuildEvent>
+      <AdditionalSourcesToCopyMapping>$(SolutionDir)\Complex\bin\$(Platform)\$(Configuration)\libComplex.so:=projects/$(SolutionName)/$(ProjectName)/bin/$(Platform)/$(Configuration)/libComplex.so;$(SolutionDir)\Complex 2.0\bin\$(Platform)\$(Configuration)\libComplex 2.0.so:=projects/$(SolutionName)/$(ProjectName)/bin/$(Platform)/$(Configuration)/libComplex 2.0.so;$(SolutionDir)\Complex 3.0\bin\$(Platform)\$(Configuration)\libComplex 3.0.so:=projects/$(SolutionName)/$(ProjectName)/bin/$(Platform)/$(Configuration)/libComplex 3.0.so;$(SolutionDir)\Sedenion\bin\$(Platform)\$(Configuration)\libSedenion.so:=projects/$(SolutionName)/$(ProjectName)/bin/$(Platform)/$(Configuration)/libSedenion.so</AdditionalSourcesToCopyMapping>
+    </PostBuildEvent>
+    <RemotePreBuildEvent>
+      <Command>
+      </Command>
+      <AdditionalSourcesToCopyMapping>
+      </AdditionalSourcesToCopyMapping>
+    </RemotePreBuildEvent>
+    <RemotePostBuildEvent>
+      <AdditionalSourcesToCopyMapping>
+      </AdditionalSourcesToCopyMapping>
+    </RemotePostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PreprocessorDefinitions>X64;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)\Complex\export\;$(SolutionDir)\Complex 2.0\export\;$(SolutionDir)\Complex 3.0\export\;$(SolutionDir)\Sedenion\export\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <CppLanguageStandard>c++20</CppLanguageStandard>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>$(SolutionDir)\Complex\bin\$(Platform)\$(Configuration)\;$(SolutionDir)\Complex 2.0\bin\$(Platform)\$(Configuration)\;$(SolutionDir)\Complex 3.0\bin\$(Platform)\$(Configuration)\;$(SolutionDir)\Sedenion\bin\$(Platform)\$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <LibraryDependencies>Complex;Complex 2.0;Complex 3.0;Sedenion;%(LibraryDependencies)</LibraryDependencies>
+    </Link>
+    <PreBuildEvent>
+      <Command>copy /Y "$(SolutionDir)\Complex\bin\$(Platform)\$(Configuration)\libComplex.so" "$(OutDir)\libComplex.so"
+copy /Y "$(SolutionDir)\Complex 2.0\bin\$(Platform)\$(Configuration)\libComplex 2.0.so" "$(OutDir)\libComplex 2.0.so"
+copy /Y "$(SolutionDir)\Complex 3.0\bin\$(Platform)\$(Configuration)\libComplex 3.0.so" "$(OutDir)\libComplex 3.0.so"
+copy /Y "$(SolutionDir)\Sedenion\bin\$(Platform)\$(Configuration)\libSedenion.so" "$(OutDir)\libSedenion.so"
+</Command>
+      <AdditionalSourcesToCopyMapping>
+      </AdditionalSourcesToCopyMapping>
+    </PreBuildEvent>
+    <PostBuildEvent>
+      <AdditionalSourcesToCopyMapping>$(SolutionDir)\Complex\bin\$(Platform)\$(Configuration)\libComplex.so:=projects/$(SolutionName)/$(ProjectName)/bin/$(Platform)/$(Configuration)/libComplex.so;$(SolutionDir)\Complex 2.0\bin\$(Platform)\$(Configuration)\libComplex 2.0.so:=projects/$(SolutionName)/$(ProjectName)/bin/$(Platform)/$(Configuration)/libComplex 2.0.so;$(SolutionDir)\Complex 3.0\bin\$(Platform)\$(Configuration)\libComplex 3.0.so:=projects/$(SolutionName)/$(ProjectName)/bin/$(Platform)/$(Configuration)/libComplex 3.0.so;$(SolutionDir)\Sedenion\bin\$(Platform)\$(Configuration)\libSedenion.so:=projects/$(SolutionName)/$(ProjectName)/bin/$(Platform)/$(Configuration)/libSedenion.so</AdditionalSourcesToCopyMapping>
+    </PostBuildEvent>
+    <RemotePreBuildEvent>
+      <Command>
+      </Command>
+      <AdditionalSourcesToCopyMapping>
+      </AdditionalSourcesToCopyMapping>
+    </RemotePreBuildEvent>
+    <RemotePostBuildEvent>
+      <AdditionalSourcesToCopyMapping>
+      </AdditionalSourcesToCopyMapping>
+    </RemotePostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
+    <ClCompile>
+      <PreprocessorDefinitions>X86;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)\Complex\export\;$(SolutionDir)\Complex 2.0\export\;$(SolutionDir)\Complex 3.0\export\;$(SolutionDir)\Sedenion\export\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <CppLanguageStandard>c++20</CppLanguageStandard>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>$(SolutionDir)\Complex\bin\$(Platform)\$(Configuration)\;$(SolutionDir)\Complex 2.0\bin\$(Platform)\$(Configuration)\;$(SolutionDir)\Complex 3.0\bin\$(Platform)\$(Configuration)\;$(SolutionDir)\Sedenion\bin\$(Platform)\$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <LibraryDependencies>Complex;Complex 2.0;Complex 3.0;Sedenion;%(LibraryDependencies)</LibraryDependencies>
+    </Link>
+    <PreBuildEvent>
+      <Command>copy /Y "$(SolutionDir)\Complex\bin\$(Platform)\$(Configuration)\libComplex.so" "$(OutDir)\libComplex.so"
+copy /Y "$(SolutionDir)\Complex 2.0\bin\$(Platform)\$(Configuration)\libComplex 2.0.so" "$(OutDir)\libComplex 2.0.so"
+copy /Y "$(SolutionDir)\Complex 3.0\bin\$(Platform)\$(Configuration)\libComplex 3.0.so" "$(OutDir)\libComplex 3.0.so"
+copy /Y "$(SolutionDir)\Sedenion\bin\$(Platform)\$(Configuration)\libSedenion.so" "$(OutDir)\libSedenion.so"
+</Command>
+      <AdditionalSourcesToCopyMapping>
+      </AdditionalSourcesToCopyMapping>
+    </PreBuildEvent>
+    <PostBuildEvent>
+      <AdditionalSourcesToCopyMapping>$(SolutionDir)\Complex\bin\$(Platform)\$(Configuration)\libComplex.so:=projects/$(SolutionName)/$(ProjectName)/bin/$(Platform)/$(Configuration)/libComplex.so;$(SolutionDir)\Complex 2.0\bin\$(Platform)\$(Configuration)\libComplex 2.0.so:=projects/$(SolutionName)/$(ProjectName)/bin/$(Platform)/$(Configuration)/libComplex 2.0.so;$(SolutionDir)\Complex 3.0\bin\$(Platform)\$(Configuration)\libComplex 3.0.so:=projects/$(SolutionName)/$(ProjectName)/bin/$(Platform)/$(Configuration)/libComplex 3.0.so;$(SolutionDir)\Sedenion\bin\$(Platform)\$(Configuration)\libSedenion.so:=projects/$(SolutionName)/$(ProjectName)/bin/$(Platform)/$(Configuration)/libSedenion.so</AdditionalSourcesToCopyMapping>
+    </PostBuildEvent>
+    <RemotePreBuildEvent>
+      <Command>
+      </Command>
+      <AdditionalSourcesToCopyMapping>
+      </AdditionalSourcesToCopyMapping>
+    </RemotePreBuildEvent>
+    <RemotePostBuildEvent>
+      <AdditionalSourcesToCopyMapping>
+      </AdditionalSourcesToCopyMapping>
+    </RemotePostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
+    <ClCompile>
+      <PreprocessorDefinitions>ARM;RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)\Complex\export\;$(SolutionDir)\Complex 2.0\export\;$(SolutionDir)\Complex 3.0\export\;$(SolutionDir)\Sedenion\export\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <CppLanguageStandard>c++20</CppLanguageStandard>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>$(SolutionDir)\Complex\bin\$(Platform)\$(Configuration)\;$(SolutionDir)\Complex 2.0\bin\$(Platform)\$(Configuration)\;$(SolutionDir)\Complex 3.0\bin\$(Platform)\$(Configuration)\;$(SolutionDir)\Sedenion\bin\$(Platform)\$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <LibraryDependencies>Complex;Complex 2.0;Complex 3.0;Sedenion;%(LibraryDependencies)</LibraryDependencies>
+    </Link>
+    <PreBuildEvent>
+      <Command>copy /Y "$(SolutionDir)\Complex\bin\$(Platform)\$(Configuration)\libComplex.so" "$(OutDir)\libComplex.so"
+copy /Y "$(SolutionDir)\Complex 2.0\bin\$(Platform)\$(Configuration)\libComplex 2.0.so" "$(OutDir)\libComplex 2.0.so"
+copy /Y "$(SolutionDir)\Complex 3.0\bin\$(Platform)\$(Configuration)\libComplex 3.0.so" "$(OutDir)\libComplex 3.0.so"
+copy /Y "$(SolutionDir)\Sedenion\bin\$(Platform)\$(Configuration)\libSedenion.so" "$(OutDir)\libSedenion.so"
+</Command>
+      <AdditionalSourcesToCopyMapping>
+      </AdditionalSourcesToCopyMapping>
+    </PreBuildEvent>
+    <PostBuildEvent>
+      <AdditionalSourcesToCopyMapping>$(SolutionDir)\Complex\bin\$(Platform)\$(Configuration)\libComplex.so:=projects/$(SolutionName)/$(ProjectName)/bin/$(Platform)/$(Configuration)/libComplex.so;$(SolutionDir)\Complex 2.0\bin\$(Platform)\$(Configuration)\libComplex 2.0.so:=projects/$(SolutionName)/$(ProjectName)/bin/$(Platform)/$(Configuration)/libComplex 2.0.so;$(SolutionDir)\Complex 3.0\bin\$(Platform)\$(Configuration)\libComplex 3.0.so:=projects/$(SolutionName)/$(ProjectName)/bin/$(Platform)/$(Configuration)/libComplex 3.0.so;$(SolutionDir)\Sedenion\bin\$(Platform)\$(Configuration)\libSedenion.so:=projects/$(SolutionName)/$(ProjectName)/bin/$(Platform)/$(Configuration)/libSedenion.so</AdditionalSourcesToCopyMapping>
+    </PostBuildEvent>
+    <RemotePreBuildEvent>
+      <Command>
+      </Command>
+      <AdditionalSourcesToCopyMapping>
+      </AdditionalSourcesToCopyMapping>
+    </RemotePreBuildEvent>
+    <RemotePostBuildEvent>
+      <AdditionalSourcesToCopyMapping>
+      </AdditionalSourcesToCopyMapping>
+    </RemotePostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
+    <ClCompile>
+      <PreprocessorDefinitions>ARM64;RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)\Complex\export\;$(SolutionDir)\Complex 2.0\export\;$(SolutionDir)\Complex 3.0\export\;$(SolutionDir)\Sedenion\export\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <CppLanguageStandard>c++20</CppLanguageStandard>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>$(SolutionDir)\Complex\bin\$(Platform)\$(Configuration)\;$(SolutionDir)\Complex 2.0\bin\$(Platform)\$(Configuration)\;$(SolutionDir)\Complex 3.0\bin\$(Platform)\$(Configuration)\;$(SolutionDir)\Sedenion\bin\$(Platform)\$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <LibraryDependencies>Complex;Complex 2.0;Complex 3.0;Sedenion;%(LibraryDependencies)</LibraryDependencies>
+    </Link>
+    <PreBuildEvent>
+      <Command>copy /Y "$(SolutionDir)\Complex\bin\$(Platform)\$(Configuration)\libComplex.so" "$(OutDir)\libComplex.so"
+copy /Y "$(SolutionDir)\Complex 2.0\bin\$(Platform)\$(Configuration)\libComplex 2.0.so" "$(OutDir)\libComplex 2.0.so"
+copy /Y "$(SolutionDir)\Complex 3.0\bin\$(Platform)\$(Configuration)\libComplex 3.0.so" "$(OutDir)\libComplex 3.0.so"
+copy /Y "$(SolutionDir)\Sedenion\bin\$(Platform)\$(Configuration)\libSedenion.so" "$(OutDir)\libSedenion.so"
+</Command>
+      <AdditionalSourcesToCopyMapping>
+      </AdditionalSourcesToCopyMapping>
+    </PreBuildEvent>
+    <PostBuildEvent>
+      <AdditionalSourcesToCopyMapping>$(SolutionDir)\Complex\bin\$(Platform)\$(Configuration)\libComplex.so:=projects/$(SolutionName)/$(ProjectName)/bin/$(Platform)/$(Configuration)/libComplex.so;$(SolutionDir)\Complex 2.0\bin\$(Platform)\$(Configuration)\libComplex 2.0.so:=projects/$(SolutionName)/$(ProjectName)/bin/$(Platform)/$(Configuration)/libComplex 2.0.so;$(SolutionDir)\Complex 3.0\bin\$(Platform)\$(Configuration)\libComplex 3.0.so:=projects/$(SolutionName)/$(ProjectName)/bin/$(Platform)/$(Configuration)/libComplex 3.0.so;$(SolutionDir)\Sedenion\bin\$(Platform)\$(Configuration)\libSedenion.so:=projects/$(SolutionName)/$(ProjectName)/bin/$(Platform)/$(Configuration)/libSedenion.so</AdditionalSourcesToCopyMapping>
+    </PostBuildEvent>
+    <RemotePreBuildEvent>
+      <Command>
+      </Command>
+      <AdditionalSourcesToCopyMapping>
+      </AdditionalSourcesToCopyMapping>
+    </RemotePreBuildEvent>
+    <RemotePostBuildEvent>
+      <AdditionalSourcesToCopyMapping>
+      </AdditionalSourcesToCopyMapping>
+    </RemotePostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <PreprocessorDefinitions>X64;RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)\Complex\export\;$(SolutionDir)\Complex 2.0\export\;$(SolutionDir)\Complex 3.0\export\;$(SolutionDir)\Sedenion\export\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <CppLanguageStandard>c++20</CppLanguageStandard>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>$(SolutionDir)\Complex\bin\$(Platform)\$(Configuration)\;$(SolutionDir)\Complex 2.0\bin\$(Platform)\$(Configuration)\;$(SolutionDir)\Complex 3.0\bin\$(Platform)\$(Configuration)\;$(SolutionDir)\Sedenion\bin\$(Platform)\$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <LibraryDependencies>Complex;Complex 2.0;Complex 3.0;Sedenion;%(LibraryDependencies)</LibraryDependencies>
+    </Link>
+    <PreBuildEvent>
+      <Command>copy /Y "$(SolutionDir)\Complex\bin\$(Platform)\$(Configuration)\libComplex.so" "$(OutDir)\libComplex.so"
+copy /Y "$(SolutionDir)\Complex 2.0\bin\$(Platform)\$(Configuration)\libComplex 2.0.so" "$(OutDir)\libComplex 2.0.so"
+copy /Y "$(SolutionDir)\Complex 3.0\bin\$(Platform)\$(Configuration)\libComplex 3.0.so" "$(OutDir)\libComplex 3.0.so"
+copy /Y "$(SolutionDir)\Sedenion\bin\$(Platform)\$(Configuration)\libSedenion.so" "$(OutDir)\libSedenion.so"
+</Command>
+      <AdditionalSourcesToCopyMapping>
+      </AdditionalSourcesToCopyMapping>
+    </PreBuildEvent>
+    <PostBuildEvent>
+      <AdditionalSourcesToCopyMapping>$(SolutionDir)\Complex\bin\$(Platform)\$(Configuration)\libComplex.so:=projects/$(SolutionName)/$(ProjectName)/bin/$(Platform)/$(Configuration)/libComplex.so;$(SolutionDir)\Complex 2.0\bin\$(Platform)\$(Configuration)\libComplex 2.0.so:=projects/$(SolutionName)/$(ProjectName)/bin/$(Platform)/$(Configuration)/libComplex 2.0.so;$(SolutionDir)\Complex 3.0\bin\$(Platform)\$(Configuration)\libComplex 3.0.so:=projects/$(SolutionName)/$(ProjectName)/bin/$(Platform)/$(Configuration)/libComplex 3.0.so;$(SolutionDir)\Sedenion\bin\$(Platform)\$(Configuration)\libSedenion.so:=projects/$(SolutionName)/$(ProjectName)/bin/$(Platform)/$(Configuration)/libSedenion.so</AdditionalSourcesToCopyMapping>
+    </PostBuildEvent>
+    <RemotePreBuildEvent>
+      <Command>
+      </Command>
+      <AdditionalSourcesToCopyMapping>
+      </AdditionalSourcesToCopyMapping>
+    </RemotePreBuildEvent>
+    <RemotePostBuildEvent>
+      <AdditionalSourcesToCopyMapping>
+      </AdditionalSourcesToCopyMapping>
+    </RemotePostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
+    <ClCompile>
+      <PreprocessorDefinitions>X86;RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)\Complex\export\;$(SolutionDir)\Complex 2.0\export\;$(SolutionDir)\Complex 3.0\export\;$(SolutionDir)\Sedenion\export\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <CppLanguageStandard>c++20</CppLanguageStandard>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>$(SolutionDir)\Complex\bin\$(Platform)\$(Configuration)\;$(SolutionDir)\Complex 2.0\bin\$(Platform)\$(Configuration)\;$(SolutionDir)\Complex 3.0\bin\$(Platform)\$(Configuration)\;$(SolutionDir)\Sedenion\bin\$(Platform)\$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <LibraryDependencies>Complex;Complex 2.0;Complex 3.0;Sedenion;%(LibraryDependencies)</LibraryDependencies>
+    </Link>
+    <PreBuildEvent>
+      <Command>copy /Y "$(SolutionDir)\Complex\bin\$(Platform)\$(Configuration)\libComplex.so" "$(OutDir)\libComplex.so"
+copy /Y "$(SolutionDir)\Complex 2.0\bin\$(Platform)\$(Configuration)\libComplex 2.0.so" "$(OutDir)\libComplex 2.0.so"
+copy /Y "$(SolutionDir)\Complex 3.0\bin\$(Platform)\$(Configuration)\libComplex 3.0.so" "$(OutDir)\libComplex 3.0.so"
+copy /Y "$(SolutionDir)\Sedenion\bin\$(Platform)\$(Configuration)\libSedenion.so" "$(OutDir)\libSedenion.so"
+</Command>
+      <AdditionalSourcesToCopyMapping>
+      </AdditionalSourcesToCopyMapping>
+    </PreBuildEvent>
+    <PostBuildEvent>
+      <AdditionalSourcesToCopyMapping>$(SolutionDir)\Complex\bin\$(Platform)\$(Configuration)\libComplex.so:=projects/$(SolutionName)/$(ProjectName)/bin/$(Platform)/$(Configuration)/libComplex.so;$(SolutionDir)\Complex 2.0\bin\$(Platform)\$(Configuration)\libComplex 2.0.so:=projects/$(SolutionName)/$(ProjectName)/bin/$(Platform)/$(Configuration)/libComplex 2.0.so;$(SolutionDir)\Complex 3.0\bin\$(Platform)\$(Configuration)\libComplex 3.0.so:=projects/$(SolutionName)/$(ProjectName)/bin/$(Platform)/$(Configuration)/libComplex 3.0.so;$(SolutionDir)\Sedenion\bin\$(Platform)\$(Configuration)\libSedenion.so:=projects/$(SolutionName)/$(ProjectName)/bin/$(Platform)/$(Configuration)/libSedenion.so</AdditionalSourcesToCopyMapping>
+    </PostBuildEvent>
+    <RemotePreBuildEvent>
+      <Command>
+      </Command>
+      <AdditionalSourcesToCopyMapping>
+      </AdditionalSourcesToCopyMapping>
+    </RemotePreBuildEvent>
+    <RemotePostBuildEvent>
+      <AdditionalSourcesToCopyMapping>
+      </AdditionalSourcesToCopyMapping>
+    </RemotePostBuildEvent>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets" />
+</Project>
