@@ -1,10 +1,10 @@
 #include <algorithm>
 #include <numeric>
-inline bool is_number(std::size_t n) noexcept
+constexpr bool is_factor(std::size_t n) noexcept
 {
 	if (n == 1) { return true; }
 	else if (n == 0 || (n >> 1 << 1 != n)) { return false; }
-	return is_number(n >> 1);
+	return is_factor(n >> 1);
 };
 class Factor
 {
@@ -19,11 +19,21 @@ public:
 	constexpr Factor(const double* data, std::size_t size)
 		: data{ new double[size] {} }, size{ size }
 	{
+		if (!is_factor(size))
+		{
+			delete[] this->data;
+			throw std::invalid_argument("\"size\" must be a number which is 2 to the power of a natural number.");
+		}
 		std::copy(data, data + size, this->data);
 	};
 	constexpr Factor(const std::initializer_list<double>& init)
 		: data{ new double[init.size()] {} }, size{ init.size() }
 	{
+		if (!is_factor(init.size()))
+		{
+			delete[] data;
+			throw std::invalid_argument("\"size\" must be a number which is 2 to the power of a natural number.");
+		}
 		std::copy(init.begin(), init.end(), data);
 	};
 	constexpr Factor(const Factor& Value)
