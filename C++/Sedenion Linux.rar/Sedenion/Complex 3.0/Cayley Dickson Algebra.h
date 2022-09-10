@@ -41,7 +41,7 @@ private:
 		return Number<sizeof...(I)>{ data[O + I]... };
 	};
 	template <std::size_t... I> requires (N == sizeof...(I))
-	static constexpr Number<2 * N> merga_impl(const Number<N>& Union, const Number<N>& Value, std::integer_sequence<std::size_t, I...>) noexcept
+	static constexpr Number<2 * N> merge_impl(const Number<N>& Union, const Number<N>& Value, std::integer_sequence<std::size_t, I...>) noexcept
 	{
 		return Number<2 * N>{ Union[I]..., Value[I]... };
 	};
@@ -86,9 +86,9 @@ public:
 	{
 		return get(std::integral_constant<std::size_t, H>{}, std::make_index_sequence<H>{});
 	};
-	static constexpr Number<2 * N> merga(const Number<N>& Union, const Number<N>& Value) noexcept
+	static constexpr Number<2 * N> merge(const Number<N>& Union, const Number<N>& Value) noexcept
 	{
-		return merga_impl(Union, Value, std::make_index_sequence<N>{});
+		return merge_impl(Union, Value, std::make_index_sequence<N>{});
 	};
 	static constexpr Number<N> mul(double Union, const Number<N>& Value) noexcept
 	{
@@ -131,7 +131,7 @@ constexpr Number<N> operator *(const Number<N>& Union, const Number<N>& Value) n
 	if constexpr (N == 1) { return Number<1>{ Union[0] * Value[0] }; }
 	else
 	{
-		return Number<N / 2>::merga(
+		return Number<N / 2>::merge(
 			Union.left() * Value.left() - ~Value.right() * Union.right(),
 			Value.right() * Union.left() + Union.right() * ~Value.left()
 		);

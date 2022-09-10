@@ -55,7 +55,7 @@ public:
 		return *this;
 	};
 	constexpr ~Factor() noexcept { delete[] data; };
-	static Factor merga(const Factor& Left, const Factor& Right)
+	static Factor merge(const Factor& Left, const Factor& Right)
 	{
 		std::size_t Size = Left.size + Right.size;
 		double* Temp = new double[Size] {};
@@ -112,10 +112,21 @@ constexpr Factor operator +(const Factor& Union, const Factor& Value)
 constexpr Factor operator -(const Factor& Union, const Factor& Value) { return Union + (-Value); };
 constexpr Factor operator *(const Factor& Union, const Factor& Value) noexcept
 {
+	std::size_t SizeMid = Union.get_size();
+	std::size_t SizeLast = Value.get_size();
+	if (SizeMid > SizeLast) { return Value * Union; }
+	if (SizeMid < SizeLast)
+	{
+		double* Temp = new double[SizeLast] {};
+		std::copy(Union.get_data(), Union.get_data() + Union.get_size(), Temp);
+		Factor Output{ Temp, SizeLast };
+		delete[] Temp;
+		return Output * Value;
+	}
 	if (Union.get_size() == 1) { return Factor{Union[0] * Value[0]}; }
 	else
 	{
-		return Factor::merga(
+		return Factor::merge(
 			Union.left() * Value.left() - ~Value.right() * Union.right(),
 			Value.right() * Union.left() + Union.right() * ~Value.left()
 		);
