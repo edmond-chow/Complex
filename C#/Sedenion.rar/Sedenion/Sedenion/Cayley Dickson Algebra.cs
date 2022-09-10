@@ -89,7 +89,7 @@ namespace Seden
                 return new Number(this.Skip(Length / 2).ToArray());
             }
         }
-        public static Number Merga(Number Union, Number Value)
+        public static Number Merge(Number Union, Number Value)
         {
             if (Union.LongLength != Value.LongLength) { throw new NotImplementedException(); }
             return new Number(Enumerable.Concat(Union, Value).ToArray());
@@ -110,7 +110,7 @@ namespace Seden
         {
             if (Union.LongLength != Value.LongLength) { throw new NotImplementedException(); }
             if (Union.LongLength == 1) { return new Number(Union[0] * Value[0]); }
-            return Merga(
+            return Merge(
                 Union.Left * Value.Left - ~Value.Right * Union.Right,
                 Value.Right * Union.Left + Union.Right * ~Value.Left
             );
