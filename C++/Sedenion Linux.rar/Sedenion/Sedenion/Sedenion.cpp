@@ -478,7 +478,7 @@ namespace Seden
 	{
 		if (Value.empty()) { throw std::invalid_argument("The string is empty."); }
 		std::size_t Dimension = 0;
-		std::wregex Regex(L"e\\d+");
+		std::wregex Regex(L"e\\d+(?=-|\\+|$)");
 		std::wstring TheString = Value;
 		std::wsmatch Match;
 		while (std::regex_search(TheString, Match, Regex))
