@@ -210,7 +210,7 @@ namespace Seden
         public static string CType_String(Sedenion Value) { return Value.ToString(); }
         public static Sedenion CType_Sedenion(string Value)
         {
-            MatchCollection Matches = new Regex("e\\d+").Matches(Value);
+            MatchCollection Matches = new Regex("e\\d+(?=-|\\+|$)").Matches(Value);
             if (Matches.Count == 0) { throw new NotImplementedException(); }
             long Dimension = 0;
             for (int i = 0; i < Matches.Count; ++i)

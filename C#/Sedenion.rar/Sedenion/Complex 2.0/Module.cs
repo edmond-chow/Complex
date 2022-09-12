@@ -6,7 +6,7 @@ namespace Cmplx2
 {
     internal static class Module
     {
-        private static readonly string RealRegExp = @"(-|\+|)(\d+)(\.\d+|)(E(-|\+|)(\d+)|)";
+        private static readonly string RealRegExp = @"(-|\+|)(\d+)(\.\d+|)([Ee](-|\+|)(\d+)|)";
         private static readonly string NotOthers = @"(-|\+|$)";
         internal static string ToString(this double[] Numbers, params string[] Terms)
         {
