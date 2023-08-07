@@ -225,7 +225,6 @@ namespace Cmplx
 		};
 		Vector1D CMPLX_FUNC_CALL Vector1D::CType_Vector1D(const std::wstring& Value)
 		{
-			if (Value.empty()) { throw std::invalid_argument("The string is empty."); }
 			Vector1D Object;
 			ToNumbers(Value, Object[index::e1], L"e1");
 			return Object;
@@ -668,7 +667,6 @@ namespace Cmplx
 		};
 		Complex CMPLX_FUNC_CALL Complex::CType_Complex(const std::wstring& Value)
 		{
-			if (Value.empty()) { throw std::invalid_argument("The string is empty."); }
 			Complex Object;
 			ToNumbers(Value, Object[index::s], L"", Object[index::i], L"i");
 			return Object;
