@@ -255,7 +255,6 @@ namespace Cmplx3
 		};
 		Vector7D CMPLX3_FUNC_CALL Vector7D::CType_Vector7D(const std::wstring& Value)
 		{
-			if (Value.empty()) { throw std::invalid_argument("The string is empty."); }
 			Vector7D Object;
 			ToNumbers(Value, Object[index::e1], L"e1", Object[index::e2], L"e2", Object[index::e3], L"e3", Object[index::e4], L"e4", Object[index::e5], L"e5", Object[index::e6], L"e6", Object[index::e7], L"e7");
 			return Object;
@@ -736,7 +735,6 @@ namespace Cmplx3
 		};
 		Octonion CMPLX3_FUNC_CALL Octonion::CType_Octonion(const std::wstring& Value)
 		{
-			if (Value.empty()) { throw std::invalid_argument("The string is empty."); }
 			Octonion Object;
 			ToNumbers(Value, Object[index::s], L"", Object[index::i], L"i", Object[index::j], L"j", Object[index::k], L"k", Object[index::l], L"l", Object[index::il], L"il", Object[index::jl], L"jl", Object[index::kl], L"kl");
 			return Object;

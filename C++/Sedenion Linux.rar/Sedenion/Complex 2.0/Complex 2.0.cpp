@@ -219,7 +219,6 @@ namespace Cmplx2
 		};
 		Vector3D CMPLX2_FUNC_CALL Vector3D::CType_Vector3D(const std::wstring& Value)
 		{
-			if (Value.empty()) { throw std::invalid_argument("The string is empty."); }
 			Vector3D Object;
 			ToNumbers(Value, Object[index::e1], L"e1", Object[index::e2], L"e2", Object[index::e3], L"e3");
 			return Object;
@@ -672,7 +671,6 @@ namespace Cmplx2
 		};
 		Quaternion CMPLX2_FUNC_CALL Quaternion::CType_Quaternion(const std::wstring& Value)
 		{
-			if (Value.empty()) { throw std::invalid_argument("The string is empty."); }
 			Quaternion Object;
 			ToNumbers(Value, Object[index::s], L"", Object[index::i], L"i", Object[index::j], L"j", Object[index::k], L"k");
 			return Object;
