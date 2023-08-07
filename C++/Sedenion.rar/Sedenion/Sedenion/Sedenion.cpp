@@ -1,6 +1,5 @@
 ﻿#include <cmath>
 #include <numbers>
-#include <stdexcept>
 #include "Module.h"
 #include "Cayley Dickson Algebra.h"
 #pragma pack(push)
@@ -500,7 +499,6 @@ namespace Seden
 	};
 	Sedenion SEDEN_FUNC_CALL Sedenion::CType_Sedenion(const std::wstring& Value)
 	{
-		if (Value.empty()) { throw std::invalid_argument("The string is empty."); }
 		std::size_t Dimension = 0;
 		std::wregex Regex(L"e\\d+(?=-|\\+|$)");
 		std::wstring TheString = Value;

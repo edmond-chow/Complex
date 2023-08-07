@@ -3,6 +3,49 @@
 #include <sstream>
 #include <tuple>
 #include <array>
+#include <functional>
+#include <stdexcept>
+template <typename CharT, typename Traits, typename Allocator, typename RegexTraits, typename FuncT>
+std::basic_string<CharT, Traits, Allocator> regex_search_and_replace(const std::basic_string<CharT, Traits, Allocator>& String, const std::basic_regex<CharT, RegexTraits>& Regex, FuncT Function) {
+	using StringT = std::basic_string<CharT, Traits, Allocator>;
+	StringT Input = String;
+	StringT Output{};
+	bool NotBol = false;
+	while (Input.empty() == false)
+	{
+		bool matched = false;
+		std::size_t Cursor = 0;
+		while (Cursor <= Input.size())
+		{
+			std::regex_constants::match_flag_type Type = std::regex_constants::match_default;
+			if (NotBol == true) {
+				Type = Type | std::regex_constants::match_not_bol;
+			}
+			if (Cursor > 0) {
+				Type = Type | std::regex_constants::match_not_eol;
+			}
+			std::match_results<typename StringT::const_iterator> Match;
+			StringT SubInput = Input.substr(0, Input.size() - Cursor);
+			if (std::regex_search(SubInput, Match, Regex, Type)) {
+				StringT Result = Match.str();
+				Output.append(Match.prefix().str()).append(Function(Result));
+				if (Result.empty() == false) {
+					Input = Match.suffix().str();
+					NotBol = true;
+					matched = true;
+				}
+				break;
+			}
+			++Cursor;
+		}
+		if (matched == false) {
+			Output.append(Input.substr(0, 1));
+			Input = Input.substr(1);
+			NotBol = true;
+		}
+	}
+	return Output;
+};
 std::wstring ToString(std::size_t Size, const double* Numbers, const std::wstring* Terms)
 {
 	std::wstringstream TheString;
@@ -73,10 +116,10 @@ void SetForValue(const std::wstring& TheValue, std::size_t Size, double* Numbers
 void ToNumbers(const std::wstring& Value, std::size_t Size, double* Numbers, const std::wstring* Terms)
 {
 	std::wstring TheValue = std::regex_replace(Value, std::wregex(L" "), L"");
-	std::wsmatch Match;
-	std::regex_search(TheValue, Match, std::wregex(GetInitTermRegexString(Size, Terms)));
-	TheValue = std::regex_replace(TheValue, std::wregex(GetInitTermRegexString(Size, Terms)), Match.str() + L"1");
-	if (!TestForValid(TheValue, Size, Terms)) { throw std::exception(); }
-	if (TheValue.length() == 0) { throw std::exception(); }
+	TheValue = regex_search_and_replace(TheValue, std::wregex(GetInitTermRegexString(Size, Terms)), [](std::wstring Match) -> std::wstring {
+		return Match + L"1";
+	});
+	if (!TestForValid(TheValue, Size, Terms)) { throw std::invalid_argument("The string is invalid."); }
+	if (TheValue.length() == 0) { throw std::invalid_argument("The string is empty."); }
 	SetForValue(TheValue, Size, Numbers, Terms);
 };
