@@ -115,7 +115,7 @@ namespace Cmplx3
         {
             public Vector7DException() : base() { }
             public Vector7DException(string message) : base(message) { }
-            public Vector7DException(string message, Vector7DException innerException) : base(message, innerException) { }
+            public Vector7DException(string message, Exception innerException) : base(message, innerException) { }
             [SecuritySafeCritical]
             protected Vector7DException(SerializationInfo info, StreamingContext context) : base(info, context) { }
         }
@@ -155,7 +155,7 @@ namespace Cmplx3
                 Vector7D RetValue = 0;
                 double[] Numbers;
                 try { Numbers = Value.ToNumbers("e1", "e2", "e3", "e4", "e5", "e6", "e7"); }
-                catch (Exception) { throw new Vector7DException("The string cannot be converted as a number."); }
+                catch (Exception Exception) { throw new Vector7DException("The string cannot be converted as a number.", Exception); }
                 RetValue[1] = Numbers[1];
                 RetValue[2] = Numbers[2];
                 RetValue[3] = Numbers[3];
@@ -259,7 +259,7 @@ namespace Cmplx3
         {
             public OctonionException() : base() { }
             public OctonionException(string message) : base(message) { }
-            public OctonionException(string message, OctonionException innerException) : base(message, innerException) { }
+            public OctonionException(string message, Exception innerException) : base(message, innerException) { }
             [SecuritySafeCritical]
             protected OctonionException(SerializationInfo info, StreamingContext context) : base(info, context) { }
         }
@@ -411,7 +411,7 @@ namespace Cmplx3
                 Octonion RetValue = 0;
                 double[] Numbers;
                 try { Numbers = Value.ToNumbers("", "i", "j", "k", "l", "il", "jl", "kl"); }
-                catch (Exception) { throw new OctonionException("The string cannot be converted as a number."); }
+                catch (Exception Exception) { throw new OctonionException("The string cannot be converted as a number.", Exception); }
                 RetValue[0] = Numbers[0];
                 RetValue[1] = Numbers[1];
                 RetValue[2] = Numbers[2];

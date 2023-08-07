@@ -90,7 +90,7 @@ namespace Cmplx
         {
             public Vector1DException() : base() { }
             public Vector1DException(string message) : base(message) { }
-            public Vector1DException(string message, Vector1DException innerException) : base(message, innerException) { }
+            public Vector1DException(string message, Exception innerException) : base(message, innerException) { }
             [SecuritySafeCritical]
             protected Vector1DException(SerializationInfo info, StreamingContext context) : base(info, context) { }
         }
@@ -124,7 +124,7 @@ namespace Cmplx
                 Vector1D RetValue = 0;
                 double[] Numbers;
                 try { Numbers = Value.ToNumbers("e1"); }
-                catch (Exception) { throw new Vector1DException("The string cannot be converted as a number."); }
+                catch (Exception Exception) { throw new Vector1DException("The string cannot be converted as a number.", Exception); }
                 RetValue[1] = Numbers[1];
                 return RetValue;
             }
@@ -222,7 +222,7 @@ namespace Cmplx
         {
             public ComplexException() : base() { }
             public ComplexException(string message) : base(message) { }
-            public ComplexException(string message, ComplexException innerException) : base(message, innerException) { }
+            public ComplexException(string message, Exception innerException) : base(message, innerException) { }
             [SecuritySafeCritical]
             protected ComplexException(SerializationInfo info, StreamingContext context) : base(info, context) { }
         }
@@ -370,7 +370,7 @@ namespace Cmplx
                 Complex RetValue = 0;
                 double[] Numbers;
                 try { Numbers = Value.ToNumbers("", "i"); }
-                catch (Exception) { throw new ComplexException("The string cannot be converted as a number."); }
+                catch (Exception Exception) { throw new ComplexException("The string cannot be converted as a number.", Exception); }
                 RetValue[0] = Numbers[0];
                 RetValue[1] = Numbers[1];
                 return RetValue;
