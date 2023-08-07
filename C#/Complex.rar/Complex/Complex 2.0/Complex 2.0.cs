@@ -99,7 +99,7 @@ namespace Cmplx2
         {
             public Vector3DException() : base() { }
             public Vector3DException(string message) : base(message) { }
-            public Vector3DException(string message, Vector3DException innerException) : base(message, innerException) { }
+            public Vector3DException(string message, Exception innerException) : base(message, innerException) { }
             [SecuritySafeCritical]
             protected Vector3DException(SerializationInfo info, StreamingContext context) : base(info, context) { }
         }
@@ -135,7 +135,7 @@ namespace Cmplx2
                 Vector3D RetValue = 0;
                 double[] Numbers;
                 try { Numbers = Value.ToNumbers("e1", "e2", "e3"); }
-                catch (Exception) { throw new Vector3DException("The string cannot be converted as a number."); }
+                catch (Exception Exception) { throw new Vector3DException("The string cannot be converted as a number.", Exception); }
                 RetValue[1] = Numbers[1];
                 RetValue[2] = Numbers[2];
                 RetValue[3] = Numbers[3];
@@ -235,7 +235,7 @@ namespace Cmplx2
         {
             public QuaternionException() : base() { }
             public QuaternionException(string message) : base(message) { }
-            public QuaternionException(string message, QuaternionException innerException) : base(message, innerException) { }
+            public QuaternionException(string message, Exception innerException) : base(message, innerException) { }
             [SecuritySafeCritical]
             protected QuaternionException(SerializationInfo info, StreamingContext context) : base(info, context) { }
         }
@@ -383,7 +383,7 @@ namespace Cmplx2
                 Quaternion RetValue = 0;
                 double[] Numbers;
                 try { Numbers = Value.ToNumbers("", "i", "j", "k"); }
-                catch (Exception) { throw new QuaternionException("The string cannot be converted as a number."); }
+                catch (Exception Exception) { throw new QuaternionException("The string cannot be converted as a number.", Exception); }
                 RetValue[0] = Numbers[0];
                 RetValue[1] = Numbers[1];
                 RetValue[2] = Numbers[2];

@@ -45,22 +45,22 @@ namespace Cmplx3
         public long LongLength { get => data.LongLength; }
         public Number(long size)
         {
-            if (!IsNumber(size)) { throw new NotImplementedException(); }
+            if (!IsNumber(size)) { throw new ArgumentException("The size must be a number which is 2 to the power of a natural number."); }
             data = new double[size];
         }
         public Number(params double[] args)
         {
-            if (!IsNumber(args.LongLength)) { throw new NotImplementedException(); }
+            if (!IsNumber(args.LongLength)) { throw new ArgumentException("The size must be a number which is 2 to the power of a natural number."); }
             data = args;
         }
         public static bool Equal(Number Union, Number Value)
         {
-            if (Union.LongLength != Value.LongLength) { throw new NotImplementedException(); }
+            if (Union.LongLength != Value.LongLength) { throw new NotImplementedException("The branch should ensure not instantiated at compile time."); }
             return Enumerable.SequenceEqual(Union, Value);
         }
         public static Number Add(Number Union, Number Value)
         {
-            if (Union.LongLength != Value.LongLength) { throw new NotImplementedException(); }
+            if (Union.LongLength != Value.LongLength) { throw new NotImplementedException("The branch should ensure not instantiated at compile time."); }
             return new Number(Enumerable.Zip(Union, Value, (double U, double V) => { return U + V; }).ToArray());
         }
         public static Number Neg(Number Value)
@@ -77,7 +77,7 @@ namespace Cmplx3
         {
             get
             {
-                if (LongLength == 1) { throw new NotImplementedException(); }
+                if (LongLength == 1) { throw new NotImplementedException("The branch should ensure not instantiated at compile time."); }
                 return new Number(this.Take(Length / 2).ToArray());
             }
         }
@@ -85,13 +85,13 @@ namespace Cmplx3
         {
             get
             {
-                if (LongLength == 1) { throw new NotImplementedException(); }
+                if (LongLength == 1) { throw new NotImplementedException("The branch should ensure not instantiated at compile time."); }
                 return new Number(this.Skip(Length / 2).ToArray());
             }
         }
         public static Number Merge(Number Union, Number Value)
         {
-            if (Union.LongLength != Value.LongLength) { throw new NotImplementedException(); }
+            if (Union.LongLength != Value.LongLength) { throw new NotImplementedException("The branch should ensure not instantiated at compile time."); }
             return new Number(Enumerable.Concat(Union, Value).ToArray());
         }
         public override bool Equals(object obj)
@@ -109,7 +109,7 @@ namespace Cmplx3
         public static Number operator *(Number Union, Number Value)
         {
             double[] doubles = Union.Where((double d) => { return true; }).ToArray();
-            if (Union.LongLength != Value.LongLength) { throw new NotImplementedException(); }
+            if (Union.LongLength != Value.LongLength) { throw new NotImplementedException("The branch should ensure not instantiated at compile time."); }
             if (Union.LongLength == 1) { return new Number(Union[0] * Value[0]); }
             return Merge(
                 Union.Left * Value.Left - ~Value.Right * Union.Right,
