@@ -22,7 +22,7 @@ public:
 		if (!is_factor(size))
 		{
 			delete[] this->data;
-			throw std::invalid_argument("\"size\" must be a number which is 2 to the power of a natural number.");
+			throw std::invalid_argument("The size must be a number which is 2 to the power of a natural number.");
 		}
 		std::copy(data, data + size, this->data);
 	};
@@ -32,7 +32,7 @@ public:
 		if (!is_factor(init.size()))
 		{
 			delete[] data;
-			throw std::invalid_argument("\"size\" must be a number which is 2 to the power of a natural number.");
+			throw std::invalid_argument("The size must be a number which is 2 to the power of a natural number.");
 		}
 		std::copy(init.begin(), init.end(), data);
 	};
