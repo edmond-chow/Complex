@@ -14,7 +14,7 @@ namespace Cmplx
             StringBuilder TheString = new StringBuilder();
             for (long i = 0; i < Numbers.LongLength; ++i)
             {
-                string Replace = Numbers[i].ToString();
+                string Replace = Numbers[i].ToString("G17");
                 if (Numbers[i] > 0)
                 {
                     if (Terms[i].Length > 0) { Replace = Regex.Replace(Replace, "^1$", ""); }
