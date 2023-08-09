@@ -1,3 +1,5 @@
+#include <cmath>
+#include <iomanip>
 #include <string>
 #include <regex>
 #include <sstream>
@@ -46,12 +48,17 @@ std::basic_string<CharT, Traits, Allocator> regex_search_and_replace(const std::
 	}
 	return Output;
 };
-std::wstring ToString(std::size_t Size, const double* Numbers, const std::wstring* Terms)
+inline std::wstring double_to_wstring(double Number) {
+	std::wstringstream TheString;
+	TheString << std::defaultfloat << std::setprecision(17) << Number;
+	return TheString.str();
+};
+inline std::wstring ToString(std::size_t Size, const double* Numbers, const std::wstring* Terms)
 {
 	std::wstringstream TheString;
 	for (std::size_t i = 0; i < Size; ++i)
 	{
-		std::wstring Replace = std::to_wstring(Numbers[i]);
+		std::wstring Replace = double_to_wstring(Numbers[i]);
 		if (Numbers[i] > 0)
 		{
 			if (Terms[i].length() > 0) { Replace = std::regex_replace(Replace, std::wregex(L"^1$"), L""); }
@@ -63,13 +70,12 @@ std::wstring ToString(std::size_t Size, const double* Numbers, const std::wstrin
 			TheString << Replace << Terms[i];
 		}
 	}
-	std::wstring RetString;
-	std::getline(TheString, RetString);
+	std::wstring RetString = TheString.str();
 	RetString = std::regex_replace(RetString, std::wregex(L"^$"), L"0");
 	RetString = std::regex_replace(RetString, std::wregex(L"^\\+"), L"");
 	return RetString;
 };
-std::wstring GetInitTermRegexString(std::size_t Size, const std::wstring* Terms)
+inline std::wstring GetInitTermRegexString(std::size_t Size, const std::wstring* Terms)
 {
 	std::wstringstream TheString;
 	TheString << L"(^|\\+|-)(";
@@ -77,9 +83,7 @@ std::wstring GetInitTermRegexString(std::size_t Size, const std::wstring* Terms)
 	{
 		if (Terms[i].length() > 0) { TheString << L"(?=" << Terms[i] << L")|"; }
 	}
-	std::wstring RetString;
-	std::getline(TheString, RetString);
-	return std::regex_replace(RetString, std::wregex(L"\\)\\|$"), L"))");
+	return std::regex_replace(TheString.str(), std::wregex(L"\\)\\|$"), L"))");
 };
 inline std::wstring GetRegexString(const std::wstring& Term, bool With)
 {
@@ -87,7 +91,7 @@ inline std::wstring GetRegexString(const std::wstring& Term, bool With)
 	static constexpr const wchar_t NotOthers[] = L"(-|\\+|$)";
 	return std::wstring().append(RealRegExp).append(With ? Term : L"").append(L"(?=").append(With ? L"" : Term).append(NotOthers).append(L")");
 };
-bool TestForValid(const std::wstring& Value, std::size_t Size, const std::wstring* Terms)
+inline bool TestForValid(const std::wstring& Value, std::size_t Size, const std::wstring* Terms)
 {
 	std::wstring Test(Value);
 	for (std::size_t i = 0; i < Size; ++i)
@@ -97,7 +101,7 @@ bool TestForValid(const std::wstring& Value, std::size_t Size, const std::wstrin
 	}
 	return Test.length() == 0;
 };
-void SetForValue(const std::wstring& TheValue, std::size_t Size, double* Numbers, const std::wstring* Terms)
+inline void SetForValue(const std::wstring& TheValue, std::size_t Size, double* Numbers, const std::wstring* Terms)
 {
 	for (std::size_t i = 0; i < Size; ++i)
 	{
@@ -113,7 +117,7 @@ void SetForValue(const std::wstring& TheValue, std::size_t Size, double* Numbers
 		Numbers[i] = Data;
 	}
 };
-void ToNumbers(const std::wstring& Value, std::size_t Size, double* Numbers, const std::wstring* Terms)
+inline void ToNumbers(const std::wstring& Value, std::size_t Size, double* Numbers, const std::wstring* Terms)
 {
 	std::wstring TheValue = std::regex_replace(Value, std::wregex(L" "), L"");
 	TheValue = regex_search_and_replace(TheValue, std::wregex(GetInitTermRegexString(Size, Terms)), [](std::wstring Match) -> std::wstring {
