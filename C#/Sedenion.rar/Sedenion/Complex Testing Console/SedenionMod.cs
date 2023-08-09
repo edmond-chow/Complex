@@ -13,7 +13,7 @@ internal static class SedenionMod
         {
             Sedenion Union = CType_Sedenion(Base.Input("Union = "));
             Sedenion Value = CType_Sedenion(Base.Input("Value = "));
-            Base.Output(f.Invoke(Union, Value).ToString());
+            Base.Output(typeof(R) == typeof(bool) ? f.Invoke(Union, Value).ToString().ToLower() : f.Invoke(Union, Value).ToString());
         }
     }
     internal static void Op(string str, string ptr, Func<Sedenion, double, Sedenion> f)

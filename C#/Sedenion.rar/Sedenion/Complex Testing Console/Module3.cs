@@ -13,7 +13,7 @@ internal static class Mod3
         {
             Octonion Union = CType_Octonion(Base.Input("Union = "));
             Octonion Value = CType_Octonion(Base.Input("Value = "));
-            Base.Output(f.Invoke(Union, Value).ToString());
+            Base.Output(typeof(R) == typeof(bool) ? f.Invoke(Union, Value).ToString().ToLower() : f.Invoke(Union, Value).ToString());
         }
     }
     internal static void PowerOp(string str, string ptr, Func<Octonion, long, Octonion> f)

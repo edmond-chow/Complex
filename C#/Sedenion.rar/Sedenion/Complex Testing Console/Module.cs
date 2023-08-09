@@ -13,7 +13,7 @@ internal static class Mod
         {
             Complex Union = CType_Complex(Base.Input("Union = "));
             Complex Value = CType_Complex(Base.Input("Value = "));
-            Base.Output(f.Invoke(Union, Value).ToString());
+            Base.Output(typeof(R) == typeof(bool) ? f.Invoke(Union, Value).ToString().ToLower() : f.Invoke(Union, Value).ToString());
         }
     }
     internal static void PowerOp(string str, string ptr, Func<Complex, long, Complex> f)
