@@ -17,7 +17,7 @@ namespace ComplexTestingConsole
 		/// Base
 		///
 		static constexpr const wchar_t* TestingConsole[] { L"Exit", L"Complex Testing Console", L"Quaternion Testing Console", L"Octonion Testing Console" };
-		static constexpr const wchar_t* SedenionModeConsole[] { L"SedenionMode", L"Sedenion", L"Trigintaduonion", L"Sexagintaquatronion", L"Centumduodetrigintanion", L"Ducentiquinquagintasexion" };
+		static constexpr const wchar_t* SedenionModeConsole[] { L"SedenionMode", L"Sedenion", L"Pathion", L"Chingon", L"Routon", L"Voudon" };
 		static std::size_t Index;
 	public:
 		static std::wstring GetTitle();
