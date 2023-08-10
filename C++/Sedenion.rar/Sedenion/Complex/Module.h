@@ -51,7 +51,7 @@ std::basic_string<CharT, Traits, Allocator> regex_search_and_replace(const std::
 inline std::wstring double_to_wstring(double Number) {
 	std::wstringstream TheString;
 	TheString << std::defaultfloat << std::setprecision(17) << Number;
-	return TheString.str();
+	return std::regex_replace(TheString.str(), std::wregex(L"e-0+"), L"e-");
 };
 template <std::size_t I = 0, std::size_t N> requires (I <= N)
 std::wstring ToString(std::wstringstream& TheString, const std::array<double, N>& Numbers, const std::array<std::wstring, N>& Terms)
