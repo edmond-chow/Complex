@@ -8,13 +8,17 @@ namespace Cmplx3
     {
         private static readonly string RealRegExp = @"(-|\+|)(\d+)(\.\d+|)([Ee](-|\+|)(\d+)|)";
         private static readonly string NotOthers = @"(-|\+|$)";
+        private static string DoubleToString(this double Number)
+        {
+            return Regex.Replace(Number.ToString("G17").ToLower(), "e-0+", "e-");
+        }
         internal static string ToString(this double[] Numbers, params string[] Terms)
         {
             if (Numbers.LongLength != Terms.LongLength) { throw new NotImplementedException("The branch should ensure not instantiated at compile time."); }
             StringBuilder TheString = new StringBuilder();
             for (long i = 0; i < Numbers.LongLength; ++i)
             {
-                string Replace = Numbers[i].ToString("G17").ToLower();
+                string Replace = Numbers[i].DoubleToString();
                 if (Numbers[i] > 0)
                 {
                     if (Terms[i].Length > 0) { Replace = Regex.Replace(Replace, "^1$", ""); }
