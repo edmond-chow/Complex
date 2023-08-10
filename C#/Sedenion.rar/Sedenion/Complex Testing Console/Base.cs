@@ -9,7 +9,7 @@ namespace ComplexTestingConsole
         /// Base
         ///
         private static readonly string[] TestingConsole = new string[] { "Exit", "ComplexTestingConsole", "QuaternionTestingConsole", "OctonionTestingConsole" };
-        private static readonly string[] SedenionModeConsole = new string[] { "SedenionMode", "Sedenion", "Trigintaduonion", "Sexagintaquatronion", "Centumduodetrigintanion", "Ducentiquinquagintasexion" };
+        private static readonly string[] SedenionModeConsole = new string[] { "SedenionMode", "Sedenion", "Pathion", "Chingon", "Routon", "Voudon" };
         private static string[] ConsoleList => TestingConsole.Concat(new string[] { SedenionModeConsole[0] }).ToArray();
         private static long Index = TestingConsole.LongLength - 1;
         public static string GetTitle() { return ConsoleList[Index]; }
