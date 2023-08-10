@@ -210,8 +210,9 @@ namespace Seden
         public static string CType_String(Sedenion Value) { return Value.ToString(); }
         public static Sedenion CType_Sedenion(string Value)
         {
+            if (Value.Replace(" ", "") == "0") { return new Sedenion(); }
             MatchCollection Matches = new Regex("e\\d+(?=-|\\+|$)").Matches(Value);
-            if (Matches.Count == 0) { throw new NotImplementedException(); }
+            if (Matches.Count == 0) { throw new NotImplementedException("The branch should ensure not instantiated at compile time."); }
             long Dimension = 0;
             for (int i = 0; i < Matches.Count; ++i)
             {
