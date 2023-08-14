@@ -1,35 +1,73 @@
 ﻿#pragma once
 #ifndef CMPLX_UNIT_TEST
 #define CMPLX_UNIT_TEST
+#include <cstdint>
 #include <array>
 #include <string>
 #include <stdexcept>
 #include <functional>
-#include <limits>
-template <typename string_type>
-std::int64_t stoi64_t(const string_type& str)
+inline std::int64_t wtoi64_t(const wchar_t* str)
 {
-	using ul = decltype(std::stoul(string_type()));
-	using ull = decltype(std::stoull(string_type()));
-	if constexpr (sizeof(std::int64_t) == sizeof(ul)) { return static_cast<std::int64_t>(std::stol(str)); }
-	if constexpr (sizeof(std::int64_t) >= sizeof(ull)) { return static_cast<std::int64_t>(std::stoll(str)); }
-	else
+	const wchar_t* number = str;
+	if (str[0] == L'-' || str[0] == L'+') { ++number; }
+	std::size_t number_size = 0;
+	const wchar_t* number_end = number;
+	while (*number_end != L'\0')
 	{
-		ull ret = std::stoll(str);
-		if (ret > static_cast<ull>(std::numeric_limits<std::int64_t>::max())) { throw std::out_of_range("stoull argument out of range"); }
-		return static_cast<std::int64_t>(ret);
+		if (static_cast<std::uint16_t>(*number_end) < 48 || static_cast<std::uint16_t>(*number_end) > 57) { throw std::invalid_argument("The string cannot not be converted as an integer."); }
+		++number_end;
+		++number_size;
 	}
+	const wchar_t wcharsPlus[] = L"9223372036854775807";
+	const wchar_t wcharsMinus[] = L"9223372036854775808";
+	wchar_t digitsCheck[20]{ L'\0' };
+	if (number_size > 20)
+	{
+		throw std::out_of_range("An integer is exceeded the limit.");
+	}
+	std::int64_t accumulate = 1;
+	std::int64_t output = 0;
+	for (std::size_t i = 0; i < number_size; ++i)
+	{
+		wchar_t wchar = number[number_size - i - 1];
+		digitsCheck[number_size - i - 1] = wchar;
+		std::uint16_t digit = static_cast<std::uint16_t>(wchar) - 48;
+		if (str[0] == L'-') { output -= digit * accumulate; }
+		else { output += digit * accumulate; }
+		accumulate = accumulate * 10;
+	}
+	if (number_size == 20)
+	{
+		for (std::size_t i = 0; i < 20; ++i)
+		{
+			if (str[0] == L'-')
+			{
+				if (digitsCheck[i] < wcharsMinus[i]) { break; }
+				else if (digitsCheck[i] > wcharsMinus[i]) { throw std::out_of_range("An integer is exceeded the limit."); }
+			}
+			else
+			{
+				if (digitsCheck[i] < wcharsPlus[i]) { break; }
+				else if (digitsCheck[i] > wcharsPlus[i]) { throw std::out_of_range("An integer is exceeded the limit."); }
+			}
+		}
+	}
+	return output;
+};
+inline std::int64_t stoi64_t(std::wstring str)
+{
+	return wtoi64_t(str.c_str());
 };
 template <typename T>
-inline std::wstring to_wstring(T t)
-{
-	if constexpr (requires (T t) { std::to_wstring(t); }) { return std::to_wstring(t); }
-	else { return to_wstring(T::CType_String(t)); }
-};
+inline std::wstring to_wstring(T t) { return T::CType_String(t); };
+template <>
+inline std::wstring to_wstring<double>(double t) { return std::to_wstring(t); };
+template <>
+inline std::wstring to_wstring<std::size_t>(std::size_t t) { return std::to_wstring(t); };
+template <>
+inline std::wstring to_wstring<std::int64_t>(std::int64_t t) { return std::to_wstring(t); };
 template <>
 inline std::wstring to_wstring<bool>(bool t) { return t ? L"true" : L"false"; };
-template <>
-inline std::wstring to_wstring<std::wstring>(std::wstring t) { return t; };
 namespace ComplexTestingConsole
 {
 	class Base final
