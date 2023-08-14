@@ -1,5 +1,5 @@
 #include <algorithm>
-#include <numeric>
+#include <stdexcept>
 constexpr bool is_factor(std::size_t n) noexcept
 {
 	if (n == 1) { return true; }
