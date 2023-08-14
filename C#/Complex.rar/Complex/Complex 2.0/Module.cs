@@ -10,7 +10,7 @@ namespace Cmplx2
         private static readonly string NotOthers = @"(-|\+|$)";
         private static string DoubleToString(this double Number)
         {
-            return Regex.Replace(Number.ToString("G17").ToLower(), "e-0+", "e-");
+            return Regex.Replace(Number.ToString("G17").ToLower(), "e-0(?=[1-9])", "e-");
         }
         internal static string ToString(this double[] Numbers, params string[] Terms)
         {
