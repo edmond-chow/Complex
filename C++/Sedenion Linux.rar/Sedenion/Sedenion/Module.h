@@ -8,7 +8,8 @@
 #include <functional>
 #include <stdexcept>
 template <typename CharT, typename Traits, typename Allocator, typename RegexTraits, typename FuncT>
-std::basic_string<CharT, Traits, Allocator> regex_search_and_replace(const std::basic_string<CharT, Traits, Allocator>& String, const std::basic_regex<CharT, RegexTraits>& Regex, FuncT Function) {
+std::basic_string<CharT, Traits, Allocator> regex_search_and_replace(const std::basic_string<CharT, Traits, Allocator>& String, const std::basic_regex<CharT, RegexTraits>& Regex, FuncT Function)
+{
 	using StringT = std::basic_string<CharT, Traits, Allocator>;
 	StringT Input = String;
 	StringT Output{};
