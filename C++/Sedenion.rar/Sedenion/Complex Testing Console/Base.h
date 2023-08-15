@@ -6,6 +6,7 @@
 #include <string>
 #include <stdexcept>
 #include <functional>
+#include <regex>
 inline std::int64_t wtoi64_t(const wchar_t* str)
 {
 	const wchar_t* number = str;
@@ -54,9 +55,10 @@ inline std::int64_t wtoi64_t(const wchar_t* str)
 	}
 	return output;
 };
-inline std::int64_t stoi64_t(std::wstring str)
+inline std::int64_t stoi64_t(const std::wstring& str)
 {
-	return wtoi64_t(str.c_str());
+	std::wstring result = std::regex_replace(str, std::wregex(L" "), L"");
+	return wtoi64_t(result.c_str());
 };
 template <typename T>
 inline std::wstring to_wstring(T t) { return T::CType_String(t); };
