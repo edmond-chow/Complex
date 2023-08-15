@@ -4,14 +4,10 @@ using namespace ComplexTestingConsole;
 using namespace Seden;
 namespace SedenionMod
 {
-	inline void op(const std::wstring& str, const wchar_t* ptr, Sedenion(CMPLX_UNIT_TEST_INTERFACE* f)(const Sedenion&, double))
+	inline double stod_t(const std::wstring& str)
 	{
-		if (str == ptr)
-		{
-			Sedenion Union = Sedenion::CType_Sedenion(Base::Input(L"Union = "));
-			double Value = stod(Base::Input(L"Value = "));
-			Base::Output(to_wstring(std::invoke(f, Union, Value)));
-		}
+		std::wstring result = std::regex_replace(str, std::wregex(L" "), L"");
+		return std::stod(str);
 	};
 	template <typename F = Sedenion(CMPLX_UNIT_TEST_INTERFACE*)(const Sedenion&, const Sedenion&)>
 	void op(const std::wstring& str, const wchar_t* ptr, F f)
@@ -20,6 +16,15 @@ namespace SedenionMod
 		{
 			Sedenion Union = Sedenion::CType_Sedenion(Base::Input(L"Union = "));
 			Sedenion Value = Sedenion::CType_Sedenion(Base::Input(L"Value = "));
+			Base::Output(to_wstring(std::invoke(f, Union, Value)));
+		}
+	};
+	inline void op(const std::wstring& str, const wchar_t* ptr, Sedenion(CMPLX_UNIT_TEST_INTERFACE* f)(const Sedenion&, double))
+	{
+		if (str == ptr)
+		{
+			Sedenion Union = Sedenion::CType_Sedenion(Base::Input(L"Union = "));
+			double Value = stod_t(Base::Input(L"Value = "));
 			Base::Output(to_wstring(std::invoke(f, Union, Value)));
 		}
 	};
