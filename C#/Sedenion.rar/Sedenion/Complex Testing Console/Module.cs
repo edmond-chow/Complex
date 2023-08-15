@@ -21,7 +21,7 @@ internal static class Mod
         if (str == ptr)
         {
             Complex BaseNumber = CType_Complex(Base.Input("Base = "));
-            long ExponentNumber = long.Parse(Base.Input("Exponent = "));
+            long ExponentNumber = long.Parse(Base.Input("Exponent = ").Replace(" ", ""));
             Base.Output(f.Invoke(BaseNumber, ExponentNumber).ToString());
         }
     }
@@ -65,14 +65,14 @@ internal static class Mod
         if (str == ptr)
         {
             Complex Value = CType_Complex(Base.Input("Value = "));
-            long Theta = long.Parse(Base.Input("Theta = "));
+            long Theta = long.Parse(Base.Input("Theta = ").Replace(" ", ""));
             Base.Output(f.Invoke(Value, Theta).ToString());
         }
         else if (str == ptr + "()")
         {
             Complex Value = CType_Complex(Base.Input("Value = "));
-            long ThetaMin = long.Parse(Base.Input("ThetaMin = "));
-            long ThetaMax = long.Parse(Base.Input("ThetaMax = "));
+            long ThetaMin = long.Parse(Base.Input("ThetaMin = ").Replace(" ", ""));
+            long ThetaMax = long.Parse(Base.Input("ThetaMax = ").Replace(" ", ""));
             for (long Theta = ThetaMin; Theta <= ThetaMax; ++Theta)
             {
                 Base.Output(ptr + "(" + Theta.ToString() + ") = ", f.Invoke(Value, Theta).ToString());
@@ -95,14 +95,14 @@ internal static class Mod
             bool Sign = false;
             string Input = Base.Input("Sign : ");
             if (Input == "+" && Input != "-") { Sign = true; }
-            long Period = long.Parse(Base.Input("Period = "));
+            long Period = long.Parse(Base.Input("Period = ").Replace(" ", ""));
             Base.Output(f.Invoke(Value, Sign, Period).ToString());
         }
         else if (str == ptr + "()")
         {
             Complex Value = CType_Complex(Base.Input("Value = "));
-            long PeriodMin = long.Parse(Base.Input("PeriodMin = "));
-            long PeriodMax = long.Parse(Base.Input("PeriodMax = "));
+            long PeriodMin = long.Parse(Base.Input("PeriodMin = ").Replace(" ", ""));
+            long PeriodMax = long.Parse(Base.Input("PeriodMax = ").Replace(" ", ""));
             for (long Period = PeriodMin; Period <= PeriodMax; ++Period)
             {
                 Base.Output(ptr + "(+, " + Period.ToString() + ") = ", f.Invoke(Value, true, Period).ToString());
