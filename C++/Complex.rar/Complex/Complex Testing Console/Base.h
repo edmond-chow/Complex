@@ -9,8 +9,13 @@
 #include <regex>
 inline std::int64_t wtoi64_t(const wchar_t* str)
 {
+	if (str[0] == L'\0') { throw std::invalid_argument("The string cannot not be converted as an integer."); }
 	const wchar_t* number = str;
-	if (str[0] == L'-' || str[0] == L'+') { ++number; }
+	if (str[0] == L'-' || str[0] == L'+')
+	{
+		if (str[1] == L'\0') { throw std::invalid_argument("The string cannot not be converted as an integer."); }
+		++number;
+	}
 	std::size_t number_size = 0;
 	const wchar_t* number_end = number;
 	while (*number_end != L'\0')
