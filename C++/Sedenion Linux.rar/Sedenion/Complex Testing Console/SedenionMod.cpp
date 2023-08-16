@@ -103,8 +103,9 @@ namespace SedenionMod
 		{
 			Sedenion Value = Sedenion::CType_Sedenion(Base::Input(L"Value = "));
 			bool Sign = false;
-			std::wstring Input = Base::Input(L"Sign : ");
-			if (Input == L"+" && Input != L"-") { Sign = true; }
+			std::wstring Input = std::regex_replace(Base::Input(L"Sign : "), std::wregex(L" "), L"");
+			if (Input == L"+") { Sign = true; }
+			else if (Input != L"-") { throw std::invalid_argument("A string interpretation of the sign cannot be converted as a bool value."); }
 			std::int64_t Period = stoi64_t(Base::Input(L"Period = "));
 			Base::Output(to_wstring(std::invoke(f, Value, Sign, Period)));
 		}
