@@ -93,8 +93,9 @@ internal static class Mod2
         {
             Quaternion Value = CType_Quaternion(Base.Input("Value = "));
             bool Sign = false;
-            string Input = Base.Input("Sign : ");
-            if (Input == "+" && Input != "-") { Sign = true; }
+            string Input = Base.Input("Sign : ").Replace(" ", "");
+            if (Input == "+") { Sign = true; }
+            else if (Input != "-") { throw new ArgumentException("A string interpretation of the sign cannot be converted as a bool value."); }
             long Period = long.Parse(Base.Input("Period = ").Replace(" ", ""));
             Base.Output(f.Invoke(Value, Sign, Period).ToString());
         }
