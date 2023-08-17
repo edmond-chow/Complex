@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 using System.Threading;
 namespace ComplexTestingConsole
 {
@@ -150,7 +151,7 @@ namespace ComplexTestingConsole
         {
             Interlocked.Exchange(ref V, Interlocked.Exchange(ref U, V));
         }
-        internal static string GetAngleName(long I, string[] Angle)
+        private static string GetAngleName(long I, string[] Angle)
         {
             return I < Angle.LongLength ? Angle[I] : ("Angle" + I.ToString());
         }
@@ -189,7 +190,7 @@ namespace ComplexTestingConsole
             long[] Temp = new long[Data.LongLength];
             PowerResultImpl(f, str, Union, Value, Data, Temp, 0);
         }
-        internal static void PowerResultImpl<N>(Delegate f, string str, N Union, N Value, Tuple<long, long>[] Data, long[] Temp, long X)
+        private static void PowerResultImpl<N>(Delegate f, string str, N Union, N Value, Tuple<long, long>[] Data, long[] Temp, long X)
         {
             if (X == Temp.LongLength)
             {
@@ -206,7 +207,7 @@ namespace ComplexTestingConsole
                 PowerResultImpl(f, str, Union, Value, Data, Temp, X + 1);
             }
         }
-        internal static string GetOutputPrepend(string str, long[] integers)
+        private static string GetOutputPrepend(string str, long[] integers)
         {
             string ret = str + "(";
             for (long i = 0; i < integers.LongLength ; ++i)
@@ -216,6 +217,17 @@ namespace ComplexTestingConsole
             ret = ret.Substring(0, ret.Length - 2);
             ret += ") = ";
             return ret;
+        }
+        private static string DoubleToString(this double Number)
+        {
+            return Regex.Replace(Number.ToString("G17").ToLower(), "e-0(?=[1-9])", "e-");
+        }
+        internal static string ToModuleString(this object Object)
+        {
+            if (Object is double DoubleValue) { return DoubleValue.DoubleToString(); }
+            else if (Object is long LongValue) { return LongValue.ToString(); }
+            else if (Object is bool BoolValue) { return BoolValue.ToString().ToLower(); }
+            return Object.ToString();
         }
     }
 }
