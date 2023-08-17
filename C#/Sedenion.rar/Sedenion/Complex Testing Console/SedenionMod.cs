@@ -13,7 +13,7 @@ internal static class SedenionMod
         {
             Sedenion Union = CType_Sedenion(Base.Input("Union = "));
             Sedenion Value = CType_Sedenion(Base.Input("Value = "));
-            Base.Output(typeof(R) == typeof(bool) ? f.Invoke(Union, Value).ToString().ToLower() : f.Invoke(Union, Value).ToString());
+            Base.Output(f.Invoke(Union, Value).ToModuleString());
         }
     }
     internal static void Op(string str, string ptr, Func<Sedenion, double, Sedenion> f)
@@ -22,7 +22,7 @@ internal static class SedenionMod
         {
             Sedenion Union = CType_Sedenion(Base.Input("Union = "));
             double Value = double.Parse(Base.Input("Value = ").Replace(" ", ""));
-            Base.Output(f.Invoke(Union, Value).ToString());
+            Base.Output(f.Invoke(Union, Value).ToModuleString());
         }
     }
     internal static void PowerOp(string str, string ptr, Func<Sedenion, long, Sedenion> f)
@@ -31,7 +31,7 @@ internal static class SedenionMod
         {
             Sedenion BaseNumber = CType_Sedenion(Base.Input("Base = "));
             long ExponentNumber = long.Parse(Base.Input("Exponent = ").Replace(" ", ""));
-            Base.Output(f.Invoke(BaseNumber, ExponentNumber).ToString());
+            Base.Output(f.Invoke(BaseNumber, ExponentNumber).ToModuleString());
         }
     }
     internal static void Power(string str, string ptr, Func<Sedenion, Sedenion, long, long, long, Sedenion> f)
@@ -66,7 +66,7 @@ internal static class SedenionMod
         if (str == ptr)
         {
             Sedenion Value = CType_Sedenion(Base.Input("Value = "));
-            Base.Output(f.Invoke(Value).ToString());
+            Base.Output(f.Invoke(Value).ToModuleString());
         }
     }
     internal static void BasicWith<R>(string str, string ptr, Func<Sedenion, long, R> f)
@@ -75,7 +75,7 @@ internal static class SedenionMod
         {
             Sedenion Value = CType_Sedenion(Base.Input("Value = "));
             long Theta = long.Parse(Base.Input("Theta = ").Replace(" ", ""));
-            Base.Output(f.Invoke(Value, Theta).ToString());
+            Base.Output(f.Invoke(Value, Theta).ToModuleString());
         }
         else if (str == ptr + "()")
         {
@@ -84,7 +84,7 @@ internal static class SedenionMod
             long ThetaMax = long.Parse(Base.Input("ThetaMax = ").Replace(" ", ""));
             for (long Theta = ThetaMin; Theta <= ThetaMax; ++Theta)
             {
-                Base.Output(ptr + "(" + Theta.ToString() + ") = ", f.Invoke(Value, Theta).ToString());
+                Base.Output(ptr + "(" + Theta.ToModuleString() + ") = ", f.Invoke(Value, Theta).ToModuleString());
             }
         }
     }
@@ -93,7 +93,7 @@ internal static class SedenionMod
         if (str == ptr)
         {
             Sedenion Value = CType_Sedenion(Base.Input("Value = "));
-            Base.Output(f.Invoke(Value).ToString());
+            Base.Output(f.Invoke(Value).ToModuleString());
         }
     }
     internal static void Arctri(string str, string ptr, Func<Sedenion, bool, long, Sedenion> f)
@@ -106,7 +106,7 @@ internal static class SedenionMod
             if (Input == "+") { Sign = true; }
             else if (Input != "-") { throw new ArgumentException("A string interpretation of the sign cannot be converted as a bool value."); }
             long Period = long.Parse(Base.Input("Period = ").Replace(" ", ""));
-            Base.Output(f.Invoke(Value, Sign, Period).ToString());
+            Base.Output(f.Invoke(Value, Sign, Period).ToModuleString());
         }
         else if (str == ptr + "()")
         {
@@ -115,11 +115,11 @@ internal static class SedenionMod
             long PeriodMax = long.Parse(Base.Input("PeriodMax = ").Replace(" ", ""));
             for (long Period = PeriodMin; Period <= PeriodMax; ++Period)
             {
-                Base.Output(ptr + "(+, " + Period.ToString() + ") = ", f.Invoke(Value, true, Period).ToString());
+                Base.Output(ptr + "(+, " + Period.ToModuleString() + ") = ", f.Invoke(Value, true, Period).ToModuleString());
             }
             for (long Period = PeriodMin; Period <= PeriodMax; ++Period)
             {
-                Base.Output(ptr + "(-, " + Period.ToString() + ") = ", f.Invoke(Value, false, Period).ToString());
+                Base.Output(ptr + "(-, " + Period.ToModuleString() + ") = ", f.Invoke(Value, false, Period).ToModuleString());
             }
         }
     }
