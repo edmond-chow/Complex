@@ -74,15 +74,15 @@ inline std::wstring double_to_wstring(double Number)
 	return std::regex_replace(TheString.str(), std::wregex(L"e-0(?=[1-9])"), L"e-");
 };
 template <typename T>
-inline std::wstring to_wstring(T t) { return T::CType_String(t); };
+inline std::wstring to_wstring(T o) { return T::CType_String(o); };
 template <>
-inline std::wstring to_wstring<double>(double t) { return double_to_wstring(t); };
+inline std::wstring to_wstring<double>(double o) { return double_to_wstring(o); };
 template <>
-inline std::wstring to_wstring<std::size_t>(std::size_t t) { return std::to_wstring(t); };
+inline std::wstring to_wstring<std::size_t>(std::size_t o) { return std::to_wstring(o); };
 template <>
-inline std::wstring to_wstring<std::int64_t>(std::int64_t t) { return std::to_wstring(t); };
+inline std::wstring to_wstring<std::int64_t>(std::int64_t o) { return std::to_wstring(o); };
 template <>
-inline std::wstring to_wstring<bool>(bool t) { return t ? L"true" : L"false"; };
+inline std::wstring to_wstring<bool>(bool o) { return o ? L"true" : L"false"; };
 namespace ComplexTestingConsole
 {
 	class Base final
