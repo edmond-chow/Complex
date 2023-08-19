@@ -16,13 +16,13 @@ namespace ComplexTestingConsole
 		///
 		/// Base
 		///
-		static constexpr const wchar_t* TestingConsole[] { L"Exit", L"Complex Testing Console", L"Quaternion Testing Console", L"Octonion Testing Console" };
-		static constexpr const wchar_t* SedenionModeConsole[] { L"SedenionMode", L"Sedenion", L"Pathion", L"Chingon", L"Routon", L"Voudon" };
+		static constexpr const wchar_t* TestingConsole[] { L"Exit", L"Complex Testing Console", L"Quaternion Testing Console", L"Octonion Testing Console", L"SedenionMode" };
+		static constexpr const std::size_t DefaultIndex = 3;
 		static std::size_t Index;
+		static std::wstring AddSquares(const std::wstring& Str) { return L"[" + Str + L"]"; };
 	public:
 		static std::wstring GetTitle();
 		static std::wstring GetStartupLine();
-		static std::wstring GetSedenTitle();
 		static bool IsSwitchTo(const std::wstring& Str);
 		///
 		/// Main Thread
@@ -48,35 +48,27 @@ namespace ComplexTestingConsole
 	///
 	/// Base
 	///
-	std::size_t Base::Index = std::extent_v<decltype(Base::TestingConsole)> - 1;
-	std::wstring Base::GetTitle() { return Index != std::extent_v<decltype(Base::TestingConsole)> ? TestingConsole[Index] : SedenionModeConsole[0]; };
+	std::size_t Base::Index = DefaultIndex;
+	std::wstring Base::GetTitle()
+	{
+		return Index > DefaultIndex ? L"SedenionMode (Sedenion, Pathion, Chingon, Routon, Voudon, ...)" : TestingConsole[Index];
+	};
 	std::wstring Base::GetStartupLine()
 	{
 		std::wstring Output = L" >> ";
-		for (const wchar_t* Name : TestingConsole)
+		for (std::size_t i = 1; i < std::extent_v<decltype(TestingConsole)>; ++i)
 		{
-			if (std::wstring(Name) == TestingConsole[0]) { continue; }
-			Output.append(L"[").append(Name).append(L"]   ");
+			Output.append(AddSquares(TestingConsole[i])).append(L"   ");
 		}
-		return Output.append(L"[").append(SedenionModeConsole[0]).append(L"]");
-	};
-	std::wstring Base::GetSedenTitle()
-	{
-		std::wstring Output;
-		for (std::size_t i = 1; i < std::extent_v<decltype(Base::SedenionModeConsole)>; ++i)
-		{
-			Output += SedenionModeConsole[i];
-			Output += L", ";
-		}
-		return Output += L"...";
+		return Output.substr(0, Output.length() - 3);
 	};
 	bool Base::IsSwitchTo(const std::wstring& Str)
 	{
-		for (std::size_t s = 0; s < std::extent_v<decltype(TestingConsole)> + 1; ++s)
+		for (std::size_t i = 0; i < std::extent_v<decltype(TestingConsole)>; ++i)
 		{
-			if (Str == std::wstring{}.append(L"[").append(s != std::extent_v<decltype(Base::TestingConsole)> ? TestingConsole[s] : SedenionModeConsole[0]).append(L"]"))
+			if (Str == AddSquares(TestingConsole[i]))
 			{
-				Index = s;
+				Index = i;
 				return true;
 			}
 		}

@@ -134,7 +134,7 @@ namespace SedenionMod
 	};
 	void MySedenionTestor::Load() noexcept
 	{
-		Base::Startup(Base::GetTitle() + L" (" + Base::GetSedenTitle() + L")");
+		Base::Startup(Base::GetTitle());
 		Base::Selection(L"=   +   -   *   /   ^   Power()   Root()   Log()");
 		Base::Selection(L"abs   arg()   conjg   sgn   inverse   exp   ln()");
 		Base::Selection(L"sin   cos   tan   csc   sec   cot   arcsin()   arccos()   arctan()   arccsc()   arcsec()   arccot()");
