@@ -8,18 +8,23 @@ namespace ComplexTestingConsole
         ///
         /// Base
         ///
-        private static readonly string[] TestingConsole = new string[] { "Exit", "ComplexTestingConsole", "QuaternionTestingConsole", "OctonionTestingConsole" };
-        private static long Index = TestingConsole.LongLength - 1;
-        public static string GetTitle() { return TestingConsole[Index]; }
+        private static readonly string[] TestingConsole = new string[] { "Exit", "Complex Testing Console", "Quaternion Testing Console", "Octonion Testing Console" };
+        private const long DefaultIndex = 3;
+        private static long Index = DefaultIndex;
+        private static string AddSquares(this string Str)
+        {
+            return "[" + Str + "]";
+        }
+        public static string GetTitle()
+        {
+            return TestingConsole[Index];
+        }
         public static string GetStartupLine()
         {
             string Output = " >> ";
-            foreach (string Name in TestingConsole)
+            for (long i = 1; i < TestingConsole.LongLength; ++i)
             {
-                if (Name == TestingConsole[0]) { continue; }
-                Output += "[";
-                Output += Name;
-                Output += "]   ";
+                Output += TestingConsole[i].AddSquares() + "   ";
             }
             return Output.Substring(0, Output.Length - 3);
         }
@@ -27,7 +32,7 @@ namespace ComplexTestingConsole
         {
             for (long i = 0; i < TestingConsole.LongLength; ++i)
             {
-                if (Str == "[" + TestingConsole[i] + "]")
+                if (Str == TestingConsole[i].AddSquares())
                 {
                     Index = i;
                     return true;
