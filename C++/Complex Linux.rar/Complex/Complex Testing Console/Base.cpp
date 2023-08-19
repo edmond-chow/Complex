@@ -16,7 +16,9 @@ namespace ComplexTestingConsole
 		/// Base
 		///
 		static constexpr const wchar_t* TestingConsole[] { L"Exit", L"Complex Testing Console", L"Quaternion Testing Console", L"Octonion Testing Console" };
+		static constexpr const std::size_t DefaultIndex = 3;
 		static std::size_t Index;
+		static std::wstring AddSquares(const std::wstring& Str) { return L"[" + Str + L"]"; };
 	public:
 		static std::wstring GetTitle();
 		static std::wstring GetStartupLine();
@@ -45,25 +47,27 @@ namespace ComplexTestingConsole
 	///
 	/// Base
 	///
-	std::size_t Base::Index = std::extent_v<decltype(Base::TestingConsole)> - 1;
-	std::wstring Base::GetTitle() { return TestingConsole[Index]; };
+	std::size_t Base::Index = DefaultIndex;
+	std::wstring Base::GetTitle()
+	{
+		return TestingConsole[Index];
+	};
 	std::wstring Base::GetStartupLine()
 	{
 		std::wstring Output = L" >> ";
-		for (const wchar_t* Name : TestingConsole)
+		for (std::size_t i = 1; i < std::extent_v<decltype(TestingConsole)>; ++i)
 		{
-			if (std::wstring(Name) == TestingConsole[0]) { continue; }
-			Output.append(L"[").append(Name).append(L"]   ");
+			Output.append(AddSquares(TestingConsole[i])).append(L"   ");
 		}
 		return Output.substr(0, Output.length() - 3);
 	};
 	bool Base::IsSwitchTo(const std::wstring& Str)
 	{
-		for (std::size_t s = 0; s < std::extent_v<decltype(TestingConsole)>; ++s)
+		for (std::size_t i = 0; i < std::extent_v<decltype(TestingConsole)>; ++i)
 		{
-			if (Str == std::wstring{}.append(L"[").append(TestingConsole[s]).append(L"]"))
+			if (Str == AddSquares(TestingConsole[i]))
 			{
-				Index = s;
+				Index = i;
 				return true;
 			}
 		}
