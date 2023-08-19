@@ -10,38 +10,31 @@ namespace ComplexTestingConsole
         ///
         /// Base
         ///
-        private static readonly string[] TestingConsole = new string[] { "Exit", "ComplexTestingConsole", "QuaternionTestingConsole", "OctonionTestingConsole" };
-        private static readonly string[] SedenionModeConsole = new string[] { "SedenionMode", "Sedenion", "Pathion", "Chingon", "Routon", "Voudon" };
-        private static string[] ConsoleList => TestingConsole.Concat(new string[] { SedenionModeConsole[0] }).ToArray();
-        private static long Index = TestingConsole.LongLength - 1;
-        public static string GetTitle() { return ConsoleList[Index]; }
+        private static readonly string[] TestingConsole = new string[] { "Exit", "Complex Testing Console", "Quaternion Testing Console", "Octonion Testing Console", "SedenionMode" };
+        private const long DefaultIndex = 3;
+        private static long Index = DefaultIndex;
+        private static string AddSquares(this string Str)
+        {
+            return "[" + Str + "]";
+        }
+        public static string GetTitle()
+        {
+            return Index > DefaultIndex ? "SedenionMode (Sedenion, Pathion, Chingon, Routon, Voudon, ...)" : TestingConsole[Index];
+        }
         public static string GetStartupLine()
         {
             string Output = " >> ";
-            foreach (string Name in ConsoleList)
+            for (long i = 1; i < TestingConsole.LongLength; ++i)
             {
-                if (Name == TestingConsole[0]) { continue; }
-                Output += "[";
-                Output += Name;
-                Output += "]   ";
+                Output += TestingConsole[i].AddSquares() + "   ";
             }
             return Output.Substring(0, Output.Length - 3);
         }
-        public static string GetSedenTitle()
-        {
-            string Output = "";
-            foreach (string Name in SedenionModeConsole.Skip(1))
-            {
-                Output += Name;
-                Output += ", ";
-            }
-            return Output += "...";
-        }
         public static bool IsSwitchTo(string Str)
         {
-            for (long i = 0; i < ConsoleList.LongLength; ++i)
+            for (long i = 0; i < TestingConsole.LongLength; ++i)
             {
-                if (Str == "[" + ConsoleList[i] + "]")
+                if (Str == TestingConsole[i].AddSquares())
                 {
                     Index = i;
                     return true;

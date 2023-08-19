@@ -128,7 +128,7 @@ internal static class MySedenionTestor
 {
     internal static void Load()
     {
-        Base.Startup(Base.GetTitle() + " (" + Base.GetSedenTitle() + ")");
+        Base.Startup(Base.GetTitle());
         Base.Selection("=   +   -   *   /   ^   Power()   Root()   Log()");
         Base.Selection("abs   arg()   conjg   sgn   inverse   exp   ln()");
         Base.Selection("sin   cos   tan   csc   sec   cot   arcsin()   arccos()   arctan()   arccsc()   arcsec()   arccot()");
