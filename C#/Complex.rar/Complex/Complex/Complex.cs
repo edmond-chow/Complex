@@ -125,7 +125,7 @@ namespace Cmplx
                 double[] Numbers;
                 try { Numbers = Value.ToNumbers("e1"); }
                 catch (Exception Exception) { throw new Vector1DException("The string cannot be converted as a number.", Exception); }
-                RetValue[1] = Numbers[1];
+                RetValue[1] = Numbers[0];
                 return RetValue;
             }
             public static Vector1D ToVector1D(this string Value) { return CType_Vector1D(Value); }
