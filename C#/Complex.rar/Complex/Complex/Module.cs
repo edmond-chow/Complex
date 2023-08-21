@@ -55,13 +55,57 @@ namespace Cmplx
             for (long i = 0; i < Terms.LongLength; ++i) { Test = new Regex(GetRegexString(Terms[i], true)).Replace(Test, ""); }
             return Test.Length == 0;
         }
+        private static void CheckForRange(string Number, string Check, bool Sign)
+        {
+            for (int i = 0; i < (Number.Length < Check.Length ? Number.Length : Check.Length); ++i)
+            {
+                if (Sign)
+                {
+                    if (Number[i] < Check[i]) { break; }
+                    else if (Number[i] > Check[i]) { throw new OverflowException("The number is out of range which cannot be a vaild representation in double."); }
+                }
+                else
+                {
+                    if (Number[i] > Check[i]) { break; }
+                    else if (Number[i] < Check[i]) { throw new OverflowException("The number is out of range which cannot be a vaild representation in double."); }
+                }
+            }
+        }
+        private static string TestForRange(string Number)
+        {
+            Match Match = new Regex(RealRegExp).Match(Number);
+            int Exponent = 0;
+            string Exponential = Match.Groups[4].Value;
+            if (Exponential != "")
+            {
+                string ExponentialSign = Match.Groups[5].Value;
+                string ExponentialDigits = Match.Groups[6].Value;
+                Exponent = int.Parse(ExponentialSign + ExponentialDigits);
+            }
+            string Integral = Match.Groups[2].Value;
+            string Decimal = Match.Groups[3].Value;
+            Exponent += Integral.Length - 1;
+            if (Exponent == 308)
+            {
+                CheckForRange(Integral + (Decimal == "" ? "" : Decimal.Substring(1)), "17976931348623157", true);
+            }
+            else if (Exponent == -324)
+            {
+                CheckForRange(Integral + (Decimal == "" ? "" : Decimal.Substring(1)), "49406564584124654", false);
+            }
+            else if (Exponent > 308 || Exponent < -324)
+            {
+                throw new OverflowException("The number is out of range which cannot be a vaild representation in double.");
+            }
+            return Number;
+        }
         private static void SetForValue(string TheValue, double[] Numbers, string[] Terms)
         {
             if (Numbers.LongLength != Terms.LongLength) { throw new NotImplementedException("The branch should ensure not instantiated at compile time."); }
             for (long i = 0; i < Numbers.LongLength; ++i)
             {
                 MatchCollection Match = new Regex(GetRegexString(Terms[i], false)).Matches(TheValue);
-                for (int j = 0; j < Match.Count; ++j) { Numbers[i] += double.Parse(Match[j].Value); }
+                for (int j = 0; j < Match.Count; ++j) { Numbers[i] += double.Parse(TestForRange(Match[j].Value)); }
             }
         }
         internal static double[] ToNumbers(this string Value, params string[] Terms)
