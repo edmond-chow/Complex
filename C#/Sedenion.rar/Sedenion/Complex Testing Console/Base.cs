@@ -65,7 +65,7 @@ namespace ComplexTestingConsole
                         MySedenionTestor.Load();
                         break;
                     default:
-                        throw new NotImplementedException();
+                        throw new NotImplementedException("The branch should ensure not instantiated at compile time.");
                 }
             }
         }
@@ -244,7 +244,7 @@ namespace ComplexTestingConsole
         {
             if (Object is double DoubleValue) { return DoubleValue.DoubleToString(); }
             else if (Object is long LongValue) { return LongValue.ToString(); }
-            else if (Object is bool BoolValue) { return BoolValue.ToString().ToLower(); }
+            else if (Object is bool BoolValue) { return BoolValue ? "true" : "false"; }
             return Object.ToString();
         }
     }
