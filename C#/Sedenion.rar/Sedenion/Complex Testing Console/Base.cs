@@ -89,8 +89,8 @@ namespace ComplexTestingConsole
             }
             Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine("   Press any key to continue . . . ");
-            Console.WriteLine();
             Console.ReadKey(true);
+            Console.WriteLine();
             return "";
         }
         internal static string Exception()
