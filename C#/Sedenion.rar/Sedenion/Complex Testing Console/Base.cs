@@ -76,10 +76,20 @@ namespace ComplexTestingConsole
         ///
         internal static string Exception(Exception ex)
         {
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.WriteLine(ex);
+            Console.WriteLine();
+            while (ex != null)
+            {
+                Console.ForegroundColor = ConsoleColor.DarkCyan;
+                Console.Write("   [" + ex.GetType().FullName + "] ");
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.WriteLine(ex.Message);
+                Console.ForegroundColor = ConsoleColor.Gray;
+                Console.WriteLine(Regex.Replace(ex.StackTrace, "(^|\n)", "${0}   "));
+                ex = ex.InnerException;
+            }
             Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine("Press any key to continue . . . ");
+            Console.WriteLine("   Press any key to continue . . . ");
+            Console.WriteLine();
             Console.ReadKey(true);
             return "";
         }
