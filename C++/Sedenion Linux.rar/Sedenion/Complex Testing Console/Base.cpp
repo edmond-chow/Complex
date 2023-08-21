@@ -110,7 +110,7 @@ namespace ComplexTestingConsole
 	std::wstring Base::Exception(const std::exception& ex)
 	{
 		setForegroundColor(ConsoleColor::DarkCyan);
-		std::wcout << std::endl << L"   [" << typeid(decltype(ex)).name() << L"] ";
+		std::wcout << std::endl << L"   [" << typeid(ex).name() << L"] ";
 		setForegroundColor(ConsoleColor::Cyan);
 		std::wcout << ex.what() << std::endl;
 		setForegroundColor(ConsoleColor::White);
