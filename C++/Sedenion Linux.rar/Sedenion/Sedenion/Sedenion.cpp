@@ -521,10 +521,10 @@ namespace Seden
 	};
 	Sedenion SEDEN_FUNC_CALL Sedenion::CType_Sedenion(const std::wstring& Value)
 	{
-		if (std::regex_replace(Value, std::wregex(L" "), L"") == L"0") { return Sedenion{}; };
 		std::size_t Dimension = 0;
 		std::wregex Regex(L"e\\d+(?=-|\\+|$)");
-		std::wstring TheString = Value;
+		std::wstring TheString = std::regex_replace(Value, std::wregex(L" "), L"");
+		if (TheString == L"0") { return Sedenion{}; };
 		std::wsmatch Match;
 		while (std::regex_search(TheString, Match, Regex))
 		{
