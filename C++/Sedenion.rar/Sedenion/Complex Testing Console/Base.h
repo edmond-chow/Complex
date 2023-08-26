@@ -96,7 +96,6 @@ namespace ComplexTestingConsole
 	public:
 		static std::wstring GetTitle();
 		static std::wstring GetStartupLine();
-		static std::wstring GetSedenTitle();
 		static bool IsSwitchTo(const std::wstring& Str);
 		///
 		/// Main Thread
