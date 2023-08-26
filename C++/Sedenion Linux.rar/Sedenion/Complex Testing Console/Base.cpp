@@ -100,7 +100,7 @@ namespace ComplexTestingConsole
 				SedenionMod::MySedenionTestor::Load();
 				break;
 			default:
-				throw;
+				throw std::logic_error("The branch should ensure not instantiated at compile time.");
 			}
 		}
 	};
