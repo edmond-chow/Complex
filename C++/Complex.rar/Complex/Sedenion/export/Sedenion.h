@@ -160,8 +160,8 @@ namespace Seden
 		///
 		/// Conversion of Types
 		///
-		static std::wstring SEDEN_FUNC_CALL CType_String(const Sedenion& Value);
-		static Sedenion SEDEN_FUNC_CALL CType_Sedenion(const std::wstring& Value);
+		static std::wstring SEDEN_FUNC_CALL GetString(const Sedenion& Value);
+		static Sedenion SEDEN_FUNC_CALL GetInstance(const std::wstring& Value);
 	};
 	bool SEDEN_INTERFACE SEDEN_FUNC_CALL operator ==(const Sedenion& Union, const Sedenion& Value);
 	bool SEDEN_INTERFACE SEDEN_FUNC_CALL operator !=(const Sedenion& Union, const Sedenion& Value);
@@ -177,10 +177,6 @@ namespace Seden
 	inline Sedenion operator"" _s(long double Value) { return Sedenion(static_cast<double>(Value)); };
 	inline Sedenion operator"" _s(unsigned long long int Value) { return operator"" _s(static_cast<long double>(Value)); };
 }
-#pragma pop_macro("SEDEN_FUNC_INSTANCE_CALL")
-#pragma pop_macro("SEDEN_FUNC_CALL")
-#pragma pop_macro("SEDEN_INTERFACE")
-#pragma pop_macro("CALL")
 #pragma pack(pop)
 #endif
 #endif

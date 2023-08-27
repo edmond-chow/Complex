@@ -100,8 +100,8 @@ namespace Cmplx
 			///
 			/// Conversion of Types
 			///
-			static std::wstring CMPLX_FUNC_CALL CType_String(const Vector1D& Value);
-			static Vector1D CMPLX_FUNC_CALL CType_Vector1D(const std::wstring& Value);
+			static std::wstring CMPLX_FUNC_CALL GetString(const Vector1D& Value);
+			static Vector1D CMPLX_FUNC_CALL GetInstance(const std::wstring& Value);
 			/* Casting */
 			inline auto to_number() const& noexcept
 				-> decltype(forward_as_number(0, (*this)[index::e1]))
@@ -219,11 +219,11 @@ namespace Cmplx
 		///
 		/// Conversion of Types
 		///
-		std::wstring CMPLX_FUNC_CALL Vector1D::CType_String(const Vector1D& Value)
+		std::wstring CMPLX_FUNC_CALL Vector1D::GetString(const Vector1D& Value)
 		{
 			return ToString(Value[index::e1], L"e1");
 		};
-		Vector1D CMPLX_FUNC_CALL Vector1D::CType_Vector1D(const std::wstring& Value)
+		Vector1D CMPLX_FUNC_CALL Vector1D::GetInstance(const std::wstring& Value)
 		{
 			Vector1D Object;
 			ToNumbers(Value, Object[index::e1], L"e1");
@@ -367,8 +367,8 @@ namespace Cmplx
 			///
 			/// Conversion of Types
 			///
-			static std::wstring CMPLX_FUNC_CALL CType_String(const Complex& Value);
-			static Complex CMPLX_FUNC_CALL CType_Complex(const std::wstring& Value);
+			static std::wstring CMPLX_FUNC_CALL GetString(const Complex& Value);
+			static Complex CMPLX_FUNC_CALL GetInstance(const std::wstring& Value);
 			/* Casting */
 			inline auto to_number() const& noexcept
 				-> decltype(forward_as_number((*this)[index::s], (*this)[index::i]))
@@ -661,11 +661,11 @@ namespace Cmplx
 		///
 		/// Conversion of Types
 		///
-		std::wstring CMPLX_FUNC_CALL Complex::CType_String(const Complex& Value)
+		std::wstring CMPLX_FUNC_CALL Complex::GetString(const Complex& Value)
 		{
 			return ToString(Value[index::s], L"", Value[index::i], L"i");
 		};
-		Complex CMPLX_FUNC_CALL Complex::CType_Complex(const std::wstring& Value)
+		Complex CMPLX_FUNC_CALL Complex::GetInstance(const std::wstring& Value)
 		{
 			Complex Object;
 			ToNumbers(Value, Object[index::s], L"", Object[index::i], L"i");

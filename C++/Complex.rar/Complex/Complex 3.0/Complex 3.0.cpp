@@ -118,8 +118,8 @@ namespace Cmplx3
 			///
 			/// Conversion of Types
 			///
-			static std::wstring CMPLX3_FUNC_CALL CType_String(const Vector7D& Value);
-			static Vector7D CMPLX3_FUNC_CALL CType_Vector7D(const std::wstring& Value);
+			static std::wstring CMPLX3_FUNC_CALL GetString(const Vector7D& Value);
+			static Vector7D CMPLX3_FUNC_CALL GetInstance(const std::wstring& Value);
 			/* Casting */
 			inline auto to_number() const& noexcept
 				-> decltype(forward_as_number(0, (*this)[index::e1], (*this)[index::e2], (*this)[index::e3], (*this)[index::e4], (*this)[index::e5], (*this)[index::e6], (*this)[index::e7]))
@@ -273,11 +273,11 @@ namespace Cmplx3
 		///
 		/// Conversion of Types
 		///
-		std::wstring CMPLX3_FUNC_CALL Vector7D::CType_String(const Vector7D& Value)
+		std::wstring CMPLX3_FUNC_CALL Vector7D::GetString(const Vector7D& Value)
 		{
 			return ToString(Value[index::e1], L"e1", Value[index::e2], L"e2", Value[index::e3], L"e3", Value[index::e4], L"e4", Value[index::e5], L"e5", Value[index::e6], L"e6", Value[index::e7], L"e7");
 		};
-		Vector7D CMPLX3_FUNC_CALL Vector7D::CType_Vector7D(const std::wstring& Value)
+		Vector7D CMPLX3_FUNC_CALL Vector7D::GetInstance(const std::wstring& Value)
 		{
 			Vector7D Object;
 			ToNumbers(Value, Object[index::e1], L"e1", Object[index::e2], L"e2", Object[index::e3], L"e3", Object[index::e4], L"e4", Object[index::e5], L"e5", Object[index::e6], L"e6", Object[index::e7], L"e7");
@@ -431,8 +431,8 @@ namespace Cmplx3
 			///
 			/// Conversion of Types
 			///
-			static std::wstring CMPLX3_FUNC_CALL CType_String(const Octonion& Value);
-			static Octonion CMPLX3_FUNC_CALL CType_Octonion(const std::wstring& Value);
+			static std::wstring CMPLX3_FUNC_CALL GetString(const Octonion& Value);
+			static Octonion CMPLX3_FUNC_CALL GetInstance(const std::wstring& Value);
 			/* Casting */
 			inline auto to_number() const& noexcept
 				-> decltype(forward_as_number((*this)[index::s], (*this)[index::i], (*this)[index::j], (*this)[index::k], (*this)[index::l], (*this)[index::il], (*this)[index::jl], (*this)[index::kl]))
@@ -753,11 +753,11 @@ namespace Cmplx3
 		///
 		/// Conversion of Types
 		///
-		std::wstring CMPLX3_FUNC_CALL Octonion::CType_String(const Octonion& Value)
+		std::wstring CMPLX3_FUNC_CALL Octonion::GetString(const Octonion& Value)
 		{
 			return ToString(Value[index::s], L"", Value[index::i], L"i", Value[index::j], L"j", Value[index::k], L"k", Value[index::l], L"l", Value[index::il], L"il", Value[index::jl], L"jl", Value[index::kl], L"kl");
 		};
-		Octonion CMPLX3_FUNC_CALL Octonion::CType_Octonion(const std::wstring& Value)
+		Octonion CMPLX3_FUNC_CALL Octonion::GetInstance(const std::wstring& Value)
 		{
 			Octonion Object;
 			ToNumbers(Value, Object[index::s], L"", Object[index::i], L"i", Object[index::j], L"j", Object[index::k], L"k", Object[index::l], L"l", Object[index::il], L"il", Object[index::jl], L"jl", Object[index::kl], L"kl");

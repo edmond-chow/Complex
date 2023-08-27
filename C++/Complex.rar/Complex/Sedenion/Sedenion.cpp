@@ -234,8 +234,8 @@ namespace Seden
 		///
 		/// Conversion of Types
 		///
-		static std::wstring SEDEN_FUNC_CALL CType_String(const Sedenion& Value);
-		static Sedenion SEDEN_FUNC_CALL CType_Sedenion(const std::wstring& Value);
+		static std::wstring SEDEN_FUNC_CALL GetString(const Sedenion& Value);
+		static Sedenion SEDEN_FUNC_CALL GetInstance(const std::wstring& Value);
 		/* Casting */
 	private:
 		Factor to_factor() const& noexcept { return Factor{ data, size }; };
@@ -534,7 +534,7 @@ namespace Seden
 	///
 	/// Conversion of Types
 	///
-	std::wstring SEDEN_FUNC_CALL Sedenion::CType_String(const Sedenion& Value)
+	std::wstring SEDEN_FUNC_CALL Sedenion::GetString(const Sedenion& Value)
 	{
 		const double* Numbers = Value.data;
 		std::wstring* Strings = new std::wstring[Value.size] {};
@@ -543,7 +543,7 @@ namespace Seden
 		delete[] Strings;
 		return Output;
 	};
-	Sedenion SEDEN_FUNC_CALL Sedenion::CType_Sedenion(const std::wstring& Value)
+	Sedenion SEDEN_FUNC_CALL Sedenion::GetInstance(const std::wstring& Value)
 	{
 		std::size_t Dimension = 0;
 		std::wregex Regex(L"e\\d+(?=-|\\+|$)");
