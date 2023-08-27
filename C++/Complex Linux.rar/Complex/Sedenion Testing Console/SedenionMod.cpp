@@ -9,21 +9,21 @@ namespace SedenionMod
 		std::wstring result = std::regex_replace(str, std::wregex(L" "), L"");
 		return std::stod(str);
 	};
-	template <typename F = Sedenion(CMPLX_UNIT_TEST_INTERFACE*)(const Sedenion&, const Sedenion&)>
+	template <typename F = Sedenion(SEDEN_FUNC_CALL*)(const Sedenion&, const Sedenion&)>
 	void op(const std::wstring& str, const wchar_t* ptr, F f)
 	{
 		if (str == ptr)
 		{
-			Sedenion Union = Sedenion::CType_Sedenion(Base::Input(L"Union = "));
-			Sedenion Value = Sedenion::CType_Sedenion(Base::Input(L"Value = "));
+			Sedenion Union = Sedenion::GetInstance(Base::Input(L"Union = "));
+			Sedenion Value = Sedenion::GetInstance(Base::Input(L"Value = "));
 			Base::Output(to_wstring(std::invoke(f, Union, Value)));
 		}
 	};
-	inline void op(const std::wstring& str, const wchar_t* ptr, Sedenion(CMPLX_UNIT_TEST_INTERFACE* f)(const Sedenion&, double))
+	inline void op(const std::wstring& str, const wchar_t* ptr, Sedenion(SEDEN_FUNC_CALL* f)(const Sedenion&, double))
 	{
 		if (str == ptr)
 		{
-			Sedenion Union = Sedenion::CType_Sedenion(Base::Input(L"Union = "));
+			Sedenion Union = Sedenion::GetInstance(Base::Input(L"Union = "));
 			double Value = stod_t(Base::Input(L"Value = "));
 			Base::Output(to_wstring(std::invoke(f, Union, Value)));
 		}
@@ -33,26 +33,26 @@ namespace SedenionMod
 	{
 		if (str == ptr)
 		{
-			Sedenion Base = Sedenion::CType_Sedenion(Base::Input(L"Base = "));
+			Sedenion Base = Sedenion::GetInstance(Base::Input(L"Base = "));
 			std::int64_t Exponent = stoi64_t(Base::Input(L"Exponent = "));
 			Base::Output(to_wstring(std::invoke(f, Base, Exponent)));
 		}
 	};
 	template <typename... args>
-	void power(const std::wstring& str, std::wstring&& ptr, Sedenion(CMPLX_UNIT_TEST_INTERFACE* f)(const Sedenion&, const Sedenion&, std::int64_t, args...))
+	void power(const std::wstring& str, std::wstring&& ptr, Sedenion(SEDEN_FUNC_CALL* f)(const Sedenion&, const Sedenion&, std::int64_t, args...))
 	{
 		if (str == ptr)
 		{
-			Sedenion Union = Sedenion::CType_Sedenion(Base::Input(L"Union = "));
-			Sedenion Value = Sedenion::CType_Sedenion(Base::Input(L"Value = "));
+			Sedenion Union = Sedenion::GetInstance(Base::Input(L"Union = "));
+			Sedenion Value = Sedenion::GetInstance(Base::Input(L"Value = "));
 			std::array<std::int64_t, 1 + sizeof...(args)> Data{};
 			power_get(Data);
 			power_result(f, ptr, Union, Value, Data);
 		}
 		else if (str == ptr + L"()")
 		{
-			Sedenion Union = Sedenion::CType_Sedenion(Base::Input(L"Union = "));
-			Sedenion Value = Sedenion::CType_Sedenion(Base::Input(L"Value = "));
+			Sedenion Union = Sedenion::GetInstance(Base::Input(L"Union = "));
+			Sedenion Value = Sedenion::GetInstance(Base::Input(L"Value = "));
 			std::array<std::pair<std::int64_t, std::int64_t>, 1 + sizeof...(args)> Data{};
 			power_get(Data);
 			power_result(f, ptr, Union, Value, Data);
@@ -63,22 +63,22 @@ namespace SedenionMod
 	{
 		if (str == ptr)
 		{
-			Sedenion Value = Sedenion::CType_Sedenion(Base::Input(L"Value = "));
+			Sedenion Value = Sedenion::GetInstance(Base::Input(L"Value = "));
 			Base::Output(to_wstring(std::invoke(f, Value)));
 		}
 	};
 	template <typename R>
-	void basic(const std::wstring& str, std::wstring&& ptr, R(CMPLX_UNIT_TEST_INTERFACE* f)(const Sedenion&, std::int64_t))
+	void basic(const std::wstring& str, std::wstring&& ptr, R(SEDEN_FUNC_CALL* f)(const Sedenion&, std::int64_t))
 	{
 		if (str == ptr)
 		{
-			Sedenion Value = Sedenion::CType_Sedenion(Base::Input(L"Value = "));
+			Sedenion Value = Sedenion::GetInstance(Base::Input(L"Value = "));
 			std::int64_t Theta = stoi64_t(Base::Input(L"Theta = "));
 			Base::Output(to_wstring(std::invoke(f, Value, Theta)));
 		}
 		else if (str == ptr + L"()")
 		{
-			Sedenion Value = Sedenion::CType_Sedenion(Base::Input(L"Value = "));
+			Sedenion Value = Sedenion::GetInstance(Base::Input(L"Value = "));
 			std::int64_t ThetaMin = stoi64_t(Base::Input(L"ThetaMin = "));
 			std::int64_t ThetaMax = stoi64_t(Base::Input(L"ThetaMax = "));
 			for (std::int64_t Theta = ThetaMin; Theta <= ThetaMax; ++Theta)
@@ -87,21 +87,21 @@ namespace SedenionMod
 			}
 		}
 	};
-	template <typename F = Sedenion(CMPLX_UNIT_TEST_INTERFACE*)(const Sedenion&)>
+	template <typename F = Sedenion(SEDEN_FUNC_CALL*)(const Sedenion&)>
 	inline void tri(const std::wstring& str, const wchar_t* ptr, F f)
 	{
 		if (str == ptr)
 		{
-			Sedenion Value = Sedenion::CType_Sedenion(Base::Input(L"Value = "));
+			Sedenion Value = Sedenion::GetInstance(Base::Input(L"Value = "));
 			Base::Output(to_wstring(std::invoke(f, Value)));
 		}
 	};
-	template <typename F = Sedenion(CMPLX_UNIT_TEST_INTERFACE*)(const Sedenion&, bool, std::int64_t)>
+	template <typename F = Sedenion(SEDEN_FUNC_CALL*)(const Sedenion&, bool, std::int64_t)>
 	inline void arctri(const std::wstring& str, std::wstring&& ptr, F f)
 	{
 		if (str == ptr)
 		{
-			Sedenion Value = Sedenion::CType_Sedenion(Base::Input(L"Value = "));
+			Sedenion Value = Sedenion::GetInstance(Base::Input(L"Value = "));
 			bool Sign = false;
 			std::wstring Input = std::regex_replace(Base::Input(L"Sign : "), std::wregex(L" "), L"");
 			if (Input == L"+") { Sign = true; }
@@ -111,7 +111,7 @@ namespace SedenionMod
 		}
 		else if (str == ptr + L"()")
 		{
-			Sedenion Value = Sedenion::CType_Sedenion(Base::Input(L"Value = "));
+			Sedenion Value = Sedenion::GetInstance(Base::Input(L"Value = "));
 			std::int64_t PeriodMin = stoi64_t(Base::Input(L"PeriodMin = "));
 			std::int64_t PeriodMax = stoi64_t(Base::Input(L"PeriodMax = "));
 			for (std::int64_t Period = PeriodMin; Period <= PeriodMax; ++Period)

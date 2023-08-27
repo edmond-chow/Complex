@@ -74,8 +74,8 @@ namespace Cmplx2
 			///
 			/// Conversion of Types
 			///
-			static std::wstring CMPLX2_FUNC_CALL CType_String(const Vector3D& Value);
-			static Vector3D CMPLX2_FUNC_CALL CType_Vector3D(const std::wstring& Value);
+			static std::wstring CMPLX2_FUNC_CALL GetString(const Vector3D& Value);
+			static Vector3D CMPLX2_FUNC_CALL GetInstance(const std::wstring& Value);
 		};
 		bool CMPLX2_INTERFACE CMPLX2_FUNC_CALL operator ==(const Vector3D& Union, const Vector3D& Value) noexcept;
 		bool CMPLX2_INTERFACE CMPLX2_FUNC_CALL operator !=(const Vector3D& Union, const Vector3D& Value) noexcept;
@@ -216,8 +216,8 @@ namespace Cmplx2
 			///
 			/// Conversion of Types
 			///
-			static std::wstring CMPLX2_FUNC_CALL CType_String(const Quaternion& Value);
-			static Quaternion CMPLX2_FUNC_CALL CType_Quaternion(const std::wstring& Value);
+			static std::wstring CMPLX2_FUNC_CALL GetString(const Quaternion& Value);
+			static Quaternion CMPLX2_FUNC_CALL GetInstance(const std::wstring& Value);
 		};
 		bool CMPLX2_INTERFACE CMPLX2_FUNC_CALL operator ==(const Quaternion& Union, const Quaternion& Value) noexcept;
 		bool CMPLX2_INTERFACE CMPLX2_FUNC_CALL operator !=(const Quaternion& Union, const Quaternion& Value) noexcept;
@@ -234,10 +234,6 @@ namespace Cmplx2
 		inline Quaternion operator"" _q(unsigned long long int Value) noexcept { return operator"" _q(static_cast<long double>(Value)); };
 	}
 }
-#pragma pop_macro("CMPLX2_FUNC_INSTANCE_CALL")
-#pragma pop_macro("CMPLX2_FUNC_CALL")
-#pragma pop_macro("CMPLX2_INTERFACE")
-#pragma pop_macro("CALL")
 #pragma pack(pop)
 #endif
 #endif

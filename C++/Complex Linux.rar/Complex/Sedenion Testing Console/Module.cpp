@@ -5,13 +5,13 @@ using namespace Cmplx;
 using namespace Cmplx::MainType;
 namespace Mod
 {
-	template <typename F = Complex(CMPLX_UNIT_TEST_INTERFACE*)(const Complex&, const Complex&)>
+	template <typename F = Complex(CMPLX_FUNC_CALL*)(const Complex&, const Complex&)>
 	void op(const std::wstring& str, const wchar_t* ptr, F f)
 	{
 		if (str == ptr)
 		{
-			Complex Union = Complex::CType_Complex(Base::Input(L"Union = "));
-			Complex Value = Complex::CType_Complex(Base::Input(L"Value = "));
+			Complex Union = Complex::GetInstance(Base::Input(L"Union = "));
+			Complex Value = Complex::GetInstance(Base::Input(L"Value = "));
 			Base::Output(to_wstring(std::invoke(f, Union, Value)));
 		}
 	};
@@ -20,26 +20,26 @@ namespace Mod
 	{
 		if (str == ptr)
 		{
-			Complex Base = Complex::CType_Complex(Base::Input(L"Base = "));
+			Complex Base = Complex::GetInstance(Base::Input(L"Base = "));
 			std::int64_t Exponent = stoi64_t(Base::Input(L"Exponent = "));
 			Base::Output(to_wstring(std::invoke(f, Base, Exponent)));
 		}
 	};
 	template <typename... args>
-	void power(const std::wstring& str, std::wstring&& ptr, Complex(CMPLX_UNIT_TEST_INTERFACE* f)(const Complex&, const Complex&, std::int64_t, args...))
+	void power(const std::wstring& str, std::wstring&& ptr, Complex(CMPLX_FUNC_CALL* f)(const Complex&, const Complex&, std::int64_t, args...))
 	{
 		if (str == ptr)
 		{
-			Complex Union = Complex::CType_Complex(Base::Input(L"Union = "));
-			Complex Value = Complex::CType_Complex(Base::Input(L"Value = "));
+			Complex Union = Complex::GetInstance(Base::Input(L"Union = "));
+			Complex Value = Complex::GetInstance(Base::Input(L"Value = "));
 			std::array<std::int64_t, 1 + sizeof...(args)> Data{};
 			power_get(Data);
 			power_result(f, ptr, Union, Value, Data);
 		}
 		else if (str == ptr + L"()")
 		{
-			Complex Union = Complex::CType_Complex(Base::Input(L"Union = "));
-			Complex Value = Complex::CType_Complex(Base::Input(L"Value = "));
+			Complex Union = Complex::GetInstance(Base::Input(L"Union = "));
+			Complex Value = Complex::GetInstance(Base::Input(L"Value = "));
 			std::array<std::pair<std::int64_t, std::int64_t>, 1 + sizeof...(args)> Data{};
 			power_get(Data);
 			power_result(f, ptr, Union, Value, Data);
@@ -50,22 +50,22 @@ namespace Mod
 	{
 		if (str == ptr)
 		{
-			Complex Value = Complex::CType_Complex(Base::Input(L"Value = "));
+			Complex Value = Complex::GetInstance(Base::Input(L"Value = "));
 			Base::Output(to_wstring(std::invoke(f, Value)));
 		}
 	};
 	template <typename R>
-	void basic(const std::wstring& str, std::wstring&& ptr, R(CMPLX_UNIT_TEST_INTERFACE* f)(const Complex&, std::int64_t))
+	void basic(const std::wstring& str, std::wstring&& ptr, R(CMPLX_FUNC_CALL* f)(const Complex&, std::int64_t))
 	{
 		if (str == ptr)
 		{
-			Complex Value = Complex::CType_Complex(Base::Input(L"Value = "));
+			Complex Value = Complex::GetInstance(Base::Input(L"Value = "));
 			std::int64_t Theta = stoi64_t(Base::Input(L"Theta = "));
 			Base::Output(to_wstring(std::invoke(f, Value, Theta)));
 		}
 		else if (str == ptr + L"()")
 		{
-			Complex Value = Complex::CType_Complex(Base::Input(L"Value = "));
+			Complex Value = Complex::GetInstance(Base::Input(L"Value = "));
 			std::int64_t ThetaMin = stoi64_t(Base::Input(L"ThetaMin = "));
 			std::int64_t ThetaMax = stoi64_t(Base::Input(L"ThetaMax = "));
 			for (std::int64_t Theta = ThetaMin; Theta <= ThetaMax; ++Theta)
@@ -74,21 +74,21 @@ namespace Mod
 			}
 		}
 	};
-	template <typename F = Complex(CMPLX_UNIT_TEST_INTERFACE*)(const Complex&)>
+	template <typename F = Complex(CMPLX_FUNC_CALL*)(const Complex&)>
 	inline void tri(const std::wstring& str, const wchar_t* ptr, F f)
 	{
 		if (str == ptr)
 		{
-			Complex Value = Complex::CType_Complex(Base::Input(L"Value = "));
+			Complex Value = Complex::GetInstance(Base::Input(L"Value = "));
 			Base::Output(to_wstring(std::invoke(f, Value)));
 		}
 	};
-	template <typename F = Complex(CMPLX_UNIT_TEST_INTERFACE*)(const Complex&, bool, std::int64_t)>
+	template <typename F = Complex(CMPLX_FUNC_CALL*)(const Complex&, bool, std::int64_t)>
 	inline void arctri(const std::wstring& str, std::wstring&& ptr, F f)
 	{
 		if (str == ptr)
 		{
-			Complex Value = Complex::CType_Complex(Base::Input(L"Value = "));
+			Complex Value = Complex::GetInstance(Base::Input(L"Value = "));
 			bool Sign = false;
 			std::wstring Input = std::regex_replace(Base::Input(L"Sign : "), std::wregex(L" "), L"");
 			if (Input == L"+") { Sign = true; }
@@ -98,7 +98,7 @@ namespace Mod
 		}
 		else if (str == ptr + L"()")
 		{
-			Complex Value = Complex::CType_Complex(Base::Input(L"Value = "));
+			Complex Value = Complex::GetInstance(Base::Input(L"Value = "));
 			std::int64_t PeriodMin = stoi64_t(Base::Input(L"PeriodMin = "));
 			std::int64_t PeriodMax = stoi64_t(Base::Input(L"PeriodMax = "));
 			for (std::int64_t Period = PeriodMin; Period <= PeriodMax; ++Period)

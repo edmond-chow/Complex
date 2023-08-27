@@ -86,8 +86,8 @@ namespace Cmplx3
 			///
 			/// Conversion of Types
 			///
-			static std::wstring CMPLX3_FUNC_CALL CType_String(const Vector7D& Value);
-			static Vector7D CMPLX3_FUNC_CALL CType_Vector7D(const std::wstring& Value);
+			static std::wstring CMPLX3_FUNC_CALL GetString(const Vector7D& Value);
+			static Vector7D CMPLX3_FUNC_CALL GetInstance(const std::wstring& Value);
 		};
 		bool CMPLX3_INTERFACE CMPLX3_FUNC_CALL operator ==(const Vector7D& Union, const Vector7D& Value) noexcept;
 		bool CMPLX3_INTERFACE CMPLX3_FUNC_CALL operator !=(const Vector7D& Union, const Vector7D& Value) noexcept;
@@ -236,8 +236,8 @@ namespace Cmplx3
 			///
 			/// Conversion of Types
 			///
-			static std::wstring CMPLX3_FUNC_CALL CType_String(const Octonion& Value);
-			static Octonion CMPLX3_FUNC_CALL CType_Octonion(const std::wstring& Value);
+			static std::wstring CMPLX3_FUNC_CALL GetString(const Octonion& Value);
+			static Octonion CMPLX3_FUNC_CALL GetInstance(const std::wstring& Value);
 		};
 		bool CMPLX3_INTERFACE CMPLX3_FUNC_CALL operator ==(const Octonion& Union, const Octonion& Value) noexcept;
 		bool CMPLX3_INTERFACE CMPLX3_FUNC_CALL operator !=(const Octonion& Union, const Octonion& Value) noexcept;
@@ -254,10 +254,6 @@ namespace Cmplx3
 		inline Octonion operator"" _o(unsigned long long int Value) noexcept { return operator"" _o(static_cast<long double>(Value)); };
 	}
 }
-#pragma pop_macro("CMPLX3_FUNC_INSTANCE_CALL")
-#pragma pop_macro("CMPLX3_FUNC_CALL")
-#pragma pop_macro("CMPLX3_INTERFACE")
-#pragma pop_macro("CALL")
 #pragma pack(pop)
 #endif
 #endif

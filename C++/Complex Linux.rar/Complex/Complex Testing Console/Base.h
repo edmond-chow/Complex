@@ -74,7 +74,7 @@ inline std::wstring double_to_wstring(double Number)
 	return std::regex_replace(TheString.str(), std::wregex(L"e-0(?=[1-9])"), L"e-");
 };
 template <typename T>
-inline std::wstring to_wstring(T o) { return T::CType_String(o); };
+inline std::wstring to_wstring(T o) { return T::GetString(o); };
 template <>
 inline std::wstring to_wstring<double>(double o) { return double_to_wstring(o); };
 template <>
@@ -221,5 +221,4 @@ namespace ComplexTestingConsole
 		}
 	};
 }
-#define CMPLX_UNIT_TEST_INTERFACE
 #endif

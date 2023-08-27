@@ -82,8 +82,8 @@ namespace Cmplx2
 			///
 			/// Conversion of Types
 			///
-			static std::wstring CMPLX2_FUNC_CALL CType_String(const Vector3D& Value);
-			static Vector3D CMPLX2_FUNC_CALL CType_Vector3D(const std::wstring& Value);
+			static std::wstring CMPLX2_FUNC_CALL GetString(const Vector3D& Value);
+			static Vector3D CMPLX2_FUNC_CALL GetInstance(const std::wstring& Value);
 			/* Casting */
 			inline auto to_number() const& noexcept
 				-> decltype(forward_as_number(0, (*this)[index::e1], (*this)[index::e2], (*this)[index::e3]))
@@ -213,11 +213,11 @@ namespace Cmplx2
 		///
 		/// Conversion of Types
 		///
-		std::wstring CMPLX2_FUNC_CALL Vector3D::CType_String(const Vector3D& Value)
+		std::wstring CMPLX2_FUNC_CALL Vector3D::GetString(const Vector3D& Value)
 		{
 			return ToString(Value[index::e1], L"e1", Value[index::e2], L"e2", Value[index::e3], L"e3");
 		};
-		Vector3D CMPLX2_FUNC_CALL Vector3D::CType_Vector3D(const std::wstring& Value)
+		Vector3D CMPLX2_FUNC_CALL Vector3D::GetInstance(const std::wstring& Value)
 		{
 			Vector3D Object;
 			ToNumbers(Value, Object[index::e1], L"e1", Object[index::e2], L"e2", Object[index::e3], L"e3");
@@ -363,8 +363,8 @@ namespace Cmplx2
 			///
 			/// Conversion of Types
 			///
-			static std::wstring CMPLX2_FUNC_CALL CType_String(const Quaternion& Value);
-			static Quaternion CMPLX2_FUNC_CALL CType_Quaternion(const std::wstring& Value);
+			static std::wstring CMPLX2_FUNC_CALL GetString(const Quaternion& Value);
+			static Quaternion CMPLX2_FUNC_CALL GetInstance(const std::wstring& Value);
 			/* Casting */
 			inline auto to_number() const& noexcept
 				-> decltype(forward_as_number((*this)[index::s], (*this)[index::i], (*this)[index::j], (*this)[index::k]))
@@ -665,11 +665,11 @@ namespace Cmplx2
 		///
 		/// Conversion of Types
 		///
-		std::wstring CMPLX2_FUNC_CALL Quaternion::CType_String(const Quaternion& Value)
+		std::wstring CMPLX2_FUNC_CALL Quaternion::GetString(const Quaternion& Value)
 		{
 			return ToString(Value[index::s], L"", Value[index::i], L"i", Value[index::j], L"j", Value[index::k], L"k");
 		};
-		Quaternion CMPLX2_FUNC_CALL Quaternion::CType_Quaternion(const std::wstring& Value)
+		Quaternion CMPLX2_FUNC_CALL Quaternion::GetInstance(const std::wstring& Value)
 		{
 			Quaternion Object;
 			ToNumbers(Value, Object[index::s], L"", Object[index::i], L"i", Object[index::j], L"j", Object[index::k], L"k");

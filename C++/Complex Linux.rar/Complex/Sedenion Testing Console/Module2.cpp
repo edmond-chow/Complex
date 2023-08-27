@@ -5,13 +5,13 @@ using namespace Cmplx2;
 using namespace Cmplx2::MainType;
 namespace Mod2
 {
-	template <typename F = Quaternion(CMPLX_UNIT_TEST_INTERFACE*)(const Quaternion&, const Quaternion&)>
+	template <typename F = Quaternion(CMPLX2_FUNC_CALL*)(const Quaternion&, const Quaternion&)>
 	void op(const std::wstring& str, const wchar_t* ptr, F f)
 	{
 		if (str == ptr)
 		{
-			Quaternion Union = Quaternion::CType_Quaternion(Base::Input(L"Union = "));
-			Quaternion Value = Quaternion::CType_Quaternion(Base::Input(L"Value = "));
+			Quaternion Union = Quaternion::GetInstance(Base::Input(L"Union = "));
+			Quaternion Value = Quaternion::GetInstance(Base::Input(L"Value = "));
 			Base::Output(to_wstring(std::invoke(f, Union, Value)));
 		}
 	};
@@ -20,26 +20,26 @@ namespace Mod2
 	{
 		if (str == ptr)
 		{
-			Quaternion Base = Quaternion::CType_Quaternion(Base::Input(L"Base = "));
+			Quaternion Base = Quaternion::GetInstance(Base::Input(L"Base = "));
 			std::int64_t Exponent = stoi64_t(Base::Input(L"Exponent = "));
 			Base::Output(to_wstring(std::invoke(f, Base, Exponent)));
 		}
 	};
 	template <typename... args>
-	void power(const std::wstring& str, std::wstring&& ptr, Quaternion(CMPLX_UNIT_TEST_INTERFACE* f)(const Quaternion&, const Quaternion&, std::int64_t, args...))
+	void power(const std::wstring& str, std::wstring&& ptr, Quaternion(CMPLX2_FUNC_CALL* f)(const Quaternion&, const Quaternion&, std::int64_t, args...))
 	{
 		if (str == ptr)
 		{
-			Quaternion Union = Quaternion::CType_Quaternion(Base::Input(L"Union = "));
-			Quaternion Value = Quaternion::CType_Quaternion(Base::Input(L"Value = "));
+			Quaternion Union = Quaternion::GetInstance(Base::Input(L"Union = "));
+			Quaternion Value = Quaternion::GetInstance(Base::Input(L"Value = "));
 			std::array<std::int64_t, 1 + sizeof...(args)> Data{};
 			power_get(Data);
 			power_result(f, ptr, Union, Value, Data);
 		}
 		else if (str == ptr + L"()")
 		{
-			Quaternion Union = Quaternion::CType_Quaternion(Base::Input(L"Union = "));
-			Quaternion Value = Quaternion::CType_Quaternion(Base::Input(L"Value = "));
+			Quaternion Union = Quaternion::GetInstance(Base::Input(L"Union = "));
+			Quaternion Value = Quaternion::GetInstance(Base::Input(L"Value = "));
 			std::array<std::pair<std::int64_t, std::int64_t>, 1 + sizeof...(args)> Data{};
 			power_get(Data);
 			power_result(f, ptr, Union, Value, Data);
@@ -50,22 +50,22 @@ namespace Mod2
 	{
 		if (str == ptr)
 		{
-			Quaternion Value = Quaternion::CType_Quaternion(Base::Input(L"Value = "));
+			Quaternion Value = Quaternion::GetInstance(Base::Input(L"Value = "));
 			Base::Output(to_wstring(std::invoke(f, Value)));
 		}
 	};
 	template <typename R>
-	void basic(const std::wstring& str, std::wstring&& ptr, R(CMPLX_UNIT_TEST_INTERFACE* f)(const Quaternion&, std::int64_t))
+	void basic(const std::wstring& str, std::wstring&& ptr, R(CMPLX2_FUNC_CALL* f)(const Quaternion&, std::int64_t))
 	{
 		if (str == ptr)
 		{
-			Quaternion Value = Quaternion::CType_Quaternion(Base::Input(L"Value = "));
+			Quaternion Value = Quaternion::GetInstance(Base::Input(L"Value = "));
 			std::int64_t Theta = stoi64_t(Base::Input(L"Theta = "));
 			Base::Output(to_wstring(std::invoke(f, Value, Theta)));
 		}
 		else if (str == ptr + L"()")
 		{
-			Quaternion Value = Quaternion::CType_Quaternion(Base::Input(L"Value = "));
+			Quaternion Value = Quaternion::GetInstance(Base::Input(L"Value = "));
 			std::int64_t ThetaMin = stoi64_t(Base::Input(L"ThetaMin = "));
 			std::int64_t ThetaMax = stoi64_t(Base::Input(L"ThetaMax = "));
 			for (std::int64_t Theta = ThetaMin; Theta <= ThetaMax; ++Theta)
@@ -74,21 +74,21 @@ namespace Mod2
 			}
 		}
 	};
-	template <typename F = Quaternion(CMPLX_UNIT_TEST_INTERFACE*)(const Quaternion&)>
+	template <typename F = Quaternion(CMPLX2_FUNC_CALL*)(const Quaternion&)>
 	inline void tri(const std::wstring& str, const wchar_t* ptr, F f)
 	{
 		if (str == ptr)
 		{
-			Quaternion Value = Quaternion::CType_Quaternion(Base::Input(L"Value = "));
+			Quaternion Value = Quaternion::GetInstance(Base::Input(L"Value = "));
 			Base::Output(to_wstring(std::invoke(f, Value)));
 		}
 	};
-	template <typename F = Quaternion(CMPLX_UNIT_TEST_INTERFACE*)(const Quaternion&, bool, std::int64_t)>
+	template <typename F = Quaternion(CMPLX2_FUNC_CALL*)(const Quaternion&, bool, std::int64_t)>
 	inline void arctri(const std::wstring& str, std::wstring&& ptr, F f)
 	{
 		if (str == ptr)
 		{
-			Quaternion Value = Quaternion::CType_Quaternion(Base::Input(L"Value = "));
+			Quaternion Value = Quaternion::GetInstance(Base::Input(L"Value = "));
 			bool Sign = false;
 			std::wstring Input = std::regex_replace(Base::Input(L"Sign : "), std::wregex(L" "), L"");
 			if (Input == L"+") { Sign = true; }
@@ -98,7 +98,7 @@ namespace Mod2
 		}
 		else if (str == ptr + L"()")
 		{
-			Quaternion Value = Quaternion::CType_Quaternion(Base::Input(L"Value = "));
+			Quaternion Value = Quaternion::GetInstance(Base::Input(L"Value = "));
 			std::int64_t PeriodMin = stoi64_t(Base::Input(L"PeriodMin = "));
 			std::int64_t PeriodMax = stoi64_t(Base::Input(L"PeriodMax = "));
 			for (std::int64_t Period = PeriodMin; Period <= PeriodMax; ++Period)

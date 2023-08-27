@@ -68,8 +68,8 @@ namespace Cmplx
 			///
 			/// Conversion of Types
 			///
-			static std::wstring CMPLX_FUNC_CALL CType_String(const Vector1D& Value);
-			static Vector1D CMPLX_FUNC_CALL CType_Vector1D(const std::wstring& Value);
+			static std::wstring CMPLX_FUNC_CALL GetString(const Vector1D& Value);
+			static Vector1D CMPLX_FUNC_CALL GetInstance(const std::wstring& Value);
 		};
 		bool CMPLX_INTERFACE CMPLX_FUNC_CALL operator ==(const Vector1D& Union, const Vector1D& Value) noexcept;
 		bool CMPLX_INTERFACE CMPLX_FUNC_CALL operator !=(const Vector1D& Union, const Vector1D& Value) noexcept;
@@ -208,8 +208,8 @@ namespace Cmplx
 			///
 			/// Conversion of Types
 			///
-			static std::wstring CMPLX_FUNC_CALL CType_String(const Complex& Value);
-			static Complex CMPLX_FUNC_CALL CType_Complex(const std::wstring& Value);
+			static std::wstring CMPLX_FUNC_CALL GetString(const Complex& Value);
+			static Complex CMPLX_FUNC_CALL GetInstance(const std::wstring& Value);
 		};
 		bool CMPLX_INTERFACE CMPLX_FUNC_CALL operator ==(const Complex& Union, const Complex& Value) noexcept;
 		bool CMPLX_INTERFACE CMPLX_FUNC_CALL operator !=(const Complex& Union, const Complex& Value) noexcept;
@@ -226,10 +226,6 @@ namespace Cmplx
 		inline Complex operator"" _c(unsigned long long int Value) noexcept { return operator"" _c(static_cast<long double>(Value)); };
 	}
 }
-#pragma pop_macro("CMPLX_FUNC_INSTANCE_CALL")
-#pragma pop_macro("CMPLX_FUNC_CALL")
-#pragma pop_macro("CMPLX_INTERFACE")
-#pragma pop_macro("CALL")
 #pragma pack(pop)
 #endif
 #endif
