@@ -11,8 +11,8 @@ internal static class SedenionMod
     {
         if (str == ptr)
         {
-            Sedenion Union = CType_Sedenion(Base.Input("Union = "));
-            Sedenion Value = CType_Sedenion(Base.Input("Value = "));
+            Sedenion Union = GetInstance(Base.Input("Union = "));
+            Sedenion Value = GetInstance(Base.Input("Value = "));
             Base.Output(f.Invoke(Union, Value).ToModuleString());
         }
     }
@@ -20,7 +20,7 @@ internal static class SedenionMod
     {
         if (str == ptr)
         {
-            Sedenion Union = CType_Sedenion(Base.Input("Union = "));
+            Sedenion Union = GetInstance(Base.Input("Union = "));
             double Value = double.Parse(Base.Input("Value = ").Replace(" ", ""));
             Base.Output(f.Invoke(Union, Value).ToModuleString());
         }
@@ -29,7 +29,7 @@ internal static class SedenionMod
     {
         if (str == ptr)
         {
-            Sedenion BaseNumber = CType_Sedenion(Base.Input("Base = "));
+            Sedenion BaseNumber = GetInstance(Base.Input("Base = "));
             long ExponentNumber = long.Parse(Base.Input("Exponent = ").Replace(" ", ""));
             Base.Output(f.Invoke(BaseNumber, ExponentNumber).ToModuleString());
         }
@@ -46,16 +46,16 @@ internal static class SedenionMod
     {
         if (str == ptr)
         {
-            Sedenion Union = CType_Sedenion(Base.Input("Union = "));
-            Sedenion Value = CType_Sedenion(Base.Input("Value = "));
+            Sedenion Union = GetInstance(Base.Input("Union = "));
+            Sedenion Value = GetInstance(Base.Input("Value = "));
             long[] Data = new long[f.GetMethodInfo().GetParameters().LongLength - 2];
             PowerGet(Data);
             PowerResult(f, ptr, Union, Value, Data);
         }
         else if (str == ptr + "()")
         {
-            Sedenion Union = CType_Sedenion(Base.Input("Union = "));
-            Sedenion Value = CType_Sedenion(Base.Input("Value = "));
+            Sedenion Union = GetInstance(Base.Input("Union = "));
+            Sedenion Value = GetInstance(Base.Input("Value = "));
             Tuple<long, long>[] Data = new Tuple<long, long>[f.GetMethodInfo().GetParameters().LongLength - 2];
             PowerGet(Data);
             PowerResult(f, ptr, Union, Value, Data);
@@ -65,7 +65,7 @@ internal static class SedenionMod
     {
         if (str == ptr)
         {
-            Sedenion Value = CType_Sedenion(Base.Input("Value = "));
+            Sedenion Value = GetInstance(Base.Input("Value = "));
             Base.Output(f.Invoke(Value).ToModuleString());
         }
     }
@@ -73,13 +73,13 @@ internal static class SedenionMod
     {
         if (str == ptr)
         {
-            Sedenion Value = CType_Sedenion(Base.Input("Value = "));
+            Sedenion Value = GetInstance(Base.Input("Value = "));
             long Theta = long.Parse(Base.Input("Theta = ").Replace(" ", ""));
             Base.Output(f.Invoke(Value, Theta).ToModuleString());
         }
         else if (str == ptr + "()")
         {
-            Sedenion Value = CType_Sedenion(Base.Input("Value = "));
+            Sedenion Value = GetInstance(Base.Input("Value = "));
             long ThetaMin = long.Parse(Base.Input("ThetaMin = ").Replace(" ", ""));
             long ThetaMax = long.Parse(Base.Input("ThetaMax = ").Replace(" ", ""));
             for (long Theta = ThetaMin; Theta <= ThetaMax; ++Theta)
@@ -92,7 +92,7 @@ internal static class SedenionMod
     {
         if (str == ptr)
         {
-            Sedenion Value = CType_Sedenion(Base.Input("Value = "));
+            Sedenion Value = GetInstance(Base.Input("Value = "));
             Base.Output(f.Invoke(Value).ToModuleString());
         }
     }
@@ -100,7 +100,7 @@ internal static class SedenionMod
     {
         if (str == ptr)
         {
-            Sedenion Value = CType_Sedenion(Base.Input("Value = "));
+            Sedenion Value = GetInstance(Base.Input("Value = "));
             bool Sign = false;
             string Input = Base.Input("Sign : ").Replace(" ", "");
             if (Input == "+") { Sign = true; }
@@ -110,7 +110,7 @@ internal static class SedenionMod
         }
         else if (str == ptr + "()")
         {
-            Sedenion Value = CType_Sedenion(Base.Input("Value = "));
+            Sedenion Value = GetInstance(Base.Input("Value = "));
             long PeriodMin = long.Parse(Base.Input("PeriodMin = ").Replace(" ", ""));
             long PeriodMax = long.Parse(Base.Input("PeriodMax = ").Replace(" ", ""));
             for (long Period = PeriodMin; Period <= PeriodMax; ++Period)

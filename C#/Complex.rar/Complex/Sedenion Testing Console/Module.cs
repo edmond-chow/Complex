@@ -11,8 +11,8 @@ internal static class Mod
     {
         if (str == ptr)
         {
-            Complex Union = CType_Complex(Base.Input("Union = "));
-            Complex Value = CType_Complex(Base.Input("Value = "));
+            Complex Union = GetInstance(Base.Input("Union = "));
+            Complex Value = GetInstance(Base.Input("Value = "));
             Base.Output(f.Invoke(Union, Value).ToModuleString());
         }
     }
@@ -20,7 +20,7 @@ internal static class Mod
     {
         if (str == ptr)
         {
-            Complex BaseNumber = CType_Complex(Base.Input("Base = "));
+            Complex BaseNumber = GetInstance(Base.Input("Base = "));
             long ExponentNumber = long.Parse(Base.Input("Exponent = ").Replace(" ", ""));
             Base.Output(f.Invoke(BaseNumber, ExponentNumber).ToModuleString());
         }
@@ -37,16 +37,16 @@ internal static class Mod
     {
         if (str == ptr)
         {
-            Complex Union = CType_Complex(Base.Input("Union = "));
-            Complex Value = CType_Complex(Base.Input("Value = "));
+            Complex Union = GetInstance(Base.Input("Union = "));
+            Complex Value = GetInstance(Base.Input("Value = "));
             long[] Data = new long[f.GetMethodInfo().GetParameters().LongLength - 2];
             PowerGet(Data);
             PowerResult(f, ptr, Union, Value, Data);
         }
         else if (str == ptr + "()")
         {
-            Complex Union = CType_Complex(Base.Input("Union = "));
-            Complex Value = CType_Complex(Base.Input("Value = "));
+            Complex Union = GetInstance(Base.Input("Union = "));
+            Complex Value = GetInstance(Base.Input("Value = "));
             Tuple<long, long>[] Data = new Tuple<long, long>[f.GetMethodInfo().GetParameters().LongLength - 2];
             PowerGet(Data);
             PowerResult(f, ptr, Union, Value, Data);
@@ -56,7 +56,7 @@ internal static class Mod
     {
         if (str == ptr)
         {
-            Complex Value = CType_Complex(Base.Input("Value = "));
+            Complex Value = GetInstance(Base.Input("Value = "));
             Base.Output(f.Invoke(Value).ToModuleString());
         }
     }
@@ -64,13 +64,13 @@ internal static class Mod
     {
         if (str == ptr)
         {
-            Complex Value = CType_Complex(Base.Input("Value = "));
+            Complex Value = GetInstance(Base.Input("Value = "));
             long Theta = long.Parse(Base.Input("Theta = ").Replace(" ", ""));
             Base.Output(f.Invoke(Value, Theta).ToModuleString());
         }
         else if (str == ptr + "()")
         {
-            Complex Value = CType_Complex(Base.Input("Value = "));
+            Complex Value = GetInstance(Base.Input("Value = "));
             long ThetaMin = long.Parse(Base.Input("ThetaMin = ").Replace(" ", ""));
             long ThetaMax = long.Parse(Base.Input("ThetaMax = ").Replace(" ", ""));
             for (long Theta = ThetaMin; Theta <= ThetaMax; ++Theta)
@@ -83,7 +83,7 @@ internal static class Mod
     {
         if (str == ptr)
         {
-            Complex Value = CType_Complex(Base.Input("Value = "));
+            Complex Value = GetInstance(Base.Input("Value = "));
             Base.Output(f.Invoke(Value).ToModuleString());
         }
     }
@@ -91,7 +91,7 @@ internal static class Mod
     {
         if (str == ptr)
         {
-            Complex Value = CType_Complex(Base.Input("Value = "));
+            Complex Value = GetInstance(Base.Input("Value = "));
             bool Sign = false;
             string Input = Base.Input("Sign : ").Replace(" ", "");
             if (Input == "+") { Sign = true; }
@@ -101,7 +101,7 @@ internal static class Mod
         }
         else if (str == ptr + "()")
         {
-            Complex Value = CType_Complex(Base.Input("Value = "));
+            Complex Value = GetInstance(Base.Input("Value = "));
             long PeriodMin = long.Parse(Base.Input("PeriodMin = ").Replace(" ", ""));
             long PeriodMax = long.Parse(Base.Input("PeriodMax = ").Replace(" ", ""));
             for (long Period = PeriodMin; Period <= PeriodMax; ++Period)

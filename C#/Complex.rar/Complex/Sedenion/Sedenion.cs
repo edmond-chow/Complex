@@ -44,8 +44,8 @@ namespace Seden
             set => Data[Index % LongLength] = value;
         }
         public override int GetHashCode() { return 0; }
-        public static explicit operator Sedenion(string Value) { return CType_Sedenion(Value); }
-        public static explicit operator string(Sedenion Value) { return CType_String(Value); }
+        public static explicit operator Sedenion(string Value) { return GetInstance(Value); }
+        public static explicit operator string(Sedenion Value) { return GetString(Value); }
         public static implicit operator Sedenion(double Value) { return new Sedenion(Value); }
         public static double Scalar(Sedenion Value) { return Value.ToNumber()[0]; }
         public static Sedenion Vector(Sedenion Value) { return new Sedenion(new double[] { 0 }.Concat(Value.ToNumber().Skip(1)).ToArray()); }
@@ -207,8 +207,8 @@ namespace Seden
         ///
         /// Conversion of Types
         ///
-        public static string CType_String(Sedenion Value) { return Value.ToString(); }
-        public static Sedenion CType_Sedenion(string Value)
+        public static string GetString(Sedenion Value) { return Value.ToString(); }
+        public static Sedenion GetInstance(string Value)
         {
             if (Value.Replace(" ", "") == "0") { return new Sedenion(); }
             MatchCollection Matches = new Regex("e\\d+(?=-|\\+|$)").Matches(Value);

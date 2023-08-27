@@ -77,8 +77,8 @@ namespace Cmplx3
                 }
             }
             public override int GetHashCode() { return 0; }
-            public static explicit operator Vector7D(string Value) { return CType_Vector7D(Value); }
-            public static explicit operator string(Vector7D Value) { return CType_String(Value); }
+            public static explicit operator Vector7D(string Value) { return Vector7DModule.GetInstance(Value); }
+            public static explicit operator string(Vector7D Value) { return GetString(Value); }
             public static implicit operator Vector7D(double Value)
             {
                 if (Value == 0) { return new Vector7D(); }
@@ -149,8 +149,8 @@ namespace Cmplx3
             ///
             /// Conversion of Types
             ///
-            public static string CType_String(Vector7D Value) { return Value.ToString(); }
-            public static Vector7D CType_Vector7D(string Value)
+            public static string GetString(Vector7D Value) { return Value.ToString(); }
+            public static Vector7D GetInstance(string Value)
             {
                 Vector7D RetValue = 0;
                 double[] Numbers;
@@ -165,7 +165,7 @@ namespace Cmplx3
                 RetValue[7] = Numbers[6];
                 return RetValue;
             }
-            public static Vector7D ToVector7D(this string Value) { return CType_Vector7D(Value); }
+            public static Vector7D ToVector7D(this string Value) { return GetInstance(Value); }
         }
     }
     namespace MainType
@@ -219,8 +219,8 @@ namespace Cmplx3
                 }
             }
             public override int GetHashCode() { return 0; }
-            public static explicit operator Octonion(string Value) { return CType_Octonion(Value); }
-            public static explicit operator string(Octonion Value) { return CType_String(Value); }
+            public static explicit operator Octonion(string Value) { return OctonionModule.GetInstance(Value); }
+            public static explicit operator string(Octonion Value) { return GetString(Value); }
             public static implicit operator Octonion(double Value) { return new Octonion(Value, new Vector7D()); }
             public static implicit operator Octonion(Vector7D Value) { return new Octonion(0, Value); }
             public static double Scalar(Octonion Value) { return Value.real; }
@@ -405,8 +405,8 @@ namespace Cmplx3
             ///
             /// Conversion of Types
             ///
-            public static string CType_String(Octonion Value) { return Value.ToString(); }
-            public static Octonion CType_Octonion(string Value)
+            public static string GetString(Octonion Value) { return Value.ToString(); }
+            public static Octonion GetInstance(string Value)
             {
                 Octonion RetValue = 0;
                 double[] Numbers;
@@ -422,7 +422,7 @@ namespace Cmplx3
                 RetValue[7] = Numbers[7];
                 return RetValue;
             }
-            public static Octonion ToOctonion(this string Value) { return CType_Octonion(Value); }
+            public static Octonion ToOctonion(this string Value) { return GetInstance(Value); }
         }
     }
 }

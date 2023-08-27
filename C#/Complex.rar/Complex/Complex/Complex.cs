@@ -52,8 +52,8 @@ namespace Cmplx
                 }
             }
             public override int GetHashCode() { return 0; }
-            public static explicit operator Vector1D(string Value) { return CType_Vector1D(Value); }
-            public static explicit operator string(Vector1D Value) { return CType_String(Value); }
+            public static explicit operator Vector1D(string Value) { return Vector1DModule.GetInstance(Value); }
+            public static explicit operator string(Vector1D Value) { return GetString(Value); }
             public static implicit operator Vector1D(double Value)
             {
                 if (Value == 0) { return new Vector1D(); }
@@ -118,8 +118,8 @@ namespace Cmplx
             ///
             /// Conversion of Types
             ///
-            public static string CType_String(Vector1D Value) { return Value.ToString(); }
-            public static Vector1D CType_Vector1D(string Value)
+            public static string GetString(Vector1D Value) { return Value.ToString(); }
+            public static Vector1D GetInstance(string Value)
             {
                 Vector1D RetValue = 0;
                 double[] Numbers;
@@ -128,7 +128,7 @@ namespace Cmplx
                 RetValue[1] = Numbers[0];
                 return RetValue;
             }
-            public static Vector1D ToVector1D(this string Value) { return CType_Vector1D(Value); }
+            public static Vector1D ToVector1D(this string Value) { return GetInstance(Value); }
         }
     }
     namespace MainType
@@ -182,8 +182,8 @@ namespace Cmplx
                 }
             }
             public override int GetHashCode() { return 0; }
-            public static explicit operator Complex(string Value) { return CType_Complex(Value); }
-            public static explicit operator string(Complex Value) { return CType_String(Value); }
+            public static explicit operator Complex(string Value) { return ComplexModule.GetInstance(Value); }
+            public static explicit operator string(Complex Value) { return GetString(Value); }
             public static implicit operator Complex(double Value) { return new Complex(Value, new Vector1D()); }
             public static implicit operator Complex(Vector1D Value) { return new Complex(0, Value); }
             public static double Scalar(Complex Value) { return Value.real; }
@@ -364,8 +364,8 @@ namespace Cmplx
             ///
             /// Conversion of Types
             ///
-            public static string CType_String(Complex Value) { return Value.ToString(); }
-            public static Complex CType_Complex(string Value)
+            public static string GetString(Complex Value) { return Value.ToString(); }
+            public static Complex GetInstance(string Value)
             {
                 Complex RetValue = 0;
                 double[] Numbers;
@@ -375,7 +375,7 @@ namespace Cmplx
                 RetValue[1] = Numbers[1];
                 return RetValue;
             }
-            public static Complex ToComplex(this string Value) { return CType_Complex(Value); }
+            public static Complex ToComplex(this string Value) { return GetInstance(Value); }
         }
     }
 }

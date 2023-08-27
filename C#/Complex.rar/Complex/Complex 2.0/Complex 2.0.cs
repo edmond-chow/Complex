@@ -61,8 +61,8 @@ namespace Cmplx2
                 }
             }
             public override int GetHashCode() { return 0; }
-            public static explicit operator Vector3D(string Value) { return CType_Vector3D(Value); }
-            public static explicit operator string(Vector3D Value) { return CType_String(Value); }
+            public static explicit operator Vector3D(string Value) { return Vector3DModule.GetInstance(Value); }
+            public static explicit operator string(Vector3D Value) { return GetString(Value); }
             public static implicit operator Vector3D(double Value)
             {
                 if (Value == 0) { return new Vector3D(); }
@@ -129,8 +129,8 @@ namespace Cmplx2
             ///
             /// Conversion of Types
             ///
-            public static string CType_String(Vector3D Value) { return Value.ToString(); }
-            public static Vector3D CType_Vector3D(string Value)
+            public static string GetString(Vector3D Value) { return Value.ToString(); }
+            public static Vector3D GetInstance(string Value)
             {
                 Vector3D RetValue = 0;
                 double[] Numbers;
@@ -141,7 +141,7 @@ namespace Cmplx2
                 RetValue[3] = Numbers[2];
                 return RetValue;
             }
-            public static Vector3D ToVector3D(this string Value) { return CType_Vector3D(Value); }
+            public static Vector3D ToVector3D(this string Value) { return GetInstance(Value); }
         }
     }
     namespace MainType
@@ -195,8 +195,8 @@ namespace Cmplx2
                 }
             }
             public override int GetHashCode() { return 0; }
-            public static explicit operator Quaternion(string Value) { return CType_Quaternion(Value); }
-            public static explicit operator string(Quaternion Value) { return CType_String(Value); }
+            public static explicit operator Quaternion(string Value) { return QuaternionModule.GetInstance(Value); }
+            public static explicit operator string(Quaternion Value) { return GetString(Value); }
             public static implicit operator Quaternion(double Value) { return new Quaternion(Value, new Vector3D()); }
             public static implicit operator Quaternion(Vector3D Value) { return new Quaternion(0, Value); }
             public static double Scalar(Quaternion Value) { return Value.real; }
@@ -377,8 +377,8 @@ namespace Cmplx2
             ///
             /// Conversion of Types
             ///
-            public static string CType_String(Quaternion Value) { return Value.ToString(); }
-            public static Quaternion CType_Quaternion(string Value)
+            public static string GetString(Quaternion Value) { return Value.ToString(); }
+            public static Quaternion GetInstance(string Value)
             {
                 Quaternion RetValue = 0;
                 double[] Numbers;
@@ -390,7 +390,7 @@ namespace Cmplx2
                 RetValue[3] = Numbers[3];
                 return RetValue;
             }
-            public static Quaternion ToQuaternion(this string Value) { return CType_Quaternion(Value); }
+            public static Quaternion ToQuaternion(this string Value) { return GetInstance(Value); }
         }
     }
 }
