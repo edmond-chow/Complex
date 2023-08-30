@@ -218,20 +218,18 @@ namespace Seden
             {
                 Dimension = Math.Max(Dimension, long.Parse(Matches[i].Value.Substring(1)));
             }
-            double[] Numbers = new double[GetDimension(Dimension)];
-            string[] Strings = new string[Numbers.LongLength];
+            string[] Strings = new string[GetDimension(Dimension)];
             for (long i = 0; i < Strings.LongLength; ++i) { Strings[i] = "e" + i.ToString(); }
-            Numbers = Value.ToNumbers(Strings);
-            return new Sedenion(Numbers);
+            return new Sedenion(Value.ToNumbers(Strings));
         }
         /* Casting */
         private Number ToNumber() { return numbers; }
-        private Number ToNumber(int D)
+        private Number ToNumber(int Dimension)
         {
-            double[] numbers = Data.ToArray();
-            Array.Resize(ref numbers, Math.Max(Length, D));
-            return new Number(numbers);
+            double[] Numbers = Data.ToArray();
+            Array.Resize(ref Numbers, Math.Max(Length, Dimension));
+            return new Number(Numbers);
         }
-        private static Sedenion From(Number N) { return new Sedenion(N.ToArray()); }
+        private static Sedenion From(Number Number) { return new Sedenion(Number.ToArray()); }
     }
 }

@@ -6,50 +6,50 @@ internal class Number : IEnumerable<double>
 {
     public class NumberIterator : IEnumerator<double>
     {
-        private readonly double[] numbers;
-        private long index;
-        public double Current => numbers[index];
-        object IEnumerator.Current => numbers[index];
+        private readonly double[] Numbers;
+        private long Index;
+        public double Current => Numbers[Index];
+        object IEnumerator.Current => Numbers[Index];
         public void Dispose() { }
         public bool MoveNext()
         {
-            if (index < numbers.LongLength) { ++index; }
-            if (index == numbers.LongLength) { return false; }
+            if (Index < Numbers.LongLength) { ++Index; }
+            if (Index == Numbers.LongLength) { return false; }
             return true;
         }
-        public void Reset() { index = -1; }
-        public NumberIterator(double[] data)
+        public void Reset() { Index = -1; }
+        public NumberIterator(double[] Data)
         {
-            numbers = data;
-            index = -1;
+            Numbers = Data;
+            Index = -1;
         }
     }
-    public IEnumerator<double> GetEnumerator() { return new NumberIterator(data); }
-    IEnumerator IEnumerable.GetEnumerator() { return new NumberIterator(data); }
-    private static bool IsNumber(long n)
+    public IEnumerator<double> GetEnumerator() { return new NumberIterator(Data); }
+    IEnumerator IEnumerable.GetEnumerator() { return new NumberIterator(Data); }
+    private static bool IsNumber(long Number)
     {
-        if (n < 0) { return false; }
-        if (n == 1) { return true; }
-        else if (n == 0 || (n >> 1 << 1 != n)) { return false; }
-        return IsNumber(n >> 1);
+        if (Number < 0) { return false; }
+        if (Number == 1) { return true; }
+        else if (Number == 0 || (Number >> 1 << 1 != Number)) { return false; }
+        return IsNumber(Number >> 1);
     }
-    private readonly double[] data;
-    public double this[long i]
+    private readonly double[] Data;
+    public double this[long Index]
     {
-        get => data[i];
-        set => data[i] = value;
+        get => Data[Index];
+        set => Data[Index] = value;
     }
-    public int Length { get => data.Length; }
-    public long LongLength { get => data.LongLength; }
-    public Number(long size)
+    public int Length { get => Data.Length; }
+    public long LongLength { get => Data.LongLength; }
+    public Number(long Size)
     {
-        if (!IsNumber(size)) { throw new ArgumentException("The size must be a number which is 2 to the power of a natural number."); }
-        data = new double[size];
+        if (!IsNumber(Size)) { throw new ArgumentException("The size must be a number which is 2 to the power of a natural number."); }
+        Data = new double[Size];
     }
-    public Number(params double[] args)
+    public Number(params double[] Args)
     {
-        if (!IsNumber(args.LongLength)) { throw new ArgumentException("The size must be a number which is 2 to the power of a natural number."); }
-        data = args;
+        if (!IsNumber(Args.LongLength)) { throw new ArgumentException("The size must be a number which is 2 to the power of a natural number."); }
+        Data = Args;
     }
     public static bool Equal(Number Union, Number Value)
     {

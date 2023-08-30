@@ -105,9 +105,9 @@ namespace Cmplx3
             {
                 return new Number(0, x1, x2, x3, x4, x5, x6, x7);
             }
-            internal static Vector7D From(Number N)
+            internal static Vector7D From(Number Number)
             {
-                return new Vector7D(N[1], N[2], N[3], N[4], N[5], N[6], N[7]);
+                return new Vector7D(Number[1], Number[2], Number[3], Number[4], Number[5], Number[6], Number[7]);
             }
         }
         [Serializable]
@@ -249,9 +249,9 @@ namespace Cmplx3
             {
                 return new Number(real, imaginary[1], imaginary[2], imaginary[3], imaginary[4], imaginary[5], imaginary[6], imaginary[7]);
             }
-            internal static Octonion From(Number N)
+            internal static Octonion From(Number Number)
             {
-                return new Octonion(N[0], N[1], N[2], N[3], N[4], N[5], N[6], N[7]);
+                return new Octonion(Number[0], Number[1], Number[2], Number[3], Number[4], Number[5], Number[6], Number[7]);
             }
         }
         [Serializable]

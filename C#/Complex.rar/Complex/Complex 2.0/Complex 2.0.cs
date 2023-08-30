@@ -89,9 +89,9 @@ namespace Cmplx2
             {
                 return new Number(0, x1, x2, x3);
             }
-            internal static Vector3D From(Number N)
+            internal static Vector3D From(Number Number)
             {
-                return new Vector3D(N[1], N[2], N[3]);
+                return new Vector3D(Number[1], Number[2], Number[3]);
             }
         }
         [Serializable]
@@ -225,9 +225,9 @@ namespace Cmplx2
             {
                 return new Number(real, imaginary[1], imaginary[2], imaginary[3]);
             }
-            internal static Quaternion From(Number N)
+            internal static Quaternion From(Number Number)
             {
-                return new Quaternion(N[0], N[1], N[2], N[3]);
+                return new Quaternion(Number[0], Number[1], Number[2], Number[3]);
             }
         }
         [Serializable]

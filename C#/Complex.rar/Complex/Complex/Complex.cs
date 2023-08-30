@@ -80,9 +80,9 @@ namespace Cmplx
             {
                 return new Number(0, x1);
             }
-            internal static Vector1D From(Number N)
+            internal static Vector1D From(Number Number)
             {
-                return new Vector1D(N[1]);
+                return new Vector1D(Number[1]);
             }
         }
         [Serializable]
@@ -212,9 +212,9 @@ namespace Cmplx
             {
                 return new Number(real, imaginary[1]);
             }
-            internal static Complex From(Number N)
+            internal static Complex From(Number Number)
             {
-                return new Complex(N[0], N[1]);
+                return new Complex(Number[0], Number[1]);
             }
         }
         [Serializable]
