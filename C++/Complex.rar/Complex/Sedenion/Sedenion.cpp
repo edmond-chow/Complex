@@ -1,5 +1,6 @@
 ﻿#include <cmath>
 #include <numbers>
+#include <stdexcept>
 #include <limits>
 #include "Module.h"
 #include "Cayley Dickson Algebra.h"

@@ -1,6 +1,6 @@
 ﻿#pragma once
-#ifndef CMPLX_UNIT_TEST
-#define CMPLX_UNIT_TEST
+#ifndef SEDEN_UNIT_TEST
+#define SEDEN_UNIT_TEST
 #include <cstdint>
 #include <array>
 #include <iomanip>
