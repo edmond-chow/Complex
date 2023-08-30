@@ -1,4 +1,5 @@
 ﻿#include <string>
+#include <stdexcept>
 #include <iostream>
 #include "Module.h"
 #include "Module2.h"
