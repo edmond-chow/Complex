@@ -136,9 +136,7 @@ namespace Cmplx2
                 double[] Numbers;
                 try { Numbers = Value.ToNumbers("e1", "e2", "e3"); }
                 catch (Exception Exception) { throw new Vector3DException("The string cannot be converted as a number.", Exception); }
-                RetValue[1] = Numbers[0];
-                RetValue[2] = Numbers[1];
-                RetValue[3] = Numbers[2];
+                for (long i = 0; i < Numbers.LongLength; i++) { RetValue[i + 1] = Numbers[i]; }
                 return RetValue;
             }
             public static Vector3D ToVector3D(this string Value) { return GetInstance(Value); }
@@ -384,10 +382,7 @@ namespace Cmplx2
                 double[] Numbers;
                 try { Numbers = Value.ToNumbers("", "i", "j", "k"); }
                 catch (Exception Exception) { throw new QuaternionException("The string cannot be converted as a number.", Exception); }
-                RetValue[0] = Numbers[0];
-                RetValue[1] = Numbers[1];
-                RetValue[2] = Numbers[2];
-                RetValue[3] = Numbers[3];
+                for (long i = 0; i < Numbers.LongLength; i++) { RetValue[i] = Numbers[i]; }
                 return RetValue;
             }
             public static Quaternion ToQuaternion(this string Value) { return GetInstance(Value); }

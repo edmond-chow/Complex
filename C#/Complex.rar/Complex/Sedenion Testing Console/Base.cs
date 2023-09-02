@@ -11,9 +11,9 @@ namespace SedenionTestingConsole
         private static readonly string[] TestingConsole = new string[] { "Exit", "Complex Testing Console", "Quaternion Testing Console", "Octonion Testing Console", "SedenionMode" };
         private const long DefaultIndex = 3;
         private static long Index = DefaultIndex;
-        private static string AddSquares(this string Str)
+        private static string AddSquares(this string Option)
         {
-            return "[" + Str + "]";
+            return "[" + Option + "]";
         }
         public static string GetTitle()
         {
@@ -50,6 +50,7 @@ namespace SedenionTestingConsole
                 switch (Index)
                 {
                     case 0:
+                        Index = DefaultIndex;
                         Console.Clear();
                         return;
                     case 1:
@@ -72,18 +73,18 @@ namespace SedenionTestingConsole
         ///
         /// Console Line Materials
         ///
-        internal static string Exception(Exception ex)
+        internal static string Exception(Exception Exception)
         {
             Console.WriteLine();
-            while (ex != null)
+            while (Exception != null)
             {
                 Console.ForegroundColor = ConsoleColor.DarkCyan;
-                Console.Write("   [" + ex.GetType().FullName + "] ");
+                Console.Write("   [" + Exception.GetType().FullName + "] ");
                 Console.ForegroundColor = ConsoleColor.Cyan;
-                Console.WriteLine(ex.Message);
+                Console.WriteLine(Exception.Message);
                 Console.ForegroundColor = ConsoleColor.Gray;
-                Console.WriteLine(Regex.Replace(ex.StackTrace, "(^|\n)", "${0}   "));
-                ex = ex.InnerException;
+                Console.WriteLine(Regex.Replace(Exception.StackTrace, "(^|\n)", "${0}   "));
+                Exception = Exception.InnerException;
             }
             Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine("   Press any key to continue . . . ");
@@ -95,24 +96,24 @@ namespace SedenionTestingConsole
         {
             return Exception(new Exception());
         }
-        internal static string Selection(string str)
+        internal static string Selection(string Content)
         {
             Console.ForegroundColor = ConsoleColor.DarkCyan;
             Console.Write(" %   ");
             Console.ForegroundColor = ConsoleColor.Blue;
-            Console.WriteLine(str);
-            return str;
+            Console.WriteLine(Content);
+            return Content;
         }
         internal static string Selection()
         {
             return Selection("");
         }
-        internal static string Input(string str)
+        internal static string Input(string Content)
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.Write(" >   ");
             Console.ForegroundColor = ConsoleColor.DarkGreen;
-            Console.Write(str);
+            Console.Write(Content);
             Console.ForegroundColor = ConsoleColor.Green;
             return Console.ReadLine();
         }
@@ -120,46 +121,46 @@ namespace SedenionTestingConsole
         {
             return Input("");
         }
-        internal static string Output(string main, string str)
+        internal static string Output(string Preceding, string Content)
         {
             Console.ForegroundColor = ConsoleColor.Magenta;
             Console.Write(" #   ");
             Console.ForegroundColor = ConsoleColor.DarkRed;
-            Console.Write(main);
+            Console.Write(Preceding);
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine(str);
-            return str;
+            Console.WriteLine(Content);
+            return Content;
         }
-        internal static string Output(string str)
+        internal static string Output(string Content)
         {
-            return Output("", str);
+            return Output("", Content);
         }
         internal static string Output()
         {
             return Output("");
         }
-        internal static string Comment(string head, string str)
+        internal static string Comment(string Preceding, string Content)
         {
             Console.ForegroundColor = ConsoleColor.White;
             Console.Write(" /   ");
             Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.Write(head);
+            Console.Write(Preceding);
             Console.ForegroundColor = ConsoleColor.Gray;
-            Console.WriteLine(str);
-            return str;
+            Console.WriteLine(Content);
+            return Content;
         }
-        internal static string Comment(string str)
+        internal static string Comment(string Content)
         {
-            return Comment("", str);
+            return Comment("", Content);
         }
         internal static string Comment()
         {
             return Comment("");
         }
-        internal static void Startup(string title)
+        internal static void Startup(string Title)
         {
             Console.Clear();
-            Console.Title = title;
+            Console.Title = Title;
             Console.WriteLine();
         }
     }
@@ -194,21 +195,21 @@ namespace SedenionTestingConsole
                 Data[I] = new Tuple<long, long>(Min, Max);
             }
         }
-        internal static void PowerResult<N>(Delegate f, string str, N Union, N Value, long[] Data)
+        internal static void PowerResult<N>(Delegate Subroutine, string RightValue, N Union, N Value, long[] Data)
         {
-            if (str == null) { return; }
+            if (RightValue == null) { return; }
             object[] Params = new object[Data.LongLength + 2];
             Params[0] = Union;
             Params[1] = Value;
             for (long i = 0; i < Data.LongLength; ++i) { Params[i + 2] = Data[i]; }
-            Base.Output(((N)f.DynamicInvoke(Params)).ToString());
+            Base.Output(((N)Subroutine.DynamicInvoke(Params)).ToString());
         }
-        internal static void PowerResult<N>(Delegate f, string str, N Union, N Value, Tuple<long, long>[] Data)
+        internal static void PowerResult<N>(Delegate Subroutine, string RightValue, N Union, N Value, Tuple<long, long>[] Data)
         {
             long[] Temp = new long[Data.LongLength];
-            PowerResultImpl(f, str, Union, Value, Data, Temp, 0);
+            PowerResultImpl(Subroutine, RightValue, Union, Value, Data, Temp, 0);
         }
-        private static void PowerResultImpl<N>(Delegate f, string str, N Union, N Value, Tuple<long, long>[] Data, long[] Temp, long X)
+        private static void PowerResultImpl<N>(Delegate Subroutine, string RightValue, N Union, N Value, Tuple<long, long>[] Data, long[] Temp, long X)
         {
             if (X == Temp.LongLength)
             {
@@ -216,21 +217,21 @@ namespace SedenionTestingConsole
                 Params[0] = Union;
                 Params[1] = Value;
                 for (long i = 0; i < Temp.LongLength; ++i) { Params[i + 2] = Temp[i]; }
-                Base.Output(GetOutputPrepend(str, Temp), ((N)f.DynamicInvoke(Params)).ToString());
+                Base.Output(GetOutputPrepend(RightValue, Temp), ((N)Subroutine.DynamicInvoke(Params)).ToString());
                 return;
             }
             for (long I = Data[X].Item1; I <= Data[X].Item2; ++I)
             {
                 Temp[X] = I;
-                PowerResultImpl(f, str, Union, Value, Data, Temp, X + 1);
+                PowerResultImpl(Subroutine, RightValue, Union, Value, Data, Temp, X + 1);
             }
         }
-        private static string GetOutputPrepend(string str, long[] integers)
+        private static string GetOutputPrepend(string RightValue, long[] Temp)
         {
-            string ret = str + "(";
-            for (long i = 0; i < integers.LongLength; ++i)
+            string ret = RightValue + "(";
+            for (long i = 0; i < Temp.LongLength; ++i)
             {
-                ret += integers[i].ToString() + ", ";
+                ret += Temp[i].ToString() + ", ";
             }
             ret = ret.Substring(0, ret.Length - 2);
             ret += ") = ";

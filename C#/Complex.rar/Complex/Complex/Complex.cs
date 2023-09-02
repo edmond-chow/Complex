@@ -125,7 +125,7 @@ namespace Cmplx
                 double[] Numbers;
                 try { Numbers = Value.ToNumbers("e1"); }
                 catch (Exception Exception) { throw new Vector1DException("The string cannot be converted as a number.", Exception); }
-                RetValue[1] = Numbers[0];
+                for (long i = 0; i < Numbers.LongLength; i++) { RetValue[i + 1] = Numbers[i]; }
                 return RetValue;
             }
             public static Vector1D ToVector1D(this string Value) { return GetInstance(Value); }
@@ -371,8 +371,7 @@ namespace Cmplx
                 double[] Numbers;
                 try { Numbers = Value.ToNumbers("", "i"); }
                 catch (Exception Exception) { throw new ComplexException("The string cannot be converted as a number.", Exception); }
-                RetValue[0] = Numbers[0];
-                RetValue[1] = Numbers[1];
+                for (long i = 0; i < Numbers.LongLength; i++) { RetValue[i] = Numbers[i]; }
                 return RetValue;
             }
             public static Complex ToComplex(this string Value) { return GetInstance(Value); }

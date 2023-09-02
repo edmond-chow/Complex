@@ -156,13 +156,7 @@ namespace Cmplx3
                 double[] Numbers;
                 try { Numbers = Value.ToNumbers("e1", "e2", "e3", "e4", "e5", "e6", "e7"); }
                 catch (Exception Exception) { throw new Vector7DException("The string cannot be converted as a number.", Exception); }
-                RetValue[1] = Numbers[0];
-                RetValue[2] = Numbers[1];
-                RetValue[3] = Numbers[2];
-                RetValue[4] = Numbers[3];
-                RetValue[5] = Numbers[4];
-                RetValue[6] = Numbers[5];
-                RetValue[7] = Numbers[6];
+                for (long i = 0; i < Numbers.LongLength; i++) { RetValue[i + 1] = Numbers[i]; }
                 return RetValue;
             }
             public static Vector7D ToVector7D(this string Value) { return GetInstance(Value); }
@@ -412,14 +406,7 @@ namespace Cmplx3
                 double[] Numbers;
                 try { Numbers = Value.ToNumbers("", "i", "j", "k", "l", "il", "jl", "kl"); }
                 catch (Exception Exception) { throw new OctonionException("The string cannot be converted as a number.", Exception); }
-                RetValue[0] = Numbers[0];
-                RetValue[1] = Numbers[1];
-                RetValue[2] = Numbers[2];
-                RetValue[3] = Numbers[3];
-                RetValue[4] = Numbers[4];
-                RetValue[5] = Numbers[5];
-                RetValue[6] = Numbers[6];
-                RetValue[7] = Numbers[7];
+                for (long i = 0; i < Numbers.LongLength; i++) { RetValue[i] = Numbers[i]; }
                 return RetValue;
             }
             public static Octonion ToOctonion(this string Value) { return GetInstance(Value); }

@@ -83,10 +83,10 @@ internal static class Module
         }
         return Output;
     }
-    internal static long PeriodShift(long i, long l)
+    internal static long PeriodShift(long Index, long LongLength)
     {
-        --i;
-        i %= l;
-        return ++i;
+        --Index;
+        Index %= LongLength;
+        return ++Index;
     }
 }

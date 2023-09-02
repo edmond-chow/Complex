@@ -71,11 +71,11 @@ internal static class Module
         SetForValue(TheValue, Numbers, Terms);
         return Numbers;
     }
-    internal static long Period(Type type)
+    internal static long Period(Type Type)
     {
         long Output = 0;
-        if (!type.IsValueType) { throw new NotImplementedException("The type should be a value type."); }
-        foreach (FieldInfo Field in type.GetRuntimeFields())
+        if (!Type.IsValueType) { throw new NotImplementedException("The type should be a value type."); }
+        foreach (FieldInfo Field in Type.GetRuntimeFields())
         {
             if (Field.FieldType == typeof(double)) { ++Output; }
             else if (Field.FieldType.IsValueType) { Output += Period(Field.FieldType); }
@@ -83,10 +83,10 @@ internal static class Module
         }
         return Output;
     }
-    internal static long PeriodShift(long i, long l)
+    internal static long PeriodShift(long Index, long LongLength)
     {
-        --i;
-        i %= l;
-        return ++i;
+        --Index;
+        Index %= LongLength;
+        return ++Index;
     }
 }
