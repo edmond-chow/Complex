@@ -104,17 +104,17 @@ namespace SedenionTestingConsole
 		///
 		/// Console Line Materials
 		///
-		static std::wstring Exception(const std::exception& ex);
+		static std::wstring Exception(const std::exception& Exception);
 		static std::wstring Exception();
-		static std::wstring Selection(const std::wstring& str);
+		static std::wstring Selection(const std::wstring& Content);
 		static std::wstring Selection();
-		static std::wstring Input(const std::wstring& str);
+		static std::wstring Input(const std::wstring& Content);
 		static std::wstring Input();
-		static std::wstring Output(const std::wstring& main, const std::wstring& str);
-		static std::wstring Output(const std::wstring& str);
+		static std::wstring Output(const std::wstring& main, const std::wstring& Content);
+		static std::wstring Output(const std::wstring& Content);
 		static std::wstring Output();
-		static std::wstring Comment(const std::wstring& head, const std::wstring& str);
-		static std::wstring Comment(const std::wstring& str);
+		static std::wstring Comment(const std::wstring& head, const std::wstring& Content);
+		static std::wstring Comment(const std::wstring& Content);
 		static std::wstring Comment();
 		static void Startup(const std::wstring& title);
 	};
@@ -134,9 +134,9 @@ namespace SedenionTestingConsole
 		return get_output_prepend_impl(prepend + to_wstring(arg) + midend, midend, append, args...);
 	};
 	template <typename... Args>
-	std::wstring get_output_prepend(const std::wstring& str, Args... args)
+	std::wstring get_output_prepend(const std::wstring& RightValue, Args... Temp)
 	{
-		return get_output_prepend_impl(str + L"(", L", ", L") = ", args...);
+		return get_output_prepend_impl(RightValue + L"(", L", ", L") = ", Temp...);
 	};
 	template <typename T, std::size_t I = 0, std::size_t A, std::size_t S>
 	void power_get_impl(std::array<T, A>& Data, const std::array<const wchar_t*, S>& Angle)
@@ -168,33 +168,33 @@ namespace SedenionTestingConsole
 		power_get_impl(Data, Angle);
 	};
 	template <typename F, typename N, std::size_t A, std::size_t... I>
-	void power_result_impl(F f, const N& Union, const N& Value, const std::array<std::int64_t, A>& Data, std::integer_sequence<std::size_t, I...>)
+	void power_result_impl(F Subroutine, const N& Union, const N& Value, const std::array<std::int64_t, A>& Data, std::integer_sequence<std::size_t, I...>)
 	{
-		Base::Output(to_wstring(std::invoke(f, Union, Value, std::get<I>(Data)...)));
+		Base::Output(to_wstring(std::invoke(Subroutine, Union, Value, std::get<I>(Data)...)));
 	};
 	template <typename F, typename N, std::size_t A, std::size_t... I>
-	void power_result_impl(F f, const std::wstring& str, const N& Union, const N& Value, const std::array<std::int64_t, A>& Temp, std::integer_sequence<std::size_t, I...>)
+	void power_result_impl(F Subroutine, const std::wstring& RightValue, const N& Union, const N& Value, const std::array<std::int64_t, A>& Temp, std::integer_sequence<std::size_t, I...>)
 	{
 		Base::Output(
-			get_output_prepend(str, std::get<I>(Temp)...),
-			to_wstring(std::invoke(f, Union, Value, std::get<I>(Temp)...))
+			get_output_prepend(RightValue, std::get<I>(Temp)...),
+			to_wstring(std::invoke(Subroutine, Union, Value, std::get<I>(Temp)...))
 		);
 	};
 	template <typename F, typename N, std::size_t A, std::size_t I = 0>
-	void power_result_impl(F f, const std::wstring& str, const N& Union, const N& Value, const std::array<std::pair<std::int64_t, std::int64_t>, A>& Data, std::array<std::int64_t, A>& Temp)
+	void power_result_impl(F Subroutine, const std::wstring& RightValue, const N& Union, const N& Value, const std::array<std::pair<std::int64_t, std::int64_t>, A>& Data, std::array<std::int64_t, A>& Temp)
 	{
 		if constexpr (I < A)
 		{
 			while (std::get<I>(Temp) <= std::get<I>(Data).second)
 			{
-				power_result_impl<F, N, A, I + 1>(f, str, Union, Value, Data, Temp);
+				power_result_impl<F, N, A, I + 1>(Subroutine, RightValue, Union, Value, Data, Temp);
 				std::get<I>(Temp) = std::get<I>(Temp) + 1;
 			}
 			std::get<I>(Temp) = std::get<I>(Data).first;
 		}
 		else if constexpr (I == A)
 		{
-			power_result_impl(f, str, Union, Value, Temp, std::make_index_sequence<A>{});
+			power_result_impl(Subroutine, RightValue, Union, Value, Temp, std::make_index_sequence<A>{});
 		}
 	};
 	template <std::size_t A, std::size_t I = 0>
@@ -207,17 +207,17 @@ namespace SedenionTestingConsole
 		}
 	};
 	template <typename T, typename F, typename N, std::size_t A>
-	void power_result(F f, const std::wstring& str, const N& Union, const N& Value, const std::array<T, A>& Data)
+	void power_result(F Subroutine, const std::wstring& RightValue, const N& Union, const N& Value, const std::array<T, A>& Data)
 	{
 		if constexpr (std::is_same_v<T, std::int64_t>)
 		{
-			power_result_impl(f, Union, Value, Data, std::make_index_sequence<A>{});
+			power_result_impl(Subroutine, Union, Value, Data, std::make_index_sequence<A>{});
 		}
 		else if constexpr (std::is_same_v<T, std::pair<std::int64_t, std::int64_t>>)
 		{
 			std::array<std::int64_t, A> Temp{};
 			power_temp_init(Data, Temp);
-			power_result_impl(f, str, Union, Value, Data, Temp);
+			power_result_impl(Subroutine, RightValue, Union, Value, Data, Temp);
 		}
 	};
 }

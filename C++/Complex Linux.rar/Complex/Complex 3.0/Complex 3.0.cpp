@@ -355,16 +355,16 @@ namespace Cmplx3
 			///
 			/// Operation 3 algorithms
 			///
-			static Octonion CMPLX3_FUNC_CALL Power(const Octonion& Base, const Octonion& Exponent);
-			static Octonion CMPLX3_FUNC_CALL Power(const Octonion& Base, const Octonion& Exponent, std::int64_t Theta, std::int64_t Phi, std::int64_t Tau);
-			static Octonion CMPLX3_FUNC_CALL Power(const Octonion& Base, double Exponent);
-			static Octonion CMPLX3_FUNC_CALL Power(const Octonion& Base, double Exponent, std::int64_t Theta);
-			static Octonion CMPLX3_FUNC_CALL Root(const Octonion& Base, const Octonion& Exponent);
-			static Octonion CMPLX3_FUNC_CALL Root(const Octonion& Base, const Octonion& Exponent, std::int64_t Theta, std::int64_t Phi, std::int64_t Tau);
-			static Octonion CMPLX3_FUNC_CALL Root(const Octonion& Base, double Exponent);
-			static Octonion CMPLX3_FUNC_CALL Root(const Octonion& Base, double Exponent, std::int64_t Theta);
-			static Octonion CMPLX3_FUNC_CALL Log(const Octonion& Base, const Octonion& Number);
-			static Octonion CMPLX3_FUNC_CALL Log(const Octonion& Base, const Octonion& Number, std::int64_t Theta, std::int64_t Phi, std::int64_t Tau, std::int64_t Omega);
+			static Octonion CMPLX3_FUNC_CALL power(const Octonion& Base, const Octonion& Exponent);
+			static Octonion CMPLX3_FUNC_CALL power(const Octonion& Base, const Octonion& Exponent, std::int64_t Theta, std::int64_t Phi, std::int64_t Tau);
+			static Octonion CMPLX3_FUNC_CALL power(const Octonion& Base, double Exponent);
+			static Octonion CMPLX3_FUNC_CALL power(const Octonion& Base, double Exponent, std::int64_t Theta);
+			static Octonion CMPLX3_FUNC_CALL root(const Octonion& Base, const Octonion& Exponent);
+			static Octonion CMPLX3_FUNC_CALL root(const Octonion& Base, const Octonion& Exponent, std::int64_t Theta, std::int64_t Phi, std::int64_t Tau);
+			static Octonion CMPLX3_FUNC_CALL root(const Octonion& Base, double Exponent);
+			static Octonion CMPLX3_FUNC_CALL root(const Octonion& Base, double Exponent, std::int64_t Theta);
+			static Octonion CMPLX3_FUNC_CALL log(const Octonion& Base, const Octonion& Number);
+			static Octonion CMPLX3_FUNC_CALL log(const Octonion& Base, const Octonion& Number, std::int64_t Theta, std::int64_t Phi, std::int64_t Tau, std::int64_t Omega);
 			///
 			/// Trigonometric functions
 			///
@@ -559,7 +559,7 @@ namespace Cmplx3
 		};
 		Octonion CMPLX3_FUNC_CALL operator ^(const Octonion& Base, std::int64_t Exponent) noexcept
 		{
-			try { return Octonion::Power(Base, static_cast<double>(Exponent)); }
+			try { return Octonion::power(Base, static_cast<double>(Exponent)); }
 			catch (...) { return 0; }
 		};
 		Octonion& CMPLX3_FUNC_INSTANCE_CALL Octonion::operator =(const Octonion& Value) & noexcept
@@ -620,24 +620,24 @@ namespace Cmplx3
 		///
 		/// Operation 3 algorithms
 		///
-		Octonion CMPLX3_FUNC_CALL Octonion::Power(const Octonion& Base, const Octonion& Exponent) { return Power(Base, Exponent, 0, 0, 0); };
-		Octonion CMPLX3_FUNC_CALL Octonion::Power(const Octonion& Base, const Octonion& Exponent, std::int64_t Theta, std::int64_t Phi, std::int64_t Tau)
+		Octonion CMPLX3_FUNC_CALL Octonion::power(const Octonion& Base, const Octonion& Exponent) { return power(Base, Exponent, 0, 0, 0); };
+		Octonion CMPLX3_FUNC_CALL Octonion::power(const Octonion& Base, const Octonion& Exponent, std::int64_t Theta, std::int64_t Phi, std::int64_t Tau)
 		{
 			return exp(exp(ln(ln(Base, Theta), Phi) + ln(Exponent, Tau)));
 		};
-		Octonion CMPLX3_FUNC_CALL Octonion::Power(const Octonion& Base, double Exponent) { return Power(Base, Exponent, 0); }
-		Octonion CMPLX3_FUNC_CALL Octonion::Power(const Octonion& Base, double Exponent, std::int64_t Theta)
+		Octonion CMPLX3_FUNC_CALL Octonion::power(const Octonion& Base, double Exponent) { return power(Base, Exponent, 0); }
+		Octonion CMPLX3_FUNC_CALL Octonion::power(const Octonion& Base, double Exponent, std::int64_t Theta)
 		{
 			if (Base == 0) { return Exponent == 0 ? 1 : 0; }
 			return std::pow(abs(Base), Exponent) *
 				(std::cos(Exponent * arg(Base, Theta)) + sgn(Vector(Base)) * std::sin(Exponent * arg(Base, Theta)));
 		};
-		Octonion CMPLX3_FUNC_CALL Octonion::Root(const Octonion& Base, const Octonion& Exponent) { return Root(Base, Exponent, 0, 0, 0); };
-		Octonion CMPLX3_FUNC_CALL Octonion::Root(const Octonion& Base, const Octonion& Exponent, std::int64_t Theta, std::int64_t Phi, std::int64_t Tau) { return Power(Base, inverse(Exponent), Theta, Phi, Tau); };
-		Octonion CMPLX3_FUNC_CALL Octonion::Root(const Octonion& Base, double Exponent) { return Power(Base, 1 / Exponent); };
-		Octonion CMPLX3_FUNC_CALL Octonion::Root(const Octonion& Base, double Exponent, std::int64_t Theta) { return Power(Base, 1 / Exponent, Theta); };
-		Octonion CMPLX3_FUNC_CALL Octonion::Log(const Octonion& Base, const Octonion& Number) { return Log(Base, Number, 0, 0, 0, 0); };
-		Octonion CMPLX3_FUNC_CALL Octonion::Log(const Octonion& Base, const Octonion& Number, std::int64_t Theta, std::int64_t Phi, std::int64_t Tau, std::int64_t Omega)
+		Octonion CMPLX3_FUNC_CALL Octonion::root(const Octonion& Base, const Octonion& Exponent) { return root(Base, Exponent, 0, 0, 0); };
+		Octonion CMPLX3_FUNC_CALL Octonion::root(const Octonion& Base, const Octonion& Exponent, std::int64_t Theta, std::int64_t Phi, std::int64_t Tau) { return power(Base, inverse(Exponent), Theta, Phi, Tau); };
+		Octonion CMPLX3_FUNC_CALL Octonion::root(const Octonion& Base, double Exponent) { return power(Base, 1 / Exponent); };
+		Octonion CMPLX3_FUNC_CALL Octonion::root(const Octonion& Base, double Exponent, std::int64_t Theta) { return power(Base, 1 / Exponent, Theta); };
+		Octonion CMPLX3_FUNC_CALL Octonion::log(const Octonion& Base, const Octonion& Number) { return log(Base, Number, 0, 0, 0, 0); };
+		Octonion CMPLX3_FUNC_CALL Octonion::log(const Octonion& Base, const Octonion& Number, std::int64_t Theta, std::int64_t Phi, std::int64_t Tau, std::int64_t Omega)
 		{
 			return exp(ln(ln(Number, Theta), Phi) - ln(ln(Base, Tau), Omega));
 		};
@@ -663,7 +663,7 @@ namespace Cmplx3
 		Octonion CMPLX3_FUNC_CALL Octonion::arcsinh(const Octonion& Value) { return arcsinh(Value, true, 0); };
 		Octonion CMPLX3_FUNC_CALL Octonion::arcsinh(const Octonion& Value, bool Sign, std::int64_t Period)
 		{
-			if (Sign == true) { return ln(Value + Root(Power(Value, 2) + 1, 2), Period); }
+			if (Sign == true) { return ln(Value + root(power(Value, 2) + 1, 2), Period); }
 			else { return pi * sgn(Vector(Value)) - arcsinh(Value, true, Period); }
 		};
 		Octonion CMPLX3_FUNC_CALL Octonion::cos(const Octonion& Value)
@@ -685,12 +685,12 @@ namespace Cmplx3
 		Octonion CMPLX3_FUNC_CALL Octonion::arccosh(const Octonion& Value) { return arccosh(Value, true, 0); };
 		Octonion CMPLX3_FUNC_CALL Octonion::arccosh(const Octonion& Value, bool Sign, std::int64_t Period)
 		{
-			if (Sign == true) { return ln(Value + Root(Power(Value, 2) - 1, 2), Period); }
+			if (Sign == true) { return ln(Value + root(power(Value, 2) - 1, 2), Period); }
 			else { return 2 * pi * sgn(Vector(Value)) - arccosh(Value, true, Period); }
 		};
 		Octonion CMPLX3_FUNC_CALL Octonion::tan(const Octonion& Value)
 		{
-			return Root(Power(sec(Value), 2) - 1, 2);
+			return root(power(sec(Value), 2) - 1, 2);
 		};
 		Octonion CMPLX3_FUNC_CALL Octonion::arctan(const Octonion& Value) { return arctan(Value, true, 0); };
 		Octonion CMPLX3_FUNC_CALL Octonion::arctan(const Octonion& Value, bool Sign, std::int64_t Period)

@@ -164,16 +164,16 @@ namespace Cmplx2
 			///
 			/// Operation 3 algorithms
 			///
-			static Quaternion CMPLX2_FUNC_CALL Power(const Quaternion& Base, const Quaternion& Exponent);
-			static Quaternion CMPLX2_FUNC_CALL Power(const Quaternion& Base, const Quaternion& Exponent, std::int64_t Theta, std::int64_t Phi, std::int64_t Tau);
-			static Quaternion CMPLX2_FUNC_CALL Power(const Quaternion& Base, double Exponent);
-			static Quaternion CMPLX2_FUNC_CALL Power(const Quaternion& Base, double Exponent, std::int64_t Theta);
-			static Quaternion CMPLX2_FUNC_CALL Root(const Quaternion& Base, const Quaternion& Exponent);
-			static Quaternion CMPLX2_FUNC_CALL Root(const Quaternion& Base, const Quaternion& Exponent, std::int64_t Theta, std::int64_t Phi, std::int64_t Tau);
-			static Quaternion CMPLX2_FUNC_CALL Root(const Quaternion& Base, double Exponent);
-			static Quaternion CMPLX2_FUNC_CALL Root(const Quaternion& Base, double Exponent, std::int64_t Theta);
-			static Quaternion CMPLX2_FUNC_CALL Log(const Quaternion& Base, const Quaternion& Number);
-			static Quaternion CMPLX2_FUNC_CALL Log(const Quaternion& Base, const Quaternion& Number, std::int64_t Theta, std::int64_t Phi, std::int64_t Tau, std::int64_t Omega);
+			static Quaternion CMPLX2_FUNC_CALL power(const Quaternion& Base, const Quaternion& Exponent);
+			static Quaternion CMPLX2_FUNC_CALL power(const Quaternion& Base, const Quaternion& Exponent, std::int64_t Theta, std::int64_t Phi, std::int64_t Tau);
+			static Quaternion CMPLX2_FUNC_CALL power(const Quaternion& Base, double Exponent);
+			static Quaternion CMPLX2_FUNC_CALL power(const Quaternion& Base, double Exponent, std::int64_t Theta);
+			static Quaternion CMPLX2_FUNC_CALL root(const Quaternion& Base, const Quaternion& Exponent);
+			static Quaternion CMPLX2_FUNC_CALL root(const Quaternion& Base, const Quaternion& Exponent, std::int64_t Theta, std::int64_t Phi, std::int64_t Tau);
+			static Quaternion CMPLX2_FUNC_CALL root(const Quaternion& Base, double Exponent);
+			static Quaternion CMPLX2_FUNC_CALL root(const Quaternion& Base, double Exponent, std::int64_t Theta);
+			static Quaternion CMPLX2_FUNC_CALL log(const Quaternion& Base, const Quaternion& Number);
+			static Quaternion CMPLX2_FUNC_CALL log(const Quaternion& Base, const Quaternion& Number, std::int64_t Theta, std::int64_t Phi, std::int64_t Tau, std::int64_t Omega);
 			///
 			/// Trigonometric functions
 			///

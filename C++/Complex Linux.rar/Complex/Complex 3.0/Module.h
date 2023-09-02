@@ -185,9 +185,9 @@ public:
 };
 template <typename T>
 inline constexpr std::int64_t Period = PeriodImpl<T>::Size;
-inline std::int64_t PeriodShift(std::int64_t i, std::int64_t l)
+inline std::int64_t PeriodShift(std::int64_t Index, std::int64_t Length)
 {
-	--i;
-	i %= l;
-	return ++i;
+	--Index;
+	Index %= Length;
+	return ++Index;
 };

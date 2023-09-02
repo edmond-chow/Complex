@@ -184,16 +184,16 @@ namespace Cmplx3
 			///
 			/// Operation 3 algorithms
 			///
-			static Octonion CMPLX3_FUNC_CALL Power(const Octonion& Base, const Octonion& Exponent);
-			static Octonion CMPLX3_FUNC_CALL Power(const Octonion& Base, const Octonion& Exponent, std::int64_t Theta, std::int64_t Phi, std::int64_t Tau);
-			static Octonion CMPLX3_FUNC_CALL Power(const Octonion& Base, double Exponent);
-			static Octonion CMPLX3_FUNC_CALL Power(const Octonion& Base, double Exponent, std::int64_t Theta);
-			static Octonion CMPLX3_FUNC_CALL Root(const Octonion& Base, const Octonion& Exponent);
-			static Octonion CMPLX3_FUNC_CALL Root(const Octonion& Base, const Octonion& Exponent, std::int64_t Theta, std::int64_t Phi, std::int64_t Tau);
-			static Octonion CMPLX3_FUNC_CALL Root(const Octonion& Base, double Exponent);
-			static Octonion CMPLX3_FUNC_CALL Root(const Octonion& Base, double Exponent, std::int64_t Theta);
-			static Octonion CMPLX3_FUNC_CALL Log(const Octonion& Base, const Octonion& Number);
-			static Octonion CMPLX3_FUNC_CALL Log(const Octonion& Base, const Octonion& Number, std::int64_t Theta, std::int64_t Phi, std::int64_t Tau, std::int64_t Omega);
+			static Octonion CMPLX3_FUNC_CALL power(const Octonion& Base, const Octonion& Exponent);
+			static Octonion CMPLX3_FUNC_CALL power(const Octonion& Base, const Octonion& Exponent, std::int64_t Theta, std::int64_t Phi, std::int64_t Tau);
+			static Octonion CMPLX3_FUNC_CALL power(const Octonion& Base, double Exponent);
+			static Octonion CMPLX3_FUNC_CALL power(const Octonion& Base, double Exponent, std::int64_t Theta);
+			static Octonion CMPLX3_FUNC_CALL root(const Octonion& Base, const Octonion& Exponent);
+			static Octonion CMPLX3_FUNC_CALL root(const Octonion& Base, const Octonion& Exponent, std::int64_t Theta, std::int64_t Phi, std::int64_t Tau);
+			static Octonion CMPLX3_FUNC_CALL root(const Octonion& Base, double Exponent);
+			static Octonion CMPLX3_FUNC_CALL root(const Octonion& Base, double Exponent, std::int64_t Theta);
+			static Octonion CMPLX3_FUNC_CALL log(const Octonion& Base, const Octonion& Number);
+			static Octonion CMPLX3_FUNC_CALL log(const Octonion& Base, const Octonion& Number, std::int64_t Theta, std::int64_t Phi, std::int64_t Tau, std::int64_t Omega);
 			///
 			/// Trigonometric functions
 			///

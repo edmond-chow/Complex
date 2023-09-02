@@ -291,16 +291,16 @@ namespace Cmplx
 			///
 			/// Operation 3 algorithms
 			///
-			static Complex CMPLX_FUNC_CALL Power(const Complex& Base, const Complex& Exponent);
-			static Complex CMPLX_FUNC_CALL Power(const Complex& Base, const Complex& Exponent, std::int64_t Theta);
-			static Complex CMPLX_FUNC_CALL Power(const Complex& Base, double Exponent);
-			static Complex CMPLX_FUNC_CALL Power(const Complex& Base, double Exponent, std::int64_t Theta);
-			static Complex CMPLX_FUNC_CALL Root(const Complex& Base, const Complex& Exponent);
-			static Complex CMPLX_FUNC_CALL Root(const Complex& Base, const Complex& Exponent, std::int64_t Theta);
-			static Complex CMPLX_FUNC_CALL Root(const Complex& Base, double Exponent);
-			static Complex CMPLX_FUNC_CALL Root(const Complex& Base, double Exponent, std::int64_t Theta);
-			static Complex CMPLX_FUNC_CALL Log(const Complex& Base, const Complex& Number);
-			static Complex CMPLX_FUNC_CALL Log(const Complex& Base, const Complex& Number, std::int64_t Theta, std::int64_t Phi);
+			static Complex CMPLX_FUNC_CALL power(const Complex& Base, const Complex& Exponent);
+			static Complex CMPLX_FUNC_CALL power(const Complex& Base, const Complex& Exponent, std::int64_t Theta);
+			static Complex CMPLX_FUNC_CALL power(const Complex& Base, double Exponent);
+			static Complex CMPLX_FUNC_CALL power(const Complex& Base, double Exponent, std::int64_t Theta);
+			static Complex CMPLX_FUNC_CALL root(const Complex& Base, const Complex& Exponent);
+			static Complex CMPLX_FUNC_CALL root(const Complex& Base, const Complex& Exponent, std::int64_t Theta);
+			static Complex CMPLX_FUNC_CALL root(const Complex& Base, double Exponent);
+			static Complex CMPLX_FUNC_CALL root(const Complex& Base, double Exponent, std::int64_t Theta);
+			static Complex CMPLX_FUNC_CALL log(const Complex& Base, const Complex& Number);
+			static Complex CMPLX_FUNC_CALL log(const Complex& Base, const Complex& Number, std::int64_t Theta, std::int64_t Phi);
 			///
 			/// Trigonometric functions
 			///
@@ -467,7 +467,7 @@ namespace Cmplx
 		};
 		Complex CMPLX_FUNC_CALL operator ^(const Complex& Base, std::int64_t Exponent) noexcept
 		{
-			try { return Complex::Power(Base, static_cast<double>(Exponent)); }
+			try { return Complex::power(Base, static_cast<double>(Exponent)); }
 			catch (...) { return 0; }
 		};
 		Complex& CMPLX_FUNC_INSTANCE_CALL Complex::operator =(const Complex& Value) & noexcept
@@ -528,24 +528,24 @@ namespace Cmplx
 		///
 		/// Operation 3 algorithms
 		///
-		Complex CMPLX_FUNC_CALL Complex::Power(const Complex& Base, const Complex& Exponent) { return Power(Base, Exponent, 0); };
-		Complex CMPLX_FUNC_CALL Complex::Power(const Complex& Base, const Complex& Exponent, std::int64_t Theta)
+		Complex CMPLX_FUNC_CALL Complex::power(const Complex& Base, const Complex& Exponent) { return power(Base, Exponent, 0); };
+		Complex CMPLX_FUNC_CALL Complex::power(const Complex& Base, const Complex& Exponent, std::int64_t Theta)
 		{
 			return exp(Exponent * ln(Base, Theta));
 		};
-		Complex CMPLX_FUNC_CALL Complex::Power(const Complex& Base, double Exponent) { return Power(Base, Exponent, 0); };
-		Complex CMPLX_FUNC_CALL Complex::Power(const Complex& Base, double Exponent, std::int64_t Theta)
+		Complex CMPLX_FUNC_CALL Complex::power(const Complex& Base, double Exponent) { return power(Base, Exponent, 0); };
+		Complex CMPLX_FUNC_CALL Complex::power(const Complex& Base, double Exponent, std::int64_t Theta)
 		{
 			if (Base == 0) { return Exponent == 0 ? 1 : 0; }
 			return std::pow(abs(Base), Exponent) *
 				(std::cos(Exponent * arg(Base, Theta)) + sgn(Vector(Base)) * std::sin(Exponent * arg(Base, Theta)));
 		};
-		Complex CMPLX_FUNC_CALL Complex::Root(const Complex& Base, const Complex& Exponent) { return Root(Base, Exponent, 0); };
-		Complex CMPLX_FUNC_CALL Complex::Root(const Complex& Base, const Complex& Exponent, std::int64_t Theta) { return Power(Base, inverse(Exponent), Theta); };
-		Complex CMPLX_FUNC_CALL Complex::Root(const Complex& Base, double Exponent) { return Root(Base, Exponent, 0); };
-		Complex CMPLX_FUNC_CALL Complex::Root(const Complex& Base, double Exponent, std::int64_t Theta) { return Power(Base, 1 / Exponent, Theta); };
-		Complex CMPLX_FUNC_CALL Complex::Log(const Complex& Base, const Complex& Number) { return Log(Base, Number, 0, 0); };
-		Complex CMPLX_FUNC_CALL Complex::Log(const Complex& Base, const Complex& Number, std::int64_t Theta, std::int64_t Phi)
+		Complex CMPLX_FUNC_CALL Complex::root(const Complex& Base, const Complex& Exponent) { return root(Base, Exponent, 0); };
+		Complex CMPLX_FUNC_CALL Complex::root(const Complex& Base, const Complex& Exponent, std::int64_t Theta) { return power(Base, inverse(Exponent), Theta); };
+		Complex CMPLX_FUNC_CALL Complex::root(const Complex& Base, double Exponent) { return root(Base, Exponent, 0); };
+		Complex CMPLX_FUNC_CALL Complex::root(const Complex& Base, double Exponent, std::int64_t Theta) { return power(Base, 1 / Exponent, Theta); };
+		Complex CMPLX_FUNC_CALL Complex::log(const Complex& Base, const Complex& Number) { return log(Base, Number, 0, 0); };
+		Complex CMPLX_FUNC_CALL Complex::log(const Complex& Base, const Complex& Number, std::int64_t Theta, std::int64_t Phi)
 		{
 			return ln(Number, Theta) / ln(Base, Phi);
 		};
@@ -571,7 +571,7 @@ namespace Cmplx
 		Complex CMPLX_FUNC_CALL Complex::arcsinh(const Complex& Value) { return arcsinh(Value, true, 0); };
 		Complex CMPLX_FUNC_CALL Complex::arcsinh(const Complex& Value, bool Sign, std::int64_t Period)
 		{
-			if (Sign == true) { return ln(Value + Root(Power(Value, 2) + 1, 2), Period); }
+			if (Sign == true) { return ln(Value + root(power(Value, 2) + 1, 2), Period); }
 			else { return pi * sgn(Vector(Value)) - arcsinh(Value, true, Period); }
 		};
 		Complex CMPLX_FUNC_CALL Complex::cos(const Complex& Value)
@@ -593,12 +593,12 @@ namespace Cmplx
 		Complex CMPLX_FUNC_CALL Complex::arccosh(const Complex& Value) { return arccosh(Value, true, 0); };
 		Complex CMPLX_FUNC_CALL Complex::arccosh(const Complex& Value, bool Sign, std::int64_t Period)
 		{
-			if (Sign == true) { return ln(Value + Root(Power(Value, 2) - 1, 2), Period); }
+			if (Sign == true) { return ln(Value + root(power(Value, 2) - 1, 2), Period); }
 			else { return 2 * pi * sgn(Vector(Value)) - arccosh(Value, true, Period); }
 		};
 		Complex CMPLX_FUNC_CALL Complex::tan(const Complex& Value)
 		{
-			return Root(Power(sec(Value), 2) - 1, 2);
+			return root(power(sec(Value), 2) - 1, 2);
 		};
 		Complex CMPLX_FUNC_CALL Complex::arctan(const Complex& Value) { return arctan(Value, true, 0); };
 		Complex CMPLX_FUNC_CALL Complex::arctan(const Complex& Value, bool Sign, std::int64_t Period)
