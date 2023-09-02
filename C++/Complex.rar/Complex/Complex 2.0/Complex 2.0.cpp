@@ -335,16 +335,16 @@ namespace Cmplx2
 			///
 			/// Operation 3 algorithms
 			///
-			static Quaternion CMPLX2_FUNC_CALL Power(const Quaternion& Base, const Quaternion& Exponent);
-			static Quaternion CMPLX2_FUNC_CALL Power(const Quaternion& Base, const Quaternion& Exponent, std::int64_t Theta, std::int64_t Phi, std::int64_t Tau);
-			static Quaternion CMPLX2_FUNC_CALL Power(const Quaternion& Base, double Exponent);
-			static Quaternion CMPLX2_FUNC_CALL Power(const Quaternion& Base, double Exponent, std::int64_t Theta);
-			static Quaternion CMPLX2_FUNC_CALL Root(const Quaternion& Base, const Quaternion& Exponent);
-			static Quaternion CMPLX2_FUNC_CALL Root(const Quaternion& Base, const Quaternion& Exponent, std::int64_t Theta, std::int64_t Phi, std::int64_t Tau);
-			static Quaternion CMPLX2_FUNC_CALL Root(const Quaternion& Base, double Exponent);
-			static Quaternion CMPLX2_FUNC_CALL Root(const Quaternion& Base, double Exponent, std::int64_t Theta);
-			static Quaternion CMPLX2_FUNC_CALL Log(const Quaternion& Base, const Quaternion& Number);
-			static Quaternion CMPLX2_FUNC_CALL Log(const Quaternion& Base, const Quaternion& Number, std::int64_t Theta, std::int64_t Phi, std::int64_t Tau, std::int64_t Omega);
+			static Quaternion CMPLX2_FUNC_CALL power(const Quaternion& Base, const Quaternion& Exponent);
+			static Quaternion CMPLX2_FUNC_CALL power(const Quaternion& Base, const Quaternion& Exponent, std::int64_t Theta, std::int64_t Phi, std::int64_t Tau);
+			static Quaternion CMPLX2_FUNC_CALL power(const Quaternion& Base, double Exponent);
+			static Quaternion CMPLX2_FUNC_CALL power(const Quaternion& Base, double Exponent, std::int64_t Theta);
+			static Quaternion CMPLX2_FUNC_CALL root(const Quaternion& Base, const Quaternion& Exponent);
+			static Quaternion CMPLX2_FUNC_CALL root(const Quaternion& Base, const Quaternion& Exponent, std::int64_t Theta, std::int64_t Phi, std::int64_t Tau);
+			static Quaternion CMPLX2_FUNC_CALL root(const Quaternion& Base, double Exponent);
+			static Quaternion CMPLX2_FUNC_CALL root(const Quaternion& Base, double Exponent, std::int64_t Theta);
+			static Quaternion CMPLX2_FUNC_CALL log(const Quaternion& Base, const Quaternion& Number);
+			static Quaternion CMPLX2_FUNC_CALL log(const Quaternion& Base, const Quaternion& Number, std::int64_t Theta, std::int64_t Phi, std::int64_t Tau, std::int64_t Omega);
 			///
 			/// Trigonometric functions
 			///
@@ -519,7 +519,7 @@ namespace Cmplx2
 		};
 		Quaternion CMPLX2_FUNC_CALL operator ^(const Quaternion& Base, std::int64_t Exponent) noexcept
 		{
-			try { return Quaternion::Power(Base, static_cast<double>(Exponent)); }
+			try { return Quaternion::power(Base, static_cast<double>(Exponent)); }
 			catch (...) { return 0; }
 		};
 		Quaternion& CMPLX2_FUNC_INSTANCE_CALL Quaternion::operator =(const Quaternion& Value) & noexcept
@@ -580,24 +580,24 @@ namespace Cmplx2
 		///
 		/// Operation 3 algorithms
 		///
-		Quaternion CMPLX2_FUNC_CALL Quaternion::Power(const Quaternion& Base, const Quaternion& Exponent) { return Power(Base, Exponent, 0, 0, 0); };
-		Quaternion CMPLX2_FUNC_CALL Quaternion::Power(const Quaternion& Base, const Quaternion& Exponent, std::int64_t Theta, std::int64_t Phi, std::int64_t Tau)
+		Quaternion CMPLX2_FUNC_CALL Quaternion::power(const Quaternion& Base, const Quaternion& Exponent) { return power(Base, Exponent, 0, 0, 0); };
+		Quaternion CMPLX2_FUNC_CALL Quaternion::power(const Quaternion& Base, const Quaternion& Exponent, std::int64_t Theta, std::int64_t Phi, std::int64_t Tau)
 		{
 			return exp(exp(ln(ln(Base, Theta), Phi) + ln(Exponent, Tau)));
 		};
-		Quaternion CMPLX2_FUNC_CALL Quaternion::Power(const Quaternion& Base, double Exponent) { return Power(Base, Exponent, 0); }
-		Quaternion CMPLX2_FUNC_CALL Quaternion::Power(const Quaternion& Base, double Exponent, std::int64_t Theta)
+		Quaternion CMPLX2_FUNC_CALL Quaternion::power(const Quaternion& Base, double Exponent) { return power(Base, Exponent, 0); }
+		Quaternion CMPLX2_FUNC_CALL Quaternion::power(const Quaternion& Base, double Exponent, std::int64_t Theta)
 		{
 			if (Base == 0) { return Exponent == 0 ? 1 : 0; }
 			return std::pow(abs(Base), Exponent) *
 				(std::cos(Exponent * arg(Base, Theta)) + sgn(Vector(Base)) * std::sin(Exponent * arg(Base, Theta)));
 		};
-		Quaternion CMPLX2_FUNC_CALL Quaternion::Root(const Quaternion& Base, const Quaternion& Exponent) { return Root(Base, Exponent, 0, 0, 0); };
-		Quaternion CMPLX2_FUNC_CALL Quaternion::Root(const Quaternion& Base, const Quaternion& Exponent, std::int64_t Theta, std::int64_t Phi, std::int64_t Tau) { return Power(Base, inverse(Exponent), Theta, Phi, Tau); };
-		Quaternion CMPLX2_FUNC_CALL Quaternion::Root(const Quaternion& Base, double Exponent) { return Root(Base, Exponent, 0); };
-		Quaternion CMPLX2_FUNC_CALL Quaternion::Root(const Quaternion& Base, double Exponent, std::int64_t Theta) { return Power(Base, 1 / Exponent, Theta); };
-		Quaternion CMPLX2_FUNC_CALL Quaternion::Log(const Quaternion& Base, const Quaternion& Number) { return Log(Base, Number, 0, 0, 0, 0); };
-		Quaternion CMPLX2_FUNC_CALL Quaternion::Log(const Quaternion& Base, const Quaternion& Number, std::int64_t Theta, std::int64_t Phi, std::int64_t Tau, std::int64_t Omega)
+		Quaternion CMPLX2_FUNC_CALL Quaternion::root(const Quaternion& Base, const Quaternion& Exponent) { return root(Base, Exponent, 0, 0, 0); };
+		Quaternion CMPLX2_FUNC_CALL Quaternion::root(const Quaternion& Base, const Quaternion& Exponent, std::int64_t Theta, std::int64_t Phi, std::int64_t Tau) { return power(Base, inverse(Exponent), Theta, Phi, Tau); };
+		Quaternion CMPLX2_FUNC_CALL Quaternion::root(const Quaternion& Base, double Exponent) { return root(Base, Exponent, 0); };
+		Quaternion CMPLX2_FUNC_CALL Quaternion::root(const Quaternion& Base, double Exponent, std::int64_t Theta) { return power(Base, 1 / Exponent, Theta); };
+		Quaternion CMPLX2_FUNC_CALL Quaternion::log(const Quaternion& Base, const Quaternion& Number) { return log(Base, Number, 0, 0, 0, 0); };
+		Quaternion CMPLX2_FUNC_CALL Quaternion::log(const Quaternion& Base, const Quaternion& Number, std::int64_t Theta, std::int64_t Phi, std::int64_t Tau, std::int64_t Omega)
 		{
 			return exp(ln(ln(Number, Theta), Phi) - ln(ln(Base, Tau), Omega));
 		};
@@ -623,7 +623,7 @@ namespace Cmplx2
 		Quaternion CMPLX2_FUNC_CALL Quaternion::arcsinh(const Quaternion& Value) { return arcsinh(Value, true, 0); };
 		Quaternion CMPLX2_FUNC_CALL Quaternion::arcsinh(const Quaternion& Value, bool Sign, std::int64_t Period)
 		{
-			if (Sign == true) { return ln(Value + Root(Power(Value, 2) + 1, 2), Period); }
+			if (Sign == true) { return ln(Value + root(power(Value, 2) + 1, 2), Period); }
 			else { return pi * sgn(Vector(Value)) - arcsinh(Value, true, Period); }
 		};
 		Quaternion CMPLX2_FUNC_CALL Quaternion::cos(const Quaternion& Value)
@@ -645,12 +645,12 @@ namespace Cmplx2
 		Quaternion CMPLX2_FUNC_CALL Quaternion::arccosh(const Quaternion& Value) { return arccosh(Value, true, 0); };
 		Quaternion CMPLX2_FUNC_CALL Quaternion::arccosh(const Quaternion& Value, bool Sign, std::int64_t Period)
 		{
-			if (Sign == true) { return ln(Value + Root(Power(Value, 2) - 1, 2), Period); }
+			if (Sign == true) { return ln(Value + root(power(Value, 2) - 1, 2), Period); }
 			else { return 2 * pi * sgn(Vector(Value)) - arccosh(Value, true, Period); }
 		};
 		Quaternion CMPLX2_FUNC_CALL Quaternion::tan(const Quaternion& Value)
 		{
-			return Root(Power(sec(Value), 2) - 1, 2);
+			return root(power(sec(Value), 2) - 1, 2);
 		};
 		Quaternion CMPLX2_FUNC_CALL Quaternion::arctan(const Quaternion& Value) { return arctan(Value, true, 0); };
 		Quaternion CMPLX2_FUNC_CALL Quaternion::arctan(const Quaternion& Value, bool Sign, std::int64_t Period)

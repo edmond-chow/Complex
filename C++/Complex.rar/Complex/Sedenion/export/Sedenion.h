@@ -108,16 +108,16 @@ namespace Seden
 		///
 		/// Operation 3 algorithms
 		///
-		static Sedenion SEDEN_FUNC_CALL Power(const Sedenion& Base, const Sedenion& Exponent);
-		static Sedenion SEDEN_FUNC_CALL Power(const Sedenion& Base, const Sedenion& Exponent, std::int64_t Theta, std::int64_t Phi, std::int64_t Tau);
-		static Sedenion SEDEN_FUNC_CALL Power(const Sedenion& Base, double Exponent);
-		static Sedenion SEDEN_FUNC_CALL Power(const Sedenion& Base, double Exponent, std::int64_t Theta);
-		static Sedenion SEDEN_FUNC_CALL Root(const Sedenion& Base, const Sedenion& Exponent);
-		static Sedenion SEDEN_FUNC_CALL Root(const Sedenion& Base, const Sedenion& Exponent, std::int64_t Theta, std::int64_t Phi, std::int64_t Tau);
-		static Sedenion SEDEN_FUNC_CALL Root(const Sedenion& Base, double Exponent);
-		static Sedenion SEDEN_FUNC_CALL Root(const Sedenion& Base, double Exponent, std::int64_t Theta);
-		static Sedenion SEDEN_FUNC_CALL Log(const Sedenion& Base, const Sedenion& Number);
-		static Sedenion SEDEN_FUNC_CALL Log(const Sedenion& Base, const Sedenion& Number, std::int64_t Theta, std::int64_t Phi, std::int64_t Tau, std::int64_t Omega);
+		static Sedenion SEDEN_FUNC_CALL power(const Sedenion& Base, const Sedenion& Exponent);
+		static Sedenion SEDEN_FUNC_CALL power(const Sedenion& Base, const Sedenion& Exponent, std::int64_t Theta, std::int64_t Phi, std::int64_t Tau);
+		static Sedenion SEDEN_FUNC_CALL power(const Sedenion& Base, double Exponent);
+		static Sedenion SEDEN_FUNC_CALL power(const Sedenion& Base, double Exponent, std::int64_t Theta);
+		static Sedenion SEDEN_FUNC_CALL root(const Sedenion& Base, const Sedenion& Exponent);
+		static Sedenion SEDEN_FUNC_CALL root(const Sedenion& Base, const Sedenion& Exponent, std::int64_t Theta, std::int64_t Phi, std::int64_t Tau);
+		static Sedenion SEDEN_FUNC_CALL root(const Sedenion& Base, double Exponent);
+		static Sedenion SEDEN_FUNC_CALL root(const Sedenion& Base, double Exponent, std::int64_t Theta);
+		static Sedenion SEDEN_FUNC_CALL log(const Sedenion& Base, const Sedenion& Number);
+		static Sedenion SEDEN_FUNC_CALL log(const Sedenion& Base, const Sedenion& Number, std::int64_t Theta, std::int64_t Phi, std::int64_t Tau, std::int64_t Omega);
 		///
 		/// Trigonometric functions
 		///

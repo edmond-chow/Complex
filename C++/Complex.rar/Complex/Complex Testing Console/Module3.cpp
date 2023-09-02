@@ -6,87 +6,87 @@ using namespace Cmplx3::MainType;
 namespace Mod3
 {
 	template <typename F = Octonion(CMPLX3_FUNC_CALL*)(const Octonion&, const Octonion&)>
-	void op(const std::wstring& str, const wchar_t* ptr, F f)
+	void op(const std::wstring& LeftValue, const wchar_t* RightValue, F Subroutine)
 	{
-		if (str == ptr)
+		if (LeftValue == RightValue)
 		{
 			Octonion Union = Octonion::GetInstance(Base::Input(L"Union = "));
 			Octonion Value = Octonion::GetInstance(Base::Input(L"Value = "));
-			Base::Output(to_wstring(std::invoke(f, Union, Value)));
+			Base::Output(to_wstring(std::invoke(Subroutine, Union, Value)));
 		}
 	};
 	template <typename F>
-	void power(const std::wstring& str, const wchar_t* ptr, F f)
+	void power(const std::wstring& LeftValue, const wchar_t* RightValue, F Subroutine)
 	{
-		if (str == ptr)
+		if (LeftValue == RightValue)
 		{
 			Octonion Base = Octonion::GetInstance(Base::Input(L"Base = "));
 			std::int64_t Exponent = stoi64_t(Base::Input(L"Exponent = "));
-			Base::Output(to_wstring(std::invoke(f, Base, Exponent)));
+			Base::Output(to_wstring(std::invoke(Subroutine, Base, Exponent)));
 		}
 	};
 	template <typename... args>
-	void power(const std::wstring& str, std::wstring&& ptr, Octonion(CMPLX3_FUNC_CALL* f)(const Octonion&, const Octonion&, std::int64_t, args...))
+	void power(const std::wstring& LeftValue, std::wstring&& RightValue, Octonion(CMPLX3_FUNC_CALL* Subroutine)(const Octonion&, const Octonion&, std::int64_t, args...))
 	{
-		if (str == ptr)
+		if (LeftValue == RightValue)
 		{
 			Octonion Union = Octonion::GetInstance(Base::Input(L"Union = "));
 			Octonion Value = Octonion::GetInstance(Base::Input(L"Value = "));
 			std::array<std::int64_t, 1 + sizeof...(args)> Data{};
 			power_get(Data);
-			power_result(f, ptr, Union, Value, Data);
+			power_result(Subroutine, RightValue, Union, Value, Data);
 		}
-		else if (str == ptr + L"()")
+		else if (LeftValue == RightValue + L"()")
 		{
 			Octonion Union = Octonion::GetInstance(Base::Input(L"Union = "));
 			Octonion Value = Octonion::GetInstance(Base::Input(L"Value = "));
 			std::array<std::pair<std::int64_t, std::int64_t>, 1 + sizeof...(args)> Data{};
 			power_get(Data);
-			power_result(f, ptr, Union, Value, Data);
+			power_result(Subroutine, RightValue, Union, Value, Data);
 		}
 	};
 	template <typename F>
-	void basic(const std::wstring& str, const wchar_t* ptr, F f)
+	void basic(const std::wstring& LeftValue, const wchar_t* RightValue, F Subroutine)
 	{
-		if (str == ptr)
+		if (LeftValue == RightValue)
 		{
 			Octonion Value = Octonion::GetInstance(Base::Input(L"Value = "));
-			Base::Output(to_wstring(std::invoke(f, Value)));
+			Base::Output(to_wstring(std::invoke(Subroutine, Value)));
 		}
 	};
 	template <typename R>
-	void basic(const std::wstring& str, std::wstring&& ptr, R(CMPLX3_FUNC_CALL* f)(const Octonion&, std::int64_t))
+	void basic(const std::wstring& LeftValue, std::wstring&& RightValue, R(CMPLX3_FUNC_CALL* Subroutine)(const Octonion&, std::int64_t))
 	{
-		if (str == ptr)
+		if (LeftValue == RightValue)
 		{
 			Octonion Value = Octonion::GetInstance(Base::Input(L"Value = "));
 			std::int64_t Theta = stoi64_t(Base::Input(L"Theta = "));
-			Base::Output(to_wstring(std::invoke(f, Value, Theta)));
+			Base::Output(to_wstring(std::invoke(Subroutine, Value, Theta)));
 		}
-		else if (str == ptr + L"()")
+		else if (LeftValue == RightValue + L"()")
 		{
 			Octonion Value = Octonion::GetInstance(Base::Input(L"Value = "));
 			std::int64_t ThetaMin = stoi64_t(Base::Input(L"ThetaMin = "));
 			std::int64_t ThetaMax = stoi64_t(Base::Input(L"ThetaMax = "));
 			for (std::int64_t Theta = ThetaMin; Theta <= ThetaMax; ++Theta)
 			{
-				Base::Output(ptr + L"(" + to_wstring(Theta) + L") = ", to_wstring(std::invoke(f, Value, Theta)));
+				Base::Output(RightValue + L"(" + to_wstring(Theta) + L") = ", to_wstring(std::invoke(Subroutine, Value, Theta)));
 			}
 		}
 	};
 	template <typename F = Octonion(CMPLX3_FUNC_CALL*)(const Octonion&)>
-	inline void tri(const std::wstring& str, const wchar_t* ptr, F f)
+	inline void tri(const std::wstring& LeftValue, const wchar_t* RightValue, F Subroutine)
 	{
-		if (str == ptr)
+		if (LeftValue == RightValue)
 		{
 			Octonion Value = Octonion::GetInstance(Base::Input(L"Value = "));
-			Base::Output(to_wstring(std::invoke(f, Value)));
+			Base::Output(to_wstring(std::invoke(Subroutine, Value)));
 		}
 	};
 	template <typename F = Octonion(CMPLX3_FUNC_CALL*)(const Octonion&, bool, std::int64_t)>
-	inline void arctri(const std::wstring& str, std::wstring&& ptr, F f)
+	inline void arctri(const std::wstring& LeftValue, std::wstring&& RightValue, F Subroutine)
 	{
-		if (str == ptr)
+		if (LeftValue == RightValue)
 		{
 			Octonion Value = Octonion::GetInstance(Base::Input(L"Value = "));
 			bool Sign = false;
@@ -94,20 +94,20 @@ namespace Mod3
 			if (Input == L"+") { Sign = true; }
 			else if (Input != L"-") { throw std::invalid_argument("A string interpretation of the sign cannot be converted as a bool value."); }
 			std::int64_t Period = stoi64_t(Base::Input(L"Period = "));
-			Base::Output(to_wstring(std::invoke(f, Value, Sign, Period)));
+			Base::Output(to_wstring(std::invoke(Subroutine, Value, Sign, Period)));
 		}
-		else if (str == ptr + L"()")
+		else if (LeftValue == RightValue + L"()")
 		{
 			Octonion Value = Octonion::GetInstance(Base::Input(L"Value = "));
 			std::int64_t PeriodMin = stoi64_t(Base::Input(L"PeriodMin = "));
 			std::int64_t PeriodMax = stoi64_t(Base::Input(L"PeriodMax = "));
 			for (std::int64_t Period = PeriodMin; Period <= PeriodMax; ++Period)
 			{
-				Base::Output(ptr + L"(+, " + to_wstring(Period) + L") = ", to_wstring(std::invoke(f, Value, true, Period)));
+				Base::Output(RightValue + L"(+, " + to_wstring(Period) + L") = ", to_wstring(std::invoke(Subroutine, Value, true, Period)));
 			}
 			for (std::int64_t Period = PeriodMin; Period <= PeriodMax; ++Period)
 			{
-				Base::Output(ptr + L"(-, " + to_wstring(Period) + L") = ", to_wstring(std::invoke(f, Value, false, Period)));
+				Base::Output(RightValue + L"(-, " + to_wstring(Period) + L") = ", to_wstring(std::invoke(Subroutine, Value, false, Period)));
 			}
 		}
 	};
@@ -122,59 +122,59 @@ namespace Mod3
 	void MyModule3::Load() noexcept
 	{
 		Base::Startup(Base::GetTitle());
-		Base::Selection(L"=   +   -   *   /   ^   Power()   Root()   Log()");
+		Base::Selection(L"=   +   -   *   /   ^   power()   root()   log()");
 		Base::Selection(L"abs   arg()   conjg   sgn   inverse   exp   ln()");
 		Base::Selection(L"sin   cos   tan   csc   sec   cot   arcsin()   arccos()   arctan()   arccsc()   arcsec()   arccot()");
 		Base::Selection(L"sinh   cosh   tanh   csch   sech   coth   arcsinh()   arccosh()   arctanh()   arccsch()   arcsech()   arccoth()");
 		Base::Selection(Base::GetStartupLine());
-		for (std::wstring Str; !Base::IsSwitchTo(Str); Str = Base::Input())
+		for (std::wstring Line; !Base::IsSwitchTo(Line); Line = Base::Input())
 		{
-			if (Str.empty()) { continue; }
+			if (Line.empty()) { continue; }
 			try
 			{
-				op(Str, L"=", operator ==);
-				op(Str, L"+", operator +);
-				op(Str, L"-", operator -);
-				op(Str, L"*", operator *);
-				op(Str, L"/", operator /);
+				op(Line, L"=", operator ==);
+				op(Line, L"+", operator +);
+				op(Line, L"-", operator -);
+				op(Line, L"*", operator *);
+				op(Line, L"/", operator /);
 				/****/
-				power(Str, L"^", operator ^);
-				power(Str, L"Power", Octonion::Power);
-				power(Str, L"Root", Octonion::Root);
-				power(Str, L"Log", Octonion::Log);
+				power(Line, L"^", operator ^);
+				power(Line, L"power", Octonion::power);
+				power(Line, L"root", Octonion::root);
+				power(Line, L"log", Octonion::log);
 				/****/
-				basic(Str, L"abs", Octonion::abs);
-				basic(Str, L"arg", Octonion::arg);
-				basic(Str, L"conjg", Octonion::conjg);
-				basic(Str, L"sgn", Octonion::sgn);
-				basic(Str, L"inverse", Octonion::inverse);
-				basic(Str, L"exp", Octonion::exp);
-				basic(Str, L"ln", Octonion::ln);
+				basic(Line, L"abs", Octonion::abs);
+				basic(Line, L"arg", Octonion::arg);
+				basic(Line, L"conjg", Octonion::conjg);
+				basic(Line, L"sgn", Octonion::sgn);
+				basic(Line, L"inverse", Octonion::inverse);
+				basic(Line, L"exp", Octonion::exp);
+				basic(Line, L"ln", Octonion::ln);
 				/****/
-				tri(Str, L"sin", Octonion::sin);
-				tri(Str, L"cos", Octonion::cos);
-				tri(Str, L"tan", Octonion::tan);
-				tri(Str, L"csc", Octonion::csc);
-				tri(Str, L"sec", Octonion::sec);
-				tri(Str, L"cot", Octonion::cot);
-				tri(Str, L"sinh", Octonion::sinh);
-				tri(Str, L"cosh", Octonion::cosh);
-				tri(Str, L"tanh", Octonion::tanh);
-				tri(Str, L"csch", Octonion::csch);
-				tri(Str, L"sech", Octonion::sech);
-				tri(Str, L"coth", Octonion::coth);
-				arctri(Str, L"arcsin", Octonion::arcsin);
-				arctri(Str, L"arccos", Octonion::arccos);
-				arctri(Str, L"arctan", Octonion::arctan);
-				arctri(Str, L"arccsc", Octonion::arccsc);
-				arctri(Str, L"arcsec", Octonion::arcsec);
-				arctri(Str, L"arccot", Octonion::arccot);
-				arctri(Str, L"arcsinh", Octonion::arcsinh);
-				arctri(Str, L"arccosh", Octonion::arccosh);
-				arctri(Str, L"arctanh", Octonion::arctanh);
-				arctri(Str, L"arccsch", Octonion::arccsch);
-				arctri(Str, L"arcsech", Octonion::arcsech);
-				arctri(Str, L"arccoth", Octonion::arccoth);
+				tri(Line, L"sin", Octonion::sin);
+				tri(Line, L"cos", Octonion::cos);
+				tri(Line, L"tan", Octonion::tan);
+				tri(Line, L"csc", Octonion::csc);
+				tri(Line, L"sec", Octonion::sec);
+				tri(Line, L"cot", Octonion::cot);
+				tri(Line, L"sinh", Octonion::sinh);
+				tri(Line, L"cosh", Octonion::cosh);
+				tri(Line, L"tanh", Octonion::tanh);
+				tri(Line, L"csch", Octonion::csch);
+				tri(Line, L"sech", Octonion::sech);
+				tri(Line, L"coth", Octonion::coth);
+				arctri(Line, L"arcsin", Octonion::arcsin);
+				arctri(Line, L"arccos", Octonion::arccos);
+				arctri(Line, L"arctan", Octonion::arctan);
+				arctri(Line, L"arccsc", Octonion::arccsc);
+				arctri(Line, L"arcsec", Octonion::arcsec);
+				arctri(Line, L"arccot", Octonion::arccot);
+				arctri(Line, L"arcsinh", Octonion::arcsinh);
+				arctri(Line, L"arccosh", Octonion::arccosh);
+				arctri(Line, L"arctanh", Octonion::arctanh);
+				arctri(Line, L"arccsch", Octonion::arccsch);
+				arctri(Line, L"arcsech", Octonion::arcsech);
+				arctri(Line, L"arccoth", Octonion::arccoth);
 			}
 			catch (const std::exception& Ex) { Base::Exception(Ex); }
 		}

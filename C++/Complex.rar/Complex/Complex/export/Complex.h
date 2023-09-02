@@ -180,16 +180,16 @@ namespace Cmplx
 			///
 			/// Operation 3 algorithms
 			///
-			static Complex CMPLX_FUNC_CALL Power(const Complex& Base, const Complex& Exponent);
-			static Complex CMPLX_FUNC_CALL Power(const Complex& Base, const Complex& Exponent, std::int64_t Theta);
-			static Complex CMPLX_FUNC_CALL Power(const Complex& Base, double Exponent);
-			static Complex CMPLX_FUNC_CALL Power(const Complex& Base, double Exponent, std::int64_t Theta);
-			static Complex CMPLX_FUNC_CALL Root(const Complex& Base, const Complex& Exponent);
-			static Complex CMPLX_FUNC_CALL Root(const Complex& Base, const Complex& Exponent, std::int64_t Theta);
-			static Complex CMPLX_FUNC_CALL Root(const Complex& Base, double Exponent);
-			static Complex CMPLX_FUNC_CALL Root(const Complex& Base, double Exponent, std::int64_t Theta);
-			static Complex CMPLX_FUNC_CALL Log(const Complex& Base, const Complex& Number);
-			static Complex CMPLX_FUNC_CALL Log(const Complex& Base, const Complex& Number, std::int64_t Theta, std::int64_t Phi);
+			static Complex CMPLX_FUNC_CALL power(const Complex& Base, const Complex& Exponent);
+			static Complex CMPLX_FUNC_CALL power(const Complex& Base, const Complex& Exponent, std::int64_t Theta);
+			static Complex CMPLX_FUNC_CALL power(const Complex& Base, double Exponent);
+			static Complex CMPLX_FUNC_CALL power(const Complex& Base, double Exponent, std::int64_t Theta);
+			static Complex CMPLX_FUNC_CALL root(const Complex& Base, const Complex& Exponent);
+			static Complex CMPLX_FUNC_CALL root(const Complex& Base, const Complex& Exponent, std::int64_t Theta);
+			static Complex CMPLX_FUNC_CALL root(const Complex& Base, double Exponent);
+			static Complex CMPLX_FUNC_CALL root(const Complex& Base, double Exponent, std::int64_t Theta);
+			static Complex CMPLX_FUNC_CALL log(const Complex& Base, const Complex& Number);
+			static Complex CMPLX_FUNC_CALL log(const Complex& Base, const Complex& Number, std::int64_t Theta, std::int64_t Phi);
 			///
 			/// Trigonometric functions
 			///
