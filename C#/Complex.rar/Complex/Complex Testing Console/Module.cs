@@ -125,7 +125,7 @@ internal static class MyModule
         Base.Selection("sin   cos   tan   csc   sec   cot   arcsin()   arccos()   arctan()   arccsc()   arcsec()   arccot()");
         Base.Selection("sinh   cosh   tanh   csch   sech   coth   arcsinh()   arccosh()   arctanh()   arccsch()   arcsech()   arccoth()");
         Base.Selection(Base.GetStartupLine());
-        for (string Line = ""; !Base.IsSwitchTo(Line); Line = Base.Input())
+        for (string Line = ""; !Base.IsSwitchTo(Line); Line = Base.Input().Trim().ToLower())
         {
             if (Line == "") { continue; }
             try
@@ -137,9 +137,9 @@ internal static class MyModule
                 Op(Line, "/", (Complex Union, Complex Value) => { return Union / Value; });
                 /****/
                 PowerOp(Line, "^", (Complex Union, long Value) => { return Union ^ Value; });
-                Power(Line, "Power", Power);
-                Power(Line, "Root", Root);
-                Power(Line, "Log", Log);
+                Power(Line, "power", Power);
+                Power(Line, "root", Root);
+                Power(Line, "log", Log);
                 /****/
                 Basic(Line, "abs", Abs);
                 BasicWith(Line, "arg", Arg);
