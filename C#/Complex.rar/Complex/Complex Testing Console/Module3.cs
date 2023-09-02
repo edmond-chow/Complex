@@ -120,12 +120,12 @@ internal static class MyModule3
     internal static void Load()
     {
         Base.Startup(Base.GetTitle());
-        Base.Selection("=   +   -   *   /   ^   Power()   Root()   Log()");
+        Base.Selection("=   +   -   *   /   ^   power()   root()   log()");
         Base.Selection("abs   arg()   conjg   sgn   inverse   exp   ln()");
         Base.Selection("sin   cos   tan   csc   sec   cot   arcsin()   arccos()   arctan()   arccsc()   arcsec()   arccot()");
         Base.Selection("sinh   cosh   tanh   csch   sech   coth   arcsinh()   arccosh()   arctanh()   arccsch()   arcsech()   arccoth()");
         Base.Selection(Base.GetStartupLine());
-        for (string Line = ""; !Base.IsSwitchTo(Line); Line = Base.Input().Trim().ToLower())
+        for (string Line = ""; !Base.IsSwitchTo(Line); Line = Base.Input())
         {
             if (Line == "") { continue; }
             try
