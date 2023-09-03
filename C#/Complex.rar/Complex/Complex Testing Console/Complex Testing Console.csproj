@@ -38,7 +38,7 @@
     <ApplicationIcon>icons8-browse-page.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>CmplxConExt.Original</StartupObject>
+    <StartupObject>CmplxConExt</StartupObject>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>

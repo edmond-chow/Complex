@@ -53,7 +53,7 @@
     <ApplicationIcon>icons8-browse-page.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>SedenConExt.Original</StartupObject>
+    <StartupObject>SedenConExt</StartupObject>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
