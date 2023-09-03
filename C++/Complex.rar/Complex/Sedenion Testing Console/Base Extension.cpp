@@ -59,9 +59,9 @@ namespace SedenConExt
 			capacity += increase;
 		}
 	};
-	void SetForegroundColor(ConsoleColor color) { SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), static_cast<WORD>(color) + static_cast<WORD>(GetBackgroundColor()) * 16); };
-	void SetBackgroundColor(ConsoleColor color) { SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), static_cast<WORD>(GetForegroundColor()) + static_cast<WORD>(color) * 16); };
-	void SetTitle(const std::wstring& title) { SetConsoleTitleW(title.c_str()); };
+	void SetForegroundColor(ConsoleColor Color) { SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), static_cast<WORD>(Color) + static_cast<WORD>(GetBackgroundColor()) * 16); };
+	void SetBackgroundColor(ConsoleColor Color) { SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), static_cast<WORD>(GetForegroundColor()) + static_cast<WORD>(Color) * 16); };
+	void SetTitle(const std::wstring& Text) { SetConsoleTitleW(Text.c_str()); };
 	void Clear()
 	{
 		COORD TopLeft{ 0, 0 };
