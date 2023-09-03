@@ -9,6 +9,7 @@ namespace CmplxConExt
 {
 	enum class ConsoleColor : std::uint8_t
 	{
+		Default = 0xff,
 		Black = 0,
 		DarkBlue = 1,
 		DarkGreen = 2,
@@ -26,12 +27,12 @@ namespace CmplxConExt
 		Yellow = 14,
 		White = 15,
 	};
-	ConsoleColor getForegroundColor();
-	ConsoleColor getBackgroundColor();
-	std::wstring getTitle();
-	void setForegroundColor(ConsoleColor color);
-	void setBackgroundColor(ConsoleColor color);
-	void setTitle(const std::wstring& title);
-	void clear();
-	void pressAnyKey();
+	ConsoleColor GetForegroundColor();
+	ConsoleColor GetBackgroundColor();
+	std::wstring GetTitle();
+	void SetForegroundColor(ConsoleColor Color);
+	void SetBackgroundColor(ConsoleColor Color);
+	void SetTitle(const std::wstring& Text);
+	void Clear();
+	void PressAnyKey();
 }

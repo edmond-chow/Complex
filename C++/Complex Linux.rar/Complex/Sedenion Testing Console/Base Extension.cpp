@@ -28,7 +28,7 @@ namespace SedenConExt
 	};
 	enum class ConsoleColor : std::uint8_t
 	{
-		Default = static_cast<std::uint8_t>(-1),
+		Default = 0xff,
 		Black = 0,
 		DarkBlue = 1,
 		DarkGreen = 2,
@@ -46,15 +46,15 @@ namespace SedenConExt
 		Yellow = 14,
 		White = 15,
 	};
-	static ConsoleColor ForegroundColor{ ConsoleColor::White };
-	static ConsoleColor BackgroundColor{ ConsoleColor::Black };
+	static ConsoleColor ForegroundColor{ ConsoleColor::Gray };
+	static ConsoleColor BackgroundColor{ ConsoleColor::Default };
 	static std::wstring Title{ L"" };
-	ConsoleColor getForegroundColor() { return ForegroundColor; };
-	ConsoleColor getBackgroundColor() { return BackgroundColor; };
-	std::wstring getTitle() { return Title; };
-	void setForegroundColor(ConsoleColor color)
+	ConsoleColor GetForegroundColor() { return ForegroundColor; };
+	ConsoleColor GetBackgroundColor() { return BackgroundColor; };
+	std::wstring GetTitle() { return Title; };
+	void SetForegroundColor(ConsoleColor Color)
 	{
-		switch (color)
+		switch (Color)
 		{
 		case ConsoleColor::Black:
 			std::wcout << L"\033[30m";
@@ -108,11 +108,11 @@ namespace SedenConExt
 			std::wcout << L"\033[39m";
 			return;
 		}
-		ForegroundColor = color;
+		ForegroundColor = Color;
 	};
-	void setBackgroundColor(ConsoleColor color)
+	void SetBackgroundColor(ConsoleColor Color)
 	{
-		switch (color)
+		switch (Color)
 		{
 		case ConsoleColor::Black:
 			std::wcout << L"\033[40m";
@@ -166,22 +166,18 @@ namespace SedenConExt
 			std::wcout << L"\033[49m";
 			return;
 		}
-		BackgroundColor = color;
+		BackgroundColor = Color;
 	};
-	void setTitle(const std::wstring& title)
+	void SetTitle(const std::wstring& Text)
 	{
-		std::wcout << L"\033]0;" << title << L"\007";
-		Title = title;
+		std::wcout << L"\033]0;" << Text << L"\007";
+		Title = Text;
 	};
-	void clear() { [[maybe_unused]] int ret = system("clear"); };
-	void pressAnyKey() { getch(); };
+	void Clear() { [[maybe_unused]] int ret = system("clear"); };
+	void PressAnyKey() { getch(); };
 }
 int main()
 {
-	using namespace SedenConExt;
 	SedenionTestingConsole::Base::Main();
-	setForegroundColor(ConsoleColor::Default);
-	setBackgroundColor(ConsoleColor::Default);
-	setTitle(L"");
 	return EXIT_SUCCESS;
 };

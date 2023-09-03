@@ -24,7 +24,7 @@ namespace SedenionTestingConsole
 	public:
 		static std::wstring GetTitle();
 		static std::wstring GetStartupLine();
-		static bool IsSwitchTo(const std::wstring& Str);
+		static bool IsSwitchTo(const std::wstring& Option);
 		///
 		/// Main Thread
 		///
@@ -44,7 +44,7 @@ namespace SedenionTestingConsole
 		static std::wstring Comment(const std::wstring& Preceding, const std::wstring& Content);
 		static std::wstring Comment(const std::wstring& Content);
 		static std::wstring Comment();
-		static void Startup(const std::wstring& title);
+		static void Startup(const std::wstring& Title);
 	};
 	///
 	/// Base
@@ -63,11 +63,11 @@ namespace SedenionTestingConsole
 		}
 		return Output.substr(0, Output.length() - 3);
 	};
-	bool Base::IsSwitchTo(const std::wstring& Str)
+	bool Base::IsSwitchTo(const std::wstring& Option)
 	{
 		for (std::size_t i = 0; i < std::extent_v<decltype(TestingConsole)>; ++i)
 		{
-			if (Str == AddSquares(TestingConsole[i]))
+			if (Option == AddSquares(TestingConsole[i]))
 			{
 				Index = i;
 				return true;
@@ -86,7 +86,7 @@ namespace SedenionTestingConsole
 			{
 			case 0:
 				Index = DefaultIndex;
-				clear();
+				Clear();
 				return;
 			case 1:
 				Mod::MyModule::Load();
@@ -110,33 +110,33 @@ namespace SedenionTestingConsole
 	///
 	std::wstring Base::Exception(const std::exception& Exception)
 	{
-		setForegroundColor(ConsoleColor::DarkCyan);
+		SetForegroundColor(ConsoleColor::DarkCyan);
 		std::wcout << std::endl << L"   [" << typeid(Exception).name() << L"] ";
-		setForegroundColor(ConsoleColor::Cyan);
+		SetForegroundColor(ConsoleColor::Cyan);
 		std::wcout << Exception.what() << std::endl;
-		setForegroundColor(ConsoleColor::White);
+		SetForegroundColor(ConsoleColor::White);
 		std::wcout << L"   Press any key to continue . . .   " << std::endl;
-		pressAnyKey();
+		PressAnyKey();
 		std::wcout << std::endl;
 		return L"";
 	};
 	std::wstring Base::Exception() { return Exception(std::exception()); };
 	std::wstring Base::Selection(const std::wstring& Content)
 	{
-		setForegroundColor(ConsoleColor::DarkCyan);
+		SetForegroundColor(ConsoleColor::DarkCyan);
 		std::wcout << L" %   ";
-		setForegroundColor(ConsoleColor::Blue);
+		SetForegroundColor(ConsoleColor::Blue);
 		std::wcout << Content << std::endl;
 		return Content;
 	};
 	std::wstring Base::Selection() { return Selection(L""); };
 	std::wstring Base::Input(const std::wstring& Content)
 	{
-		setForegroundColor(ConsoleColor::Yellow);
+		SetForegroundColor(ConsoleColor::Yellow);
 		std::wcout << L" >   ";
-		setForegroundColor(ConsoleColor::DarkGreen);
+		SetForegroundColor(ConsoleColor::DarkGreen);
 		std::wcout << Content;
-		setForegroundColor(ConsoleColor::Green);
+		SetForegroundColor(ConsoleColor::Green);
 		std::wstring output;
 		std::getline(std::wcin, output);
 		return output;
@@ -144,11 +144,11 @@ namespace SedenionTestingConsole
 	std::wstring Base::Input() { return Input(L""); };
 	std::wstring Base::Output(const std::wstring& Preceding, const std::wstring& Content)
 	{
-		setForegroundColor(ConsoleColor::Magenta);
+		SetForegroundColor(ConsoleColor::Magenta);
 		std::wcout << L" #   ";
-		setForegroundColor(ConsoleColor::DarkRed);
+		SetForegroundColor(ConsoleColor::DarkRed);
 		std::wcout << Preceding;
-		setForegroundColor(ConsoleColor::Red);
+		SetForegroundColor(ConsoleColor::Red);
 		std::wcout << Content << std::endl;
 		return Content;
 	};
@@ -156,20 +156,20 @@ namespace SedenionTestingConsole
 	std::wstring Base::Output() { return Output(L""); };
 	std::wstring Base::Comment(const std::wstring& Preceding, const std::wstring& Content)
 	{
-		setForegroundColor(ConsoleColor::White);
+		SetForegroundColor(ConsoleColor::White);
 		std::wcout << L" /   ";
-		setForegroundColor(ConsoleColor::Cyan);
+		SetForegroundColor(ConsoleColor::Cyan);
 		std::wcout << Preceding;
-		setForegroundColor(ConsoleColor::Gray);
+		SetForegroundColor(ConsoleColor::Gray);
 		std::wcout << Content << std::endl;
 		return Content;
 	};
 	std::wstring Base::Comment(const std::wstring& Content) { return Comment(L"", Content); };
 	std::wstring Base::Comment() { return Comment(L""); };
-	void Base::Startup(const std::wstring& title)
+	void Base::Startup(const std::wstring& Title)
 	{
-		clear();
-		setTitle(title);
+		Clear();
+		SetTitle(Title);
 		std::wcout << std::endl;
 	};
 }

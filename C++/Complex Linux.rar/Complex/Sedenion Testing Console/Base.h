@@ -96,7 +96,7 @@ namespace SedenionTestingConsole
 	public:
 		static std::wstring GetTitle();
 		static std::wstring GetStartupLine();
-		static bool IsSwitchTo(const std::wstring& Str);
+		static bool IsSwitchTo(const std::wstring& Option);
 		///
 		/// Main Thread
 		///
@@ -110,13 +110,13 @@ namespace SedenionTestingConsole
 		static std::wstring Selection();
 		static std::wstring Input(const std::wstring& Content);
 		static std::wstring Input();
-		static std::wstring Output(const std::wstring& main, const std::wstring& Content);
+		static std::wstring Output(const std::wstring& Preceding, const std::wstring& Content);
 		static std::wstring Output(const std::wstring& Content);
 		static std::wstring Output();
-		static std::wstring Comment(const std::wstring& head, const std::wstring& Content);
+		static std::wstring Comment(const std::wstring& Preceding, const std::wstring& Content);
 		static std::wstring Comment(const std::wstring& Content);
 		static std::wstring Comment();
-		static void Startup(const std::wstring& title);
+		static void Startup(const std::wstring& Title);
 	};
 	template <std::size_t I, std::size_t S>
 	std::wstring get_angle_name(std::integral_constant<std::size_t, I>, const std::array<const wchar_t*, S>& Angle)
