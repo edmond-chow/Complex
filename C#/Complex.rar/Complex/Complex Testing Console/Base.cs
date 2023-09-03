@@ -28,11 +28,11 @@ namespace ComplexTestingConsole
             }
             return Output.Substring(0, Output.Length - 3);
         }
-        public static bool IsSwitchTo(string Str)
+        public static bool IsSwitchTo(string Option)
         {
             for (long i = 0; i < TestingConsole.LongLength; ++i)
             {
-                if (Str == TestingConsole[i].AddSquares())
+                if (Option == TestingConsole[i].AddSquares())
                 {
                     Index = i;
                     return true;
