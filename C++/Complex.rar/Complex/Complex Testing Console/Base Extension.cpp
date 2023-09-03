@@ -7,10 +7,7 @@
 #include <Windows.h>
 #include <string>
 #include <iostream>
-#pragma push_macro("max")
-#undef max
 #include "Base.h"
-#pragma pop_macro("max")
 namespace CmplxConExt
 {
 	enum class ConsoleColor : std::uint8_t
@@ -32,19 +29,19 @@ namespace CmplxConExt
 		Yellow = 14,
 		White = 15,
 	};
-	ConsoleColor getForegroundColor()
+	ConsoleColor GetForegroundColor()
 	{
 		CONSOLE_SCREEN_BUFFER_INFO csbiInfo;
 		GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbiInfo);
 		return static_cast<ConsoleColor>(csbiInfo.wAttributes % 16);
 	};
-	ConsoleColor getBackgroundColor()
+	ConsoleColor GetBackgroundColor()
 	{
 		CONSOLE_SCREEN_BUFFER_INFO csbiInfo;
 		GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbiInfo);
 		return static_cast<ConsoleColor>((csbiInfo.wAttributes - (csbiInfo.wAttributes % 16)) / 16);
 	};
-	std::wstring getTitle()
+	std::wstring GetTitle()
 	{
 		constexpr const std::size_t stack_size = 64;
 		wchar_t stack_str[stack_size];
@@ -62,10 +59,10 @@ namespace CmplxConExt
 			capacity += increase;
 		}
 	};
-	void setForegroundColor(ConsoleColor color) { SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), static_cast<WORD>(color) + static_cast<WORD>(getBackgroundColor()) * 16); };
-	void setBackgroundColor(ConsoleColor color) { SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), static_cast<WORD>(getForegroundColor()) + static_cast<WORD>(color) * 16); };
-	void setTitle(const std::wstring& title) { SetConsoleTitleW(title.c_str()); };
-	void clear()
+	void SetForegroundColor(ConsoleColor color) { SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), static_cast<WORD>(color) + static_cast<WORD>(GetBackgroundColor()) * 16); };
+	void SetBackgroundColor(ConsoleColor color) { SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), static_cast<WORD>(GetForegroundColor()) + static_cast<WORD>(color) * 16); };
+	void SetTitle(const std::wstring& title) { SetConsoleTitleW(title.c_str()); };
+	void Clear()
 	{
 		COORD TopLeft{ 0, 0 };
 		HANDLE Console = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -76,19 +73,7 @@ namespace CmplxConExt
 		FillConsoleOutputAttribute(Console, FOREGROUND_GREEN | FOREGROUND_RED | FOREGROUND_BLUE, Screen.dwSize.X * Screen.dwSize.Y, TopLeft, &Written);
 		SetConsoleCursorPosition(Console, TopLeft);
 	};
-	void pressAnyKey() { int ret = _getwch(); };
-	static const struct Original {
-		ConsoleColor ForegroundColor;
-		ConsoleColor BackgroundColor;
-		std::wstring Title;
-		Original() : ForegroundColor(getForegroundColor()), BackgroundColor(getBackgroundColor()), Title(getTitle()) {};
-		~Original()
-		{
-			setForegroundColor(ForegroundColor);
-			setBackgroundColor(BackgroundColor);
-			setTitle(Title);
-		};
-	} Store{};
+	void PressAnyKey() { int ret = _getwch(); };
 }
 int main()
 {

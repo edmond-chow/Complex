@@ -26,12 +26,12 @@ namespace SedenConExt
 		Yellow = 14,
 		White = 15,
 	};
-	ConsoleColor getForegroundColor();
-	ConsoleColor getBackgroundColor();
-	std::wstring getTitle();
-	void setForegroundColor(ConsoleColor color);
-	void setBackgroundColor(ConsoleColor color);
-	void setTitle(const std::wstring& title);
-	void clear();
-	void pressAnyKey();
+	ConsoleColor GetForegroundColor();
+	ConsoleColor GetBackgroundColor();
+	std::wstring GetTitle();
+	void SetForegroundColor(ConsoleColor color);
+	void SetBackgroundColor(ConsoleColor color);
+	void SetTitle(const std::wstring& title);
+	void Clear();
+	void PressAnyKey();
 }
