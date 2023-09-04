@@ -152,7 +152,6 @@ namespace ComplexTestingConsole
 			{
 				std::int64_t Min = stoi64_t(Base::Input(get_angle_name(std::integral_constant<std::size_t, I>{}, Angle) + L"Min" + Assign));
 				std::int64_t Max = stoi64_t(Base::Input(get_angle_name(std::integral_constant<std::size_t, I>{}, Angle) + L"Max" + Assign));
-				if (Min > Max) { std::swap(Min, Max); }
 				std::get<I>(Data) = std::make_pair<std::int64_t, std::int64_t>(std::move(Min), std::move(Max));
 			}
 			if constexpr (I < A)
