@@ -166,18 +166,14 @@ namespace SedenionTestingConsole
     }
     internal static class Module
     {
-        private static void Swap(ref long U, ref long V)
-        {
-            Interlocked.Exchange(ref V, Interlocked.Exchange(ref U, V));
-        }
+        private static readonly string Assign = " = ";
+        private static readonly string[] Angle = { "Theta", "Phi", "Tau", "Omega" };
         private static string GetAngleName(long I, string[] Angle)
         {
             return I < Angle.LongLength ? Angle[I] : ("Angle" + I.ToString());
         }
         internal static void PowerGet(long[] Data)
         {
-            string Assign = " = ";
-            string[] Angle = { "Theta", "Phi", "Tau", "Omega" };
             for (long I = 0; I < Data.LongLength; ++I)
             {
                 Data[I] = long.Parse(Base.Input(GetAngleName(I, Angle) + Assign));
@@ -185,13 +181,10 @@ namespace SedenionTestingConsole
         }
         internal static void PowerGet(Tuple<long, long>[] Data)
         {
-            string Assign = " = ";
-            string[] Angle = { "Theta", "Phi", "Tau", "Omega" };
             for (long I = 0; I < Data.LongLength; ++I)
             {
                 long Min = long.Parse(Base.Input(GetAngleName(I, Angle) + "Min" + Assign));
                 long Max = long.Parse(Base.Input(GetAngleName(I, Angle) + "Max" + Assign));
-                if (Min > Max) { Swap(ref Min, ref Max); }
                 Data[I] = new Tuple<long, long>(Min, Max);
             }
         }
