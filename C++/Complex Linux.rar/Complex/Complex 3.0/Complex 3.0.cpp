@@ -658,7 +658,7 @@ namespace Cmplx3
 		Octonion CMPLX3_FUNC_CALL Octonion::sinh(const Octonion& Value)
 		{
 			return std::sinh(Scalar(Value)) * std::cos(abs(Vector(Value)))
-				+ std::cosh(Scalar(Value)) * sgn(abs(Vector(Value))) * std::sin(abs(Vector(Value)));
+				+ std::cosh(Scalar(Value)) * sgn(Vector(Value)) * std::sin(abs(Vector(Value)));
 		};
 		Octonion CMPLX3_FUNC_CALL Octonion::arcsinh(const Octonion& Value) { return arcsinh(Value, true, 0); };
 		Octonion CMPLX3_FUNC_CALL Octonion::arcsinh(const Octonion& Value, bool Sign, std::int64_t Period)
@@ -680,7 +680,7 @@ namespace Cmplx3
 		Octonion CMPLX3_FUNC_CALL Octonion::cosh(const Octonion& Value)
 		{
 			return std::cosh(Scalar(Value)) * std::cos(abs(Vector(Value)))
-				+ std::sinh(Scalar(Value)) * sgn(abs(Vector(Value))) * std::sin(abs(Vector(Value)));
+				+ std::sinh(Scalar(Value)) * sgn(Vector(Value)) * std::sin(abs(Vector(Value)));
 		};
 		Octonion CMPLX3_FUNC_CALL Octonion::arccosh(const Octonion& Value) { return arccosh(Value, true, 0); };
 		Octonion CMPLX3_FUNC_CALL Octonion::arccosh(const Octonion& Value, bool Sign, std::int64_t Period)
