@@ -14,7 +14,7 @@ namespace Cmplx
         public struct Vector1D
         {
             ///
-            /// Initializer
+            /// basis
             ///
             private double x1;
             public Vector1D(double x1)
@@ -60,7 +60,7 @@ namespace Cmplx
                 else { throw new Vector1DException("Non-zero value is not satisfy isomorphism to be a vector."); }
             }
             ///
-            /// Operators
+            /// operators
             ///
             public static bool operator ==(Vector1D Union, Vector1D Value) { return Union.ToNumber() == Value.ToNumber(); }
             public static bool operator !=(Vector1D Union, Vector1D Value) { return !(Union == Value); }
@@ -75,7 +75,9 @@ namespace Cmplx
             public static Vector1D operator *(double Union, Vector1D Value) { return From(Union * Value.ToNumber()); }
             public static Vector1D operator *(Vector1D Union, double Value) { return From(Union.ToNumber() * Value); }
             public static Vector1D operator /(Vector1D Union, double Value) { return From(Union.ToNumber() / Value); }
-            /* Casting */
+            ///
+            /// casing
+            ///
             internal Number ToNumber()
             {
                 return new Number(0, x1);
@@ -96,27 +98,32 @@ namespace Cmplx
         }
         public static class Vector1DModule
         {
+            ///
+            /// constants
+            ///
             public static readonly double pi = Math.PI;
             public static readonly double e = Math.E;
             public static readonly Vector1D e1 = new Vector1D(1);
             ///
-            /// Basic functions for constructing vectors
+            /// fundamentals
             ///
             public static double Abs(Vector1D Value) { return Math.Sqrt(Dot(Value, Value)); }
             public static Vector1D Sgn(Vector1D Value) { return Value / Abs(Value); }
-            public static double Dot(Vector1D Union, Vector1D Value) { return Build_In_Dot(Union, Value); }
-            public static Vector1D Cross(Vector1D Union, Vector1D Value) { return Build_In_Cross(Union, Value); }
-            /* Build_In */
-            private static double Build_In_Dot(Vector1D Union, Vector1D Value)
+            public static double Dot(Vector1D Union, Vector1D Value) { return DotWithNumbers(Union, Value); }
+            public static Vector1D Cross(Vector1D Union, Vector1D Value) { return CrossWithNumbers(Union, Value); }
+            ///
+            /// traits
+            ///
+            private static double DotWithNumbers(Vector1D Union, Vector1D Value)
             {
                 return ComplexModule.Dot(Union, Value);
             }
-            private static Vector1D Build_In_Cross(Vector1D Union, Vector1D Value)
+            private static Vector1D CrossWithNumbers(Vector1D Union, Vector1D Value)
             {
                 return Vector1D.From(ComplexModule.Cross(Union, Value).ToNumber());
             }
             ///
-            /// Conversion of Types
+            /// conventions
             ///
             public static string GetString(Vector1D Value) { return Value.ToString(); }
             public static Vector1D GetInstance(string Value)
@@ -136,7 +143,7 @@ namespace Cmplx
         public struct Complex
         {
             ///
-            /// Initializer
+            /// basis
             ///
             private double real;
             private Vector1D imaginary;
@@ -207,7 +214,9 @@ namespace Cmplx
                 return Union * Inverse(Value);
             }
             public static Complex operator ^(Complex Base, long Exponent) { return Power(Base, Exponent); }
-            /* Casting */
+            ///
+            /// casing
+            ///
             internal Number ToNumber()
             {
                 return new Number(real, imaginary[1]);
@@ -228,13 +237,16 @@ namespace Cmplx
         }
         public static class ComplexModule
         {
+            ///
+            /// constants
+            ///
             public static readonly double pi = Math.PI;
             public static readonly double e = Math.E;
             public static readonly Complex i = new Complex(0, 1);
             public static double Re(Complex z) { return Scalar(z); }
             public static double Im(Complex z) { return Vector(z)[0]; }
             ///
-            /// Basic functions for constructing numbers
+            /// fundamentals
             ///
             public static double Abs(Complex Value) { return Math.Sqrt(Dot(Value, Value)); }
             public static double Arg(Complex Value) { return Arg(Value, 0); }
@@ -244,16 +256,16 @@ namespace Cmplx
             public static Complex Inverse(Complex Value) { return Conjg(Value) / Dot(Value, Value); }
             public static Complex Exp(Complex Value) { return Math.Exp(Scalar(Value)) * (Math.Cos(Abs(Vector(Value))) + Sgn(Vector(Value)) * Math.Sin(Abs(Vector(Value)))); }
             public static Complex Ln(Complex Value) { return Ln(Value, 0); }
-            public static Complex Ln(Complex Value, long Theta) { return Math.Log(Abs(Value)) + Sgn(Vector(Value)) * Arg(Value, Theta); }
+            public static Complex Ln(Complex Value, long Theta) { return Math.Log(Abs(Value)) + (Vector(Value) == 0 ? 0 : Sgn(Vector(Value)) * Arg(Value, Theta)); }
             ///
-            /// 1st rank tensor algorithms
+            /// multiples
             ///
             public static double Dot(Complex Union, Complex Value) { return Scalar(Conjg(Union) * Value + Conjg(Value) * Union) / 2; }
             public static Complex Outer(Complex Union, Complex Value) { return (Conjg(Union) * Value - Conjg(Value) * Union) / 2; }
             public static Complex Even(Complex Union, Complex Value) { return (Union * Value + Value * Union) / 2; }
             public static Complex Cross(Complex Union, Complex Value) { return (Union * Value - Value * Union) / 2; }
             ///
-            /// Operation 3 algorithms
+            /// exponentials
             ///
             public static Complex Power(Complex Base, Complex Exponent) { return Power(Base, Exponent, 0); }
             public static Complex Power(Complex Base, Complex Exponent, long Theta)
@@ -277,7 +289,7 @@ namespace Cmplx
                 return Ln(Number, Theta) / Ln(Base, Phi);
             }
             ///
-            /// Trigonometric functions
+            /// trigonometrics
             ///
             public static Complex Sin(Complex Value)
             {
@@ -362,7 +374,7 @@ namespace Cmplx
             public static Complex Arccoth(Complex Value) { return Arccoth(Value, true, 0); }
             public static Complex Arccoth(Complex Value, bool Sign, long Period) { return Arctanh(Inverse(Value), Sign, Period); }
             ///
-            /// Conversion of Types
+            /// conventions
             ///
             public static string GetString(Complex Value) { return Value.ToString(); }
             public static Complex GetInstance(string Value)

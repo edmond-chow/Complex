@@ -5,20 +5,26 @@ namespace Seden
 {
     public class Sedenion
     {
+        ///
+        /// helpers
+        ///
         private static long GetDimension(long Value)
         {
-            int n = 0;
+            int Result = 0;
             while (Value > 0)
             {
                 Value >>= 1;
-                ++n;
+                ++Result;
             }
-            return 1 << n;
+            return 1 << Result;
         }
+        ///
+        /// constants
+        ///
         public static readonly double pi = Math.PI;
         public static readonly double e = Math.E;
         ///
-        /// Initializer
+        /// basis
         ///
         private readonly Number numbers;
         private Number Data => numbers;
@@ -50,7 +56,7 @@ namespace Seden
         public static double Scalar(Sedenion Value) { return Value.ToNumber()[0]; }
         public static Sedenion Vector(Sedenion Value) { return new Sedenion(new double[] { 0 }.Concat(Value.ToNumber().Skip(1)).ToArray()); }
         ///
-        /// Operators
+        /// operators
         ///
         public static bool operator ==(Sedenion Union, Sedenion Value)
         {
@@ -77,7 +83,7 @@ namespace Seden
         public static Sedenion operator /(Sedenion Union, double Value) { return From(Union.ToNumber() / Value); }
         public static Sedenion operator ^(Sedenion Base, long Exponent) { return Power(Base, Exponent); }
         ///
-        /// Basic functions for constructing numbers
+        /// fundamentals
         ///
         public static double Abs(Sedenion Value) { return Math.Sqrt(Dot(Value, Value)); }
         public static double Arg(Sedenion Value) { return Arg(Value, 0); }
@@ -87,16 +93,16 @@ namespace Seden
         public static Sedenion Inverse(Sedenion Value) { return Conjg(Value) / Dot(Value, Value); }
         public static Sedenion Exp(Sedenion Value) { return Math.Exp(Scalar(Value)) * (Math.Cos(Abs(Vector(Value))) + Sgn(Vector(Value)) * Math.Sin(Abs(Vector(Value)))); }
         public static Sedenion Ln(Sedenion Value) { return Ln(Value, 0); }
-        public static Sedenion Ln(Sedenion Value, long Theta) { return Math.Log(Abs(Value)) + Sgn(Vector(Value)) * Arg(Value, Theta); }
+        public static Sedenion Ln(Sedenion Value, long Theta) { return Math.Log(Abs(Value)) + (Vector(Value) == 0 ? 0 : Sgn(Vector(Value)) * Arg(Value, Theta)); }
         ///
-        /// 1st rank tensor algorithms
+        /// multiples
         ///
         public static double Dot(Sedenion Union, Sedenion Value) { return Scalar(Conjg(Union) * Value + Conjg(Value) * Union) / 2; }
         public static Sedenion Outer(Sedenion Union, Sedenion Value) { return (Conjg(Union) * Value - Conjg(Value) * Union) / 2; }
         public static Sedenion Even(Sedenion Union, Sedenion Value) { return (Union * Value + Value * Union) / 2; }
         public static Sedenion Cross(Sedenion Union, Sedenion Value) { return (Union * Value - Value * Union) / 2; }
         ///
-        /// Operation 3 algorithms
+        /// exponentials
         ///
         public static Sedenion Power(Sedenion Base, Sedenion Exponent) { return Power(Base, Exponent, 0, 0, 0); }
         public static Sedenion Power(Sedenion Base, Sedenion Exponent, long Theta, long Phi, long Tau)
@@ -120,7 +126,7 @@ namespace Seden
             return Exp(Ln(Ln(Number, Theta), Phi) - Ln(Ln(Base, Tau), Omega));
         }
         ///
-        /// Trigonometric functions
+        /// trigonometrics
         ///
         public static Sedenion Sin(Sedenion Value)
         {
@@ -205,7 +211,7 @@ namespace Seden
         public static Sedenion Arccoth(Sedenion Value) { return Arccoth(Value, true, 0); }
         public static Sedenion Arccoth(Sedenion Value, bool Sign, long Period) { return Arctanh(Inverse(Value), Sign, Period); }
         ///
-        /// Conversion of Types
+        /// conventions
         ///
         public static string GetString(Sedenion Value) { return Value.ToString(); }
         public static Sedenion GetInstance(string Value)
@@ -222,7 +228,9 @@ namespace Seden
             for (long i = 0; i < Strings.LongLength; ++i) { Strings[i] = "e" + i.ToString(); }
             return new Sedenion(Value.ToNumbers(Strings));
         }
-        /* Casting */
+        ///
+        /// casing
+        ///
         private Number ToNumber() { return numbers; }
         private Number ToNumber(int Dimension)
         {

@@ -14,7 +14,7 @@ namespace Cmplx2
         public struct Vector3D
         {
             ///
-            /// Initializer
+            /// basis
             ///
             private double x1;
             private double x2;
@@ -69,7 +69,7 @@ namespace Cmplx2
                 else { throw new Vector3DException("Non-zero value is not satisfy isomorphism to be a vector."); }
             }
             ///
-            /// Operators
+            /// operators
             ///
             public static bool operator ==(Vector3D Union, Vector3D Value) { return Union.ToNumber() == Value.ToNumber(); }
             public static bool operator !=(Vector3D Union, Vector3D Value) { return !(Union == Value); }
@@ -84,7 +84,9 @@ namespace Cmplx2
             public static Vector3D operator *(double Union, Vector3D Value) { return From(Union * Value.ToNumber()); }
             public static Vector3D operator *(Vector3D Union, double Value) { return From(Union.ToNumber() * Value); }
             public static Vector3D operator /(Vector3D Union, double Value) { return From(Union.ToNumber() / Value); }
-            /* Casting */
+            ///
+            /// casing
+            ///
             internal Number ToNumber()
             {
                 return new Number(0, x1, x2, x3);
@@ -105,29 +107,34 @@ namespace Cmplx2
         }
         public static class Vector3DModule
         {
+            ///
+            /// constants
+            ///
             public static readonly double pi = Math.PI;
             public static readonly double e = Math.E;
             public static readonly Vector3D e1 = new Vector3D(1, 0, 0);
             public static readonly Vector3D e2 = new Vector3D(0, 1, 0);
             public static readonly Vector3D e3 = new Vector3D(0, 0, 1);
             ///
-            /// Basic functions for constructing vectors
+            /// fundamentals
             ///
             public static double Abs(Vector3D Value) { return Math.Sqrt(Dot(Value, Value)); }
             public static Vector3D Sgn(Vector3D Value) { return Value / Abs(Value); }
-            public static double Dot(Vector3D Union, Vector3D Value) { return Build_In_Dot(Union, Value); }
-            public static Vector3D Cross(Vector3D Union, Vector3D Value) { return Build_In_Cross(Union, Value); }
-            /* Build_In */
-            private static double Build_In_Dot(Vector3D Union, Vector3D Value)
+            public static double Dot(Vector3D Union, Vector3D Value) { return DotWithNumbers(Union, Value); }
+            public static Vector3D Cross(Vector3D Union, Vector3D Value) { return CrossWithNumbers(Union, Value); }
+            ///
+            /// traits
+            ///
+            private static double DotWithNumbers(Vector3D Union, Vector3D Value)
             {
                 return QuaternionModule.Dot(Union, Value);
             }
-            private static Vector3D Build_In_Cross(Vector3D Union, Vector3D Value)
+            private static Vector3D CrossWithNumbers(Vector3D Union, Vector3D Value)
             {
                 return Vector3D.From(QuaternionModule.Cross(Union, Value).ToNumber());
             }
             ///
-            /// Conversion of Types
+            /// conventions
             ///
             public static string GetString(Vector3D Value) { return Value.ToString(); }
             public static Vector3D GetInstance(string Value)
@@ -147,7 +154,7 @@ namespace Cmplx2
         public struct Quaternion
         {
             ///
-            /// Initializer
+            /// basis
             ///
             private double real;
             private Vector3D imaginary;
@@ -218,7 +225,9 @@ namespace Cmplx2
                 return Union * Inverse(Value);
             }
             public static Quaternion operator ^(Quaternion Base, long Exponent) { return Power(Base, Exponent); }
-            /* Casting */
+            ///
+            /// casing
+            ///
             internal Number ToNumber()
             {
                 return new Number(real, imaginary[1], imaginary[2], imaginary[3]);
@@ -239,13 +248,16 @@ namespace Cmplx2
         }
         public static class QuaternionModule
         {
+            ///
+            /// constants
+            ///
             public static readonly double pi = Math.PI;
             public static readonly double e = Math.E;
             public static readonly Quaternion i = new Quaternion(0, 1, 0, 0);
             public static readonly Quaternion j = new Quaternion(0, 0, 1, 0);
             public static readonly Quaternion k = new Quaternion(0, 0, 0, 1);
             ///
-            /// Basic functions for constructing numbers
+            /// fundamentals
             ///
             public static double Abs(Quaternion Value) { return Math.Sqrt(Dot(Value, Value)); }
             public static double Arg(Quaternion Value) { return Arg(Value, 0); }
@@ -255,16 +267,16 @@ namespace Cmplx2
             public static Quaternion Inverse(Quaternion Value) { return Conjg(Value) / Dot(Value, Value); }
             public static Quaternion Exp(Quaternion Value) { return Math.Exp(Scalar(Value)) * (Math.Cos(Abs(Vector(Value))) + Sgn(Vector(Value)) * Math.Sin(Abs(Vector(Value)))); }
             public static Quaternion Ln(Quaternion Value) { return Ln(Value, 0); }
-            public static Quaternion Ln(Quaternion Value, long Theta) { return Math.Log(Abs(Value)) + Sgn(Vector(Value)) * Arg(Value, Theta); }
+            public static Quaternion Ln(Quaternion Value, long Theta) { return Math.Log(Abs(Value)) + (Vector(Value) == 0 ? 0 : Sgn(Vector(Value)) * Arg(Value, Theta)); }
             ///
-            /// 1st rank tensor algorithms
+            /// multiples
             ///
             public static double Dot(Quaternion Union, Quaternion Value) { return Scalar(Conjg(Union) * Value + Conjg(Value) * Union) / 2; }
             public static Quaternion Outer(Quaternion Union, Quaternion Value) { return (Conjg(Union) * Value - Conjg(Value) * Union) / 2; }
             public static Quaternion Even(Quaternion Union, Quaternion Value) { return (Union * Value + Value * Union) / 2; }
             public static Quaternion Cross(Quaternion Union, Quaternion Value) { return (Union * Value - Value * Union) / 2; }
             ///
-            /// Operation 3 algorithms
+            /// exponentials
             ///
             public static Quaternion Power(Quaternion Base, Quaternion Exponent) { return Power(Base, Exponent, 0, 0, 0); }
             public static Quaternion Power(Quaternion Base, Quaternion Exponent, long Theta, long Phi, long Tau)
@@ -288,7 +300,7 @@ namespace Cmplx2
                 return Exp(Ln(Ln(Number, Theta), Phi) - Ln(Ln(Base, Tau), Omega));
             }
             ///
-            /// Trigonometric functions
+            /// trigonometrics
             ///
             public static Quaternion Sin(Quaternion Value)
             {
@@ -373,7 +385,7 @@ namespace Cmplx2
             public static Quaternion Arccoth(Quaternion Value) { return Arccoth(Value, true, 0); }
             public static Quaternion Arccoth(Quaternion Value, bool Sign, long Period) { return Arctanh(Inverse(Value), Sign, Period); }
             ///
-            /// Conversion of Types
+            /// conventions
             ///
             public static string GetString(Quaternion Value) { return Value.ToString(); }
             public static Quaternion GetInstance(string Value)

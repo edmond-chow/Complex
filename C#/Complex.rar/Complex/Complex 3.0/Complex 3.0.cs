@@ -14,7 +14,7 @@ namespace Cmplx3
         public struct Vector7D
         {
             ///
-            /// Initializer
+            /// basis
             ///
             private double x1;
             private double x2;
@@ -85,7 +85,7 @@ namespace Cmplx3
                 else { throw new Vector7DException("Non-zero value is not satisfy isomorphism to be a vector."); }
             }
             ///
-            /// Operators
+            /// operators
             ///
             public static bool operator ==(Vector7D Union, Vector7D Value) { return Union.ToNumber() == Value.ToNumber(); }
             public static bool operator !=(Vector7D Union, Vector7D Value) { return !(Union == Value); }
@@ -100,7 +100,9 @@ namespace Cmplx3
             public static Vector7D operator *(double Union, Vector7D Value) { return From(Union * Value.ToNumber()); }
             public static Vector7D operator *(Vector7D Union, double Value) { return From(Union.ToNumber() * Value); }
             public static Vector7D operator /(Vector7D Union, double Value) { return From(Union.ToNumber() / Value); }
-            /* Casting */
+            ///
+            /// casing
+            ///
             internal Number ToNumber()
             {
                 return new Number(0, x1, x2, x3, x4, x5, x6, x7);
@@ -121,6 +123,9 @@ namespace Cmplx3
         }
         public static class Vector7DModule
         {
+            ///
+            /// constants
+            ///
             public static readonly double pi = Math.PI;
             public static readonly double e = Math.E;
             public static readonly Vector7D e1 = new Vector7D(1, 0, 0, 0, 0, 0, 0);
@@ -131,23 +136,25 @@ namespace Cmplx3
             public static readonly Vector7D e6 = new Vector7D(0, 0, 0, 0, 0, 1, 0);
             public static readonly Vector7D e7 = new Vector7D(0, 0, 0, 0, 0, 0, 1);
             ///
-            /// Basic functions for constructing vectors
+            /// fundamentals
             ///
             public static double Abs(Vector7D Value) { return Math.Sqrt(Dot(Value, Value)); }
             public static Vector7D Sgn(Vector7D Value) { return Value / Abs(Value); }
-            public static double Dot(Vector7D Union, Vector7D Value) { return Build_In_Dot(Union, Value); }
-            public static Vector7D Cross(Vector7D Union, Vector7D Value) { return Build_In_Cross(Union, Value); }
-            /* Build_In */
-            private static double Build_In_Dot(Vector7D Union, Vector7D Value)
+            public static double Dot(Vector7D Union, Vector7D Value) { return DotWithNumbers(Union, Value); }
+            public static Vector7D Cross(Vector7D Union, Vector7D Value) { return CrossWithNumbers(Union, Value); }
+            ///
+            /// traits
+            ///
+            private static double DotWithNumbers(Vector7D Union, Vector7D Value)
             {
                 return OctonionModule.Dot(Union, Value);
             }
-            private static Vector7D Build_In_Cross(Vector7D Union, Vector7D Value)
+            private static Vector7D CrossWithNumbers(Vector7D Union, Vector7D Value)
             {
                 return Vector7D.From(OctonionModule.Cross(Union, Value).ToNumber());
             }
             ///
-            /// Conversion of Types
+            /// conventions
             ///
             public static string GetString(Vector7D Value) { return Value.ToString(); }
             public static Vector7D GetInstance(string Value)
@@ -167,7 +174,7 @@ namespace Cmplx3
         public struct Octonion
         {
             ///
-            /// Initializer
+            /// basis
             ///
             private double real;
             private Vector7D imaginary;
@@ -238,7 +245,9 @@ namespace Cmplx3
                 return Union * Inverse(Value);
             }
             public static Octonion operator ^(Octonion Base, long Exponent) { return Power(Base, Exponent); }
-            /* Casting */
+            ///
+            /// casing
+            ///
             internal Number ToNumber()
             {
                 return new Number(real, imaginary[1], imaginary[2], imaginary[3], imaginary[4], imaginary[5], imaginary[6], imaginary[7]);
@@ -259,6 +268,9 @@ namespace Cmplx3
         }
         public static class OctonionModule
         {
+            ///
+            /// constants
+            ///
             public static readonly double pi = Math.PI;
             public static readonly double e = Math.E;
             public static readonly Octonion i = new Octonion(0, 1, 0, 0, 0, 0, 0, 0);
@@ -269,7 +281,7 @@ namespace Cmplx3
             public static readonly Octonion jl = new Octonion(0, 0, 0, 0, 0, 0, 1, 0);
             public static readonly Octonion kl = new Octonion(0, 0, 0, 0, 0, 0, 0, 1);
             ///
-            /// Basic functions for constructing numbers
+            /// fundamentals
             ///
             public static double Abs(Octonion Value) { return Math.Sqrt(Dot(Value, Value)); }
             public static double Arg(Octonion Value) { return Arg(Value, 0); }
@@ -279,16 +291,16 @@ namespace Cmplx3
             public static Octonion Inverse(Octonion Value) { return Conjg(Value) / Dot(Value, Value); }
             public static Octonion Exp(Octonion Value) { return Math.Exp(Scalar(Value)) * (Math.Cos(Abs(Vector(Value))) + Sgn(Vector(Value)) * Math.Sin(Abs(Vector(Value)))); }
             public static Octonion Ln(Octonion Value) { return Ln(Value, 0); }
-            public static Octonion Ln(Octonion Value, long Theta) { return Math.Log(Abs(Value)) + Sgn(Vector(Value)) * Arg(Value, Theta); }
+            public static Octonion Ln(Octonion Value, long Theta) { return Math.Log(Abs(Value)) + (Vector(Value) == 0 ? 0 : Sgn(Vector(Value)) * Arg(Value, Theta)); }
             ///
-            /// 1st rank tensor algorithms
+            /// multiples
             ///
             public static double Dot(Octonion Union, Octonion Value) { return Scalar(Conjg(Union) * Value + Conjg(Value) * Union) / 2; }
             public static Octonion Outer(Octonion Union, Octonion Value) { return (Conjg(Union) * Value - Conjg(Value) * Union) / 2; }
             public static Octonion Even(Octonion Union, Octonion Value) { return (Union * Value + Value * Union) / 2; }
             public static Octonion Cross(Octonion Union, Octonion Value) { return (Union * Value - Value * Union) / 2; }
             ///
-            /// Operation 3 algorithms
+            /// exponentials
             ///
             public static Octonion Power(Octonion Base, Octonion Exponent) { return Power(Base, Exponent, 0, 0, 0); }
             public static Octonion Power(Octonion Base, Octonion Exponent, long Theta, long Phi, long Tau)
@@ -312,7 +324,7 @@ namespace Cmplx3
                 return Exp(Ln(Ln(Number, Theta), Phi) - Ln(Ln(Base, Tau), Omega));
             }
             ///
-            /// Trigonometric functions
+            /// trigonometrics
             ///
             public static Octonion Sin(Octonion Value)
             {
@@ -397,7 +409,7 @@ namespace Cmplx3
             public static Octonion Arccoth(Octonion Value) { return Arccoth(Value, true, 0); }
             public static Octonion Arccoth(Octonion Value, bool Sign, long Period) { return Arctanh(Inverse(Value), Sign, Period); }
             ///
-            /// Conversion of Types
+            /// conventions
             ///
             public static string GetString(Octonion Value) { return Value.ToString(); }
             public static Octonion GetInstance(string Value)
