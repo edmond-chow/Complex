@@ -207,7 +207,7 @@ namespace Cmplx2
             public static double Scalar(Quaternion Value) { return Value.real; }
             public static Vector3D Vector(Quaternion Value) { return Value.imaginary; }
             ///
-            /// Operators
+            /// operators
             ///
             public static bool operator ==(Quaternion Union, Quaternion Value) { return Union.ToNumber() == Value.ToNumber(); }
             public static bool operator !=(Quaternion Union, Quaternion Value) { return !(Union == Value); }

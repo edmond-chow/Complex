@@ -196,7 +196,7 @@ namespace Cmplx
             public static double Scalar(Complex Value) { return Value.real; }
             public static Vector1D Vector(Complex Value) { return Value.imaginary; }
             ///
-            /// Operators
+            /// operators
             ///
             public static bool operator ==(Complex Union, Complex Value) { return Union.ToNumber() == Value.ToNumber(); }
             public static bool operator !=(Complex Union, Complex Value) { return !(Union == Value); }

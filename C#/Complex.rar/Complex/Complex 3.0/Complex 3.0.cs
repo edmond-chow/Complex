@@ -227,7 +227,7 @@ namespace Cmplx3
             public static double Scalar(Octonion Value) { return Value.real; }
             public static Vector7D Vector(Octonion Value) { return Value.imaginary; }
             ///
-            /// Operators
+            /// operators
             ///
             public static bool operator ==(Octonion Union, Octonion Value) { return Union.ToNumber() == Value.ToNumber(); }
             public static bool operator !=(Octonion Union, Octonion Value) { return !(Union == Value); }
