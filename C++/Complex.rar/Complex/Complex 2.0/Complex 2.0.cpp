@@ -618,7 +618,7 @@ namespace Cmplx2
 		Quaternion CMPLX2_FUNC_CALL Quaternion::sinh(const Quaternion& Value)
 		{
 			return std::sinh(Scalar(Value)) * std::cos(abs(Vector(Value)))
-				+ std::cosh(Scalar(Value)) * sgn(abs(Vector(Value))) * std::sin(abs(Vector(Value)));
+				+ std::cosh(Scalar(Value)) * sgn(Vector(Value)) * std::sin(abs(Vector(Value)));
 		};
 		Quaternion CMPLX2_FUNC_CALL Quaternion::arcsinh(const Quaternion& Value) { return arcsinh(Value, true, 0); };
 		Quaternion CMPLX2_FUNC_CALL Quaternion::arcsinh(const Quaternion& Value, bool Sign, std::int64_t Period)
@@ -640,7 +640,7 @@ namespace Cmplx2
 		Quaternion CMPLX2_FUNC_CALL Quaternion::cosh(const Quaternion& Value)
 		{
 			return std::cosh(Scalar(Value)) * std::cos(abs(Vector(Value)))
-				+ std::sinh(Scalar(Value)) * sgn(abs(Vector(Value))) * std::sin(abs(Vector(Value)));
+				+ std::sinh(Scalar(Value)) * sgn(Vector(Value)) * std::sin(abs(Vector(Value)));
 		};
 		Quaternion CMPLX2_FUNC_CALL Quaternion::arccosh(const Quaternion& Value) { return arccosh(Value, true, 0); };
 		Quaternion CMPLX2_FUNC_CALL Quaternion::arccosh(const Quaternion& Value, bool Sign, std::int64_t Period)

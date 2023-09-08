@@ -590,7 +590,7 @@ namespace Cmplx
 		Complex CMPLX_FUNC_CALL Complex::sinh(const Complex& Value)
 		{
 			return std::sinh(Scalar(Value)) * std::cos(abs(Vector(Value)))
-				+ std::cosh(Scalar(Value)) * sgn(abs(Vector(Value))) * std::sin(abs(Vector(Value)));
+				+ std::cosh(Scalar(Value)) * sgn(Vector(Value)) * std::sin(abs(Vector(Value)));
 		};
 		Complex CMPLX_FUNC_CALL Complex::arcsinh(const Complex& Value) { return arcsinh(Value, true, 0); };
 		Complex CMPLX_FUNC_CALL Complex::arcsinh(const Complex& Value, bool Sign, std::int64_t Period)
@@ -612,7 +612,7 @@ namespace Cmplx
 		Complex CMPLX_FUNC_CALL Complex::cosh(const Complex& Value)
 		{
 			return std::cosh(Scalar(Value)) * std::cos(abs(Vector(Value)))
-				+ std::sinh(Scalar(Value)) * sgn(abs(Vector(Value))) * std::sin(abs(Vector(Value)));
+				+ std::sinh(Scalar(Value)) * sgn(Vector(Value)) * std::sin(abs(Vector(Value)));
 		};
 		Complex CMPLX_FUNC_CALL Complex::arccosh(const Complex& Value) { return arccosh(Value, true, 0); };
 		Complex CMPLX_FUNC_CALL Complex::arccosh(const Complex& Value, bool Sign, std::int64_t Period)

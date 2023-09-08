@@ -464,7 +464,7 @@ namespace Seden
 	Sedenion SEDEN_FUNC_CALL Sedenion::sinh(const Sedenion& Value)
 	{
 		return std::sinh(Scalar(Value)) * std::cos(abs(Vector(Value)))
-			+ std::cosh(Scalar(Value)) * sgn(abs(Vector(Value))) * std::sin(abs(Vector(Value)));
+			+ std::cosh(Scalar(Value)) * sgn(Vector(Value)) * std::sin(abs(Vector(Value)));
 	};
 	Sedenion SEDEN_FUNC_CALL Sedenion::arcsinh(const Sedenion& Value) { return arcsinh(Value, true, 0); };
 	Sedenion SEDEN_FUNC_CALL Sedenion::arcsinh(const Sedenion& Value, bool Sign, std::int64_t Period)
@@ -486,7 +486,7 @@ namespace Seden
 	Sedenion SEDEN_FUNC_CALL Sedenion::cosh(const Sedenion& Value)
 	{
 		return std::cosh(Scalar(Value)) * std::cos(abs(Vector(Value)))
-			+ std::sinh(Scalar(Value)) * sgn(abs(Vector(Value))) * std::sin(abs(Vector(Value)));
+			+ std::sinh(Scalar(Value)) * sgn(Vector(Value)) * std::sin(abs(Vector(Value)));
 	};
 	Sedenion SEDEN_FUNC_CALL Sedenion::arccosh(const Sedenion& Value) { return arccosh(Value, true, 0); };
 	Sedenion SEDEN_FUNC_CALL Sedenion::arccosh(const Sedenion& Value, bool Sign, std::int64_t Period)
