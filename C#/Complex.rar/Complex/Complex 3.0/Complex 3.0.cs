@@ -328,7 +328,7 @@ namespace Cmplx3
             public static Octonion Sinh(Octonion Value)
             {
                 return Math.Sinh(Scalar(Value)) * Math.Cos(Abs(Vector(Value)))
-                    + Math.Cosh(Scalar(Value)) * Sgn(Abs(Vector(Value))) * Math.Sin(Abs(Vector(Value)));
+                    + Math.Cosh(Scalar(Value)) * Sgn(Vector(Value)) * Math.Sin(Abs(Vector(Value)));
             }
             public static Octonion Arcsinh(Octonion Value) { return Arcsinh(Value, true, 0); }
             public static Octonion Arcsinh(Octonion Value, bool Sign, long Period)
@@ -350,7 +350,7 @@ namespace Cmplx3
             public static Octonion Cosh(Octonion Value)
             {
                 return Math.Cosh(Scalar(Value)) * Math.Cos(Abs(Vector(Value)))
-                    + Math.Sinh(Scalar(Value)) * Sgn(Abs(Vector(Value))) * Math.Sin(Abs(Vector(Value)));
+                    + Math.Sinh(Scalar(Value)) * Sgn(Vector(Value)) * Math.Sin(Abs(Vector(Value)));
             }
             public static Octonion Arccosh(Octonion Value) { return Arccosh(Value, true, 0); }
             public static Octonion Arccosh(Octonion Value, bool Sign, long Period)

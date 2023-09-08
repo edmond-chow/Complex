@@ -304,7 +304,7 @@ namespace Cmplx2
             public static Quaternion Sinh(Quaternion Value)
             {
                 return Math.Sinh(Scalar(Value)) * Math.Cos(Abs(Vector(Value)))
-                    + Math.Cosh(Scalar(Value)) * Sgn(Abs(Vector(Value))) * Math.Sin(Abs(Vector(Value)));
+                    + Math.Cosh(Scalar(Value)) * Sgn(Vector(Value)) * Math.Sin(Abs(Vector(Value)));
             }
             public static Quaternion Arcsinh(Quaternion Value) { return Arcsinh(Value, true, 0); }
             public static Quaternion Arcsinh(Quaternion Value, bool Sign, long Period)
@@ -326,7 +326,7 @@ namespace Cmplx2
             public static Quaternion Cosh(Quaternion Value)
             {
                 return Math.Cosh(Scalar(Value)) * Math.Cos(Abs(Vector(Value)))
-                    + Math.Sinh(Scalar(Value)) * Sgn(Abs(Vector(Value))) * Math.Sin(Abs(Vector(Value)));
+                    + Math.Sinh(Scalar(Value)) * Sgn(Vector(Value)) * Math.Sin(Abs(Vector(Value)));
             }
             public static Quaternion Arccosh(Quaternion Value) { return Arccosh(Value, true, 0); }
             public static Quaternion Arccosh(Quaternion Value, bool Sign, long Period)

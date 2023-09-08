@@ -136,7 +136,7 @@ namespace Seden
         public static Sedenion Sinh(Sedenion Value)
         {
             return Math.Sinh(Scalar(Value)) * Math.Cos(Abs(Vector(Value)))
-                + Math.Cosh(Scalar(Value)) * Sgn(Abs(Vector(Value))) * Math.Sin(Abs(Vector(Value)));
+                + Math.Cosh(Scalar(Value)) * Sgn(Vector(Value)) * Math.Sin(Abs(Vector(Value)));
         }
         public static Sedenion Arcsinh(Sedenion Value) { return Arcsinh(Value, true, 0); }
         public static Sedenion Arcsinh(Sedenion Value, bool Sign, long Period)
@@ -158,7 +158,7 @@ namespace Seden
         public static Sedenion Cosh(Sedenion Value)
         {
             return Math.Cosh(Scalar(Value)) * Math.Cos(Abs(Vector(Value)))
-                + Math.Sinh(Scalar(Value)) * Sgn(Abs(Vector(Value))) * Math.Sin(Abs(Vector(Value)));
+                + Math.Sinh(Scalar(Value)) * Sgn(Vector(Value)) * Math.Sin(Abs(Vector(Value)));
         }
         public static Sedenion Arccosh(Sedenion Value) { return Arccosh(Value, true, 0); }
         public static Sedenion Arccosh(Sedenion Value, bool Sign, long Period)

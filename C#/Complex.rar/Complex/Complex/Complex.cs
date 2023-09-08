@@ -293,7 +293,7 @@ namespace Cmplx
             public static Complex Sinh(Complex Value)
             {
                 return Math.Sinh(Scalar(Value)) * Math.Cos(Abs(Vector(Value)))
-                    + Math.Cosh(Scalar(Value)) * Sgn(Abs(Vector(Value))) * Math.Sin(Abs(Vector(Value)));
+                    + Math.Cosh(Scalar(Value)) * Sgn(Vector(Value)) * Math.Sin(Abs(Vector(Value)));
             }
             public static Complex Arcsinh(Complex Value) { return Arcsinh(Value, true, 0); }
             public static Complex Arcsinh(Complex Value, bool Sign, long Period)
@@ -315,7 +315,7 @@ namespace Cmplx
             public static Complex Cosh(Complex Value)
             {
                 return Math.Cosh(Scalar(Value)) * Math.Cos(Abs(Vector(Value)))
-                    + Math.Sinh(Scalar(Value)) * Sgn(Abs(Vector(Value))) * Math.Sin(Abs(Vector(Value)));
+                    + Math.Sinh(Scalar(Value)) * Sgn(Vector(Value)) * Math.Sin(Abs(Vector(Value)));
             }
             public static Complex Arccosh(Complex Value) { return Arccosh(Value, true, 0); }
             public static Complex Arccosh(Complex Value, bool Sign, long Period)
