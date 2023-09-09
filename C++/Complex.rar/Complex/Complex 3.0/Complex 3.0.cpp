@@ -58,6 +58,9 @@ namespace Cmplx3
 		struct CMPLX3_INTERFACE Vector7D
 		{
 		public:
+			///
+			/// constants
+			///
 			static const double pi;
 			static const double e;
 			static const Vector7D e1;
@@ -69,7 +72,7 @@ namespace Cmplx3
 			static const Vector7D e7;
 		private:
 			///
-			/// Initializer
+			/// basis
 			///
 			double x1;
 			double x2;
@@ -83,7 +86,7 @@ namespace Cmplx3
 			explicit CMPLX3_FUNC_INSTANCE_CALL Vector7D(double x1, double x2, double x3, double x4, double x5, double x6, double x7) noexcept;
 			CMPLX3_FUNC_INSTANCE_CALL Vector7D(const Vector7D& Value) noexcept;
 			///
-			/// Operators
+			/// operators
 			///
 			Vector7D CMPLX3_FUNC_INSTANCE_CALL operator ()() const noexcept;
 			double& CMPLX3_FUNC_INSTANCE_CALL operator [](index i) &;
@@ -109,18 +112,20 @@ namespace Cmplx3
 			Vector7D& CMPLX3_FUNC_INSTANCE_CALL operator /=(double Value) & noexcept;
 			Vector7D& CMPLX3_FUNC_INSTANCE_CALL operator /=(const std::initializer_list<double>& Value) & noexcept;
 			///
-			/// Basic functions for constructing vectors
+			/// fundamentals
 			///
 			static double CMPLX3_FUNC_CALL abs(const Vector7D& Value);
 			static Vector7D CMPLX3_FUNC_CALL sgn(const Vector7D& Value);
 			static double CMPLX3_FUNC_CALL dot(const Vector7D& Union, const Vector7D& Value) noexcept;
 			static Vector7D CMPLX3_FUNC_CALL cross(const Vector7D& Union, const Vector7D& Value) noexcept;
 			///
-			/// Conversion of Types
+			/// conventions
 			///
 			static std::wstring CMPLX3_FUNC_CALL GetString(const Vector7D& Value);
 			static Vector7D CMPLX3_FUNC_CALL GetInstance(const std::wstring& Value);
-			/* Casting */
+			///
+			/// casing
+			///
 			inline auto to_number() const& noexcept
 				-> decltype(forward_as_number(0, (*this)[index::e1], (*this)[index::e2], (*this)[index::e3], (*this)[index::e4], (*this)[index::e5], (*this)[index::e6], (*this)[index::e7]))
 			{
@@ -133,9 +138,15 @@ namespace Cmplx3
 				number.store(temp, (*this)[index::e1], (*this)[index::e2], (*this)[index::e3], (*this)[index::e4], (*this)[index::e5], (*this)[index::e6], (*this)[index::e7]);
 				return *this;
 			};
-			static double build_in_dot(const Vector7D& Union, const Vector7D& Value);
-			static Vector7D build_in_cross(const Vector7D& Union, const Vector7D& Value);
+			///
+			/// traits
+			///
+			static double dot_with_numbers(const Vector7D& Union, const Vector7D& Value);
+			static Vector7D cross_with_numbers(const Vector7D& Union, const Vector7D& Value);
 		};
+		///
+		/// operators
+		///
 		bool CMPLX3_INTERFACE CMPLX3_FUNC_CALL operator ==(const Vector7D& Union, const Vector7D& Value) noexcept;
 		bool CMPLX3_INTERFACE CMPLX3_FUNC_CALL operator !=(const Vector7D& Union, const Vector7D& Value) noexcept;
 		Vector7D CMPLX3_INTERFACE CMPLX3_FUNC_CALL operator +(const Vector7D& Value) noexcept;
@@ -146,6 +157,9 @@ namespace Cmplx3
 		Vector7D CMPLX3_INTERFACE CMPLX3_FUNC_CALL operator *(const Vector7D& Union, double Value) noexcept;
 		Vector7D CMPLX3_INTERFACE CMPLX3_FUNC_CALL operator /(const Vector7D& Union, double Value) noexcept;
 		/* struct Vector7D */
+		///
+		/// constants
+		///
 		const double Vector7D::pi = std::numbers::pi;
 		const double Vector7D::e = std::numbers::e;
 		const Vector7D Vector7D::e1 = Vector7D(1, 0, 0, 0, 0, 0, 0);
@@ -156,13 +170,13 @@ namespace Cmplx3
 		const Vector7D Vector7D::e6 = Vector7D(0, 0, 0, 0, 0, 1, 0);
 		const Vector7D Vector7D::e7 = Vector7D(0, 0, 0, 0, 0, 0, 1);
 		///
-		/// Initializer
+		/// basis
 		///
 		CMPLX3_FUNC_INSTANCE_CALL Vector7D::Vector7D() noexcept : x1(), x2(), x3(), x4(), x5(), x6(), x7() {};
 		CMPLX3_FUNC_INSTANCE_CALL Vector7D::Vector7D(double x1, double x2, double x3, double x4, double x5, double x6, double x7) noexcept : x1(x1), x2(x2), x3(x3), x4(x4), x5(x5), x6(x6), x7(x7) {};
 		CMPLX3_FUNC_INSTANCE_CALL Vector7D::Vector7D(const Vector7D& Value) noexcept : x1(Value.x1), x2(Value.x2), x3(Value.x3), x4(Value.x4), x5(Value.x5), x6(Value.x6), x7(Value.x7) {};
 		///
-		/// Operators
+		/// operators
 		///
 		Vector7D CMPLX3_FUNC_INSTANCE_CALL Vector7D::operator ()() const noexcept { return *this; };
 		double& CMPLX3_FUNC_INSTANCE_CALL Vector7D::operator [](index i) &
@@ -264,14 +278,14 @@ namespace Cmplx3
 			return *this;
 		};
 		///
-		/// Basic functions for constructing vectors
+		/// fundamentals
 		///
 		double CMPLX3_FUNC_CALL Vector7D::abs(const Vector7D& Value) { return std::sqrt(dot(Value, Value)); };
 		Vector7D CMPLX3_FUNC_CALL Vector7D::sgn(const Vector7D& Value) { return Value / abs(Value); };
-		double CMPLX3_FUNC_CALL Vector7D::dot(const Vector7D& Union, const Vector7D& Value) noexcept { return build_in_dot(Union, Value); };
-		Vector7D CMPLX3_FUNC_CALL Vector7D::cross(const Vector7D& Union, const Vector7D& Value) noexcept { return build_in_cross(Union, Value); };
+		double CMPLX3_FUNC_CALL Vector7D::dot(const Vector7D& Union, const Vector7D& Value) noexcept { return dot_with_numbers(Union, Value); };
+		Vector7D CMPLX3_FUNC_CALL Vector7D::cross(const Vector7D& Union, const Vector7D& Value) noexcept { return cross_with_numbers(Union, Value); };
 		///
-		/// Conversion of Types
+		/// conventions
 		///
 		std::wstring CMPLX3_FUNC_CALL Vector7D::GetString(const Vector7D& Value)
 		{
@@ -300,6 +314,9 @@ namespace Cmplx3
 		struct CMPLX3_INTERFACE Octonion
 		{
 		public:
+			///
+			/// constants
+			///
 			static const double pi;
 			static const double e;
 			static const Octonion i;
@@ -311,7 +328,7 @@ namespace Cmplx3
 			static const Octonion kl;
 		private:
 			///
-			/// Initializer
+			/// basis
 			///
 			double real;
 			BaseType::Vector7D imaginary;
@@ -325,7 +342,7 @@ namespace Cmplx3
 			static double CMPLX3_FUNC_CALL Scalar(const Octonion& Value) noexcept;
 			static BaseType::Vector7D CMPLX3_FUNC_CALL Vector(const Octonion& Value) noexcept;
 			///
-			/// Operators
+			/// operators
 			///
 			Octonion CMPLX3_FUNC_INSTANCE_CALL operator ()() const noexcept;
 			double& CMPLX3_FUNC_INSTANCE_CALL operator [](index i) &;
@@ -358,7 +375,7 @@ namespace Cmplx3
 			Octonion& CMPLX3_FUNC_INSTANCE_CALL operator ^=(std::int64_t Exponent) & noexcept;
 			Octonion& CMPLX3_FUNC_INSTANCE_CALL operator ^=(const std::initializer_list<std::int64_t>& Exponent) & noexcept;
 			///
-			/// Basic functions for constructing numbers
+			/// fundamentals
 			///
 			static double CMPLX3_FUNC_CALL abs(const Octonion& Value);
 			static double CMPLX3_FUNC_CALL arg(const Octonion& Value);
@@ -370,14 +387,14 @@ namespace Cmplx3
 			static Octonion CMPLX3_FUNC_CALL ln(const Octonion& Value);
 			static Octonion CMPLX3_FUNC_CALL ln(const Octonion& Value, std::int64_t Theta);
 			///
-			/// 1st rank tensor algorithms
+			/// multiples
 			///
 			static double CMPLX3_FUNC_CALL dot(const Octonion& Union, const Octonion& Value) noexcept;
 			static Octonion CMPLX3_FUNC_CALL outer(const Octonion& Union, const Octonion& Value) noexcept;
 			static Octonion CMPLX3_FUNC_CALL even(const Octonion& Union, const Octonion& Value) noexcept;
 			static Octonion CMPLX3_FUNC_CALL cross(const Octonion& Union, const Octonion& Value) noexcept;
 			///
-			/// Operation 3 algorithms
+			/// exponentials
 			///
 			static Octonion CMPLX3_FUNC_CALL power(const Octonion& Base, const Octonion& Exponent);
 			static Octonion CMPLX3_FUNC_CALL power(const Octonion& Base, const Octonion& Exponent, std::int64_t Theta, std::int64_t Phi, std::int64_t Tau);
@@ -390,7 +407,7 @@ namespace Cmplx3
 			static Octonion CMPLX3_FUNC_CALL log(const Octonion& Base, const Octonion& Number);
 			static Octonion CMPLX3_FUNC_CALL log(const Octonion& Base, const Octonion& Number, std::int64_t Theta, std::int64_t Phi, std::int64_t Tau, std::int64_t Omega);
 			///
-			/// Trigonometric functions
+			/// trigonometrics
 			///
 			static Octonion CMPLX3_FUNC_CALL sin(const Octonion& Value);
 			static Octonion CMPLX3_FUNC_CALL arcsin(const Octonion& Value);
@@ -429,11 +446,13 @@ namespace Cmplx3
 			static Octonion CMPLX3_FUNC_CALL arccoth(const Octonion& Value);
 			static Octonion CMPLX3_FUNC_CALL arccoth(const Octonion& Value, bool Sign, std::int64_t Period);
 			///
-			/// Conversion of Types
+			/// conventions
 			///
 			static std::wstring CMPLX3_FUNC_CALL GetString(const Octonion& Value);
 			static Octonion CMPLX3_FUNC_CALL GetInstance(const std::wstring& Value);
-			/* Casting */
+			///
+			/// casing
+			///
 			inline auto to_number() const& noexcept
 				-> decltype(forward_as_number((*this)[index::s], (*this)[index::i], (*this)[index::j], (*this)[index::k], (*this)[index::l], (*this)[index::il], (*this)[index::jl], (*this)[index::kl]))
 			{
@@ -446,6 +465,9 @@ namespace Cmplx3
 				return *this;
 			};
 		};
+		///
+		/// operators
+		///
 		bool CMPLX3_INTERFACE CMPLX3_FUNC_CALL operator ==(const Octonion& Union, const Octonion& Value) noexcept;
 		bool CMPLX3_INTERFACE CMPLX3_FUNC_CALL operator !=(const Octonion& Union, const Octonion& Value) noexcept;
 		Octonion CMPLX3_INTERFACE CMPLX3_FUNC_CALL operator +(const Octonion& Value) noexcept;
@@ -456,10 +478,10 @@ namespace Cmplx3
 		Octonion CMPLX3_INTERFACE CMPLX3_FUNC_CALL operator *(const Octonion& Union, const Octonion& Value) noexcept;
 		Octonion CMPLX3_INTERFACE CMPLX3_FUNC_CALL operator /(const Octonion& Union, const Octonion& Value) noexcept;
 		Octonion CMPLX3_INTERFACE CMPLX3_FUNC_CALL operator ^(const Octonion& Base, std::int64_t Exponent) noexcept;
-		/* suffix operator */
-		inline Octonion operator"" _o(long double Value) noexcept { return Octonion(static_cast<double>(Value)); };
-		inline Octonion operator"" _o(unsigned long long int Value) noexcept { return operator"" _o(static_cast<long double>(Value)); };
 		/* struct Octonion */
+		///
+		/// constants
+		///
 		const double Octonion::pi = std::numbers::pi;
 		const double Octonion::e = std::numbers::e;
 		const Octonion Octonion::i = Octonion(0, 1, 0, 0, 0, 0, 0, 0);
@@ -470,7 +492,7 @@ namespace Cmplx3
 		const Octonion Octonion::jl = Octonion(0, 0, 0, 0, 0, 0, 1, 0);
 		const Octonion Octonion::kl = Octonion(0, 0, 0, 0, 0, 0, 0, 1);
 		///
-		/// Initializer
+		/// basis
 		///
 		CMPLX3_FUNC_INSTANCE_CALL Octonion::Octonion() noexcept : real(), imaginary() {};
 		CMPLX3_FUNC_INSTANCE_CALL Octonion::Octonion(double s, const BaseType::Vector7D& v) noexcept : real(s), imaginary(v) {};
@@ -481,7 +503,7 @@ namespace Cmplx3
 		double CMPLX3_FUNC_CALL Octonion::Scalar(const Octonion& Value) noexcept { return Value.real; };
 		BaseType::Vector7D CMPLX3_FUNC_CALL Octonion::Vector(const Octonion& Value) noexcept { return Value.imaginary; };
 		///
-		/// Operators
+		/// operators
 		///
 		Octonion CMPLX3_FUNC_INSTANCE_CALL Octonion::operator ()() const noexcept { return *this; };
 		double& CMPLX3_FUNC_INSTANCE_CALL Octonion::operator [](index i) &
@@ -623,7 +645,7 @@ namespace Cmplx3
 			return *this;
 		};
 		///
-		/// Basic functions for constructing numbers
+		/// fundamentals
 		///
 		double CMPLX3_FUNC_CALL Octonion::abs(const Octonion& Value) { return std::sqrt(dot(Value, Value)); };
 		double CMPLX3_FUNC_CALL Octonion::arg(const Octonion& Value) { return arg(Value, 0); };
@@ -633,16 +655,16 @@ namespace Cmplx3
 		Octonion CMPLX3_FUNC_CALL Octonion::inverse(const Octonion& Value) { return conjg(Value) / dot(Value, Value); };
 		Octonion CMPLX3_FUNC_CALL Octonion::exp(const Octonion& Value) { return std::exp(Scalar(Value)) * (std::cos(abs(Vector(Value))) + sgn(Vector(Value)) * std::sin(abs(Vector(Value)))); };
 		Octonion CMPLX3_FUNC_CALL Octonion::ln(const Octonion& Value) { return ln(Value, 0); };
-		Octonion CMPLX3_FUNC_CALL Octonion::ln(const Octonion& Value, std::int64_t Theta) { return std::log(abs(Value)) + sgn(Vector(Value)) * arg(Value, Theta); };
+		Octonion CMPLX3_FUNC_CALL Octonion::ln(const Octonion& Value, std::int64_t Theta) { return std::log(abs(Value)) + (Vector(Value) == 0 ? 0 : sgn(Vector(Value)) * arg(Value, Theta)); };
 		///
-		/// 1st rank tensor algorithms
+		/// multiples
 		///
 		double CMPLX3_FUNC_CALL Octonion::dot(const Octonion& Union, const Octonion& Value) noexcept { return Scalar(conjg(Union) * Value + conjg(Value) * Union) / 2; };
 		Octonion CMPLX3_FUNC_CALL Octonion::outer(const Octonion& Union, const Octonion& Value) noexcept { return (conjg(Union) * Value - conjg(Value) * Union) / 2; };
 		Octonion CMPLX3_FUNC_CALL Octonion::even(const Octonion& Union, const Octonion& Value) noexcept { return (Union * Value + Value * Union) / 2; };
 		Octonion CMPLX3_FUNC_CALL Octonion::cross(const Octonion& Union, const Octonion& Value) noexcept { return (Union * Value - Value * Union) / 2; };
 		///
-		/// Operation 3 algorithms
+		/// exponentials
 		///
 		Octonion CMPLX3_FUNC_CALL Octonion::power(const Octonion& Base, const Octonion& Exponent) { return power(Base, Exponent, 0, 0, 0); };
 		Octonion CMPLX3_FUNC_CALL Octonion::power(const Octonion& Base, const Octonion& Exponent, std::int64_t Theta, std::int64_t Phi, std::int64_t Tau)
@@ -666,7 +688,7 @@ namespace Cmplx3
 			return exp(ln(ln(Number, Theta), Phi) - ln(ln(Base, Tau), Omega));
 		};
 		///
-		/// Trigonometric functions
+		/// trigonometrics
 		///
 		Octonion CMPLX3_FUNC_CALL Octonion::sin(const Octonion& Value)
 		{
@@ -751,7 +773,7 @@ namespace Cmplx3
 		Octonion CMPLX3_FUNC_CALL Octonion::arccoth(const Octonion& Value) { return arccoth(Value, true, 0); };
 		Octonion CMPLX3_FUNC_CALL Octonion::arccoth(const Octonion& Value, bool Sign, std::int64_t Period) { return arctanh(inverse(Value), Sign, Period); };
 		///
-		/// Conversion of Types
+		/// conventions
 		///
 		std::wstring CMPLX3_FUNC_CALL Octonion::GetString(const Octonion& Value)
 		{
@@ -764,11 +786,14 @@ namespace Cmplx3
 			return Object;
 		};
 	}
-	double BaseType::Vector7D::build_in_dot(const BaseType::Vector7D& Union, const BaseType::Vector7D& Value)
+	///
+	/// traits
+	///
+	double BaseType::Vector7D::dot_with_numbers(const BaseType::Vector7D& Union, const BaseType::Vector7D& Value)
 	{
 		return MainType::Octonion::dot(MainType::Octonion{ Union }, MainType::Octonion{ Value });
 	};
-	BaseType::Vector7D BaseType::Vector7D::build_in_cross(const BaseType::Vector7D& Union, const BaseType::Vector7D& Value)
+	BaseType::Vector7D BaseType::Vector7D::cross_with_numbers(const BaseType::Vector7D& Union, const BaseType::Vector7D& Value)
 	{
 		return Vector7D{}.from(MainType::Octonion::cross(MainType::Octonion{ Union }, MainType::Octonion{ Value }).to_number());
 	};

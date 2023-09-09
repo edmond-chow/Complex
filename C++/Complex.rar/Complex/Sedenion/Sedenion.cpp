@@ -97,22 +97,28 @@ namespace Seden
 	class SEDEN_INTERFACE Sedenion
 	{
 	private:
+		///
+		/// helpers
+		///
 		static std::size_t GetDimension(std::size_t Value)
 		{
-			std::size_t n = 0;
+			std::size_t Result = 0;
 			while (Value > 0)
 			{
 				Value >>= static_cast<size_t>(1);
-				++n;
+				++Result;
 			}
-			return static_cast<size_t>(1) << n;
+			return static_cast<size_t>(1) << Result;
 		};
 	public:
+		///
+		/// constants
+		///
 		static const double pi;
 		static const double e;
 	private:
 		///
-		/// Initializer
+		/// basis
 		///
 		double* data;
 		std::size_t size;
@@ -130,7 +136,7 @@ namespace Seden
 		static double SEDEN_FUNC_CALL Scalar(const Sedenion& Value);
 		static Sedenion SEDEN_FUNC_CALL Vector(const Sedenion& Value);
 		///
-		/// Operators
+		/// operators
 		///
 		Sedenion SEDEN_FUNC_INSTANCE_CALL operator ()() const;
 		double& SEDEN_FUNC_INSTANCE_CALL operator [](std::int64_t i) &;
@@ -162,7 +168,7 @@ namespace Seden
 		Sedenion& SEDEN_FUNC_INSTANCE_CALL operator ^=(std::int64_t Exponent) &;
 		Sedenion& SEDEN_FUNC_INSTANCE_CALL operator ^=(const std::initializer_list<std::int64_t>& Exponent) &;
 		///
-		/// Basic functions for constructing numbers
+		/// fundamentals
 		///
 		static double SEDEN_FUNC_CALL abs(const Sedenion& Value);
 		static double SEDEN_FUNC_CALL arg(const Sedenion& Value);
@@ -174,14 +180,14 @@ namespace Seden
 		static Sedenion SEDEN_FUNC_CALL ln(const Sedenion& Value);
 		static Sedenion SEDEN_FUNC_CALL ln(const Sedenion& Value, std::int64_t Theta);
 		///
-		/// 1st rank tensor algorithms
+		/// multiples
 		///
 		static double SEDEN_FUNC_CALL dot(const Sedenion& Union, const Sedenion& Value);
 		static Sedenion SEDEN_FUNC_CALL outer(const Sedenion& Union, const Sedenion& Value);
 		static Sedenion SEDEN_FUNC_CALL even(const Sedenion& Union, const Sedenion& Value);
 		static Sedenion SEDEN_FUNC_CALL cross(const Sedenion& Union, const Sedenion& Value);
 		///
-		/// Operation 3 algorithms
+		/// exponentials
 		///
 		static Sedenion SEDEN_FUNC_CALL power(const Sedenion& Base, const Sedenion& Exponent);
 		static Sedenion SEDEN_FUNC_CALL power(const Sedenion& Base, const Sedenion& Exponent, std::int64_t Theta, std::int64_t Phi, std::int64_t Tau);
@@ -194,7 +200,7 @@ namespace Seden
 		static Sedenion SEDEN_FUNC_CALL log(const Sedenion& Base, const Sedenion& Number);
 		static Sedenion SEDEN_FUNC_CALL log(const Sedenion& Base, const Sedenion& Number, std::int64_t Theta, std::int64_t Phi, std::int64_t Tau, std::int64_t Omega);
 		///
-		/// Trigonometric functions
+		/// trigonometrics
 		///
 		static Sedenion SEDEN_FUNC_CALL sin(const Sedenion& Value);
 		static Sedenion SEDEN_FUNC_CALL arcsin(const Sedenion& Value);
@@ -233,11 +239,13 @@ namespace Seden
 		static Sedenion SEDEN_FUNC_CALL arccoth(const Sedenion& Value);
 		static Sedenion SEDEN_FUNC_CALL arccoth(const Sedenion& Value, bool Sign, std::int64_t Period);
 		///
-		/// Conversion of Types
+		/// conventions
 		///
 		static std::wstring SEDEN_FUNC_CALL GetString(const Sedenion& Value);
 		static Sedenion SEDEN_FUNC_CALL GetInstance(const std::wstring& Value);
-		/* Casting */
+		///
+		/// casing
+		///
 	private:
 		Factor to_factor() const& noexcept { return Factor{ data, size }; };
 		static Sedenion from(const Factor& number)
@@ -250,6 +258,9 @@ namespace Seden
 			return Output;
 		};
 	};
+	///
+	/// operators
+	///
 	bool SEDEN_INTERFACE SEDEN_FUNC_CALL operator ==(const Sedenion& Union, const Sedenion& Value);
 	bool SEDEN_INTERFACE SEDEN_FUNC_CALL operator !=(const Sedenion& Union, const Sedenion& Value);
 	Sedenion SEDEN_INTERFACE SEDEN_FUNC_CALL operator +(const Sedenion& Value);
@@ -260,14 +271,14 @@ namespace Seden
 	Sedenion SEDEN_INTERFACE SEDEN_FUNC_CALL operator *(const Sedenion& Union, const Sedenion& Value);
 	Sedenion SEDEN_INTERFACE SEDEN_FUNC_CALL operator /(const Sedenion& Union, double Value);
 	Sedenion SEDEN_INTERFACE SEDEN_FUNC_CALL operator ^(const Sedenion& Base, std::int64_t Exponent);
-	/* suffix operator */
-	inline Sedenion operator"" _s(long double Value) { return Sedenion(static_cast<double>(Value)); };
-	inline Sedenion operator"" _s(unsigned long long int Value) { return operator"" _s(static_cast<long double>(Value)); };
 	/* class Sedenion */
+	///
+	/// constants
+	///
 	const double Sedenion::pi = std::numbers::pi;
 	const double Sedenion::e = std::numbers::e;
 	///
-	/// Initializer
+	/// basis
 	///
 	SEDEN_FUNC_INSTANCE_CALL Sedenion::Sedenion()
 		: data(new double[16] {}), size(16) {};
@@ -298,7 +309,7 @@ namespace Seden
 		return ret;
 	};
 	///
-	/// Operators
+	/// operators
 	///
 	Sedenion SEDEN_FUNC_INSTANCE_CALL Sedenion::operator ()() const { return *this; };
 	double& SEDEN_FUNC_INSTANCE_CALL Sedenion::operator [](std::int64_t i) &
@@ -405,7 +416,7 @@ namespace Seden
 		return *this;
 	};
 	///
-	/// Basic functions for constructing numbers
+	/// fundamentals
 	///
 	double SEDEN_FUNC_CALL Sedenion::abs(const Sedenion& Value) { return std::sqrt(dot(Value, Value)); };
 	double SEDEN_FUNC_CALL Sedenion::arg(const Sedenion& Value) { return arg(Value, 0); };
@@ -415,16 +426,16 @@ namespace Seden
 	Sedenion SEDEN_FUNC_CALL Sedenion::inverse(const Sedenion& Value) { return conjg(Value) / dot(Value, Value); };
 	Sedenion SEDEN_FUNC_CALL Sedenion::exp(const Sedenion& Value) { return std::exp(Scalar(Value)) * (std::cos(abs(Vector(Value))) + sgn(Vector(Value)) * std::sin(abs(Vector(Value)))); };
 	Sedenion SEDEN_FUNC_CALL Sedenion::ln(const Sedenion& Value) { return ln(Value, 0); };
-	Sedenion SEDEN_FUNC_CALL Sedenion::ln(const Sedenion& Value, std::int64_t Theta) { return std::log(abs(Value)) + sgn(Vector(Value)) * arg(Value, Theta); };
+	Sedenion SEDEN_FUNC_CALL Sedenion::ln(const Sedenion& Value, std::int64_t Theta) { return std::log(abs(Value)) + (Vector(Value) == 0 ? 0 : sgn(Vector(Value)) * arg(Value, Theta)); };
 	///
-	/// 1st rank tensor algorithms
+	/// multiples
 	///
 	double SEDEN_FUNC_CALL Sedenion::dot(const Sedenion& Union, const Sedenion& Value) { return Scalar(conjg(Union) * Value + conjg(Value) * Union) / 2; };
 	Sedenion SEDEN_FUNC_CALL Sedenion::outer(const Sedenion& Union, const Sedenion& Value) { return (conjg(Union) * Value - conjg(Value) * Union) / 2; };
 	Sedenion SEDEN_FUNC_CALL Sedenion::even(const Sedenion& Union, const Sedenion& Value) { return (Union * Value + Value * Union) / 2; };
 	Sedenion SEDEN_FUNC_CALL Sedenion::cross(const Sedenion& Union, const Sedenion& Value) { return (Union * Value - Value * Union) / 2; };
 	///
-	/// Operation 3 algorithms
+	/// exponentials
 	///
 	Sedenion SEDEN_FUNC_CALL Sedenion::power(const Sedenion& Base, const Sedenion& Exponent) { return power(Base, Exponent, 0, 0, 0); };
 	Sedenion SEDEN_FUNC_CALL Sedenion::power(const Sedenion& Base, const Sedenion& Exponent, std::int64_t Theta, std::int64_t Phi, std::int64_t Tau)
@@ -448,7 +459,7 @@ namespace Seden
 		return exp(ln(ln(Number, Theta), Phi) - ln(ln(Base, Tau), Omega));
 	};
 	///
-	/// Trigonometric functions
+	/// trigonometrics
 	///
 	Sedenion SEDEN_FUNC_CALL Sedenion::sin(const Sedenion& Value)
 	{
@@ -533,7 +544,7 @@ namespace Seden
 	Sedenion SEDEN_FUNC_CALL Sedenion::arccoth(const Sedenion& Value) { return arccoth(Value, true, 0); };
 	Sedenion SEDEN_FUNC_CALL Sedenion::arccoth(const Sedenion& Value, bool Sign, std::int64_t Period) { return arctanh(inverse(Value), Sign, Period); };
 	///
-	/// Conversion of Types
+	/// conventions
 	///
 	std::wstring SEDEN_FUNC_CALL Sedenion::GetString(const Sedenion& Value)
 	{

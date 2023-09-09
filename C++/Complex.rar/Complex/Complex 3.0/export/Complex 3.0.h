@@ -59,6 +59,9 @@ namespace Cmplx3
 		struct CMPLX3_INTERFACE Vector7D
 		{
 		public:
+			///
+			/// constants
+			///
 			static const double pi;
 			static const double e;
 			static const Vector7D e1;
@@ -70,7 +73,7 @@ namespace Cmplx3
 			static const Vector7D e7;
 		private:
 			///
-			/// Initializer
+			/// basis
 			///
 			double x1;
 			double x2;
@@ -84,7 +87,7 @@ namespace Cmplx3
 			explicit CMPLX3_FUNC_INSTANCE_CALL Vector7D(double x1, double x2, double x3, double x4, double x5, double x6, double x7) noexcept;
 			CMPLX3_FUNC_INSTANCE_CALL Vector7D(const Vector7D& Value) noexcept;
 			///
-			/// Operators
+			/// operators
 			///
 			Vector7D CMPLX3_FUNC_INSTANCE_CALL operator ()() const noexcept;
 			double& CMPLX3_FUNC_INSTANCE_CALL operator [](index i) &;
@@ -101,18 +104,21 @@ namespace Cmplx3
 			Vector7D& CMPLX3_FUNC_INSTANCE_CALL operator /=(double Value) & noexcept;
 			Vector7D& CMPLX3_FUNC_INSTANCE_CALL operator /=(const std::initializer_list<double>& Value) & noexcept;
 			///
-			/// Basic functions for constructing vectors
+			/// fundamentals
 			///
 			static double CMPLX3_FUNC_CALL abs(const Vector7D& Value);
 			static Vector7D CMPLX3_FUNC_CALL sgn(const Vector7D& Value);
 			static double CMPLX3_FUNC_CALL dot(const Vector7D& Union, const Vector7D& Value) noexcept;
 			static Vector7D CMPLX3_FUNC_CALL cross(const Vector7D& Union, const Vector7D& Value) noexcept;
 			///
-			/// Conversion of Types
+			/// conventions
 			///
 			static std::wstring CMPLX3_FUNC_CALL GetString(const Vector7D& Value);
 			static Vector7D CMPLX3_FUNC_CALL GetInstance(const std::wstring& Value);
 		};
+		///
+		/// operators
+		///
 		bool CMPLX3_INTERFACE CMPLX3_FUNC_CALL operator ==(const Vector7D& Union, const Vector7D& Value) noexcept;
 		bool CMPLX3_INTERFACE CMPLX3_FUNC_CALL operator !=(const Vector7D& Union, const Vector7D& Value) noexcept;
 		Vector7D CMPLX3_INTERFACE CMPLX3_FUNC_CALL operator +(const Vector7D& Value) noexcept;
@@ -139,6 +145,9 @@ namespace Cmplx3
 		struct CMPLX3_INTERFACE Octonion
 		{
 		public:
+			///
+			/// constants
+			///
 			static const double pi;
 			static const double e;
 			static const Octonion i;
@@ -150,7 +159,7 @@ namespace Cmplx3
 			static const Octonion kl;
 		private:
 			///
-			/// Initializer
+			/// basis
 			///
 			double real;
 			BaseType::Vector7D imaginary;
@@ -164,7 +173,7 @@ namespace Cmplx3
 			static double CMPLX3_FUNC_CALL Scalar(const Octonion& Value) noexcept;
 			static BaseType::Vector7D CMPLX3_FUNC_CALL Vector(const Octonion& Value) noexcept;
 			///
-			/// Operators
+			/// operators
 			///
 			Octonion CMPLX3_FUNC_INSTANCE_CALL operator ()() const noexcept;
 			double& CMPLX3_FUNC_INSTANCE_CALL operator [](index i) &;
@@ -187,7 +196,7 @@ namespace Cmplx3
 			Octonion& CMPLX3_FUNC_INSTANCE_CALL operator ^=(std::int64_t Exponent) & noexcept;
 			Octonion& CMPLX3_FUNC_INSTANCE_CALL operator ^=(const std::initializer_list<std::int64_t>& Exponent) & noexcept;
 			///
-			/// Basic functions for constructing numbers
+			/// fundamentals
 			///
 			static double CMPLX3_FUNC_CALL abs(const Octonion& Value);
 			static double CMPLX3_FUNC_CALL arg(const Octonion& Value);
@@ -199,14 +208,14 @@ namespace Cmplx3
 			static Octonion CMPLX3_FUNC_CALL ln(const Octonion& Value);
 			static Octonion CMPLX3_FUNC_CALL ln(const Octonion& Value, std::int64_t Theta);
 			///
-			/// 1st rank tensor algorithms
+			/// multiples
 			///
 			static double CMPLX3_FUNC_CALL dot(const Octonion& Union, const Octonion& Value) noexcept;
 			static Octonion CMPLX3_FUNC_CALL outer(const Octonion& Union, const Octonion& Value) noexcept;
 			static Octonion CMPLX3_FUNC_CALL even(const Octonion& Union, const Octonion& Value) noexcept;
 			static Octonion CMPLX3_FUNC_CALL cross(const Octonion& Union, const Octonion& Value) noexcept;
 			///
-			/// Operation 3 algorithms
+			/// exponentials
 			///
 			static Octonion CMPLX3_FUNC_CALL power(const Octonion& Base, const Octonion& Exponent);
 			static Octonion CMPLX3_FUNC_CALL power(const Octonion& Base, const Octonion& Exponent, std::int64_t Theta, std::int64_t Phi, std::int64_t Tau);
@@ -219,7 +228,7 @@ namespace Cmplx3
 			static Octonion CMPLX3_FUNC_CALL log(const Octonion& Base, const Octonion& Number);
 			static Octonion CMPLX3_FUNC_CALL log(const Octonion& Base, const Octonion& Number, std::int64_t Theta, std::int64_t Phi, std::int64_t Tau, std::int64_t Omega);
 			///
-			/// Trigonometric functions
+			/// trigonometrics
 			///
 			static Octonion CMPLX3_FUNC_CALL sin(const Octonion& Value);
 			static Octonion CMPLX3_FUNC_CALL arcsin(const Octonion& Value);
@@ -258,11 +267,14 @@ namespace Cmplx3
 			static Octonion CMPLX3_FUNC_CALL arccoth(const Octonion& Value);
 			static Octonion CMPLX3_FUNC_CALL arccoth(const Octonion& Value, bool Sign, std::int64_t Period);
 			///
-			/// Conversion of Types
+			/// conventions
 			///
 			static std::wstring CMPLX3_FUNC_CALL GetString(const Octonion& Value);
 			static Octonion CMPLX3_FUNC_CALL GetInstance(const std::wstring& Value);
 		};
+		///
+		/// operators
+		///
 		bool CMPLX3_INTERFACE CMPLX3_FUNC_CALL operator ==(const Octonion& Union, const Octonion& Value) noexcept;
 		bool CMPLX3_INTERFACE CMPLX3_FUNC_CALL operator !=(const Octonion& Union, const Octonion& Value) noexcept;
 		Octonion CMPLX3_INTERFACE CMPLX3_FUNC_CALL operator +(const Octonion& Value) noexcept;
@@ -273,9 +285,6 @@ namespace Cmplx3
 		Octonion CMPLX3_INTERFACE CMPLX3_FUNC_CALL operator *(const Octonion& Union, const Octonion& Value) noexcept;
 		Octonion CMPLX3_INTERFACE CMPLX3_FUNC_CALL operator /(const Octonion& Union, const Octonion& Value) noexcept;
 		Octonion CMPLX3_INTERFACE CMPLX3_FUNC_CALL operator ^(const Octonion& Base, std::int64_t Exponent) noexcept;
-		/* suffix operator */
-		inline Octonion operator"" _o(long double Value) noexcept { return Octonion(static_cast<double>(Value)); };
-		inline Octonion operator"" _o(unsigned long long int Value) noexcept { return operator"" _o(static_cast<long double>(Value)); };
 	}
 }
 #pragma pack(pop)

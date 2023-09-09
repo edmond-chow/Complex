@@ -52,12 +52,15 @@ namespace Cmplx
 		struct CMPLX_INTERFACE Vector1D
 		{
 		public:
+			///
+			/// constants
+			///
 			static const double pi;
 			static const double e;
 			static const Vector1D e1;
 		private:
 			///
-			/// Initializer
+			/// basis
 			///
 			double x1;
 		public:
@@ -65,7 +68,7 @@ namespace Cmplx
 			explicit CMPLX_FUNC_INSTANCE_CALL Vector1D(double x1) noexcept;
 			CMPLX_FUNC_INSTANCE_CALL Vector1D(const Vector1D& Value) noexcept;
 			///
-			/// Operators
+			/// operators
 			///
 			Vector1D CMPLX_FUNC_INSTANCE_CALL operator ()() const noexcept;
 			double& CMPLX_FUNC_INSTANCE_CALL operator [](index i) &;
@@ -91,18 +94,20 @@ namespace Cmplx
 			Vector1D& CMPLX_FUNC_INSTANCE_CALL operator /=(double Value) & noexcept;
 			Vector1D& CMPLX_FUNC_INSTANCE_CALL operator /=(const std::initializer_list<double>& Value) & noexcept;
 			///
-			/// Basic functions for constructing vectors
+			/// fundamentals
 			///
 			static double CMPLX_FUNC_CALL abs(const Vector1D& Value);
 			static Vector1D CMPLX_FUNC_CALL sgn(const Vector1D& Value);
 			static double CMPLX_FUNC_CALL dot(const Vector1D& Union, const Vector1D& Value) noexcept;
 			static Vector1D CMPLX_FUNC_CALL cross(const Vector1D& Union, const Vector1D& Value) noexcept;
 			///
-			/// Conversion of Types
+			/// conventions
 			///
 			static std::wstring CMPLX_FUNC_CALL GetString(const Vector1D& Value);
 			static Vector1D CMPLX_FUNC_CALL GetInstance(const std::wstring& Value);
-			/* Casting */
+			///
+			/// casing
+			///
 			inline auto to_number() const& noexcept
 				-> decltype(forward_as_number(0, (*this)[index::e1]))
 			{
@@ -115,9 +120,15 @@ namespace Cmplx
 				number.store(temp, (*this)[index::e1]);
 				return *this;
 			};
-			static double build_in_dot(const Vector1D& Union, const Vector1D& Value);
-			static Vector1D build_in_cross(const Vector1D& Union, const Vector1D& Value);
+			///
+			/// traits
+			///
+			static double dot_with_numbers(const Vector1D& Union, const Vector1D& Value);
+			static Vector1D cross_with_numbers(const Vector1D& Union, const Vector1D& Value);
 		};
+		///
+		/// operators
+		///
 		bool CMPLX_INTERFACE CMPLX_FUNC_CALL operator ==(const Vector1D& Union, const Vector1D& Value) noexcept;
 		bool CMPLX_INTERFACE CMPLX_FUNC_CALL operator !=(const Vector1D& Union, const Vector1D& Value) noexcept;
 		Vector1D CMPLX_INTERFACE CMPLX_FUNC_CALL operator +(const Vector1D& Value) noexcept;
@@ -128,17 +139,20 @@ namespace Cmplx
 		Vector1D CMPLX_INTERFACE CMPLX_FUNC_CALL operator *(const Vector1D& Union, double Value) noexcept;
 		Vector1D CMPLX_INTERFACE CMPLX_FUNC_CALL operator /(const Vector1D& Union, double Value) noexcept;
 		/* struct Vector1D */
+		///
+		/// constants
+		///
 		const double Vector1D::pi = std::numbers::pi;
 		const double Vector1D::e = std::numbers::e;
 		const Vector1D Vector1D::e1 = Vector1D(1);
 		///
-		/// Initializer
+		/// basis
 		///
 		CMPLX_FUNC_INSTANCE_CALL Vector1D::Vector1D() noexcept : x1() {};
 		CMPLX_FUNC_INSTANCE_CALL Vector1D::Vector1D(double x1) noexcept : x1(x1) {};
 		CMPLX_FUNC_INSTANCE_CALL Vector1D::Vector1D(const Vector1D& Value) noexcept : x1(Value.x1) {};
 		///
-		/// Operators
+		/// operators
 		///
 		Vector1D CMPLX_FUNC_INSTANCE_CALL Vector1D::operator ()() const noexcept { return *this; };
 		double& CMPLX_FUNC_INSTANCE_CALL Vector1D::operator [](index i) &
@@ -210,14 +224,14 @@ namespace Cmplx
 			return *this;
 		};
 		///
-		/// Basic functions for constructing vectors
+		/// fundamentals
 		///
 		double CMPLX_FUNC_CALL Vector1D::abs(const Vector1D& Value) { return std::sqrt(dot(Value, Value)); };
 		Vector1D CMPLX_FUNC_CALL Vector1D::sgn(const Vector1D& Value) { return Value / abs(Value); };
-		double CMPLX_FUNC_CALL Vector1D::dot(const Vector1D& Union, const Vector1D& Value) noexcept { return build_in_dot(Union, Value); };
-		Vector1D CMPLX_FUNC_CALL Vector1D::cross(const Vector1D& Union, const Vector1D& Value) noexcept { return build_in_cross(Union, Value); };;
+		double CMPLX_FUNC_CALL Vector1D::dot(const Vector1D& Union, const Vector1D& Value) noexcept { return dot_with_numbers(Union, Value); };
+		Vector1D CMPLX_FUNC_CALL Vector1D::cross(const Vector1D& Union, const Vector1D& Value) noexcept { return cross_with_numbers(Union, Value); };;
 		///
-		/// Conversion of Types
+		/// conventions
 		///
 		std::wstring CMPLX_FUNC_CALL Vector1D::GetString(const Vector1D& Value)
 		{
@@ -240,12 +254,15 @@ namespace Cmplx
 		struct CMPLX_INTERFACE Complex
 		{
 		public:
+			///
+			/// constants
+			///
 			static const double pi;
 			static const double e;
 			static const Complex i;
 		private:
 			///
-			/// Initializer
+			/// basis
 			///
 			double real;
 			BaseType::Vector1D imaginary;
@@ -261,7 +278,7 @@ namespace Cmplx
 			static double CMPLX_FUNC_CALL Re(const Complex& z) noexcept;
 			static double CMPLX_FUNC_CALL Im(const Complex& z) noexcept;
 			///
-			/// Operators
+			/// operators
 			///
 			Complex CMPLX_FUNC_INSTANCE_CALL operator ()() const noexcept;
 			double& CMPLX_FUNC_INSTANCE_CALL operator [](index i) &;
@@ -294,7 +311,7 @@ namespace Cmplx
 			Complex& CMPLX_FUNC_INSTANCE_CALL operator ^=(std::int64_t Exponent) & noexcept;
 			Complex& CMPLX_FUNC_INSTANCE_CALL operator ^=(const std::initializer_list<std::int64_t>& Exponent) & noexcept;
 			///
-			/// Basic functions for constructing numbers
+			/// fundamentals
 			///
 			static double CMPLX_FUNC_CALL abs(const Complex& Value);
 			static double CMPLX_FUNC_CALL arg(const Complex& Value);
@@ -306,14 +323,14 @@ namespace Cmplx
 			static Complex CMPLX_FUNC_CALL ln(const Complex& Value);
 			static Complex CMPLX_FUNC_CALL ln(const Complex& Value, std::int64_t Theta);
 			///
-			/// 1st rank tensor algorithms
+			/// multiples
 			///
 			static double CMPLX_FUNC_CALL dot(const Complex& Union, const Complex& Value) noexcept;
 			static Complex CMPLX_FUNC_CALL outer(const Complex& Union, const Complex& Value) noexcept;
 			static Complex CMPLX_FUNC_CALL even(const Complex& Union, const Complex& Value) noexcept;
 			static Complex CMPLX_FUNC_CALL cross(const Complex& Union, const Complex& Value) noexcept;
 			///
-			/// Operation 3 algorithms
+			/// exponentials
 			///
 			static Complex CMPLX_FUNC_CALL power(const Complex& Base, const Complex& Exponent);
 			static Complex CMPLX_FUNC_CALL power(const Complex& Base, const Complex& Exponent, std::int64_t Theta);
@@ -326,7 +343,7 @@ namespace Cmplx
 			static Complex CMPLX_FUNC_CALL log(const Complex& Base, const Complex& Number);
 			static Complex CMPLX_FUNC_CALL log(const Complex& Base, const Complex& Number, std::int64_t Theta, std::int64_t Phi);
 			///
-			/// Trigonometric functions
+			/// trigonometrics
 			///
 			static Complex CMPLX_FUNC_CALL sin(const Complex& Value);
 			static Complex CMPLX_FUNC_CALL arcsin(const Complex& Value);
@@ -365,11 +382,13 @@ namespace Cmplx
 			static Complex CMPLX_FUNC_CALL arccoth(const Complex& Value);
 			static Complex CMPLX_FUNC_CALL arccoth(const Complex& Value, bool Sign, std::int64_t Period);
 			///
-			/// Conversion of Types
+			/// conventions
 			///
 			static std::wstring CMPLX_FUNC_CALL GetString(const Complex& Value);
 			static Complex CMPLX_FUNC_CALL GetInstance(const std::wstring& Value);
-			/* Casting */
+			///
+			/// casing
+			///
 			inline auto to_number() const& noexcept
 				-> decltype(forward_as_number((*this)[index::s], (*this)[index::i]))
 			{
@@ -382,6 +401,9 @@ namespace Cmplx
 				return *this;
 			};
 		};
+		///
+		/// operators
+		///
 		bool CMPLX_INTERFACE CMPLX_FUNC_CALL operator ==(const Complex& Union, const Complex& Value) noexcept;
 		bool CMPLX_INTERFACE CMPLX_FUNC_CALL operator !=(const Complex& Union, const Complex& Value) noexcept;
 		Complex CMPLX_INTERFACE CMPLX_FUNC_CALL operator +(const Complex& Value) noexcept;
@@ -392,15 +414,15 @@ namespace Cmplx
 		Complex CMPLX_INTERFACE CMPLX_FUNC_CALL operator *(const Complex& Union, const Complex& Value) noexcept;
 		Complex CMPLX_INTERFACE CMPLX_FUNC_CALL operator /(const Complex& Union, const Complex& Value) noexcept;
 		Complex CMPLX_INTERFACE CMPLX_FUNC_CALL operator ^(const Complex& Base, std::int64_t Exponent) noexcept;
-		/* suffix operator */
-		inline Complex operator"" _c(long double Value) noexcept { return Complex(static_cast<double>(Value)); };
-		inline Complex operator"" _c(unsigned long long int Value) noexcept { return operator"" _c(static_cast<long double>(Value)); };
 		/* struct Complex */
+		///
+		/// constants
+		///
 		const double Complex::pi = std::numbers::pi;
 		const double Complex::e = std::numbers::e;
 		const Complex Complex::i = Complex(0, 1);
 		///
-		/// Initializer
+		/// basis
 		///
 		CMPLX_FUNC_INSTANCE_CALL Complex::Complex() noexcept : real(), imaginary() {};
 		CMPLX_FUNC_INSTANCE_CALL Complex::Complex(double s, const BaseType::Vector1D& v) noexcept : real(s), imaginary(v) {};
@@ -413,7 +435,7 @@ namespace Cmplx
 		double CMPLX_FUNC_CALL Complex::Re(const Complex& z) noexcept { return Scalar(z); };
 		double CMPLX_FUNC_CALL Complex::Im(const Complex& z) noexcept { return BaseType::Vector1D::dot(Vector(z), BaseType::Vector1D::e1); };
 		///
-		/// Operators
+		/// operators
 		///
 		Complex CMPLX_FUNC_INSTANCE_CALL Complex::operator ()() const noexcept { return *this; };
 		double& CMPLX_FUNC_INSTANCE_CALL Complex::operator [](index i) &
@@ -531,7 +553,7 @@ namespace Cmplx
 			return *this;
 		};
 		///
-		/// Basic functions for constructing numbers
+		/// fundamentals
 		///
 		double CMPLX_FUNC_CALL Complex::abs(const Complex& Value) { return std::sqrt(dot(Value, Value)); };
 		double CMPLX_FUNC_CALL Complex::arg(const Complex& Value) { return arg(Value, 0); };
@@ -541,16 +563,16 @@ namespace Cmplx
 		Complex CMPLX_FUNC_CALL Complex::inverse(const Complex& Value) { return conjg(Value) / dot(Value, Value); };
 		Complex CMPLX_FUNC_CALL Complex::exp(const Complex& Value) { return std::exp(Scalar(Value)) * (std::cos(abs(Vector(Value))) + sgn(Vector(Value)) * std::sin(abs(Vector(Value)))); };
 		Complex CMPLX_FUNC_CALL Complex::ln(const Complex& Value) { return ln(Value, 0); };
-		Complex CMPLX_FUNC_CALL Complex::ln(const Complex& Value, std::int64_t Theta) { return std::log(abs(Value)) + sgn(Vector(Value)) * arg(Value, Theta); };
+		Complex CMPLX_FUNC_CALL Complex::ln(const Complex& Value, std::int64_t Theta) { return std::log(abs(Value)) + (Vector(Value) == 0 ? 0 : sgn(Vector(Value)) * arg(Value, Theta)); };
 		///
-		/// 1st rank tensor algorithms
+		/// multiples
 		///
 		double CMPLX_FUNC_CALL Complex::dot(const Complex& Union, const Complex& Value) noexcept { return Scalar(conjg(Union) * Value + conjg(Value) * Union) / 2; };
 		Complex CMPLX_FUNC_CALL Complex::outer(const Complex& Union, const Complex& Value) noexcept { return (conjg(Union) * Value - conjg(Value) * Union) / 2; };
 		Complex CMPLX_FUNC_CALL Complex::even(const Complex& Union, const Complex& Value) noexcept { return (Union * Value + Value * Union) / 2; };
 		Complex CMPLX_FUNC_CALL Complex::cross(const Complex& Union, const Complex& Value) noexcept { return (Union * Value - Value * Union) / 2; };
 		///
-		/// Operation 3 algorithms
+		/// exponentials
 		///
 		Complex CMPLX_FUNC_CALL Complex::power(const Complex& Base, const Complex& Exponent) { return power(Base, Exponent, 0); };
 		Complex CMPLX_FUNC_CALL Complex::power(const Complex& Base, const Complex& Exponent, std::int64_t Theta)
@@ -574,7 +596,7 @@ namespace Cmplx
 			return ln(Number, Theta) / ln(Base, Phi);
 		};
 		///
-		/// Trigonometric functions
+		/// trigonometrics
 		///
 		Complex CMPLX_FUNC_CALL Complex::sin(const Complex& Value)
 		{
@@ -659,7 +681,7 @@ namespace Cmplx
 		Complex CMPLX_FUNC_CALL Complex::arccoth(const Complex& Value) { return arccoth(Value, true, 0); };
 		Complex CMPLX_FUNC_CALL Complex::arccoth(const Complex& Value, bool Sign, std::int64_t Period) { return arctanh(inverse(Value), Sign, Period); };
 		///
-		/// Conversion of Types
+		/// conventions
 		///
 		std::wstring CMPLX_FUNC_CALL Complex::GetString(const Complex& Value)
 		{
@@ -672,11 +694,14 @@ namespace Cmplx
 			return Object;
 		};
 	}
-	double BaseType::Vector1D::build_in_dot(const BaseType::Vector1D& Union, const BaseType::Vector1D& Value)
+	///
+	/// traits
+	///
+	double BaseType::Vector1D::dot_with_numbers(const BaseType::Vector1D& Union, const BaseType::Vector1D& Value)
 	{
 		return MainType::Complex::dot(MainType::Complex{ Union }, MainType::Complex{ Value });
 	};
-	BaseType::Vector1D BaseType::Vector1D::build_in_cross(const BaseType::Vector1D& Union, const BaseType::Vector1D& Value)
+	BaseType::Vector1D BaseType::Vector1D::cross_with_numbers(const BaseType::Vector1D& Union, const BaseType::Vector1D& Value)
 	{
 		return Vector1D{}.from(MainType::Complex::cross(MainType::Complex{ Union }, MainType::Complex{ Value }).to_number());
 	};
