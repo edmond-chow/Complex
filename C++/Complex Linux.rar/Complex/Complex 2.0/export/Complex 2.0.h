@@ -31,6 +31,9 @@ namespace Cmplx2
 		struct CMPLX2_INTERFACE Vector3D
 		{
 		public:
+			///
+			/// constants
+			///
 			static const double pi;
 			static const double e;
 			static const Vector3D e1;
@@ -38,7 +41,7 @@ namespace Cmplx2
 			static const Vector3D e3;
 		private:
 			///
-			/// Initializer
+			/// basis
 			///
 			double x1;
 			double x2;
@@ -48,7 +51,7 @@ namespace Cmplx2
 			explicit CMPLX2_FUNC_INSTANCE_CALL Vector3D(double x1, double x2, double x3) noexcept;
 			CMPLX2_FUNC_INSTANCE_CALL Vector3D(const Vector3D& Value) noexcept;
 			///
-			/// Operators
+			/// operators
 			///
 			const Vector3D CMPLX2_FUNC_INSTANCE_CALL operator ()() const noexcept;
 			double& CMPLX2_FUNC_INSTANCE_CALL operator [](index i) &;
@@ -65,18 +68,21 @@ namespace Cmplx2
 			Vector3D& CMPLX2_FUNC_INSTANCE_CALL operator /=(double Value) & noexcept;
 			Vector3D& CMPLX2_FUNC_INSTANCE_CALL operator /=(const std::initializer_list<double>& Value) & noexcept;
 			///
-			/// Basic functions for constructing vectors
+			/// fundamentals
 			///
 			static double CMPLX2_FUNC_CALL abs(const Vector3D& Value);
 			static Vector3D CMPLX2_FUNC_CALL sgn(const Vector3D& Value);
 			static double CMPLX2_FUNC_CALL dot(const Vector3D& Union, const Vector3D& Value) noexcept;
 			static Vector3D CMPLX2_FUNC_CALL cross(const Vector3D& Union, const Vector3D& Value) noexcept;
 			///
-			/// Conversion of Types
+			/// conventions
 			///
 			static std::wstring CMPLX2_FUNC_CALL GetString(const Vector3D& Value);
 			static Vector3D CMPLX2_FUNC_CALL GetInstance(const std::wstring& Value);
 		};
+		///
+		/// operators
+		///
 		bool CMPLX2_INTERFACE CMPLX2_FUNC_CALL operator ==(const Vector3D& Union, const Vector3D& Value) noexcept;
 		bool CMPLX2_INTERFACE CMPLX2_FUNC_CALL operator !=(const Vector3D& Union, const Vector3D& Value) noexcept;
 		Vector3D CMPLX2_INTERFACE CMPLX2_FUNC_CALL operator +(const Vector3D& Value) noexcept;
@@ -99,6 +105,9 @@ namespace Cmplx2
 		struct CMPLX2_INTERFACE Quaternion
 		{
 		public:
+			///
+			/// constants
+			///
 			static const double pi;
 			static const double e;
 			static const Quaternion i;
@@ -106,7 +115,7 @@ namespace Cmplx2
 			static const Quaternion k;
 		private:
 			///
-			/// Initializer
+			/// basis
 			///
 			double real;
 			BaseType::Vector3D imaginary;
@@ -120,7 +129,7 @@ namespace Cmplx2
 			static double CMPLX2_FUNC_CALL Scalar(const Quaternion& Value) noexcept;
 			static BaseType::Vector3D CMPLX2_FUNC_CALL Vector(const Quaternion& Value) noexcept;
             ///
-			/// Operators
+			/// operators
 			///
 			const Quaternion CMPLX2_FUNC_INSTANCE_CALL operator ()() const noexcept;
 			double& CMPLX2_FUNC_INSTANCE_CALL operator [](index i) &;
@@ -143,7 +152,7 @@ namespace Cmplx2
 			Quaternion& CMPLX2_FUNC_INSTANCE_CALL operator ^=(std::int64_t Exponent) & noexcept;
 			Quaternion& CMPLX2_FUNC_INSTANCE_CALL operator ^=(const std::initializer_list<std::int64_t>& Exponent) & noexcept;
 			///
-			/// Basic functions for constructing numbers
+			/// fundamentals
 			///
 			static double CMPLX2_FUNC_CALL abs(const Quaternion& Value);
 			static double CMPLX2_FUNC_CALL arg(const Quaternion& Value);
@@ -155,14 +164,14 @@ namespace Cmplx2
 			static Quaternion CMPLX2_FUNC_CALL ln(const Quaternion& Value);
 			static Quaternion CMPLX2_FUNC_CALL ln(const Quaternion& Value, std::int64_t Theta);
 			///
-			/// 1st rank tensor algorithms
+			/// multiples
 			///
 			static double CMPLX2_FUNC_CALL dot(const Quaternion& Union, const Quaternion& Value) noexcept;
 			static Quaternion CMPLX2_FUNC_CALL outer(const Quaternion& Union, const Quaternion& Value) noexcept;
 			static Quaternion CMPLX2_FUNC_CALL even(const Quaternion& Union, const Quaternion& Value) noexcept;
 			static Quaternion CMPLX2_FUNC_CALL cross(const Quaternion& Union, const Quaternion& Value) noexcept;
 			///
-			/// Operation 3 algorithms
+			/// exponentials
 			///
 			static Quaternion CMPLX2_FUNC_CALL power(const Quaternion& Base, const Quaternion& Exponent);
 			static Quaternion CMPLX2_FUNC_CALL power(const Quaternion& Base, const Quaternion& Exponent, std::int64_t Theta, std::int64_t Phi, std::int64_t Tau);
@@ -175,7 +184,7 @@ namespace Cmplx2
 			static Quaternion CMPLX2_FUNC_CALL log(const Quaternion& Base, const Quaternion& Number);
 			static Quaternion CMPLX2_FUNC_CALL log(const Quaternion& Base, const Quaternion& Number, std::int64_t Theta, std::int64_t Phi, std::int64_t Tau, std::int64_t Omega);
 			///
-			/// Trigonometric functions
+			/// trigonometrics
 			///
 			static Quaternion CMPLX2_FUNC_CALL sin(const Quaternion& Value);
 			static Quaternion CMPLX2_FUNC_CALL arcsin(const Quaternion& Value);
@@ -214,11 +223,14 @@ namespace Cmplx2
 			static Quaternion CMPLX2_FUNC_CALL arccoth(const Quaternion& Value);
 			static Quaternion CMPLX2_FUNC_CALL arccoth(const Quaternion& Value, bool Sign, std::int64_t Period);
 			///
-			/// Conversion of Types
+			/// conventions
 			///
 			static std::wstring CMPLX2_FUNC_CALL GetString(const Quaternion& Value);
 			static Quaternion CMPLX2_FUNC_CALL GetInstance(const std::wstring& Value);
 		};
+		///
+		/// operators
+		///
 		bool CMPLX2_INTERFACE CMPLX2_FUNC_CALL operator ==(const Quaternion& Union, const Quaternion& Value) noexcept;
 		bool CMPLX2_INTERFACE CMPLX2_FUNC_CALL operator !=(const Quaternion& Union, const Quaternion& Value) noexcept;
 		Quaternion CMPLX2_INTERFACE CMPLX2_FUNC_CALL operator +(const Quaternion& Value) noexcept;
@@ -229,9 +241,6 @@ namespace Cmplx2
 		Quaternion CMPLX2_INTERFACE CMPLX2_FUNC_CALL operator *(const Quaternion& Union, const Quaternion& Value) noexcept;
 		Quaternion CMPLX2_INTERFACE CMPLX2_FUNC_CALL operator /(const Quaternion& Union, const Quaternion& Value) noexcept;
 		Quaternion CMPLX2_INTERFACE CMPLX2_FUNC_CALL operator ^(const Quaternion& Base, std::int64_t Exponent) noexcept;
-		/* suffix operator */
-		inline Quaternion operator"" _q(long double Value) noexcept { return Quaternion(static_cast<double>(Value)); };
-		inline Quaternion operator"" _q(unsigned long long int Value) noexcept { return operator"" _q(static_cast<long double>(Value)); };
 	}
 }
 #pragma pack(pop)

@@ -30,6 +30,9 @@ namespace Cmplx2
 		struct CMPLX2_INTERFACE Vector3D
 		{
 		public:
+			///
+			/// constants
+			///
 			static const double pi;
 			static const double e;
 			static const Vector3D e1;
@@ -37,7 +40,7 @@ namespace Cmplx2
 			static const Vector3D e3;
 		private:
 			///
-			/// Initializer
+			/// basis
 			///
 			double x1;
 			double x2;
@@ -47,7 +50,7 @@ namespace Cmplx2
 			explicit CMPLX2_FUNC_INSTANCE_CALL Vector3D(double x1, double x2, double x3) noexcept;
 			CMPLX2_FUNC_INSTANCE_CALL Vector3D(const Vector3D& Value) noexcept;
 			///
-			/// Operators
+			/// operators
 			///
 			Vector3D CMPLX2_FUNC_INSTANCE_CALL operator ()() const noexcept;
 			double& CMPLX2_FUNC_INSTANCE_CALL operator [](index i) &;
@@ -73,18 +76,20 @@ namespace Cmplx2
 			Vector3D& CMPLX2_FUNC_INSTANCE_CALL operator /=(double Value) & noexcept;
 			Vector3D& CMPLX2_FUNC_INSTANCE_CALL operator /=(const std::initializer_list<double>& Value) & noexcept;
 			///
-			/// Basic functions for constructing vectors
+			/// fundamentals
 			///
 			static double CMPLX2_FUNC_CALL abs(const Vector3D& Value);
 			static Vector3D CMPLX2_FUNC_CALL sgn(const Vector3D& Value);
 			static double CMPLX2_FUNC_CALL dot(const Vector3D& Union, const Vector3D& Value) noexcept;
 			static Vector3D CMPLX2_FUNC_CALL cross(const Vector3D& Union, const Vector3D& Value) noexcept;
 			///
-			/// Conversion of Types
+			/// conventions
 			///
 			static std::wstring CMPLX2_FUNC_CALL GetString(const Vector3D& Value);
 			static Vector3D CMPLX2_FUNC_CALL GetInstance(const std::wstring& Value);
-			/* Casting */
+			///
+			/// casing
+			///
 			inline auto to_number() const& noexcept
 				-> decltype(forward_as_number(0, (*this)[index::e1], (*this)[index::e2], (*this)[index::e3]))
 			{
@@ -97,9 +102,15 @@ namespace Cmplx2
 				number.store(temp, (*this)[index::e1], (*this)[index::e2], (*this)[index::e3]);
 				return *this;
 			};
-			static double build_in_dot(const Vector3D& Union, const Vector3D& Value);
-			static Vector3D build_in_cross(const Vector3D& Union, const Vector3D& Value);
+			///
+			/// traits
+			///
+			static double dot_with_numbers(const Vector3D& Union, const Vector3D& Value);
+			static Vector3D cross_with_numbers(const Vector3D& Union, const Vector3D& Value);
 		};
+		///
+		/// operators
+		///
 		bool CMPLX2_INTERFACE CMPLX2_FUNC_CALL operator ==(const Vector3D& Union, const Vector3D& Value) noexcept;
 		bool CMPLX2_INTERFACE CMPLX2_FUNC_CALL operator !=(const Vector3D& Union, const Vector3D& Value) noexcept;
 		Vector3D CMPLX2_INTERFACE CMPLX2_FUNC_CALL operator +(const Vector3D& Value) noexcept;
@@ -110,19 +121,22 @@ namespace Cmplx2
 		Vector3D CMPLX2_INTERFACE CMPLX2_FUNC_CALL operator *(const Vector3D& Union, double Value) noexcept;
 		Vector3D CMPLX2_INTERFACE CMPLX2_FUNC_CALL operator /(const Vector3D& Union, double Value) noexcept;
 		/* struct Vector3D */
+		///
+		/// constants
+		///
 		const double Vector3D::pi = std::numbers::pi;
 		const double Vector3D::e = std::numbers::e;
 		const Vector3D Vector3D::e1 = Vector3D(1, 0, 0);
 		const Vector3D Vector3D::e2 = Vector3D(0, 1, 0);
 		const Vector3D Vector3D::e3 = Vector3D(0, 0, 1);
 		///
-		/// Initializer
+		/// basis
 		///
 		CMPLX2_FUNC_INSTANCE_CALL Vector3D::Vector3D() noexcept : x1(), x2(), x3() {};
 		CMPLX2_FUNC_INSTANCE_CALL Vector3D::Vector3D(double x1, double x2, double x3) noexcept : x1(x1), x2(x2), x3(x3) {};
 		CMPLX2_FUNC_INSTANCE_CALL Vector3D::Vector3D(const Vector3D& Value) noexcept : x1(Value.x1), x2(Value.x2), x3(Value.x3) {};
 		///
-		/// Operators
+		/// operators
 		///
 		Vector3D CMPLX2_FUNC_INSTANCE_CALL Vector3D::operator ()() const noexcept { return *this; };
 		double& CMPLX2_FUNC_INSTANCE_CALL Vector3D::operator [](index i) &
@@ -204,14 +218,14 @@ namespace Cmplx2
 			return *this;
 		};
 		///
-		/// Basic functions for constructing vectors
+		/// fundamentals
 		///
 		double CMPLX2_FUNC_CALL Vector3D::abs(const Vector3D& Value) { return std::sqrt(dot(Value, Value)); };
 		Vector3D CMPLX2_FUNC_CALL Vector3D::sgn(const Vector3D& Value) { return Value / abs(Value); };
-		double CMPLX2_FUNC_CALL Vector3D::dot(const Vector3D& Union, const Vector3D& Value) noexcept { return build_in_dot(Union, Value); };
-		Vector3D CMPLX2_FUNC_CALL Vector3D::cross(const Vector3D& Union, const Vector3D& Value) noexcept { return build_in_cross(Union, Value); };;
+		double CMPLX2_FUNC_CALL Vector3D::dot(const Vector3D& Union, const Vector3D& Value) noexcept { return dot_with_numbers(Union, Value); };
+		Vector3D CMPLX2_FUNC_CALL Vector3D::cross(const Vector3D& Union, const Vector3D& Value) noexcept { return cross_with_numbers(Union, Value); };;
 		///
-		/// Conversion of Types
+		/// conventions
 		///
 		std::wstring CMPLX2_FUNC_CALL Vector3D::GetString(const Vector3D& Value)
 		{
@@ -236,6 +250,9 @@ namespace Cmplx2
 		struct CMPLX2_INTERFACE Quaternion
 		{
 		public:
+			///
+			/// constants
+			///
 			static const double pi;
 			static const double e;
 			static const Quaternion i;
@@ -243,7 +260,7 @@ namespace Cmplx2
 			static const Quaternion k;
 		private:
 			///
-			/// Initializer
+			/// basis
 			///
 			double real;
 			BaseType::Vector3D imaginary;
@@ -257,7 +274,7 @@ namespace Cmplx2
 			static double CMPLX2_FUNC_CALL Scalar(const Quaternion& Value) noexcept;
 			static BaseType::Vector3D CMPLX2_FUNC_CALL Vector(const Quaternion& Value) noexcept;
 			///
-			/// Operators
+			/// operators
 			///
 			Quaternion CMPLX2_FUNC_INSTANCE_CALL operator ()() const noexcept;
 			double& CMPLX2_FUNC_INSTANCE_CALL operator [](index i) &;
@@ -290,7 +307,7 @@ namespace Cmplx2
 			Quaternion& CMPLX2_FUNC_INSTANCE_CALL operator ^=(std::int64_t Exponent) & noexcept;
 			Quaternion& CMPLX2_FUNC_INSTANCE_CALL operator ^=(const std::initializer_list<std::int64_t>& Exponent) & noexcept;
 			///
-			/// Basic functions for constructing numbers
+			/// fundamentals
 			///
 			static double CMPLX2_FUNC_CALL abs(const Quaternion& Value);
 			static double CMPLX2_FUNC_CALL arg(const Quaternion& Value);
@@ -302,14 +319,14 @@ namespace Cmplx2
 			static Quaternion CMPLX2_FUNC_CALL ln(const Quaternion& Value);
 			static Quaternion CMPLX2_FUNC_CALL ln(const Quaternion& Value, std::int64_t Theta);
 			///
-			/// 1st rank tensor algorithms
+			/// multiples
 			///
 			static double CMPLX2_FUNC_CALL dot(const Quaternion& Union, const Quaternion& Value) noexcept;
 			static Quaternion CMPLX2_FUNC_CALL outer(const Quaternion& Union, const Quaternion& Value) noexcept;
 			static Quaternion CMPLX2_FUNC_CALL even(const Quaternion& Union, const Quaternion& Value) noexcept;
 			static Quaternion CMPLX2_FUNC_CALL cross(const Quaternion& Union, const Quaternion& Value) noexcept;
 			///
-			/// Operation 3 algorithms
+			/// exponentials
 			///
 			static Quaternion CMPLX2_FUNC_CALL power(const Quaternion& Base, const Quaternion& Exponent);
 			static Quaternion CMPLX2_FUNC_CALL power(const Quaternion& Base, const Quaternion& Exponent, std::int64_t Theta, std::int64_t Phi, std::int64_t Tau);
@@ -322,7 +339,7 @@ namespace Cmplx2
 			static Quaternion CMPLX2_FUNC_CALL log(const Quaternion& Base, const Quaternion& Number);
 			static Quaternion CMPLX2_FUNC_CALL log(const Quaternion& Base, const Quaternion& Number, std::int64_t Theta, std::int64_t Phi, std::int64_t Tau, std::int64_t Omega);
 			///
-			/// Trigonometric functions
+			/// trigonometrics
 			///
 			static Quaternion CMPLX2_FUNC_CALL sin(const Quaternion& Value);
 			static Quaternion CMPLX2_FUNC_CALL arcsin(const Quaternion& Value);
@@ -361,11 +378,13 @@ namespace Cmplx2
 			static Quaternion CMPLX2_FUNC_CALL arccoth(const Quaternion& Value);
 			static Quaternion CMPLX2_FUNC_CALL arccoth(const Quaternion& Value, bool Sign, std::int64_t Period);
 			///
-			/// Conversion of Types
+			/// conventions
 			///
 			static std::wstring CMPLX2_FUNC_CALL GetString(const Quaternion& Value);
 			static Quaternion CMPLX2_FUNC_CALL GetInstance(const std::wstring& Value);
-			/* Casting */
+			///
+			/// casing
+			///
 			inline auto to_number() const& noexcept
 				-> decltype(forward_as_number((*this)[index::s], (*this)[index::i], (*this)[index::j], (*this)[index::k]))
 			{
@@ -378,6 +397,9 @@ namespace Cmplx2
 				return *this;
 			};
 		};
+		///
+		/// operators
+		///
 		bool CMPLX2_INTERFACE CMPLX2_FUNC_CALL operator ==(const Quaternion& Union, const Quaternion& Value) noexcept;
 		bool CMPLX2_INTERFACE CMPLX2_FUNC_CALL operator !=(const Quaternion& Union, const Quaternion& Value) noexcept;
 		Quaternion CMPLX2_INTERFACE CMPLX2_FUNC_CALL operator +(const Quaternion& Value) noexcept;
@@ -388,17 +410,17 @@ namespace Cmplx2
 		Quaternion CMPLX2_INTERFACE CMPLX2_FUNC_CALL operator *(const Quaternion& Union, const Quaternion& Value) noexcept;
 		Quaternion CMPLX2_INTERFACE CMPLX2_FUNC_CALL operator /(const Quaternion& Union, const Quaternion& Value) noexcept;
 		Quaternion CMPLX2_INTERFACE CMPLX2_FUNC_CALL operator ^(const Quaternion& Base, std::int64_t Exponent) noexcept;
-		/* suffix operator */
-		inline Quaternion operator"" _q(long double Value) noexcept { return Quaternion(static_cast<double>(Value)); };
-		inline Quaternion operator"" _q(unsigned long long int Value) noexcept { return operator"" _q(static_cast<long double>(Value)); };
 		/* struct Quaternion */
+		///
+		/// constants
+		///
 		const double Quaternion::pi = std::numbers::pi;
 		const double Quaternion::e = std::numbers::e;
 		const Quaternion Quaternion::i = Quaternion(0, 1, 0, 0);
 		const Quaternion Quaternion::j = Quaternion(0, 0, 1, 0);
 		const Quaternion Quaternion::k = Quaternion(0, 0, 0, 1);
 		///
-		/// Initializer
+		/// basis
 		///
 		CMPLX2_FUNC_INSTANCE_CALL Quaternion::Quaternion() noexcept : real(), imaginary() {};
 		CMPLX2_FUNC_INSTANCE_CALL Quaternion::Quaternion(double s, const BaseType::Vector3D& v) noexcept : real(s), imaginary(v) {};
@@ -409,7 +431,7 @@ namespace Cmplx2
 		double CMPLX2_FUNC_CALL Quaternion::Scalar(const Quaternion& Value) noexcept { return Value.real; };
 		BaseType::Vector3D CMPLX2_FUNC_CALL Quaternion::Vector(const Quaternion& Value) noexcept { return Value.imaginary; };
 		///
-		/// Operators
+		/// operators
 		///
 		Quaternion CMPLX2_FUNC_INSTANCE_CALL Quaternion::operator ()() const noexcept { return *this; };
 		double& CMPLX2_FUNC_INSTANCE_CALL Quaternion::operator [](index i) &
@@ -535,7 +557,7 @@ namespace Cmplx2
 			return *this;
 		};
 		///
-		/// Basic functions for constructing numbers
+		/// fundamentals
 		///
 		double CMPLX2_FUNC_CALL Quaternion::abs(const Quaternion& Value) { return std::sqrt(dot(Value, Value)); };
 		double CMPLX2_FUNC_CALL Quaternion::arg(const Quaternion& Value) { return arg(Value, 0); };
@@ -545,16 +567,16 @@ namespace Cmplx2
 		Quaternion CMPLX2_FUNC_CALL Quaternion::inverse(const Quaternion& Value) { return conjg(Value) / dot(Value, Value); };
 		Quaternion CMPLX2_FUNC_CALL Quaternion::exp(const Quaternion& Value) { return std::exp(Scalar(Value)) * (std::cos(abs(Vector(Value))) + sgn(Vector(Value)) * std::sin(abs(Vector(Value)))); };
 		Quaternion CMPLX2_FUNC_CALL Quaternion::ln(const Quaternion& Value) { return ln(Value, 0); };
-		Quaternion CMPLX2_FUNC_CALL Quaternion::ln(const Quaternion& Value, std::int64_t Theta) { return std::log(abs(Value)) + sgn(Vector(Value)) * arg(Value, Theta); };
+		Quaternion CMPLX2_FUNC_CALL Quaternion::ln(const Quaternion& Value, std::int64_t Theta) { return std::log(abs(Value)) + (Vector(Value) == 0 ? 0 : sgn(Vector(Value)) * arg(Value, Theta)); };
 		///
-		/// 1st rank tensor algorithms
+		/// multiples
 		///
 		double CMPLX2_FUNC_CALL Quaternion::dot(const Quaternion& Union, const Quaternion& Value) noexcept { return Scalar(conjg(Union) * Value + conjg(Value) * Union) / 2; };
 		Quaternion CMPLX2_FUNC_CALL Quaternion::outer(const Quaternion& Union, const Quaternion& Value) noexcept { return (conjg(Union) * Value - conjg(Value) * Union) / 2; };
 		Quaternion CMPLX2_FUNC_CALL Quaternion::even(const Quaternion& Union, const Quaternion& Value) noexcept { return (Union * Value + Value * Union) / 2; };
 		Quaternion CMPLX2_FUNC_CALL Quaternion::cross(const Quaternion& Union, const Quaternion& Value) noexcept { return (Union * Value - Value * Union) / 2; };
 		///
-		/// Operation 3 algorithms
+		/// exponentials
 		///
 		Quaternion CMPLX2_FUNC_CALL Quaternion::power(const Quaternion& Base, const Quaternion& Exponent) { return power(Base, Exponent, 0, 0, 0); };
 		Quaternion CMPLX2_FUNC_CALL Quaternion::power(const Quaternion& Base, const Quaternion& Exponent, std::int64_t Theta, std::int64_t Phi, std::int64_t Tau)
@@ -578,7 +600,7 @@ namespace Cmplx2
 			return exp(ln(ln(Number, Theta), Phi) - ln(ln(Base, Tau), Omega));
 		};
 		///
-		/// Trigonometric functions
+		/// trigonometrics
 		///
 		Quaternion CMPLX2_FUNC_CALL Quaternion::sin(const Quaternion& Value)
 		{
@@ -663,7 +685,7 @@ namespace Cmplx2
 		Quaternion CMPLX2_FUNC_CALL Quaternion::arccoth(const Quaternion& Value) { return arccoth(Value, true, 0); };
 		Quaternion CMPLX2_FUNC_CALL Quaternion::arccoth(const Quaternion& Value, bool Sign, std::int64_t Period) { return arctanh(inverse(Value), Sign, Period); };
 		///
-		/// Conversion of Types
+		/// conventions
 		///
 		std::wstring CMPLX2_FUNC_CALL Quaternion::GetString(const Quaternion& Value)
 		{
@@ -676,11 +698,14 @@ namespace Cmplx2
 			return Object;
 		};
 	}
-	double BaseType::Vector3D::build_in_dot(const BaseType::Vector3D& Union, const BaseType::Vector3D& Value)
+	///
+	/// traits
+	///
+	double BaseType::Vector3D::dot_with_numbers(const BaseType::Vector3D& Union, const BaseType::Vector3D& Value)
 	{
 		return MainType::Quaternion::dot(MainType::Quaternion{ Union }, MainType::Quaternion{ Value });
 	};
-	BaseType::Vector3D BaseType::Vector3D::build_in_cross(const BaseType::Vector3D& Union, const BaseType::Vector3D& Value)
+	BaseType::Vector3D BaseType::Vector3D::cross_with_numbers(const BaseType::Vector3D& Union, const BaseType::Vector3D& Value)
 	{
 		return Vector3D{}.from(MainType::Quaternion::cross(MainType::Quaternion{ Union }, MainType::Quaternion{ Value }).to_number());
 	};
