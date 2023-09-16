@@ -23,7 +23,7 @@ namespace Seden
         ///
         public static readonly double pi = Math.PI;
         public static readonly double e = Math.E;
-        private static readonly Sedenion i = new Sedenion(0, 1);
+        internal static readonly Sedenion i = new Sedenion(0, 1);
         ///
         /// basis
         ///
@@ -94,18 +94,22 @@ namespace Seden
         public static Sedenion Inverse(Sedenion Value) { return Conjg(Value) / Dot(Value, Value); }
         public static Sedenion Exp(Sedenion Value)
         {
-            if (Vector(Value) == 0) { return Math.Exp(Scalar(Value)); }
-            return Math.Exp(Scalar(Value)) * (Math.Cos(Abs(Vector(Value))) + Sgn(Vector(Value)) * Math.Sin(Abs(Vector(Value))));
+            var S = Scalar(Value);
+            var V = Vector(Value);
+            if (V == 0) { return Math.Exp(S); }
+            return Math.Exp(S) * (Math.Cos(Abs(V)) + Sgn(V) * Math.Sin(Abs(V)));
         }
         public static Sedenion Ln(Sedenion Value) { return Ln(Value, 0); }
         public static Sedenion Ln(Sedenion Value, long Theta)
         {
-            if (Vector(Value) == 0)
+            var S = Scalar(Value);
+            var V = Vector(Value);
+            if (V == 0)
             {
-                if (Scalar(Value) < 0) { return Math.Log(-Scalar(Value)) + (2 * Theta + 1) * i * pi; }
-                return Math.Log(Scalar(Value));
+                if (S < 0) { return Math.Log(-S) + (2 * Theta + 1) * i * pi; }
+                return Math.Log(S);
             }
-            return Math.Log(Abs(Value)) + Sgn(Vector(Value)) * Arg(Value, Theta);
+            return Math.Log(Abs(Value)) + Sgn(V) * Arg(Value, Theta);
         }
         ///
         /// multiples
@@ -146,15 +150,15 @@ namespace Seden
             var S = Scalar(Value);
             var V = Vector(Value);
             if (V == 0) { return Math.Sin(S); }
-            return Math.Sin(S) * Math.Cosh(Abs(V)) + Sgn(V) * Math.Cos(S) * Math.Sinh(Abs(V));
+            return Math.Sin(S) * Math.Cosh(Abs(V)) + Sgn(V) * (Math.Cos(S) * Math.Sinh(Abs(V)));
         }
         public static Sedenion Arcsin(Sedenion Value) { return Arcsin(Value, true, 0); }
         public static Sedenion Arcsin(Sedenion Value, bool Sign, long Period)
         {
-            var S = Scalar(Value);
-            var V = Vector(Value);
             if (Sign == true)
             {
+                var S = Scalar(Value);
+                var V = Vector(Value);
                 if (V == 0) { return -i * Ln(i * S + Root(1 - S * S, 2), Period); }
                 return -Sgn(V) * Ln(Sgn(V) * Value + Root(1 - Value * Value, 2), Period);
             }
@@ -165,7 +169,7 @@ namespace Seden
             var S = Scalar(Value);
             var V = Vector(Value);
             if (V == 0) { return Math.Sinh(S); }
-            return Math.Sinh(S) * Math.Cos(Abs(V)) + Sgn(V) * Math.Cosh(S) * Math.Sin(Abs(V));
+            return Math.Sinh(S) * Math.Cos(Abs(V)) + Sgn(V) * (Math.Cosh(S) * Math.Sin(Abs(V)));
         }
         public static Sedenion Arcsinh(Sedenion Value) { return Arcsinh(Value, true, 0); }
         public static Sedenion Arcsinh(Sedenion Value, bool Sign, long Period)
@@ -180,15 +184,15 @@ namespace Seden
             var S = Scalar(Value);
             var V = Vector(Value);
             if (V == 0) { return Math.Cos(S); }
-            return Math.Cos(S) * Math.Cosh(Abs(V)) - Sgn(V) * Math.Sin(S) * Math.Sinh(Abs(V));
+            return Math.Cos(S) * Math.Cosh(Abs(V)) - Sgn(V) * (Math.Sin(S) * Math.Sinh(Abs(V)));
         }
         public static Sedenion Arccos(Sedenion Value) { return Arccos(Value, true, 0); }
         public static Sedenion Arccos(Sedenion Value, bool Sign, long Period)
         {
-            var S = Scalar(Value);
-            var V = Vector(Value);
             if (Sign == true)
             {
+                var S = Scalar(Value);
+                var V = Vector(Value);
                 if (V == 0) { return -i * Ln(S + Root(S * S - 1, 2), Period); }
                 return -Sgn(V) * Ln(Value + Root(Value * Value - 1, 2), Period);
             }
@@ -199,7 +203,7 @@ namespace Seden
             var S = Scalar(Value);
             var V = Vector(Value);
             if (V == 0) { return Math.Cosh(S); }
-            return Math.Cosh(S) * Math.Cos(Abs(V)) + Sgn(V) * Math.Sinh(S) * Math.Sin(Abs(V));
+            return Math.Cosh(S) * Math.Cos(Abs(V)) + Sgn(V) * (Math.Sinh(S) * Math.Sin(Abs(V)));
         }
         public static Sedenion Arccosh(Sedenion Value) { return Arccosh(Value, true, 0); }
         public static Sedenion Arccosh(Sedenion Value, bool Sign, long Period)
@@ -213,18 +217,20 @@ namespace Seden
         {
             var S = Scalar(Value);
             var V = Vector(Value);
-            if (V == 0) { return Math.Tan(S); }
             var TanS = Math.Tan(S);
+            if (V == 0) { return TanS; }
+            var TanS2 = TanS * TanS;
             var TanhV = Math.Tanh(Abs(V));
-            return (TanS * (1 - TanhV * TanhV) + Sgn(V) * TanhV * (1 + TanS * TanS)) / (1 + TanS * TanS * TanhV * TanhV);
+            var TanhV2 = TanhV * TanhV;
+            return (TanS * (1 - TanhV2) + Sgn(V) * (TanhV * (1 + TanS2))) / (1 + TanS2 * TanhV2);
         }
         public static Sedenion Arctan(Sedenion Value) { return Arctan(Value, true, 0); }
         public static Sedenion Arctan(Sedenion Value, bool Sign, long Period)
         {
-            var S = Scalar(Value);
-            var V = Vector(Value);
             if (Sign == true)
             {
+                var S = Scalar(Value);
+                var V = Vector(Value);
                 if (V == 0) { return i / 2 * (Ln(1 - i * S, Period) - Ln(1 + i * S)); }
                 return Sgn(V) / 2 * (Ln(1 - Sgn(V) * Value, Period) - Ln(1 + Sgn(V) * Value));
             }
@@ -234,10 +240,12 @@ namespace Seden
         {
             var S = Scalar(Value);
             var V = Vector(Value);
-            if (V == 0) { return Math.Tanh(S); }
             var TanhS = Math.Tanh(S);
+            if (V == 0) { return TanhS; }
+            var TanhS2 = TanhS * TanhS;
             var TanV = Math.Tan(Abs(V));
-            return (TanhS * (1 - TanV * TanV) + Sgn(V) * TanV * (1 + TanhS * TanhS)) / (1 + TanhS * TanhS * TanV * TanV);
+            var TanV2 = TanV * TanV;
+            return (TanhS * (1 - TanV2) + Sgn(V) * (TanV * (1 + TanhS2))) / (1 + TanhS2 * TanV2);
         }
         public static Sedenion Arctanh(Sedenion Value) { return Arctanh(Value, true, 0); }
         public static Sedenion Arctanh(Sedenion Value, bool Sign, long Period)
