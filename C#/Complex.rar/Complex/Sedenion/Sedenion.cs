@@ -210,8 +210,8 @@ namespace Seden
         {
             if (Sign == true) { return Ln(Value + Root(Value * Value - 1, 2), Period); }
             var V = Vector(Value);
-            if (V == 0) { return pi * i - Arccosh(Value, true, Period); }
-            return pi * Sgn(V) - Arccosh(Value, true, Period);
+            if (V == 0) { return 2 * pi * i - Arccosh(Value, true, Period); }
+            return 2 * pi * Sgn(V) - Arccosh(Value, true, Period);
         }
         public static Sedenion Tan(Sedenion Value)
         {
