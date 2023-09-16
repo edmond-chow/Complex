@@ -116,6 +116,7 @@ namespace Seden
 		///
 		static const double pi;
 		static const double e;
+		static const Sedenion i;
 	private:
 		///
 		/// basis
@@ -277,6 +278,7 @@ namespace Seden
 	///
 	const double Sedenion::pi = std::numbers::pi;
 	const double Sedenion::e = std::numbers::e;
+	const Sedenion Sedenion::i{ 0, 1 };
 	///
 	/// basis
 	///
@@ -424,9 +426,25 @@ namespace Seden
 	Sedenion SEDEN_FUNC_CALL Sedenion::conjg(const Sedenion& Value) { return ~Value; };
 	Sedenion SEDEN_FUNC_CALL Sedenion::sgn(const Sedenion& Value) { return Value / abs(Value); };
 	Sedenion SEDEN_FUNC_CALL Sedenion::inverse(const Sedenion& Value) { return conjg(Value) / dot(Value, Value); };
-	Sedenion SEDEN_FUNC_CALL Sedenion::exp(const Sedenion& Value) { return std::exp(Scalar(Value)) * (std::cos(abs(Vector(Value))) + sgn(Vector(Value)) * std::sin(abs(Vector(Value)))); };
+	Sedenion SEDEN_FUNC_CALL Sedenion::exp(const Sedenion& Value)
+	{
+		auto S = Scalar(Value);
+		auto V = Vector(Value);
+		if (V == 0) { return std::exp(S); }
+		return std::exp(S) * (std::cos(abs(V)) + sgn(V) * std::sin(abs(V)));
+	};
 	Sedenion SEDEN_FUNC_CALL Sedenion::ln(const Sedenion& Value) { return ln(Value, 0); };
-	Sedenion SEDEN_FUNC_CALL Sedenion::ln(const Sedenion& Value, std::int64_t Theta) { return std::log(abs(Value)) + (Vector(Value) == 0 ? 0 : sgn(Vector(Value)) * arg(Value, Theta)); };
+	Sedenion SEDEN_FUNC_CALL Sedenion::ln(const Sedenion& Value, std::int64_t Theta)
+	{
+		auto S = Scalar(Value);
+		auto V = Vector(Value);
+		if (V == 0)
+		{
+			if (S < 0) { return std::log(-S) + static_cast<double>(2 * Theta + 1) * i * pi; }
+			return std::log(S);
+		}
+		return std::log(abs(Value)) + sgn(V) * arg(Value, Theta);
+	};
 	///
 	/// multiples
 	///
@@ -463,67 +481,113 @@ namespace Seden
 	///
 	Sedenion SEDEN_FUNC_CALL Sedenion::sin(const Sedenion& Value)
 	{
-		return std::sin(Scalar(Value)) * std::cosh(abs(Vector(Value)))
-			+ std::cos(Scalar(Value)) * sgn(Vector(Value)) * std::sinh(abs(Vector(Value)));
+		auto S = Scalar(Value);
+		auto V = Vector(Value);
+		if (V == 0) { return std::sin(S); }
+		return std::sin(S) * std::cosh(abs(V)) + sgn(V) * (std::cos(S) * std::sinh(abs(V)));
 	};
 	Sedenion SEDEN_FUNC_CALL Sedenion::arcsin(const Sedenion& Value) { return arcsin(Value, true, 0); };
 	Sedenion SEDEN_FUNC_CALL Sedenion::arcsin(const Sedenion& Value, bool Sign, std::int64_t Period)
 	{
-		if (Sign == true) { return -sgn(Vector(Value)) * arcsinh(Value * sgn(Vector(Value))); }
-		else { return pi - arcsin(Value, true, Period); }
+		if (Sign == true)
+		{
+			auto S = Scalar(Value);
+			auto V = Vector(Value);
+			if (V == 0) { return -i * ln(i * S + root(1 - S * S, 2), Period); }
+			return -sgn(V) * ln(sgn(V) * Value + root(1 - Value * Value, 2), Period);
+		}
+		return pi - arcsin(Value, true, Period);
 	};
 	Sedenion SEDEN_FUNC_CALL Sedenion::sinh(const Sedenion& Value)
 	{
-		return std::sinh(Scalar(Value)) * std::cos(abs(Vector(Value)))
-			+ std::cosh(Scalar(Value)) * sgn(Vector(Value)) * std::sin(abs(Vector(Value)));
+		auto S = Scalar(Value);
+		auto V = Vector(Value);
+		if (V == 0) { return std::sinh(S); }
+		return std::sinh(S) * std::cos(abs(V)) + sgn(V) * (std::cosh(S) * std::sin(abs(V)));
 	};
 	Sedenion SEDEN_FUNC_CALL Sedenion::arcsinh(const Sedenion& Value) { return arcsinh(Value, true, 0); };
 	Sedenion SEDEN_FUNC_CALL Sedenion::arcsinh(const Sedenion& Value, bool Sign, std::int64_t Period)
 	{
-		if (Sign == true) { return ln(Value + root(power(Value, 2) + 1, 2), Period); }
-		else { return pi * sgn(Vector(Value)) - arcsinh(Value, true, Period); }
+		if (Sign == true) { return ln(Value + root(Value * Value + 1, 2), Period); }
+		auto V = Vector(Value);
+		if (V == 0) { return pi * i - arcsinh(Value, true, Period); }
+		return pi * sgn(V) - arcsinh(Value, true, Period);
 	};
 	Sedenion SEDEN_FUNC_CALL Sedenion::cos(const Sedenion& Value)
 	{
-		return std::cos(Scalar(Value)) * std::cosh(abs(Vector(Value)))
-			- std::sin(Scalar(Value)) * sgn(Vector(Value)) * std::sinh(abs(Vector(Value)));
+		auto S = Scalar(Value);
+		auto V = Vector(Value);
+		if (V == 0) { return std::cos(S); }
+		return std::cos(S) * std::cosh(abs(V)) - sgn(V) * (std::sin(S) * std::sinh(abs(V)));
 	};
 	Sedenion SEDEN_FUNC_CALL Sedenion::arccos(const Sedenion& Value) { return arccos(Value, true, 0); };
 	Sedenion SEDEN_FUNC_CALL Sedenion::arccos(const Sedenion& Value, bool Sign, std::int64_t Period)
 	{
-		if (Sign == true) { return -sgn(Vector(Value)) * arccosh(Value); }
-		else { return 2 * pi - arccos(Value, true, Period); }
+		if (Sign == true)
+		{
+			auto S = Scalar(Value);
+			auto V = Vector(Value);
+			if (V == 0) { return -i * ln(S + root(S * S - 1, 2), Period); }
+			return -sgn(V) * ln(Value + root(Value * Value - 1, 2), Period);
+		}
+		return 2 * pi - arccos(Value, true, Period);
 	};
 	Sedenion SEDEN_FUNC_CALL Sedenion::cosh(const Sedenion& Value)
 	{
-		return std::cosh(Scalar(Value)) * std::cos(abs(Vector(Value)))
-			+ std::sinh(Scalar(Value)) * sgn(Vector(Value)) * std::sin(abs(Vector(Value)));
+		auto S = Scalar(Value);
+		auto V = Vector(Value);
+		if (V == 0) { return std::cosh(S); }
+		return std::cosh(S) * std::cos(abs(V)) + sgn(V) * (std::sinh(S) * std::sin(abs(V)));
 	};
 	Sedenion SEDEN_FUNC_CALL Sedenion::arccosh(const Sedenion& Value) { return arccosh(Value, true, 0); };
 	Sedenion SEDEN_FUNC_CALL Sedenion::arccosh(const Sedenion& Value, bool Sign, std::int64_t Period)
 	{
-		if (Sign == true) { return ln(Value + root(power(Value, 2) - 1, 2), Period); }
-		else { return 2 * pi * sgn(Vector(Value)) - arccosh(Value, true, Period); }
+		if (Sign == true) { return ln(Value + root(Value * Value - 1, 2), Period); }
+		auto V = Vector(Value);
+		if (V == 0) { return pi * i - arccosh(Value, true, Period); }
+		return pi * sgn(V) - arccosh(Value, true, Period);
 	};
 	Sedenion SEDEN_FUNC_CALL Sedenion::tan(const Sedenion& Value)
 	{
-		return root(power(sec(Value), 2) - 1, 2);
+		auto S = Scalar(Value);
+		auto V = Vector(Value);
+		auto TanS = std::tan(S);
+		if (V == 0) { return TanS; }
+		auto TanS2 = TanS * TanS;
+		auto TanhV = std::tanh(abs(V));
+		auto TanhV2 = TanhV * TanhV;
+		return (TanS * (1 - TanhV2) + sgn(V) * (TanhV * (1 + TanS2))) / (1 + TanS2 * TanhV2);
 	};
 	Sedenion SEDEN_FUNC_CALL Sedenion::arctan(const Sedenion& Value) { return arctan(Value, true, 0); };
 	Sedenion SEDEN_FUNC_CALL Sedenion::arctan(const Sedenion& Value, bool Sign, std::int64_t Period)
 	{
-		if (Sign == true) { return -sgn(Vector(Value)) * arctanh(Value * sgn(Vector(Value))); }
-		else { return pi + arctan(Value, true, Period); }
+		if (Sign == true)
+		{
+			auto S = Scalar(Value);
+			auto V = Vector(Value);
+			if (V == 0) { return i / 2 * (ln(1 - i * S, Period) - ln(1 + i * S)); }
+			return sgn(V) / 2 * (ln(1 - sgn(V) * Value, Period) - ln(1 + sgn(V) * Value));
+		}
+		return pi + arctan(Value, true, Period);
 	};
 	Sedenion SEDEN_FUNC_CALL Sedenion::tanh(const Sedenion& Value)
 	{
-		return 1 - 2 * inverse(exp(2 * Value) + 1);
+		auto S = Scalar(Value);
+		auto V = Vector(Value);
+		auto TanhS = std::tanh(S);
+		if (V == 0) { return TanhS; }
+		auto TanhS2 = TanhS * TanhS;
+		auto TanV = std::tan(abs(V));
+		auto TanV2 = TanV * TanV;
+		return (TanhS * (1 - TanV2) + sgn(V) * (TanV * (1 + TanhS2))) / (1 + TanhS2 * TanV2);
 	};
 	Sedenion SEDEN_FUNC_CALL Sedenion::arctanh(const Sedenion& Value) { return arctanh(Value, true, 0); };
 	Sedenion SEDEN_FUNC_CALL Sedenion::arctanh(const Sedenion& Value, bool Sign, std::int64_t Period)
 	{
-		if (Sign == true) { return (ln(1 + Value, Period) - ln(1 - Value)) / 2; }
-		else { return pi * sgn(Vector(Value)) + arctanh(Value, true, Period); }
+		if (Sign == true) { return 1 / 2 * (ln(1 + Value, Period) - ln(1 - Value)); }
+		auto V = Vector(Value);
+		if (V == 0) { return pi * i + arctanh(Value, true, Period); }
+		return pi * sgn(V) + arctanh(Value, true, Period);
 	};
 	Sedenion SEDEN_FUNC_CALL Sedenion::csc(const Sedenion& Value) { return inverse(sin(Value)); };
 	Sedenion SEDEN_FUNC_CALL Sedenion::arccsc(const Sedenion& Value) { return arccsc(Value, true, 0); };
