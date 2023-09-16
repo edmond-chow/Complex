@@ -683,8 +683,8 @@ namespace Cmplx2
 		{
 			if (Sign == true) { return ln(Value + root(Value * Value - 1, 2), Period); }
 			auto V = Vector(Value);
-			if (V == 0) { return pi * i - arccosh(Value, true, Period); }
-			return pi * sgn(V) - arccosh(Value, true, Period);
+			if (V == 0) { return 2 * pi * i - arccosh(Value, true, Period); }
+			return 2 * pi * sgn(V) - arccosh(Value, true, Period);
 		};
 		Quaternion CMPLX2_FUNC_CALL Quaternion::tan(const Quaternion& Value)
 		{
