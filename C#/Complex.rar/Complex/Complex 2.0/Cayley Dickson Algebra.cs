@@ -24,8 +24,14 @@ internal class Number : IEnumerable<double>
             Index = -1;
         }
     }
-    public IEnumerator<double> GetEnumerator() { return new NumberIterator(Data); }
-    IEnumerator IEnumerable.GetEnumerator() { return new NumberIterator(Data); }
+    public IEnumerator<double> GetEnumerator()
+    {
+        return new NumberIterator(Data);
+    }
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return new NumberIterator(Data);
+    }
     private static bool IsNumber(long Number)
     {
         if (Number < 0) { return false; }
@@ -39,8 +45,14 @@ internal class Number : IEnumerable<double>
         get => Data[Index];
         set => Data[Index] = value;
     }
-    public int Length { get => Data.Length; }
-    public long LongLength { get => Data.LongLength; }
+    public int Length
+    {
+        get => Data.Length;
+    }
+    public long LongLength
+    {
+        get => Data.LongLength;
+    }
     public Number(long Size)
     {
         if (!IsNumber(Size)) { throw new ArgumentException("The size must be a number which is 2 to the power of a natural number."); }
@@ -97,13 +109,34 @@ internal class Number : IEnumerable<double>
         if (obj as Number == this) { return true; }
         return false;
     }
-    public override int GetHashCode() { return 0; }
-    public static bool operator ==(Number Union, Number Value) { return Equal(Union, Value); }
-    public static bool operator !=(Number Union, Number Value) { return !(Union == Value); }
-    public static Number operator +(Number Union, Number Value) { return Add(Union, Value); }
-    public static Number operator -(Number Value) { return Neg(Value); }
-    public static Number operator -(Number Union, Number Value) { return Union + (-Value); }
-    public static Number operator ~(Number Value) { return Conjg(Value); }
+    public override int GetHashCode()
+    {
+        return 0;
+    }
+    public static bool operator ==(Number Union, Number Value)
+    {
+        return Equal(Union, Value);
+    }
+    public static bool operator !=(Number Union, Number Value)
+    {
+        return !(Union == Value);
+    }
+    public static Number operator +(Number Union, Number Value)
+    {
+        return Add(Union, Value);
+    }
+    public static Number operator -(Number Value)
+    {
+        return Neg(Value);
+    }
+    public static Number operator -(Number Union, Number Value)
+    {
+        return Union + (-Value);
+    }
+    public static Number operator ~(Number Value)
+    {
+        return Conjg(Value);
+    }
     public static Number operator *(Number Union, Number Value)
     {
         if (Union.LongLength != Value.LongLength) { throw new NotImplementedException("The branch should ensure not instantiated at compile time."); }
@@ -117,6 +150,12 @@ internal class Number : IEnumerable<double>
     {
         return new Number(Value.Select((double V) => { return V * Union; }).ToArray());
     }
-    public static Number operator *(Number Union, double Value) { return Value * Union; }
-    public static Number operator /(Number Union, double Value) { return Union * (1 / Value); }
+    public static Number operator *(Number Union, double Value)
+    {
+        return Value * Union;
+    }
+    public static Number operator /(Number Union, double Value)
+    {
+        return Union * (1 / Value);
+    }
 }

@@ -289,9 +289,21 @@ namespace Cmplx3
             public static Octonion Conjg(Octonion Value) { return ~Value; }
             public static Octonion Sgn(Octonion Value) { return Value / Abs(Value); }
             public static Octonion Inverse(Octonion Value) { return Conjg(Value) / Dot(Value, Value); }
-            public static Octonion Exp(Octonion Value) { return Math.Exp(Scalar(Value)) * (Math.Cos(Abs(Vector(Value))) + Sgn(Vector(Value)) * Math.Sin(Abs(Vector(Value)))); }
+            public static Octonion Exp(Octonion Value)
+            {
+                if (Vector(Value) == 0) { return Math.Exp(Scalar(Value)); }
+                return Math.Exp(Scalar(Value)) * (Math.Cos(Abs(Vector(Value))) + Sgn(Vector(Value)) * Math.Sin(Abs(Vector(Value))));
+            }
             public static Octonion Ln(Octonion Value) { return Ln(Value, 0); }
-            public static Octonion Ln(Octonion Value, long Theta) { return Math.Log(Abs(Value)) + (Vector(Value) == 0 ? 0 : Sgn(Vector(Value)) * Arg(Value, Theta)); }
+            public static Octonion Ln(Octonion Value, long Theta)
+            {
+                if (Vector(Value) == 0)
+                {
+                    if (Scalar(Value) < 0) { return Math.Log(-Scalar(Value)) + (2 * Theta + 1) * i * pi; }
+                    return Math.Log(Scalar(Value));
+                }
+                return Math.Log(Abs(Value)) + Sgn(Vector(Value)) * Arg(Value, Theta);
+            }
             ///
             /// multiples
             ///
@@ -328,67 +340,109 @@ namespace Cmplx3
             ///
             public static Octonion Sin(Octonion Value)
             {
-                return Math.Sin(Scalar(Value)) * Math.Cosh(Abs(Vector(Value)))
-                    + Math.Cos(Scalar(Value)) * Sgn(Vector(Value)) * Math.Sinh(Abs(Vector(Value)));
+                var S = Scalar(Value);
+                var V = Vector(Value);
+                if (V == 0) { return Math.Sin(S); }
+                return Math.Sin(S) * Math.Cosh(Abs(V)) + Sgn(V) * Math.Cos(S) * Math.Sinh(Abs(V));
             }
             public static Octonion Arcsin(Octonion Value) { return Arcsin(Value, true, 0); }
             public static Octonion Arcsin(Octonion Value, bool Sign, long Period)
             {
-                if (Sign == true) { return -Sgn(Vector(Value)) * Arcsinh(Value * Sgn(Vector(Value))); }
-                else { return pi - Arcsin(Value, true, Period); }
+                var S = Scalar(Value);
+                var V = Vector(Value);
+                if (Sign == true)
+                {
+                    if (V == 0) { return -i * Ln(i * S + Root(1 - S * S, 2), Period); }
+                    return -Sgn(V) * Ln(Sgn(V) * Value + Root(1 - Value * Value, 2), Period);
+                }
+                return pi - Arcsin(Value, true, Period);
             }
             public static Octonion Sinh(Octonion Value)
             {
-                return Math.Sinh(Scalar(Value)) * Math.Cos(Abs(Vector(Value)))
-                    + Math.Cosh(Scalar(Value)) * Sgn(Vector(Value)) * Math.Sin(Abs(Vector(Value)));
+                var S = Scalar(Value);
+                var V = Vector(Value);
+                if (V == 0) { return Math.Sinh(S); }
+                return Math.Sinh(S) * Math.Cos(Abs(V)) + Sgn(V) * Math.Cosh(S) * Math.Sin(Abs(V));
             }
             public static Octonion Arcsinh(Octonion Value) { return Arcsinh(Value, true, 0); }
             public static Octonion Arcsinh(Octonion Value, bool Sign, long Period)
             {
-                if (Sign == true) { return Ln(Value + Root(Power(Value, 2) + 1, 2), Period); }
-                else { return pi * Sgn(Vector(Value)) - Arcsinh(Value, true, Period); }
+                if (Sign == true) { return Ln(Value + Root(Value * Value + 1, 2), Period); }
+                var V = Vector(Value);
+                if (V == 0) { return pi * i - Arcsinh(Value, true, Period); }
+                return pi * Sgn(V) - Arcsinh(Value, true, Period);
             }
             public static Octonion Cos(Octonion Value)
             {
-                return Math.Cos(Scalar(Value)) * Math.Cosh(Abs(Vector(Value)))
-                    - Math.Sin(Scalar(Value)) * Sgn(Vector(Value)) * Math.Sinh(Abs(Vector(Value)));
+                var S = Scalar(Value);
+                var V = Vector(Value);
+                if (V == 0) { return Math.Cos(S); }
+                return Math.Cos(S) * Math.Cosh(Abs(V)) - Sgn(V) * Math.Sin(S) * Math.Sinh(Abs(V));
             }
             public static Octonion Arccos(Octonion Value) { return Arccos(Value, true, 0); }
             public static Octonion Arccos(Octonion Value, bool Sign, long Period)
             {
-                if (Sign == true) { return -Sgn(Vector(Value)) * Arccosh(Value); }
-                else { return 2 * pi - Arccos(Value, true, Period); }
+                var S = Scalar(Value);
+                var V = Vector(Value);
+                if (Sign == true)
+                {
+                    if (V == 0) { return -i * Ln(S + Root(S * S - 1, 2), Period); }
+                    return -Sgn(V) * Ln(Value + Root(Value * Value - 1, 2), Period);
+                }
+                return 2 * pi - Arccos(Value, true, Period);
             }
             public static Octonion Cosh(Octonion Value)
             {
-                return Math.Cosh(Scalar(Value)) * Math.Cos(Abs(Vector(Value)))
-                    + Math.Sinh(Scalar(Value)) * Sgn(Vector(Value)) * Math.Sin(Abs(Vector(Value)));
+                var S = Scalar(Value);
+                var V = Vector(Value);
+                if (V == 0) { return Math.Cosh(S); }
+                return Math.Cosh(S) * Math.Cos(Abs(V)) + Sgn(V) * Math.Sinh(S) * Math.Sin(Abs(V));
             }
             public static Octonion Arccosh(Octonion Value) { return Arccosh(Value, true, 0); }
             public static Octonion Arccosh(Octonion Value, bool Sign, long Period)
             {
-                if (Sign == true) { return Ln(Value + Root(Power(Value, 2) - 1, 2), Period); }
-                else { return 2 * pi * Sgn(Vector(Value)) - Arccosh(Value, true, Period); }
+                if (Sign == true) { return Ln(Value + Root(Value * Value - 1, 2), Period); }
+                var V = Vector(Value);
+                if (V == 0) { return pi * i - Arccosh(Value, true, Period); }
+                return pi * Sgn(V) - Arccosh(Value, true, Period);
             }
             public static Octonion Tan(Octonion Value)
             {
-                return Root(Power(Sec(Value), 2) - 1, 2);
+                var S = Scalar(Value);
+                var V = Vector(Value);
+                if (V == 0) { return Math.Tan(S); }
+                var TanS = Math.Tan(S);
+                var TanhV = Math.Tanh(Abs(V));
+                return (TanS * (1 - TanhV * TanhV) + Sgn(V) * TanhV * (1 + TanS * TanS)) / (1 + TanS * TanS * TanhV * TanhV);
             }
             public static Octonion Arctan(Octonion Value) { return Arctan(Value, true, 0); }
             public static Octonion Arctan(Octonion Value, bool Sign, long Period)
             {
-                if (Sign == true) { return -Sgn(Vector(Value)) * Arctanh(Value * Sgn(Vector(Value))); }
-                else { return pi + Arctan(Value, true, Period); }
+                var S = Scalar(Value);
+                var V = Vector(Value);
+                if (Sign == true)
+                {
+                    if (V == 0) { return i / 2 * (Ln(1 - i * S, Period) - Ln(1 + i * S)); }
+                    return Sgn(V) / 2 * (Ln(1 - Sgn(V) * Value, Period) - Ln(1 + Sgn(V) * Value));
+                }
+                return pi + Arctan(Value, true, Period);
             }
             public static Octonion Tanh(Octonion Value)
             {
-                return 1 - 2 * Inverse(Exp(2 * Value) + 1);
+                var S = Scalar(Value);
+                var V = Vector(Value);
+                if (V == 0) { return Math.Tanh(S); }
+                var TanhS = Math.Tanh(S);
+                var TanV = Math.Tan(Abs(V));
+                return (TanhS * (1 - TanV * TanV) + Sgn(V) * TanV * (1 + TanhS * TanhS)) / (1 + TanhS * TanhS * TanV * TanV);
             }
             public static Octonion Arctanh(Octonion Value) { return Arctanh(Value, true, 0); }
             public static Octonion Arctanh(Octonion Value, bool Sign, long Period)
             {
-                if (Sign == true) { return (Ln(1 + Value, Period) - Ln(1 - Value)) / 2; }
-                else { return pi * Sgn(Vector(Value)) + Arctanh(Value, true, Period); }
+                if (Sign == true) { return 1 / 2 * (Ln(1 + Value, Period) - Ln(1 - Value)); }
+                var V = Vector(Value);
+                if (V == 0) { return pi * i + Arctanh(Value, true, Period); }
+                return pi * Sgn(V) + Arctanh(Value, true, Period);
             }
             public static Octonion Csc(Octonion Value) { return Inverse(Sin(Value)); }
             public static Octonion Arccsc(Octonion Value) { return Arccsc(Value, true, 0); }
