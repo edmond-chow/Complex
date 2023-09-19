@@ -79,9 +79,7 @@ internal class Number : IEnumerable<double>
     }
     public static Number Conjg(Number Value)
     {
-        Number Output = Neg(Value);
-        Output[0] = -Output[0];
-        return Output;
+        return new Number(Value.Take(1).Concat(Value.Skip(1).Select((double V) => { return -V; })).ToArray());
     }
     public Number Left
     {
