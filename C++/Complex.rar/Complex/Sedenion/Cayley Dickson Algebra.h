@@ -16,24 +16,33 @@ public:
 	constexpr std::size_t get_size() const { return size; };
 	constexpr double& operator [](std::int64_t i) & { return data[i % size]; };
 	constexpr const double& operator [](std::int64_t i) const& { return data[i % size]; };
-	constexpr Factor(const double* data, std::size_t size)
-		: data{ new double[size] {} }, size{ size }
+	constexpr Factor(std::size_t size)
+		: data{ nullptr }, size{ size }
 	{
 		if (!is_factor(size))
 		{
-			delete[] this->data;
 			throw std::invalid_argument("The size must be a number which is 2 to the power of a natural number.");
 		}
+		data = new double[size] {};
+	};
+	constexpr Factor(const double* data, std::size_t size)
+		: data{ nullptr }, size{ size }
+	{
+		if (!is_factor(size))
+		{
+			throw std::invalid_argument("The size must be a number which is 2 to the power of a natural number.");
+		}
+		this->data = new double[size] {};
 		std::copy(data, data + size, this->data);
 	};
 	constexpr Factor(const std::initializer_list<double>& init)
-		: data{ new double[init.size()] {} }, size{ init.size() }
+		: data{ nullptr }, size{ init.size() }
 	{
 		if (!is_factor(init.size()))
 		{
-			delete[] data;
 			throw std::invalid_argument("The size must be a number which is 2 to the power of a natural number.");
 		}
+		data = new double[size] {};
 		std::copy(init.begin(), init.end(), data);
 	};
 	constexpr Factor(const Factor& Value)
@@ -65,75 +74,83 @@ public:
 		return *this;
 	};
 	constexpr ~Factor() noexcept { delete[] data; };
+	constexpr Factor& extend(std::size_t size) &
+	{
+		if (!is_factor(size))
+		{
+			throw std::invalid_argument("The size must be a number which is 2 to the power of a natural number.");
+		}
+		else if (size > this->size)
+		{
+			double* new_data = new double[size] {};
+			std::copy(data, data + this->size, new_data);
+			delete[] data;
+			data = new_data;
+		};
+		return *this;
+	};
 	static Factor merge(const Factor& Left, const Factor& Right)
 	{
-		std::size_t Size = Left.size + Right.size;
-		double* Temp = new double[Size] {};
-		Factor Output{ Temp, Size };
-		delete[] Temp;
+		Factor Output(Left.size + Right.size);
 		std::copy(Right.data, Right.data + Right.size, std::copy(Left.data, Left.data + Left.size, Output.data));
 		return Output;
 	};
 	constexpr Factor left() const
 	{
 		if (size == 1) { return *this; }
-		double* Temp = new double[size >> 1] {};
-		Factor Output{ Temp, size >> 1 };
-		delete[] Temp;
+		Factor Output(size >> 1);
 		std::copy(data, data + (size >> 1), Output.data);
 		return Output;
 	};
 	constexpr Factor right() const
 	{
 		if (size == 1) { return *this; }
-		double* Temp = new double[size >> 1] {};
-		Factor Output{ Temp, size >> 1 };
-		delete[] Temp;
+		Factor Output(size >> 1);
 		std::copy(data + (size >> 1), data + size, Output.data);
 		return Output;
 	};
+	friend constexpr Factor operator -(const Factor& Value);
+	friend constexpr Factor operator ~(const Factor& Value);
+	friend constexpr Factor operator +(const Factor& Union, const Factor& Value);
+	friend constexpr Factor operator -(const Factor& Union, const Factor& Value);
+	friend constexpr Factor operator *(const Factor& Union, const Factor& Value);
+	friend constexpr Factor operator *(double Union, const Factor& Value);
+	friend constexpr Factor operator *(const Factor& Union, double Value);
+	friend constexpr Factor operator /(const Factor& Union, double Value);
 };
 constexpr Factor operator -(const Factor& Value)
 {
-	double* Temp = new double[Value.get_size()] {};
-	std::transform(Value.get_data(), Value.get_data() + Value.get_size(), Temp, [](double V) -> double { return -V; });
-	Factor Output{ Temp, Value.get_size()};
-	delete[] Temp;
+	Factor Output{ Value.data, Value.size };
+	for (double* ite = Value.data; ite != Value.data + Value.size; ++ite) { *ite = -*ite; }
 	return Output;
 };
 constexpr Factor operator ~(const Factor& Value)
 {
-	Factor ret = -Value;
-	ret[0] = -ret[0];
-	return ret;
+	Factor Output{ Value.data, Value.size };
+	for (double* ite = Value.data + 1; ite != Value.data + Value.size; ++ite) { *ite = -*ite; }
+	return Output;
 };
 constexpr Factor operator +(const Factor& Union, const Factor& Value)
 {
-	std::size_t SizeMid = Union.get_size();
-	std::size_t SizeLast = Value.get_size();
-	if (SizeMid > SizeLast) { return Value + Union; }
-	double* Temp = new double[SizeLast] {};
-	for (std::size_t i = 0; i < SizeMid && SizeMid <= SizeLast; ++i) { Temp[i] = Union[i] + Value[i]; }
-	std::copy(Value.get_data() + SizeMid, Value.get_data() + SizeLast, Temp + SizeMid);
-	Factor Output{ Temp, SizeLast };
-	delete[] Temp;
+	if (Union.size > Value.size) { return Value + Union; }
+	Factor Output{ Value.data, Value.size };
+	for (double* ite = Union.data, *ite_o = Output.data; ite != Union.data + Union.size; ++ite, ++ite_o) { *ite_o += *ite; }
 	return Output;
 };
-constexpr Factor operator -(const Factor& Union, const Factor& Value) { return Union + (-Value); };
+constexpr Factor operator -(const Factor& Union, const Factor& Value)
+{
+	return Union + (-Value);
+};
 constexpr Factor operator *(const Factor& Union, const Factor& Value)
 {
-	std::size_t SizeMid = Union.get_size();
-	std::size_t SizeLast = Value.get_size();
-	if (SizeMid > SizeLast) { return Value * Union; }
-	if (SizeMid < SizeLast)
+	if (Union.size > Value.size) { return Value * Union; }
+	else if (Union.size < Value.size)
 	{
-		double* Temp = new double[SizeLast] {};
-		std::copy(Union.get_data(), Union.get_data() + Union.get_size(), Temp);
-		Factor Output{ Temp, SizeLast };
-		delete[] Temp;
-		return Output * Value;
+		Factor NewUnion = Union;
+		NewUnion.extend(Value.size);
+		return NewUnion * Value;
 	}
-	if (Union.get_size() == 1) { return Factor{ Union[0] * Value[0] }; }
+	else if (Union.size == 1) { return Factor{ Union[0] * Value[0] }; }
 	else
 	{
 		return Factor::merge(
@@ -144,11 +161,15 @@ constexpr Factor operator *(const Factor& Union, const Factor& Value)
 };
 constexpr Factor operator *(double Union, const Factor& Value)
 {
-	double* Temp = new double[Value.get_size()] {};
-	std::transform(Value.get_data(), Value.get_data() + Value.get_size(), Temp, [Union](double V) -> double { return Union * V; });
-	Factor Output{ Temp, Value.get_size() };
-	delete[] Temp;
+	Factor Output{ Value.data, Value.size };
+	for (double* ite = Value.data; ite != Value.data + Value.size; ++ite) { *ite *= Union; }
 	return Output;
 };
-constexpr Factor operator *(const Factor& Union, double Value) { return Value * Union; };
-constexpr Factor operator /(const Factor& Union, double Value) { return Union * (1 / Value); };
+constexpr Factor operator *(const Factor& Union, double Value)
+{
+	return Value * Union;
+};
+constexpr Factor operator /(const Factor& Union, double Value)
+{
+	return Union * (1 / Value);
+};
