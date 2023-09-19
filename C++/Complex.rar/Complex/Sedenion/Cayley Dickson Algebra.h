@@ -121,20 +121,24 @@ public:
 constexpr Factor operator -(const Factor& Value)
 {
 	Factor Output{ Value.data, Value.size };
-	for (double* ite = Value.data; ite != Value.data + Value.size; ++ite) { *ite = -*ite; }
+	const double* ite_oe = Output.data + Output.size;
+	for (double* ite_o = Output.data; ite_o != ite_oe; ++ite_o) { *ite_o = -*ite_o; }
 	return Output;
 };
 constexpr Factor operator ~(const Factor& Value)
 {
 	Factor Output{ Value.data, Value.size };
-	for (double* ite = Value.data + 1; ite != Value.data + Value.size; ++ite) { *ite = -*ite; }
+	const double* ite_oe = Output.data + Output.size;
+	for (double* ite_o = Output.data + 1; ite_o != ite_oe; ++ite_o) { *ite_o = -*ite_o; }
 	return Output;
 };
 constexpr Factor operator +(const Factor& Union, const Factor& Value)
 {
 	if (Union.size > Value.size) { return Value + Union; }
 	Factor Output{ Value.data, Value.size };
-	for (double* ite = Union.data, *ite_o = Output.data; ite != Union.data + Union.size; ++ite, ++ite_o) { *ite_o += *ite; }
+	const double* ite_u = Union.data;
+	const double* ite_ue = Union.data + Union.size;
+	for (double* ite_o = Output.data; ite_u != ite_ue; ++ite_o, ++ite_u) { *ite_o += *ite_u; }
 	return Output;
 };
 constexpr Factor operator -(const Factor& Union, const Factor& Value)
@@ -143,12 +147,14 @@ constexpr Factor operator -(const Factor& Union, const Factor& Value)
 };
 constexpr Factor operator *(const Factor& Union, const Factor& Value)
 {
-	if (Union.size > Value.size) { return Value * Union; }
-	else if (Union.size < Value.size)
+	if (Union.size != Value.size)
 	{
+		std::size_t NewSize = std::max(Union.size, Value.size);
 		Factor NewUnion = Union;
-		NewUnion.extend(Value.size);
-		return NewUnion * Value;
+		NewUnion.extend(NewSize);
+		Factor NewValue = Union;
+		NewValue.extend(NewSize);
+		return NewUnion * NewValue;
 	}
 	else if (Union.size == 1) { return Factor{ Union[0] * Value[0] }; }
 	else
