@@ -1,3 +1,7 @@
+template <std::size_t S, std::size_t E, std::size_t... I> requires (S <= E)
+struct make_range_sequence : public make_range_sequence<S, E - 1, E - 1, I...> {};
+template <std::size_t S, std::size_t... I>
+struct make_range_sequence<S, S, I...> : public std::index_sequence<I...> {};
 consteval bool is_number(std::size_t n) noexcept
 {
 	if (n == 1) { return true; }
@@ -35,10 +39,15 @@ private:
 	{
 		return Number<N>{ -Value[I]... };
 	};
-	template <std::size_t O, std::size_t... I> requires (O + sizeof...(I) <= N)
-	constexpr Number<sizeof...(I)> get(std::integral_constant<std::size_t, O>, std::integer_sequence<std::size_t, I...>) const
+	template <std::size_t... I> requires (N == sizeof...(I) + 1)
+	static constexpr Number<N> conjg_impl(const Number<N>& Value, std::integer_sequence<std::size_t, I...>) noexcept
 	{
-		return Number<sizeof...(I)>{ data[O + I]... };
+		return Number<N>{ Value[0], -Value[I]... };
+	};
+	template <std::size_t... I> requires (sizeof...(I) <= N)
+	constexpr Number<sizeof...(I)> get(std::integer_sequence<std::size_t, I...>) const
+	{
+		return Number<sizeof...(I)>{ data[I]... };
 	};
 	template <std::size_t... I> requires (N == sizeof...(I))
 	static constexpr Number<2 * N> merge_impl(const Number<N>& Union, const Number<N>& Value, std::integer_sequence<std::size_t, I...>) noexcept
@@ -72,19 +81,17 @@ public:
 	};
 	static constexpr Number<N> conjg(const Number<N>& Value) noexcept
 	{
-		Number<N> Output = neg(Value);
-		Output[0] = -Output[0];
-		return Output;
+		return conjg_impl(Value, make_range_sequence<1, N>{});
 	};
-	template <std::size_t H = N / 2> requires (N > 1)
-	constexpr Number<H> left() const noexcept
+	template <std::size_t H = N / 2>
+	constexpr Number<H> left() const noexcept requires (H > 0)
 	{
-		return get(std::integral_constant<std::size_t, 0>{}, std::make_index_sequence<H>{});
+		return get(make_range_sequence<0, H>{});
 	};
-	template <std::size_t H = N / 2> requires (N > 1)
-	constexpr Number<H> right() const noexcept
+	template <std::size_t H = N / 2>
+	constexpr Number<H> right() const noexcept requires (H > 0)
 	{
-		return get(std::integral_constant<std::size_t, H>{}, std::make_index_sequence<H>{});
+		return get(make_range_sequence<H, N>{});
 	};
 	static constexpr Number<2 * N> merge(const Number<N>& Union, const Number<N>& Value) noexcept
 	{
