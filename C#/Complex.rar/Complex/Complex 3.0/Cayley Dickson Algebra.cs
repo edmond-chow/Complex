@@ -107,7 +107,6 @@ internal class Number : IEnumerable<double>
     }
     public static Number Merge(Number Union, Number Value)
     {
-        if (Union.LongLength != Value.LongLength) { throw new NotImplementedException("The branch should ensure not instantiated at compile time."); }
         return new Number(Enumerable.Concat(Union, Value).ToArray());
     }
     public override bool Equals(object obj)
