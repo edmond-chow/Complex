@@ -39,7 +39,7 @@ internal class Number : IEnumerable<double>
         else if (Number == 0 || (Number >> 1 << 1 != Number)) { return false; }
         return IsNumber(Number >> 1);
     }
-    private readonly double[] Data;
+    private double[] Data;
     public double this[long Index]
     {
         get => Data[Index];
@@ -55,12 +55,10 @@ internal class Number : IEnumerable<double>
     }
     public Number(long Size)
     {
-        if (!IsNumber(Size)) { throw new ArgumentException("The size must be a number which is 2 to the power of a natural number."); }
         Data = new double[Size];
     }
     public Number(params double[] Args)
     {
-        if (!IsNumber(Args.LongLength)) { throw new ArgumentException("The size must be a number which is 2 to the power of a natural number."); }
         Data = Args;
     }
     public static bool Equal(Number Union, Number Value)
@@ -105,6 +103,11 @@ internal class Number : IEnumerable<double>
             return GetRight(Length >> 1);
         }
     }
+    public Number Extend(int Size)
+    {
+        if (Size > LongLength) { Array.Resize(ref Data, Size); }
+        return this;
+    }
     public static Number Merge(Number Union, Number Value)
     {
         return new Number(Enumerable.Concat(Union, Value).ToArray());
@@ -144,12 +147,24 @@ internal class Number : IEnumerable<double>
     }
     public static Number operator *(Number Union, Number Value)
     {
-        if (Union.LongLength != Value.LongLength) { throw new NotImplementedException("The branch should ensure not instantiated at compile time."); }
-        if (Union.LongLength == 1) { return new Number(Union[0] * Value[0]); }
-        return Merge(
-            Union.Left * Value.Left - ~Value.Right * Union.Right,
-            Value.Right * Union.Left + Union.Right * ~Value.Left
-        );
+        if (!IsNumber(Union.LongLength) || !IsNumber(Value.LongLength)) { throw new ArgumentException("The size must be a number which is 2 to the power of a natural number."); }
+        else if (Union.LongLength != Value.LongLength)
+        {
+            int NewSize = Math.Max(Union.Length, Value.Length);
+            Number NewUnion = Union;
+            NewUnion.Extend(NewSize);
+            Number NewValue = Value;
+            NewValue.Extend(NewSize);
+            return NewUnion * NewValue;
+        }
+        else if (Union.LongLength == 1) { return new Number(Union[0] * Value[0]); }
+        else
+        {
+            return Merge(
+                Union.Left * Value.Left - ~Value.Right * Union.Right,
+                Value.Right * Union.Left + Union.Right * ~Value.Left
+            );
+        }
     }
     public static Number operator *(double Union, Number Value)
     {
