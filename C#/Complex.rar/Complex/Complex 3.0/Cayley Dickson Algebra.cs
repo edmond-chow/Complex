@@ -81,20 +81,28 @@ internal class Number : IEnumerable<double>
     {
         return new Number(Value.Take(1).Concat(Value.Skip(1).Select((double V) => { return -V; })).ToArray());
     }
+    public Number GetLeft(int Count)
+    {
+        if (0 >= Count || Count > Length) { throw new NotImplementedException("The branch should ensure not instantiated at compile time."); }
+        return new Number(this.Take(Count).ToArray());
+    }
+    public Number GetRight(int Count)
+    {
+        if (0 > Count || Count >= Length) { throw new NotImplementedException("The branch should ensure not instantiated at compile time."); }
+        return new Number(this.Skip(Count).ToArray());
+    }
     public Number Left
     {
         get
         {
-            if (LongLength == 1) { throw new NotImplementedException("The branch should ensure not instantiated at compile time."); }
-            return new Number(this.Take(Length / 2).ToArray());
+            return GetLeft(Length >> 1);
         }
     }
     public Number Right
     {
         get
         {
-            if (LongLength == 1) { throw new NotImplementedException("The branch should ensure not instantiated at compile time."); }
-            return new Number(this.Skip(Length / 2).ToArray());
+            return GetRight(Length >> 1);
         }
     }
     public static Number Merge(Number Union, Number Value)
