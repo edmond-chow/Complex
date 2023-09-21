@@ -14,34 +14,22 @@ private:
 public:
 	constexpr const double* get_data() const { return data; };
 	constexpr std::size_t get_size() const { return size; };
-	constexpr double& operator [](std::int64_t i) & { return data[i % size]; };
-	constexpr const double& operator [](std::int64_t i) const& { return data[i % size]; };
+	constexpr double& operator [](std::int64_t i) & noexcept { return data[i % size]; };
+	constexpr const double& operator [](std::int64_t i) const& noexcept { return data[i % size]; };
 	constexpr Factor(std::size_t size)
 		: data{ nullptr }, size{ size }
 	{
-		if (!is_factor(size))
-		{
-			throw std::invalid_argument("The size must be a number which is 2 to the power of a natural number.");
-		}
 		data = new double[size] {};
 	};
 	constexpr Factor(const double* data, std::size_t size)
 		: data{ nullptr }, size{ size }
 	{
-		if (!is_factor(size))
-		{
-			throw std::invalid_argument("The size must be a number which is 2 to the power of a natural number.");
-		}
 		this->data = new double[size] {};
 		std::copy(data, data + size, this->data);
 	};
 	constexpr Factor(const std::initializer_list<double>& init)
 		: data{ nullptr }, size{ init.size() }
 	{
-		if (!is_factor(init.size()))
-		{
-			throw std::invalid_argument("The size must be a number which is 2 to the power of a natural number.");
-		}
 		data = new double[size] {};
 		std::copy(init.begin(), init.end(), data);
 	};
@@ -76,11 +64,7 @@ public:
 	constexpr ~Factor() noexcept { delete[] data; };
 	constexpr Factor& extend(std::size_t size) &
 	{
-		if (!is_factor(size))
-		{
-			throw std::invalid_argument("The size must be a number which is 2 to the power of a natural number.");
-		}
-		else if (size > this->size)
+		if (size > this->size)
 		{
 			double* new_data = new double[size] {};
 			std::copy(data, data + this->size, new_data);
@@ -95,19 +79,27 @@ public:
 		std::copy(Right.data, Right.data + Right.size, std::copy(Left.data, Left.data + Left.size, Output.data));
 		return Output;
 	};
+	constexpr Factor left(std::size_t count) const
+	{
+		if (0 >= count || count > size) { throw std::out_of_range("The count is out of range."); }
+		Factor Output(count);
+		std::copy(data, data + count, Output.data);
+		return Output;
+	};
+	constexpr Factor right(std::size_t count) const
+	{
+		if (0 > count || count >= size) { throw std::out_of_range("The count is out of range."); }
+		Factor Output(size - count);
+		std::copy(data + count, data + size, Output.data);
+		return Output;
+	};
 	constexpr Factor left() const
 	{
-		if (size == 1) { return *this; }
-		Factor Output(size >> 1);
-		std::copy(data, data + (size >> 1), Output.data);
-		return Output;
+		return left(size >> 1);
 	};
 	constexpr Factor right() const
 	{
-		if (size == 1) { return *this; }
-		Factor Output(size >> 1);
-		std::copy(data + (size >> 1), data + size, Output.data);
-		return Output;
+		return right(size >> 1);
 	};
 	friend constexpr Factor operator -(const Factor& Value);
 	friend constexpr Factor operator ~(const Factor& Value);
@@ -147,7 +139,11 @@ constexpr Factor operator -(const Factor& Union, const Factor& Value)
 };
 constexpr Factor operator *(const Factor& Union, const Factor& Value)
 {
-	if (Union.size != Value.size)
+	if (!is_factor(Union.size) || !is_factor(Value.size))
+	{
+		throw std::invalid_argument("The size must be a number which is 2 to the power of a natural number.");
+	}
+	else if (Union.size != Value.size)
 	{
 		std::size_t NewSize = std::max(Union.size, Value.size);
 		Factor NewUnion = Union;
