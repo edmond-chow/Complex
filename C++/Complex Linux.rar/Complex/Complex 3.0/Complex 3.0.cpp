@@ -103,22 +103,16 @@ namespace Cmplx3
 			/// casing
 			///
 			inline auto to_number() const& noexcept
-				-> decltype(forward_as_number(0, (*this)[index::e1], (*this)[index::e2], (*this)[index::e3], (*this)[index::e4], (*this)[index::e5], (*this)[index::e6], (*this)[index::e7]))
+				-> decltype(forward_as_number((*this)[index::e1], (*this)[index::e2], (*this)[index::e3], (*this)[index::e4], (*this)[index::e5], (*this)[index::e6], (*this)[index::e7]))
 			{
-				return forward_as_number(0, (*this)[index::e1], (*this)[index::e2], (*this)[index::e3], (*this)[index::e4], (*this)[index::e5], (*this)[index::e6], (*this)[index::e7]);
+				return forward_as_number((*this)[index::e1], (*this)[index::e2], (*this)[index::e3], (*this)[index::e4], (*this)[index::e5], (*this)[index::e6], (*this)[index::e7]);
 			};
 			template <std::size_t N>
 			inline auto from(const Number<N>& number) && noexcept -> decltype(*this)
 			{
-				double temp{};
-				number.store(temp, (*this)[index::e1], (*this)[index::e2], (*this)[index::e3], (*this)[index::e4], (*this)[index::e5], (*this)[index::e6], (*this)[index::e7]);
+				number.store((*this)[index::e1], (*this)[index::e2], (*this)[index::e3], (*this)[index::e4], (*this)[index::e5], (*this)[index::e6], (*this)[index::e7]);
 				return *this;
 			};
-			///
-			/// traits
-			///
-			static double dot_with_numbers(const Vector7D& Union, const Vector7D& Value);
-			static Vector7D cross_with_numbers(const Vector7D& Union, const Vector7D& Value);
 		};
 		///
 		/// operators
@@ -258,8 +252,14 @@ namespace Cmplx3
 		///
 		double CMPLX3_FUNC_CALL Vector7D::abs(const Vector7D& Value) { return std::sqrt(dot(Value, Value)); };
 		Vector7D CMPLX3_FUNC_CALL Vector7D::sgn(const Vector7D& Value) { return Value / abs(Value); };
-		double CMPLX3_FUNC_CALL Vector7D::dot(const Vector7D& Union, const Vector7D& Value) noexcept { return dot_with_numbers(Union, Value); };
-		Vector7D CMPLX3_FUNC_CALL Vector7D::cross(const Vector7D& Union, const Vector7D& Value) noexcept { return cross_with_numbers(Union, Value); };
+		double CMPLX3_FUNC_CALL Vector7D::dot(const Vector7D& Union, const Vector7D& Value) noexcept
+		{
+			return vector_dot(Union.to_number(), Value.to_number());
+		};
+		Vector7D CMPLX3_FUNC_CALL Vector7D::cross(const Vector7D& Union, const Vector7D& Value) noexcept
+		{
+			return Vector7D{}.from(vector_cross(Union.to_number(), Value.to_number()));
+		};
 		///
 		/// conventions
 		///
@@ -366,9 +366,9 @@ namespace Cmplx3
 			/// multiples
 			///
 			static double CMPLX3_FUNC_CALL dot(const Octonion& Union, const Octonion& Value) noexcept;
-			static Octonion CMPLX3_FUNC_CALL outer(const Octonion& Union, const Octonion& Value) noexcept;
+			static BaseType::Vector7D CMPLX3_FUNC_CALL outer(const Octonion& Union, const Octonion& Value) noexcept;
 			static Octonion CMPLX3_FUNC_CALL even(const Octonion& Union, const Octonion& Value) noexcept;
-			static Octonion CMPLX3_FUNC_CALL cross(const Octonion& Union, const Octonion& Value) noexcept;
+			static BaseType::Vector7D CMPLX3_FUNC_CALL cross(const Octonion& Union, const Octonion& Value) noexcept;
 			///
 			/// exponentials
 			///
@@ -651,10 +651,22 @@ namespace Cmplx3
 		///
 		/// multiples
 		///
-		double CMPLX3_FUNC_CALL Octonion::dot(const Octonion& Union, const Octonion& Value) noexcept { return Scalar(conjg(Union) * Value + conjg(Value) * Union) / 2; };
-		Octonion CMPLX3_FUNC_CALL Octonion::outer(const Octonion& Union, const Octonion& Value) noexcept { return (conjg(Union) * Value - conjg(Value) * Union) / 2; };
-		Octonion CMPLX3_FUNC_CALL Octonion::even(const Octonion& Union, const Octonion& Value) noexcept { return (Union * Value + Value * Union) / 2; };
-		Octonion CMPLX3_FUNC_CALL Octonion::cross(const Octonion& Union, const Octonion& Value) noexcept { return (Union * Value - Value * Union) / 2; };
+		double CMPLX3_FUNC_CALL Octonion::dot(const Octonion& Union, const Octonion& Value) noexcept
+		{
+			return Scalar(Union) * Scalar(Value) + BaseType::Vector7D::dot(Vector(Union), Vector(Value));
+		};
+		BaseType::Vector7D CMPLX3_FUNC_CALL Octonion::outer(const Octonion& Union, const Octonion& Value) noexcept
+		{
+			return BaseType::Vector7D::cross(Vector(Union), Vector(Value)) + Scalar(Union) * Vector(Value) - Scalar(Value) * Vector(Union);
+		};
+		Octonion CMPLX3_FUNC_CALL Octonion::even(const Octonion& Union, const Octonion& Value) noexcept
+		{
+			return Scalar(Union) * Scalar(Value) - BaseType::Vector7D::dot(Vector(Union), Vector(Value)) + Scalar(Union) * Vector(Value) + Scalar(Value) * Vector(Union);
+		};
+		BaseType::Vector7D CMPLX3_FUNC_CALL Octonion::cross(const Octonion& Union, const Octonion& Value) noexcept
+		{
+			return BaseType::Vector7D::cross(Vector(Union), Vector(Value));
+		};
 		///
 		/// exponentials
 		///
@@ -824,17 +836,6 @@ namespace Cmplx3
 			return Object;
 		};
 	}
-	///
-	/// traits
-	///
-	double BaseType::Vector7D::dot_with_numbers(const BaseType::Vector7D& Union, const BaseType::Vector7D& Value)
-	{
-		return MainType::Octonion::dot(MainType::Octonion{ Union }, MainType::Octonion{ Value });
-	};
-	BaseType::Vector7D BaseType::Vector7D::cross_with_numbers(const BaseType::Vector7D& Union, const BaseType::Vector7D& Value)
-	{
-		return Vector7D{}.from(MainType::Octonion::cross(MainType::Octonion{ Union }, MainType::Octonion{ Value }).to_number());
-	};
 }
 #pragma pop_macro("CMPLX3_FUNC_INSTANCE_CALL")
 #pragma pop_macro("CMPLX3_FUNC_CALL")

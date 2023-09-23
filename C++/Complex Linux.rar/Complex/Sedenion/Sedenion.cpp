@@ -424,10 +424,22 @@ namespace Seden
 	///
 	/// multiples
 	///
-	double SEDEN_FUNC_CALL Sedenion::dot(const Sedenion& Union, const Sedenion& Value) { return Scalar(conjg(Union) * Value + conjg(Value) * Union) / 2; };
-	Sedenion SEDEN_FUNC_CALL Sedenion::outer(const Sedenion& Union, const Sedenion& Value) { return (conjg(Union) * Value - conjg(Value) * Union) / 2; };
-	Sedenion SEDEN_FUNC_CALL Sedenion::even(const Sedenion& Union, const Sedenion& Value) { return (Union * Value + Value * Union) / 2; };
-	Sedenion SEDEN_FUNC_CALL Sedenion::cross(const Sedenion& Union, const Sedenion& Value) { return (Union * Value - Value * Union) / 2; };
+	double SEDEN_FUNC_CALL Sedenion::dot(const Sedenion& Union, const Sedenion& Value)
+	{
+		return number_dot(Union.to_factor(), Value.to_factor());
+	};
+	Sedenion SEDEN_FUNC_CALL Sedenion::outer(const Sedenion& Union, const Sedenion& Value)
+	{
+		return Sedenion::from(number_outer(Union.to_factor(), Value.to_factor()));
+	};
+	Sedenion SEDEN_FUNC_CALL Sedenion::even(const Sedenion& Union, const Sedenion& Value)
+	{
+		return Sedenion::from(number_even(Union.to_factor(), Value.to_factor()));
+	};
+	Sedenion SEDEN_FUNC_CALL Sedenion::cross(const Sedenion& Union, const Sedenion& Value)
+	{
+		return Sedenion::from(number_cross(Union.to_factor(), Value.to_factor()));
+	};
 	///
 	/// exponentials
 	///

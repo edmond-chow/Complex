@@ -159,9 +159,9 @@ namespace Cmplx
 			/// multiples
 			///
 			static double CMPLX_FUNC_CALL dot(const Complex& Union, const Complex& Value) noexcept;
-			static Complex CMPLX_FUNC_CALL outer(const Complex& Union, const Complex& Value) noexcept;
+			static BaseType::Vector1D CMPLX_FUNC_CALL outer(const Complex& Union, const Complex& Value) noexcept;
 			static Complex CMPLX_FUNC_CALL even(const Complex& Union, const Complex& Value) noexcept;
-			static Complex CMPLX_FUNC_CALL cross(const Complex& Union, const Complex& Value) noexcept;
+			static BaseType::Vector1D CMPLX_FUNC_CALL cross(const Complex& Union, const Complex& Value) noexcept;
 			///
 			/// exponentials
 			///

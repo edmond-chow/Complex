@@ -91,22 +91,16 @@ namespace Cmplx2
 			/// casing
 			///
 			inline auto to_number() const& noexcept
-				-> decltype(forward_as_number(0, (*this)[index::e1], (*this)[index::e2], (*this)[index::e3]))
+				-> decltype(forward_as_number((*this)[index::e1], (*this)[index::e2], (*this)[index::e3]))
 			{
-				return forward_as_number(0, (*this)[index::e1], (*this)[index::e2], (*this)[index::e3]);
+				return forward_as_number((*this)[index::e1], (*this)[index::e2], (*this)[index::e3]);
 			};
 			template <std::size_t N>
 			inline auto from(const Number<N>& number) && noexcept -> decltype(*this)
 			{
-				double temp{};
-				number.store(temp, (*this)[index::e1], (*this)[index::e2], (*this)[index::e3]);
+				number.store((*this)[index::e1], (*this)[index::e2], (*this)[index::e3]);
 				return *this;
 			};
-			///
-			/// traits
-			///
-			static double dot_with_numbers(const Vector3D& Union, const Vector3D& Value);
-			static Vector3D cross_with_numbers(const Vector3D& Union, const Vector3D& Value);
 		};
 		///
 		/// operators
@@ -222,8 +216,14 @@ namespace Cmplx2
 		///
 		double CMPLX2_FUNC_CALL Vector3D::abs(const Vector3D& Value) { return std::sqrt(dot(Value, Value)); };
 		Vector3D CMPLX2_FUNC_CALL Vector3D::sgn(const Vector3D& Value) { return Value / abs(Value); };
-		double CMPLX2_FUNC_CALL Vector3D::dot(const Vector3D& Union, const Vector3D& Value) noexcept { return dot_with_numbers(Union, Value); };
-		Vector3D CMPLX2_FUNC_CALL Vector3D::cross(const Vector3D& Union, const Vector3D& Value) noexcept { return cross_with_numbers(Union, Value); };;
+		double CMPLX2_FUNC_CALL Vector3D::dot(const Vector3D& Union, const Vector3D& Value) noexcept
+		{
+			return vector_dot(Union.to_number(), Value.to_number());
+		};
+		Vector3D CMPLX2_FUNC_CALL Vector3D::cross(const Vector3D& Union, const Vector3D& Value) noexcept
+		{
+			return Vector3D{}.from(vector_cross(Union.to_number(), Value.to_number()));
+		};
 		///
 		/// conventions
 		///
@@ -322,9 +322,9 @@ namespace Cmplx2
 			/// multiples
 			///
 			static double CMPLX2_FUNC_CALL dot(const Quaternion& Union, const Quaternion& Value) noexcept;
-			static Quaternion CMPLX2_FUNC_CALL outer(const Quaternion& Union, const Quaternion& Value) noexcept;
+			static BaseType::Vector3D CMPLX2_FUNC_CALL outer(const Quaternion& Union, const Quaternion& Value) noexcept;
 			static Quaternion CMPLX2_FUNC_CALL even(const Quaternion& Union, const Quaternion& Value) noexcept;
-			static Quaternion CMPLX2_FUNC_CALL cross(const Quaternion& Union, const Quaternion& Value) noexcept;
+			static BaseType::Vector3D CMPLX2_FUNC_CALL cross(const Quaternion& Union, const Quaternion& Value) noexcept;
 			///
 			/// exponentials
 			///
@@ -587,10 +587,22 @@ namespace Cmplx2
 		///
 		/// multiples
 		///
-		double CMPLX2_FUNC_CALL Quaternion::dot(const Quaternion& Union, const Quaternion& Value) noexcept { return Scalar(conjg(Union) * Value + conjg(Value) * Union) / 2; };
-		Quaternion CMPLX2_FUNC_CALL Quaternion::outer(const Quaternion& Union, const Quaternion& Value) noexcept { return (conjg(Union) * Value - conjg(Value) * Union) / 2; };
-		Quaternion CMPLX2_FUNC_CALL Quaternion::even(const Quaternion& Union, const Quaternion& Value) noexcept { return (Union * Value + Value * Union) / 2; };
-		Quaternion CMPLX2_FUNC_CALL Quaternion::cross(const Quaternion& Union, const Quaternion& Value) noexcept { return (Union * Value - Value * Union) / 2; };
+		double CMPLX2_FUNC_CALL Quaternion::dot(const Quaternion& Union, const Quaternion& Value) noexcept
+		{
+			return Scalar(Union) * Scalar(Value) + BaseType::Vector3D::dot(Vector(Union), Vector(Value));
+		};
+		BaseType::Vector3D CMPLX2_FUNC_CALL Quaternion::outer(const Quaternion& Union, const Quaternion& Value) noexcept
+		{
+			return BaseType::Vector3D::cross(Vector(Union), Vector(Value)) + Scalar(Union) * Vector(Value) - Scalar(Value) * Vector(Union);
+		};
+		Quaternion CMPLX2_FUNC_CALL Quaternion::even(const Quaternion& Union, const Quaternion& Value) noexcept
+		{
+			return Scalar(Union) * Scalar(Value) - BaseType::Vector3D::dot(Vector(Union), Vector(Value)) + Scalar(Union) * Vector(Value) + Scalar(Value) * Vector(Union);
+		};
+		BaseType::Vector3D CMPLX2_FUNC_CALL Quaternion::cross(const Quaternion& Union, const Quaternion& Value) noexcept
+		{
+			return BaseType::Vector3D::cross(Vector(Union), Vector(Value));
+		};
 		///
 		/// exponentials
 		///
@@ -760,17 +772,6 @@ namespace Cmplx2
 			return Object;
 		};
 	}
-	///
-	/// traits
-	///
-	double BaseType::Vector3D::dot_with_numbers(const BaseType::Vector3D& Union, const BaseType::Vector3D& Value)
-	{
-		return MainType::Quaternion::dot(MainType::Quaternion{ Union }, MainType::Quaternion{ Value });
-	};
-	BaseType::Vector3D BaseType::Vector3D::cross_with_numbers(const BaseType::Vector3D& Union, const BaseType::Vector3D& Value)
-	{
-		return Vector3D{}.from(MainType::Quaternion::cross(MainType::Quaternion{ Union }, MainType::Quaternion{ Value }).to_number());
-	};
 }
 #pragma pop_macro("CMPLX2_FUNC_INSTANCE_CALL")
 #pragma pop_macro("CMPLX2_FUNC_CALL")

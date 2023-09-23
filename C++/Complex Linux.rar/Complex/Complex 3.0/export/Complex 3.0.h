@@ -187,9 +187,9 @@ namespace Cmplx3
 			/// multiples
 			///
 			static double CMPLX3_FUNC_CALL dot(const Octonion& Union, const Octonion& Value) noexcept;
-			static Octonion CMPLX3_FUNC_CALL outer(const Octonion& Union, const Octonion& Value) noexcept;
+			static BaseType::Vector7D CMPLX3_FUNC_CALL outer(const Octonion& Union, const Octonion& Value) noexcept;
 			static Octonion CMPLX3_FUNC_CALL even(const Octonion& Union, const Octonion& Value) noexcept;
-			static Octonion CMPLX3_FUNC_CALL cross(const Octonion& Union, const Octonion& Value) noexcept;
+			static BaseType::Vector7D CMPLX3_FUNC_CALL cross(const Octonion& Union, const Octonion& Value) noexcept;
 			///
 			/// exponentials
 			///
