@@ -109,6 +109,10 @@ public:
 	friend constexpr Factor operator *(double Union, const Factor& Value);
 	friend constexpr Factor operator *(const Factor& Union, double Value);
 	friend constexpr Factor operator /(const Factor& Union, double Value);
+	friend constexpr double number_dot(const Factor& Union, const Factor& Value);
+	friend constexpr Factor number_outer(const Factor& Union, const Factor& Value);
+	friend constexpr Factor number_even(const Factor& Union, const Factor& Value);
+	friend constexpr Factor number_cross(const Factor& Union, const Factor& Value);
 };
 constexpr Factor operator -(const Factor& Value)
 {
@@ -153,13 +157,10 @@ constexpr Factor operator *(const Factor& Union, const Factor& Value)
 		return NewUnion * NewValue;
 	}
 	else if (Union.size == 1) { return Factor{ Union[0] * Value[0] }; }
-	else
-	{
-		return Factor::merge(
-			Union.left() * Value.left() - ~Value.right() * Union.right(),
-			Value.right() * Union.left() + Union.right() * ~Value.left()
-		);
-	}
+	return Factor::merge(
+		Union.left() * Value.left() - ~Value.right() * Union.right(),
+		Value.right() * Union.left() + Union.right() * ~Value.left()
+	);
 };
 constexpr Factor operator *(double Union, const Factor& Value)
 {
@@ -174,4 +175,69 @@ constexpr Factor operator *(const Factor& Union, double Value)
 constexpr Factor operator /(const Factor& Union, double Value)
 {
 	return Union * (1 / Value);
+};
+constexpr double number_dot(const Factor& Union, const Factor& Value)
+{
+	if (!is_factor(Union.size) || !is_factor(Value.size))
+	{
+		throw std::invalid_argument("The size must be a number which is 2 to the power of a natural number.");
+	}
+	else if (Union.size != Value.size)
+	{
+		std::size_t NewSize = std::max(Union.size, Value.size);
+		Factor NewUnion = Union;
+		NewUnion.extend(NewSize);
+		Factor NewValue = Union;
+		NewValue.extend(NewSize);
+		return number_dot(NewUnion, NewValue);
+	}
+	double Output{ 0 };
+	for (std::size_t i = 0; i < Union.size; ++i)
+	{
+		Output += Union[i] * Value[i];
+	}
+	return Output;
+};
+constexpr Factor number_outer(const Factor& Union, const Factor& Value)
+{
+	Factor VecUnion = Union;
+	VecUnion[0] = 0;
+	Factor VecValue = Value;
+	VecValue[0] = 0;
+	return number_cross(VecUnion, VecValue) + Union[0] * VecValue - Value[0] * VecUnion;
+};
+constexpr Factor number_even(const Factor& Union, const Factor& Value)
+{
+	Factor VecUnion = Union;
+	VecUnion[0] = 0;
+	Factor VecValue = Value;
+	VecValue[0] = 0;
+	return Factor{ Union[0] * Value[0] - number_dot(VecUnion, VecValue) } + Union[0] * VecValue + Value[0] * VecUnion;
+};
+constexpr Factor number_cross(const Factor& Union, const Factor& Value)
+{
+	if (!is_factor(Union.size) || !is_factor(Value.size))
+	{
+		throw std::invalid_argument("The size must be a number which is 2 to the power of a natural number.");
+	}
+	else if (Union.size != Value.size)
+	{
+		std::size_t NewSize = std::max(Union.size, Value.size);
+		Factor NewUnion = Union;
+		NewUnion.extend(NewSize);
+		Factor NewValue = Union;
+		NewValue.extend(NewSize);
+		return number_cross(NewUnion, NewValue);
+	}
+	else if (Union[0] != 0 || Value[0] != 0)
+	{
+		Factor VecUnion = Union;
+		VecUnion[0] = 0;
+		Factor VecValue = Union;
+		VecValue[0] = 0;
+		return number_cross(VecUnion, VecValue);
+	}
+	Factor Output = Union * Value;
+	Output[0] = 0;
+	return Output;
 };

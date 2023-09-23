@@ -109,22 +109,16 @@ namespace Cmplx
 			/// casing
 			///
 			inline auto to_number() const& noexcept
-				-> decltype(forward_as_number(0, (*this)[index::e1]))
+				-> decltype(forward_as_number((*this)[index::e1]))
 			{
-				return forward_as_number(0, (*this)[index::e1]);
+				return forward_as_number((*this)[index::e1]);
 			};
 			template <std::size_t N>
 			inline auto from(const Number<N>& number) && noexcept -> decltype(*this)
 			{
-				double temp{};
-				number.store(temp, (*this)[index::e1]);
+				number.store((*this)[index::e1]);
 				return *this;
 			};
-			///
-			/// traits
-			///
-			static double dot_with_numbers(const Vector1D& Union, const Vector1D& Value);
-			static Vector1D cross_with_numbers(const Vector1D& Union, const Vector1D& Value);
 		};
 		///
 		/// operators
@@ -228,8 +222,14 @@ namespace Cmplx
 		///
 		double CMPLX_FUNC_CALL Vector1D::abs(const Vector1D& Value) { return std::sqrt(dot(Value, Value)); };
 		Vector1D CMPLX_FUNC_CALL Vector1D::sgn(const Vector1D& Value) { return Value / abs(Value); };
-		double CMPLX_FUNC_CALL Vector1D::dot(const Vector1D& Union, const Vector1D& Value) noexcept { return dot_with_numbers(Union, Value); };
-		Vector1D CMPLX_FUNC_CALL Vector1D::cross(const Vector1D& Union, const Vector1D& Value) noexcept { return cross_with_numbers(Union, Value); };;
+		double CMPLX_FUNC_CALL Vector1D::dot(const Vector1D& Union, const Vector1D& Value) noexcept
+		{
+			return vector_dot(Union.to_number(), Value.to_number());
+		};
+		Vector1D CMPLX_FUNC_CALL Vector1D::cross(const Vector1D& Union, const Vector1D& Value) noexcept
+		{
+			return Vector1D{}.from(vector_cross(Union.to_number(), Value.to_number()));
+		};
 		///
 		/// conventions
 		///
@@ -326,9 +326,9 @@ namespace Cmplx
 			/// multiples
 			///
 			static double CMPLX_FUNC_CALL dot(const Complex& Union, const Complex& Value) noexcept;
-			static Complex CMPLX_FUNC_CALL outer(const Complex& Union, const Complex& Value) noexcept;
+			static BaseType::Vector1D CMPLX_FUNC_CALL outer(const Complex& Union, const Complex& Value) noexcept;
 			static Complex CMPLX_FUNC_CALL even(const Complex& Union, const Complex& Value) noexcept;
-			static Complex CMPLX_FUNC_CALL cross(const Complex& Union, const Complex& Value) noexcept;
+			static BaseType::Vector1D CMPLX_FUNC_CALL cross(const Complex& Union, const Complex& Value) noexcept;
 			///
 			/// exponentials
 			///
@@ -583,10 +583,22 @@ namespace Cmplx
 		///
 		/// multiples
 		///
-		double CMPLX_FUNC_CALL Complex::dot(const Complex& Union, const Complex& Value) noexcept { return Scalar(conjg(Union) * Value + conjg(Value) * Union) / 2; };
-		Complex CMPLX_FUNC_CALL Complex::outer(const Complex& Union, const Complex& Value) noexcept { return (conjg(Union) * Value - conjg(Value) * Union) / 2; };
-		Complex CMPLX_FUNC_CALL Complex::even(const Complex& Union, const Complex& Value) noexcept { return (Union * Value + Value * Union) / 2; };
-		Complex CMPLX_FUNC_CALL Complex::cross(const Complex& Union, const Complex& Value) noexcept { return (Union * Value - Value * Union) / 2; };
+		double CMPLX_FUNC_CALL Complex::dot(const Complex& Union, const Complex& Value) noexcept
+		{
+			return Scalar(Union) * Scalar(Value) + BaseType::Vector1D::dot(Vector(Union), Vector(Value));
+		};
+		BaseType::Vector1D CMPLX_FUNC_CALL Complex::outer(const Complex& Union, const Complex& Value) noexcept
+		{
+			return BaseType::Vector1D::cross(Vector(Union), Vector(Value)) + Scalar(Union) * Vector(Value) - Scalar(Value) * Vector(Union);
+		};
+		Complex CMPLX_FUNC_CALL Complex::even(const Complex& Union, const Complex& Value) noexcept
+		{
+			return Scalar(Union) * Scalar(Value) - BaseType::Vector1D::dot(Vector(Union), Vector(Value)) + Scalar(Union) * Vector(Value) + Scalar(Value) * Vector(Union);
+		};
+		BaseType::Vector1D CMPLX_FUNC_CALL Complex::cross(const Complex& Union, const Complex& Value) noexcept
+		{
+			return BaseType::Vector1D::cross(Vector(Union), Vector(Value));
+		};
 		///
 		/// exponentials
 		///
@@ -756,17 +768,6 @@ namespace Cmplx
 			return Object;
 		};
 	}
-	///
-	/// traits
-	///
-	double BaseType::Vector1D::dot_with_numbers(const BaseType::Vector1D& Union, const BaseType::Vector1D& Value)
-	{
-		return MainType::Complex::dot(MainType::Complex{ Union }, MainType::Complex{ Value });
-	};
-	BaseType::Vector1D BaseType::Vector1D::cross_with_numbers(const BaseType::Vector1D& Union, const BaseType::Vector1D& Value)
-	{
-		return Vector1D{}.from(MainType::Complex::cross(MainType::Complex{ Union }, MainType::Complex{ Value }).to_number());
-	};
 }
 #pragma pop_macro("CMPLX_FUNC_INSTANCE_CALL")
 #pragma pop_macro("CMPLX_FUNC_CALL")

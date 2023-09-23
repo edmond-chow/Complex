@@ -191,9 +191,9 @@ namespace Cmplx2
 			/// multiples
 			///
 			static double CMPLX2_FUNC_CALL dot(const Quaternion& Union, const Quaternion& Value) noexcept;
-			static Quaternion CMPLX2_FUNC_CALL outer(const Quaternion& Union, const Quaternion& Value) noexcept;
+			static BaseType::Vector3D CMPLX2_FUNC_CALL outer(const Quaternion& Union, const Quaternion& Value) noexcept;
 			static Quaternion CMPLX2_FUNC_CALL even(const Quaternion& Union, const Quaternion& Value) noexcept;
-			static Quaternion CMPLX2_FUNC_CALL cross(const Quaternion& Union, const Quaternion& Value) noexcept;
+			static BaseType::Vector3D CMPLX2_FUNC_CALL cross(const Quaternion& Union, const Quaternion& Value) noexcept;
 			///
 			/// exponentials
 			///

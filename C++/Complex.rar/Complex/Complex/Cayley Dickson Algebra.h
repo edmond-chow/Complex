@@ -165,3 +165,24 @@ constexpr Number<N> operator /(const Number<N>& Union, double Value) noexcept
 {
 	return Union * (1 / Value);
 };
+template <std::size_t N, std::size_t... I> requires (N > 0 && is_of<I...>(0, N))
+constexpr double vector_dot(const Number<N>& Union, const Number<N>& Value, std::integer_sequence<std::size_t, I...>) noexcept requires (is_number(N + 1))
+{
+	return ((Union[I] * Value[I]) + ...);
+};
+template <std::size_t N>
+constexpr double vector_dot(const Number<N>& Union, const Number<N>& Value) noexcept requires (N > 0 && is_number(N + 1))
+{
+	return vector_dot(Union, Value, std::make_index_sequence<N>{});
+};
+template <std::size_t N, std::size_t... I> requires (N > 0 && is_of<I...>(0, N))
+constexpr Number<N> vector_cross(const Number<N>& Union, const Number<N>& Value, std::integer_sequence<std::size_t, I...>) noexcept requires (is_number(N + 1))
+{
+	Number<N + 1> Temp = Number<N + 1>{ 0, Union[I]... } *Number<N + 1>{ 0, Value[I]... };
+	return Number<N>{ Temp[I + 1]... };
+};
+template <std::size_t N>
+constexpr Number<N> vector_cross(const Number<N>& Union, const Number<N>& Value) noexcept requires (N > 0 && is_number(N + 1))
+{
+	return vector_cross(Union, Value, std::make_index_sequence<N>{});
+};
