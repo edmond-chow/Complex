@@ -80,11 +80,11 @@ namespace Cmplx
             ///
             internal Number ToNumber()
             {
-                return new Number(0, x1);
+                return new Number(x1);
             }
             internal static Vector1D From(Number Number)
             {
-                return new Vector1D(Number[1]);
+                return new Vector1D(Number[0]);
             }
         }
         [Serializable]
@@ -109,18 +109,13 @@ namespace Cmplx
             ///
             public static double Abs(Vector1D Value) { return Math.Sqrt(Dot(Value, Value)); }
             public static Vector1D Sgn(Vector1D Value) { return Value / Abs(Value); }
-            public static double Dot(Vector1D Union, Vector1D Value) { return DotWithNumbers(Union, Value); }
-            public static Vector1D Cross(Vector1D Union, Vector1D Value) { return CrossWithNumbers(Union, Value); }
-            ///
-            /// traits
-            ///
-            private static double DotWithNumbers(Vector1D Union, Vector1D Value)
+            public static double Dot(Vector1D Union, Vector1D Value)
             {
-                return ComplexModule.Dot(Union, Value);
+                return Number.VectorDot(Union.ToNumber(), Value.ToNumber());
             }
-            private static Vector1D CrossWithNumbers(Vector1D Union, Vector1D Value)
+            public static Vector1D Cross(Vector1D Union, Vector1D Value)
             {
-                return Vector1D.From(ComplexModule.Cross(Union, Value).ToNumber());
+                return Vector1D.From(Number.VectorCross(Union.ToNumber(), Value.ToNumber()));
             }
             ///
             /// conventions
@@ -276,10 +271,22 @@ namespace Cmplx
             ///
             /// multiples
             ///
-            public static double Dot(Complex Union, Complex Value) { return Scalar(Conjg(Union) * Value + Conjg(Value) * Union) / 2; }
-            public static Complex Outer(Complex Union, Complex Value) { return (Conjg(Union) * Value - Conjg(Value) * Union) / 2; }
-            public static Complex Even(Complex Union, Complex Value) { return (Union * Value + Value * Union) / 2; }
-            public static Complex Cross(Complex Union, Complex Value) { return (Union * Value - Value * Union) / 2; }
+            public static double Dot(Complex Union, Complex Value)
+            {
+                return Scalar(Union) * Scalar(Value) + Vector1DModule.Dot(Vector(Union), Vector(Value));
+            }
+            public static Vector1D Outer(Complex Union, Complex Value)
+            {
+                return Vector1DModule.Cross(Vector(Union), Vector(Value)) + Scalar(Union) * Vector(Value) - Scalar(Value) * Vector(Union);
+            }
+            public static Complex Even(Complex Union, Complex Value)
+            {
+                return Scalar(Union) * Scalar(Value) - Vector1DModule.Dot(Vector(Union), Vector(Value)) + Scalar(Union) * Vector(Value) + Scalar(Value) * Vector(Union);
+            }
+            public static Vector1D Cross(Complex Union, Complex Value)
+            {
+                return Vector1DModule.Cross(Vector(Union), Vector(Value));
+            }
             ///
             /// exponentials
             ///

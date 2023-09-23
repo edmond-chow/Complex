@@ -89,11 +89,11 @@ namespace Cmplx2
             ///
             internal Number ToNumber()
             {
-                return new Number(0, x1, x2, x3);
+                return new Number(x1, x2, x3);
             }
             internal static Vector3D From(Number Number)
             {
-                return new Vector3D(Number[1], Number[2], Number[3]);
+                return new Vector3D(Number[0], Number[1], Number[2]);
             }
         }
         [Serializable]
@@ -120,18 +120,13 @@ namespace Cmplx2
             ///
             public static double Abs(Vector3D Value) { return Math.Sqrt(Dot(Value, Value)); }
             public static Vector3D Sgn(Vector3D Value) { return Value / Abs(Value); }
-            public static double Dot(Vector3D Union, Vector3D Value) { return DotWithNumbers(Union, Value); }
-            public static Vector3D Cross(Vector3D Union, Vector3D Value) { return CrossWithNumbers(Union, Value); }
-            ///
-            /// traits
-            ///
-            private static double DotWithNumbers(Vector3D Union, Vector3D Value)
+            public static double Dot(Vector3D Union, Vector3D Value)
             {
-                return QuaternionModule.Dot(Union, Value);
+                return Number.VectorDot(Union.ToNumber(), Value.ToNumber());
             }
-            private static Vector3D CrossWithNumbers(Vector3D Union, Vector3D Value)
+            public static Vector3D Cross(Vector3D Union, Vector3D Value)
             {
-                return Vector3D.From(QuaternionModule.Cross(Union, Value).ToNumber());
+                return Vector3D.From(Number.VectorCross(Union.ToNumber(), Value.ToNumber()));
             }
             ///
             /// conventions
@@ -287,10 +282,22 @@ namespace Cmplx2
             ///
             /// multiples
             ///
-            public static double Dot(Quaternion Union, Quaternion Value) { return Scalar(Conjg(Union) * Value + Conjg(Value) * Union) / 2; }
-            public static Quaternion Outer(Quaternion Union, Quaternion Value) { return (Conjg(Union) * Value - Conjg(Value) * Union) / 2; }
-            public static Quaternion Even(Quaternion Union, Quaternion Value) { return (Union * Value + Value * Union) / 2; }
-            public static Quaternion Cross(Quaternion Union, Quaternion Value) { return (Union * Value - Value * Union) / 2; }
+            public static double Dot(Quaternion Union, Quaternion Value)
+            {
+                return Scalar(Union) * Scalar(Value) + Vector3DModule.Dot(Vector(Union), Vector(Value));
+            }
+            public static Vector3D Outer(Quaternion Union, Quaternion Value)
+            {
+                return Vector3DModule.Cross(Vector(Union), Vector(Value)) + Scalar(Union) * Vector(Value) - Scalar(Value) * Vector(Union);
+            }
+            public static Quaternion Even(Quaternion Union, Quaternion Value)
+            {
+                return Scalar(Union) * Scalar(Value) - Vector3DModule.Dot(Vector(Union), Vector(Value)) + Scalar(Union) * Vector(Value) + Scalar(Value) * Vector(Union);
+            }
+            public static Vector3D Cross(Quaternion Union, Quaternion Value)
+            {
+                return Vector3DModule.Cross(Vector(Union), Vector(Value));
+            }
             ///
             /// exponentials
             ///

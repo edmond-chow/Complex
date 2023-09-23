@@ -105,11 +105,11 @@ namespace Cmplx3
             ///
             internal Number ToNumber()
             {
-                return new Number(0, x1, x2, x3, x4, x5, x6, x7);
+                return new Number(x1, x2, x3, x4, x5, x6, x7);
             }
             internal static Vector7D From(Number Number)
             {
-                return new Vector7D(Number[1], Number[2], Number[3], Number[4], Number[5], Number[6], Number[7]);
+                return new Vector7D(Number[0], Number[1], Number[2], Number[3], Number[4], Number[5], Number[6]);
             }
         }
         [Serializable]
@@ -140,18 +140,13 @@ namespace Cmplx3
             ///
             public static double Abs(Vector7D Value) { return Math.Sqrt(Dot(Value, Value)); }
             public static Vector7D Sgn(Vector7D Value) { return Value / Abs(Value); }
-            public static double Dot(Vector7D Union, Vector7D Value) { return DotWithNumbers(Union, Value); }
-            public static Vector7D Cross(Vector7D Union, Vector7D Value) { return CrossWithNumbers(Union, Value); }
-            ///
-            /// traits
-            ///
-            private static double DotWithNumbers(Vector7D Union, Vector7D Value)
+            public static double Dot(Vector7D Union, Vector7D Value)
             {
-                return OctonionModule.Dot(Union, Value);
+                return Number.VectorDot(Union.ToNumber(), Value.ToNumber());
             }
-            private static Vector7D CrossWithNumbers(Vector7D Union, Vector7D Value)
+            public static Vector7D Cross(Vector7D Union, Vector7D Value)
             {
-                return Vector7D.From(OctonionModule.Cross(Union, Value).ToNumber());
+                return Vector7D.From(Number.VectorCross(Union.ToNumber(), Value.ToNumber()));
             }
             ///
             /// conventions
@@ -311,10 +306,22 @@ namespace Cmplx3
             ///
             /// multiples
             ///
-            public static double Dot(Octonion Union, Octonion Value) { return Scalar(Conjg(Union) * Value + Conjg(Value) * Union) / 2; }
-            public static Octonion Outer(Octonion Union, Octonion Value) { return (Conjg(Union) * Value - Conjg(Value) * Union) / 2; }
-            public static Octonion Even(Octonion Union, Octonion Value) { return (Union * Value + Value * Union) / 2; }
-            public static Octonion Cross(Octonion Union, Octonion Value) { return (Union * Value - Value * Union) / 2; }
+            public static double Dot(Octonion Union, Octonion Value)
+            {
+                return Scalar(Union) * Scalar(Value) + Vector7DModule.Dot(Vector(Union), Vector(Value));
+            }
+            public static Vector7D Outer(Octonion Union, Octonion Value)
+            {
+                return Vector7DModule.Cross(Vector(Union), Vector(Value)) + Scalar(Union) * Vector(Value) - Scalar(Value) * Vector(Union);
+            }
+            public static Octonion Even(Octonion Union, Octonion Value)
+            {
+                return Scalar(Union) * Scalar(Value) - Vector7DModule.Dot(Vector(Union), Vector(Value)) + Scalar(Union) * Vector(Value) + Scalar(Value) * Vector(Union);
+            }
+            public static Vector7D Cross(Octonion Union, Octonion Value)
+            {
+                return Vector7DModule.Cross(Vector(Union), Vector(Value));
+            }
             ///
             /// exponentials
             ///

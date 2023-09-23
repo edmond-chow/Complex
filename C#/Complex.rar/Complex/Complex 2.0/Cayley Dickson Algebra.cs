@@ -63,13 +63,12 @@ internal class Number : IEnumerable<double>
     }
     public static bool Equal(Number Union, Number Value)
     {
-        if (Union.LongLength != Value.LongLength) { throw new NotImplementedException("The branch should ensure not instantiated at compile time."); }
         return Enumerable.SequenceEqual(Union, Value);
     }
     public static Number Add(Number Union, Number Value)
     {
-        if (Union.LongLength != Value.LongLength) { throw new NotImplementedException("The branch should ensure not instantiated at compile time."); }
-        return new Number(Enumerable.Zip(Union, Value, (double U, double V) => { return U + V; }).ToArray());
+        if (Union.LongLength > Value.LongLength) { Add(Value, Union); }
+        return new Number(Enumerable.Zip(Union, Value, (double U, double V) => { return U + V; }).Concat(Value.Skip(Union.Length)).ToArray());
     }
     public static Number Neg(Number Value)
     {
@@ -158,13 +157,10 @@ internal class Number : IEnumerable<double>
             return NewUnion * NewValue;
         }
         else if (Union.LongLength == 1) { return new Number(Union[0] * Value[0]); }
-        else
-        {
-            return Merge(
-                Union.Left * Value.Left - ~Value.Right * Union.Right,
-                Value.Right * Union.Left + Union.Right * ~Value.Left
-            );
-        }
+        return Merge(
+            Union.Left * Value.Left - ~Value.Right * Union.Right,
+            Value.Right * Union.Left + Union.Right * ~Value.Left
+        );
     }
     public static Number operator *(double Union, Number Value)
     {
@@ -177,5 +173,32 @@ internal class Number : IEnumerable<double>
     public static Number operator /(Number Union, double Value)
     {
         return Union * (1 / Value);
+    }
+    public static double VectorDot(Number Union, Number Value)
+    {
+        double Output = 0;
+        for (long i = 0; i < Union.LongLength; ++i)
+        {
+            Output += Union[i] * Value[i];
+        }
+        return Output;
+    }
+    public static Number VectorCross(Number Union, Number Value)
+    {
+        if (!IsNumber(Union.LongLength + 1) || !IsNumber(Value.LongLength + 1)) { throw new ArgumentException("The size must be a number which is 2 to the power of a natural number."); }
+        else if (Union.LongLength != Value.LongLength)
+        {
+            int NewSize = Math.Max(Union.Length, Value.Length);
+            Number NewUnion = Union;
+            NewUnion.Extend(NewSize);
+            Number NewValue = Value;
+            NewValue.Extend(NewSize);
+            return VectorCross(NewUnion, NewValue);
+        }
+        double[] Scalar = { 0 };
+        Number NumUnion = new Number(Scalar.Concat(Union).ToArray());
+        Number NumValue = new Number(Scalar.Concat(Value).ToArray());
+        Number NumOutput = NumUnion * NumValue;
+        return new Number(NumOutput.Skip(1).ToArray());
     }
 }

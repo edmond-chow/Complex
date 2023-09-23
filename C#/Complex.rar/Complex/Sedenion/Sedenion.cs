@@ -114,10 +114,22 @@ namespace Seden
         ///
         /// multiples
         ///
-        public static double Dot(Sedenion Union, Sedenion Value) { return Scalar(Conjg(Union) * Value + Conjg(Value) * Union) / 2; }
-        public static Sedenion Outer(Sedenion Union, Sedenion Value) { return (Conjg(Union) * Value - Conjg(Value) * Union) / 2; }
-        public static Sedenion Even(Sedenion Union, Sedenion Value) { return (Union * Value + Value * Union) / 2; }
-        public static Sedenion Cross(Sedenion Union, Sedenion Value) { return (Union * Value - Value * Union) / 2; }
+        public static double Dot(Sedenion Union, Sedenion Value)
+        {
+            return Number.NumberDot(Union.ToNumber(), Value.ToNumber());
+        }
+        public static Sedenion Outer(Sedenion Union, Sedenion Value)
+        {
+            return From(Number.NumberOuter(Union.ToNumber(), Value.ToNumber()));
+        }
+        public static Sedenion Even(Sedenion Union, Sedenion Value)
+        {
+            return From(Number.NumberEven(Union.ToNumber(), Value.ToNumber()));
+        }
+        public static Sedenion Cross(Sedenion Union, Sedenion Value)
+        {
+            return From(Number.NumberCross(Union.ToNumber(), Value.ToNumber()));
+        }
         ///
         /// exponentials
         ///
