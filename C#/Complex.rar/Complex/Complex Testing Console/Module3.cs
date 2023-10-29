@@ -7,6 +7,17 @@ using static Mod3;
 using static Cmplx3.MainType.OctonionModule;
 internal static class Mod3
 {
+    internal static void MultipleOp<R>(string LeftValue, string RightValue, Func<Octonion, Octonion, R> Subroutine)
+    {
+        if (LeftValue == RightValue)
+        {
+            Octonion Union = GetInstance(Base.Input("Union = "));
+            Octonion Value = GetInstance(Base.Input("Value = "));
+            object Result = Subroutine.Invoke(Union, Value);
+            if (Result.GetType() == typeof(Cmplx3.BaseType.Vector7D)) { Result = (Octonion)Result; }
+            Base.Output(Result.ToModuleString());
+        }
+    }
     internal static void Op<R>(string LeftValue, string RightValue, Func<Octonion, Octonion, R> Subroutine)
     {
         if (LeftValue == RightValue)
@@ -121,7 +132,7 @@ internal static class MyModule3
     {
         Base.Startup(Base.GetTitle());
         Base.Selection("=   +   -   *   /   ^   power()   root()   log()");
-        Base.Selection("abs   arg()   conjg   sgn   inverse   exp   ln()");
+        Base.Selection("abs   arg()   conjg   sgn   inverse   exp   ln()   dot   outer   even   cross");
         Base.Selection("sin   cos   tan   csc   sec   cot   arcsin()   arccos()   arctan()   arccsc()   arcsec()   arccot()");
         Base.Selection("sinh   cosh   tanh   csch   sech   coth   arcsinh()   arccosh()   arctanh()   arccsch()   arcsech()   arccoth()");
         Base.Selection(Base.GetStartupLine());
@@ -148,6 +159,10 @@ internal static class MyModule3
                 Basic(Line, "inverse", Inverse);
                 Basic(Line, "exp", Exp);
                 BasicWith(Line, "ln", Ln);
+                MultipleOp(Line, "dot", Dot);
+                MultipleOp(Line, "outer", Outer);
+                MultipleOp(Line, "even", Even);
+                MultipleOp(Line, "cross", Cross);
                 /****/
                 Tri(Line, "sin", Sin);
                 Tri(Line, "cos", Cos);

@@ -7,6 +7,17 @@ using static Mod2;
 using static Cmplx2.MainType.QuaternionModule;
 internal static class Mod2
 {
+    internal static void MultipleOp<R>(string LeftValue, string RightValue, Func<Quaternion, Quaternion, R> Subroutine)
+    {
+        if (LeftValue == RightValue)
+        {
+            Quaternion Union = GetInstance(Base.Input("Union = "));
+            Quaternion Value = GetInstance(Base.Input("Value = "));
+            object Result = Subroutine.Invoke(Union, Value);
+            if (Result.GetType() == typeof(Cmplx2.BaseType.Vector3D)) { Result = (Quaternion)Result; }
+            Base.Output(Result.ToModuleString());
+        }
+    }
     internal static void Op<R>(string LeftValue, string RightValue, Func<Quaternion, Quaternion, R> Subroutine)
     {
         if (LeftValue == RightValue)
@@ -121,7 +132,7 @@ internal static class MyModule2
     {
         Base.Startup(Base.GetTitle());
         Base.Selection("=   +   -   *   /   ^   power()   root()   log()");
-        Base.Selection("abs   arg()   conjg   sgn   inverse   exp   ln()");
+        Base.Selection("abs   arg()   conjg   sgn   inverse   exp   ln()   dot   outer   even   cross");
         Base.Selection("sin   cos   tan   csc   sec   cot   arcsin()   arccos()   arctan()   arccsc()   arcsec()   arccot()");
         Base.Selection("sinh   cosh   tanh   csch   sech   coth   arcsinh()   arccosh()   arctanh()   arccsch()   arcsech()   arccoth()");
         Base.Selection(Base.GetStartupLine());
@@ -148,6 +159,10 @@ internal static class MyModule2
                 Basic(Line, "inverse", Inverse);
                 Basic(Line, "exp", Exp);
                 BasicWith(Line, "ln", Ln);
+                MultipleOp(Line, "dot", Dot);
+                MultipleOp(Line, "outer", Outer);
+                MultipleOp(Line, "even", Even);
+                MultipleOp(Line, "cross", Cross);
                 /****/
                 Tri(Line, "sin", Sin);
                 Tri(Line, "cos", Cos);
