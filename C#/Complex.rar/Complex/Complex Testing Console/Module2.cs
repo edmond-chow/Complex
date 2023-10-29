@@ -7,14 +7,14 @@ using static Mod2;
 using static Cmplx2.MainType.QuaternionModule;
 internal static class Mod2
 {
-    internal static void MultipleOp<R>(string LeftValue, string RightValue, Func<Quaternion, Quaternion, R> Subroutine)
+    internal static void Multiple<R>(string LeftValue, string RightValue, Func<Quaternion, Quaternion, R> Subroutine)
     {
         if (LeftValue == RightValue)
         {
             Quaternion Union = GetInstance(Base.Input("Union = "));
             Quaternion Value = GetInstance(Base.Input("Value = "));
             object Result = Subroutine.Invoke(Union, Value);
-            if (Result.GetType() == typeof(Cmplx2.BaseType.Vector3D)) { Result = (Quaternion)Result; }
+            if (Result is Cmplx2.BaseType.Vector3D V) { Result = new Quaternion(0, V); }
             Base.Output(Result.ToModuleString());
         }
     }
@@ -159,10 +159,10 @@ internal static class MyModule2
                 Basic(Line, "inverse", Inverse);
                 Basic(Line, "exp", Exp);
                 BasicWith(Line, "ln", Ln);
-                MultipleOp(Line, "dot", Dot);
-                MultipleOp(Line, "outer", Outer);
-                MultipleOp(Line, "even", Even);
-                MultipleOp(Line, "cross", Cross);
+                Multiple(Line, "dot", Dot);
+                Multiple(Line, "outer", Outer);
+                Multiple(Line, "even", Even);
+                Multiple(Line, "cross", Cross);
                 /****/
                 Tri(Line, "sin", Sin);
                 Tri(Line, "cos", Cos);

@@ -7,14 +7,14 @@ using static Mod3;
 using static Cmplx3.MainType.OctonionModule;
 internal static class Mod3
 {
-    internal static void MultipleOp<R>(string LeftValue, string RightValue, Func<Octonion, Octonion, R> Subroutine)
+    internal static void Multiple<R>(string LeftValue, string RightValue, Func<Octonion, Octonion, R> Subroutine)
     {
         if (LeftValue == RightValue)
         {
             Octonion Union = GetInstance(Base.Input("Union = "));
             Octonion Value = GetInstance(Base.Input("Value = "));
             object Result = Subroutine.Invoke(Union, Value);
-            if (Result.GetType() == typeof(Cmplx3.BaseType.Vector7D)) { Result = (Octonion)Result; }
+            if (Result is Cmplx3.BaseType.Vector7D V) { Result = new Octonion(0, V); }
             Base.Output(Result.ToModuleString());
         }
     }
@@ -159,10 +159,10 @@ internal static class MyModule3
                 Basic(Line, "inverse", Inverse);
                 Basic(Line, "exp", Exp);
                 BasicWith(Line, "ln", Ln);
-                MultipleOp(Line, "dot", Dot);
-                MultipleOp(Line, "outer", Outer);
-                MultipleOp(Line, "even", Even);
-                MultipleOp(Line, "cross", Cross);
+                Multiple(Line, "dot", Dot);
+                Multiple(Line, "outer", Outer);
+                Multiple(Line, "even", Even);
+                Multiple(Line, "cross", Cross);
                 /****/
                 Tri(Line, "sin", Sin);
                 Tri(Line, "cos", Cos);

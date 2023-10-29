@@ -7,14 +7,14 @@ using static Mod;
 using static Cmplx.MainType.ComplexModule;
 internal static class Mod
 {
-    internal static void MultipleOp<R>(string LeftValue, string RightValue, Func<Complex, Complex, R> Subroutine)
+    internal static void Multiple<R>(string LeftValue, string RightValue, Func<Complex, Complex, R> Subroutine)
     {
         if (LeftValue == RightValue)
         {
             Complex Union = GetInstance(Base.Input("Union = "));
             Complex Value = GetInstance(Base.Input("Value = "));
             object Result = Subroutine.Invoke(Union, Value);
-            if (Result.GetType() == typeof(Cmplx.BaseType.Vector1D)) { Result = (Complex)Result; }
+            if (Result is Cmplx.BaseType.Vector1D V) { Result = new Complex(0, V); }
             Base.Output(Result.ToModuleString());
         }
     }
@@ -159,10 +159,10 @@ internal static class MyModule
                 Basic(Line, "inverse", Inverse);
                 Basic(Line, "exp", Exp);
                 BasicWith(Line, "ln", Ln);
-                MultipleOp(Line, "dot", Dot);
-                MultipleOp(Line, "outer", Outer);
-                MultipleOp(Line, "even", Even);
-                MultipleOp(Line, "cross", Cross);
+                Multiple(Line, "dot", Dot);
+                Multiple(Line, "outer", Outer);
+                Multiple(Line, "even", Even);
+                Multiple(Line, "cross", Cross);
                 /****/
                 Tri(Line, "sin", Sin);
                 Tri(Line, "cos", Cos);

@@ -7,14 +7,13 @@ using static SedenionMod;
 using static Seden.Sedenion;
 internal static class SedenionMod
 {
-    internal static void MultipleOp<R>(string LeftValue, string RightValue, Func<Sedenion, Sedenion, R> Subroutine)
+    internal static void Multiple<R>(string LeftValue, string RightValue, Func<Sedenion, Sedenion, R> Subroutine)
     {
         if (LeftValue == RightValue)
         {
             Sedenion Union = GetInstance(Base.Input("Union = "));
             Sedenion Value = GetInstance(Base.Input("Value = "));
-            object Result = Subroutine.Invoke(Union, Value);
-            Base.Output(Result.ToModuleString());
+            Base.Output(Subroutine.Invoke(Union, Value).ToModuleString());
         }
     }
     internal static void Op<R>(string LeftValue, string RightValue, Func<Sedenion, Sedenion, R> Subroutine)
@@ -167,10 +166,10 @@ internal static class MySedenionTestor
                 Basic(Line, "inverse", Inverse);
                 Basic(Line, "exp", Exp);
                 BasicWith(Line, "ln", Ln);
-                MultipleOp(Line, "dot", Dot);
-                MultipleOp(Line, "outer", Outer);
-                MultipleOp(Line, "even", Even);
-                MultipleOp(Line, "cross", Cross);
+                Multiple(Line, "dot", Dot);
+                Multiple(Line, "outer", Outer);
+                Multiple(Line, "even", Even);
+                Multiple(Line, "cross", Cross);
                 /****/
                 Tri(Line, "sin", Sin);
                 Tri(Line, "cos", Cos);
