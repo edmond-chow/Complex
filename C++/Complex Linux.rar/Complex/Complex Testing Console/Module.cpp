@@ -6,6 +6,16 @@ using namespace Cmplx::MainType;
 namespace Mod
 {
 	template <typename F = Complex(CMPLX_FUNC_CALL*)(const Complex&, const Complex&)>
+	void multiple(const std::wstring& LeftValue, const wchar_t* RightValue, F Subroutine)
+	{
+		if (LeftValue == RightValue)
+		{
+			Complex Union = Complex::GetInstance(Base::Input(L"Union = "));
+			Complex Value = Complex::GetInstance(Base::Input(L"Value = "));
+			Base::Output(to_wstring<Complex>(std::invoke(Subroutine, Union, Value)));
+		}
+	};
+	template <typename F = Complex(CMPLX_FUNC_CALL*)(const Complex&, const Complex&)>
 	void op(const std::wstring& LeftValue, const wchar_t* RightValue, F Subroutine)
 	{
 		if (LeftValue == RightValue)
@@ -123,7 +133,7 @@ namespace Mod
 	{
 		Base::Startup(Base::GetTitle());
 		Base::Selection(L"=   +   -   *   /   ^   power()   root()   log()");
-		Base::Selection(L"abs   arg()   conjg   sgn   inverse   exp   ln()");
+		Base::Selection(L"abs   arg()   conjg   sgn   inverse   exp   ln()   dot   outer   even   cross");
 		Base::Selection(L"sin   cos   tan   csc   sec   cot   arcsin()   arccos()   arctan()   arccsc()   arcsec()   arccot()");
 		Base::Selection(L"sinh   cosh   tanh   csch   sech   coth   arcsinh()   arccosh()   arctanh()   arccsch()   arcsech()   arccoth()");
 		Base::Selection(Base::GetStartupLine());
@@ -150,6 +160,10 @@ namespace Mod
 				basic(Line, L"inverse", Complex::inverse);
 				basic(Line, L"exp", Complex::exp);
 				basic(Line, L"ln", Complex::ln);
+				multiple(Line, L"dot", Complex::dot);
+				multiple(Line, L"outer", Complex::outer);
+				multiple(Line, L"even", Complex::even);
+				multiple(Line, L"cross", Complex::cross);
 				/****/
 				tri(Line, L"sin", Complex::sin);
 				tri(Line, L"cos", Complex::cos);

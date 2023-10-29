@@ -6,6 +6,16 @@ using namespace Cmplx3::MainType;
 namespace Mod3
 {
 	template <typename F = Octonion(CMPLX3_FUNC_CALL*)(const Octonion&, const Octonion&)>
+	void multiple(const std::wstring& LeftValue, const wchar_t* RightValue, F Subroutine)
+	{
+		if (LeftValue == RightValue)
+		{
+			Octonion Union = Octonion::GetInstance(Base::Input(L"Union = "));
+			Octonion Value = Octonion::GetInstance(Base::Input(L"Value = "));
+			Base::Output(to_wstring<Octonion>(std::invoke(Subroutine, Union, Value)));
+		}
+	};
+	template <typename F = Octonion(CMPLX3_FUNC_CALL*)(const Octonion&, const Octonion&)>
 	void op(const std::wstring& LeftValue, const wchar_t* RightValue, F Subroutine)
 	{
 		if (LeftValue == RightValue)
@@ -123,7 +133,7 @@ namespace Mod3
 	{
 		Base::Startup(Base::GetTitle());
 		Base::Selection(L"=   +   -   *   /   ^   power()   root()   log()");
-		Base::Selection(L"abs   arg()   conjg   sgn   inverse   exp   ln()");
+		Base::Selection(L"abs   arg()   conjg   sgn   inverse   exp   ln()   dot   outer   even   cross");
 		Base::Selection(L"sin   cos   tan   csc   sec   cot   arcsin()   arccos()   arctan()   arccsc()   arcsec()   arccot()");
 		Base::Selection(L"sinh   cosh   tanh   csch   sech   coth   arcsinh()   arccosh()   arctanh()   arccsch()   arcsech()   arccoth()");
 		Base::Selection(Base::GetStartupLine());
@@ -150,6 +160,10 @@ namespace Mod3
 				basic(Line, L"inverse", Octonion::inverse);
 				basic(Line, L"exp", Octonion::exp);
 				basic(Line, L"ln", Octonion::ln);
+				multiple(Line, L"dot", Octonion::dot);
+				multiple(Line, L"outer", Octonion::outer);
+				multiple(Line, L"even", Octonion::even);
+				multiple(Line, L"cross", Octonion::cross);
 				/****/
 				tri(Line, L"sin", Octonion::sin);
 				tri(Line, L"cos", Octonion::cos);
