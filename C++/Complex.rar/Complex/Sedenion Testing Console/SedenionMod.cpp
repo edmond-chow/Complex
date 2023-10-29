@@ -10,6 +10,16 @@ namespace SedenionMod
 		return std::stod(str);
 	};
 	template <typename F = Sedenion(SEDEN_FUNC_CALL*)(const Sedenion&, const Sedenion&)>
+	void multiple(const std::wstring& LeftValue, const wchar_t* RightValue, F Subroutine)
+	{
+		if (LeftValue == RightValue)
+		{
+			Sedenion Union = Sedenion::GetInstance(Base::Input(L"Union = "));
+			Sedenion Value = Sedenion::GetInstance(Base::Input(L"Value = "));
+			Base::Output(to_wstring(std::invoke(Subroutine, Union, Value)));
+		}
+	};
+	template <typename F = Sedenion(SEDEN_FUNC_CALL*)(const Sedenion&, const Sedenion&)>
 	void op(const std::wstring& LeftValue, const wchar_t* RightValue, F Subroutine)
 	{
 		if (LeftValue == RightValue)
@@ -136,7 +146,7 @@ namespace SedenionMod
 	{
 		Base::Startup(Base::GetTitle());
 		Base::Selection(L"=   +   -   *   /   ^   power()   root()   log()");
-		Base::Selection(L"abs   arg()   conjg   sgn   inverse   exp   ln()");
+		Base::Selection(L"abs   arg()   conjg   sgn   inverse   exp   ln()   dot   outer   even   cross");
 		Base::Selection(L"sin   cos   tan   csc   sec   cot   arcsin()   arccos()   arctan()   arccsc()   arcsec()   arccot()");
 		Base::Selection(L"sinh   cosh   tanh   csch   sech   coth   arcsinh()   arccosh()   arctanh()   arccsch()   arcsech()   arccoth()");
 		Base::Selection(Base::GetStartupLine());
@@ -163,6 +173,10 @@ namespace SedenionMod
 				basic(Line, L"inverse", Sedenion::inverse);
 				basic(Line, L"exp", Sedenion::exp);
 				basic(Line, L"ln", Sedenion::ln);
+				multiple(Line, L"dot", Sedenion::dot);
+				multiple(Line, L"outer", Sedenion::outer);
+				multiple(Line, L"even", Sedenion::even);
+				multiple(Line, L"cross", Sedenion::cross);
 				/****/
 				tri(Line, L"sin", Sedenion::sin);
 				tri(Line, L"cos", Sedenion::cos);
