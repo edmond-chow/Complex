@@ -4,7 +4,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 internal static class Module
 {
-    private static readonly string RealRegExp = @"(-|\+|)(\d+)(\.\d+|)([Ee](-|\+|)(\d+)|)";
+    private static readonly string RealRegExp = @"(-|\+|^)(\d+)(\.\d+|)([Ee](-|\+|)(\d+)|)";
     private static readonly string NotOthers = @"(-|\+|$)";
     private static string DoubleToString(this double Number)
     {
