@@ -87,7 +87,7 @@ inline std::wstring GetInitTermRegexString(std::size_t Size, const std::wstring*
 };
 inline std::wstring GetRegexString(const std::wstring& Term, bool With)
 {
-	static constexpr const wchar_t RealRegExp[] = L"(-|\\+|)(\\d+)(\\.\\d+|)([Ee](-|\\+|)(\\d+)|)";
+	static constexpr const wchar_t RealRegExp[] = L"(-|\\+|^)(\\d+)(\\.\\d+|)([Ee](-|\\+|)(\\d+)|)";
 	static constexpr const wchar_t NotOthers[] = L"(-|\\+|$)";
 	return std::wstring().append(RealRegExp).append(With ? Term : L"").append(L"(?=").append(With ? L"" : Term).append(NotOthers).append(L")");
 };
