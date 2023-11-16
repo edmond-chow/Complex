@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Text.RegularExpressions;
-using System.Threading;
 namespace ComplexTestingConsole
 {
     internal static class Base

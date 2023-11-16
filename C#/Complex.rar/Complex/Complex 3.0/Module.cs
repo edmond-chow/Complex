@@ -16,16 +16,16 @@ internal static class Module
         StringBuilder TheString = new StringBuilder();
         for (long i = 0; i < Numbers.LongLength; ++i)
         {
-            string Replace = Numbers[i].DoubleToString();
+            string Result = Numbers[i].DoubleToString();
             if (Numbers[i] > 0)
             {
-                if (Terms[i].Length > 0) { Replace = Regex.Replace(Replace, "^1$", ""); }
-                TheString.Append('+').Append(Replace).Append(Terms[i]);
+                if (Terms[i].Length > 0) { Result = Regex.Replace(Result, "^1$", ""); }
+                TheString.Append('+').Append(Result).Append(Terms[i]);
             }
             else if (Numbers[i] < 0)
             {
-                if (Terms[i].Length > 0) { Replace = Regex.Replace(Replace, "^-1$", "-"); }
-                TheString.Append(Replace).Append(Terms[i]);
+                if (Terms[i].Length > 0) { Result = Regex.Replace(Result, "^-1$", "-"); }
+                TheString.Append(Result).Append(Terms[i]);
             }
         }
         string RetString = TheString.ToString();
@@ -33,15 +33,17 @@ internal static class Module
         RetString = Regex.Replace(RetString, @"^\+", "");
         return RetString;
     }
-    private static string GetInitTermRegexString(string[] Terms)
+    private static string GetInitTermRegexString(string Value, string[] Terms)
     {
-        StringBuilder TheString = new StringBuilder();
-        TheString.Append(@"(^|\+|-)(");
+        string RetString = (Value[0] != '-' && Value[0] != '+' ? "+" : "") + Value;
         for (long i = 0; i < Terms.LongLength; ++i)
         {
-            if (Terms[i].Length > 0) { TheString.Append("(?=").Append(Terms[i]).Append(")|"); }
+            if (Terms[i].Length > 0)
+            {
+                RetString = RetString.Replace("+" + Terms[i], "+1" + Terms[i]).Replace("-" + Terms[i], "-1" + Terms[i]);
+            }
         }
-        return Regex.Replace(TheString.ToString(), @"\)\|$", "))");
+        return RetString;
     }
     private static string GetRegexString(string Term, bool With)
     {
@@ -65,17 +67,17 @@ internal static class Module
     internal static double[] ToNumbers(this string Value, params string[] Terms)
     {
         double[] Numbers = new double[Terms.LongLength];
-        string TheValue = new Regex(GetInitTermRegexString(Terms)).Replace(Value.Replace(" ", ""), "${0}1");
+        string TheValue = GetInitTermRegexString(Value.Replace(" ", ""), Terms);
         if (!TestForValid(TheValue, Terms)) { throw new ArgumentException("The string is invalid."); }
         if (TheValue.Length == 0) { throw new ArgumentException("The string is empty."); }
         SetForValue(TheValue, Numbers, Terms);
         return Numbers;
     }
-    internal static long Period(Type type)
+    internal static long Period(Type Type)
     {
         long Output = 0;
-        if (!type.IsValueType) { throw new NotImplementedException("The type should be a value type."); }
-        foreach (FieldInfo Field in type.GetRuntimeFields())
+        if (!Type.IsValueType) { throw new NotImplementedException("The type should be a value type."); }
+        foreach (FieldInfo Field in Type.GetRuntimeFields())
         {
             if (Field.FieldType == typeof(double)) { ++Output; }
             else if (Field.FieldType.IsValueType) { Output += Period(Field.FieldType); }
