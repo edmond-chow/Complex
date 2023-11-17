@@ -25,16 +25,16 @@ std::wstring ToString(std::wstringstream& TheString, const std::array<double, N>
 	}
 	else
 	{
-		std::wstring Replace = double_to_wstring(std::get<I>(Numbers));
+		std::wstring Result = double_to_wstring(std::get<I>(Numbers));
 		if (std::get<I>(Numbers) > 0)
 		{
-			if (std::get<I>(Terms).length() > 0) { Replace = std::regex_replace(Replace, std::wregex(L"^1$"), L""); }
-			TheString << L'+' << Replace << std::get<I>(Terms);
+			if (std::get<I>(Terms).length() > 0) { Result = std::regex_replace(Result, std::wregex(L"^1$"), L""); }
+			TheString << L'+' << Result << std::get<I>(Terms);
 		}
 		else if (std::get<I>(Numbers) < 0)
 		{
-			if (std::get<I>(Terms).length() > 0) { Replace = std::regex_replace(Replace, std::wregex(L"^-1$"), L"-"); }
-			TheString << Replace << std::get<I>(Terms);
+			if (std::get<I>(Terms).length() > 0) { Result = std::regex_replace(Result, std::wregex(L"^-1$"), L"-"); }
+			TheString << Result << std::get<I>(Terms);
 		}
 		return ToString<I + 1, N>(TheString, Numbers, Terms);
 	}
@@ -100,7 +100,7 @@ inline std::wstring GetRegexString(const std::wstring& Term, bool With)
 template <std::size_t I = 0, std::size_t N> requires (I <= N)
 bool TestForValid(std::wstring&& Test, const std::array<std::wstring, N>& Terms)
 {
-	if constexpr (I == N) { return Test.length() == 0; }
+	if constexpr (I == N) { return Test.empty(); }
 	else
 	{
 		std::wregex Regex(GetRegexString(std::get<I>(Terms), true));
@@ -136,7 +136,7 @@ void ToNumbers(const std::wstring& Value, const std::array<double*, N>& Numbers,
 {
 	std::wstring TheValue = GetInitTermRegexString(std::regex_replace(Value, std::wregex(L" "), L""), Terms);
 	if (!TestForValid(TheValue, Terms)) { throw std::invalid_argument("The string is invalid."); }
-	if (TheValue.length() == 0) { throw std::invalid_argument("The string is empty."); }
+	if (TheValue.empty()) { throw std::invalid_argument("The string is empty."); }
 	SetForValue(TheValue, Numbers, Terms);
 };
 template <typename Args, std::size_t... I> requires (std::tuple_size_v<Args> == 2 * sizeof...(I))
