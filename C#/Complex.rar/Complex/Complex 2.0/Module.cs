@@ -38,7 +38,7 @@ internal static class Module
         string RetString = (Value[0] != '-' && Value[0] != '+' ? "+" : "") + Value;
         for (long i = 0; i < Terms.LongLength; ++i)
         {
-            if (Terms[i].Length > 0)
+            if (Terms[i].Length != 0)
             {
                 RetString = RetString.Replace("+" + Terms[i], "+1" + Terms[i]).Replace("-" + Terms[i], "-1" + Terms[i]);
             }
