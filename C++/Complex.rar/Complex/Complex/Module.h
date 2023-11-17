@@ -63,7 +63,7 @@ std::wstring GetInitTermRegexString(std::wstring* TheValue, const std::array<std
 	if constexpr (I == N) { return *TheValue; }
 	else
 	{
-		if (std::get<I>(Terms) != L"")
+		if (!std::get<I>(Terms).empty())
 		{
 			std::wstring PlusSour = L"+" + std::get<I>(Terms);
 			std::wstring PlusRepl = L"+1" + std::get<I>(Terms);

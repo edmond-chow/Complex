@@ -39,7 +39,7 @@ inline std::wstring GetInitTermRegexString(std::wstring* TheValue, std::size_t S
 {
 	for (std::size_t i = 0; i < Size; ++i)
 	{
-		if (Terms[i] != L"")
+		if (!Terms[i].empty())
 		{
 			std::wstring PlusSour = L"+" + Terms[i];
 			std::wstring PlusRepl = L"+1" + Terms[i];
