@@ -18,16 +18,16 @@ inline std::wstring ToString(std::size_t Size, const double* Numbers, const std:
 	std::wstringstream TheString;
 	for (std::size_t i = 0; i < Size; ++i)
 	{
-		std::wstring Replace = double_to_wstring(Numbers[i]);
+		std::wstring Result = double_to_wstring(Numbers[i]);
 		if (Numbers[i] > 0)
 		{
-			if (Terms[i].length() > 0) { Replace = std::regex_replace(Replace, std::wregex(L"^1$"), L""); }
-			TheString << L'+' << Replace << Terms[i];
+			if (Terms[i].length() > 0) { Result = std::regex_replace(Result, std::wregex(L"^1$"), L""); }
+			TheString << L'+' << Result << Terms[i];
 		}
 		else if (Numbers[i] < 0)
 		{
-			if (Terms[i].length() > 0) { Replace = std::regex_replace(Replace, std::wregex(L"^-1$"), L"-"); }
-			TheString << Replace << Terms[i];
+			if (Terms[i].length() > 0) { Result = std::regex_replace(Result, std::wregex(L"^-1$"), L"-"); }
+			TheString << Result << Terms[i];
 		}
 	}
 	std::wstring RetString = TheString.str();
@@ -39,7 +39,7 @@ inline std::wstring GetInitTermRegexString(std::wstring* TheValue, std::size_t S
 {
 	for (std::size_t i = 0; i < Size; ++i)
 	{
-		if (Terms[i] != L"")
+		if (!Terms[i].empty())
 		{
 			std::wstring PlusSour = L"+" + Terms[i];
 			std::wstring PlusRepl = L"+1" + Terms[i];
@@ -80,7 +80,7 @@ inline bool TestForValid(const std::wstring& Value, std::size_t Size, const std:
 		std::wregex Regex(GetRegexString(Terms[i], true));
 		Test = std::regex_replace(Test, Regex, L"");
 	}
-	return Test.length() == 0;
+	return Test.empty();
 };
 inline void SetForValue(const std::wstring& TheValue, std::size_t Size, double* Numbers, const std::wstring* Terms)
 {
@@ -102,6 +102,6 @@ inline void ToNumbers(const std::wstring& Value, std::size_t Size, double* Numbe
 {
 	std::wstring TheValue = GetInitTermRegexString(std::regex_replace(Value, std::wregex(L" "), L""), Size, Terms);
 	if (!TestForValid(TheValue, Size, Terms)) { throw std::invalid_argument("The string is invalid."); }
-	if (TheValue.length() == 0) { throw std::invalid_argument("The string is empty."); }
+	if (TheValue.empty()) { throw std::invalid_argument("The string is empty."); }
 	SetForValue(TheValue, Size, Numbers, Terms);
 };
