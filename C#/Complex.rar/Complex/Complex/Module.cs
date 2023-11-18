@@ -4,8 +4,9 @@ using System.Text;
 using System.Text.RegularExpressions;
 internal static class Module
 {
-    private static readonly string RealRegExp = @"(-|\+|^)(\d+)(\.\d+|)([Ee](-|\+|)(\d+)|)";
-    private static readonly string NotOthers = @"(-|\+|$)";
+    private static readonly string SignBefore = @"(-|\+|^)";
+    private static readonly string UnsignedReal = @"(\d+)(\.\d+|)([Ee](-|\+|)(\d+)|)";
+    private static readonly string SignAfter = @"(-|\+|$)";
     private static string DoubleToString(this double Number)
     {
         return Regex.Replace(Number.ToString("G17").ToLower(), "e-0(?=[1-9])", "e-");
@@ -33,44 +34,37 @@ internal static class Module
         RetString = Regex.Replace(RetString, @"^\+", "");
         return RetString;
     }
-    private static string GetInitTermRegexString(string Value, string[] Terms)
+    private static string AddGroup(this string Pattern, bool Optional)
     {
-        string RetString = (Value[0] != '-' && Value[0] != '+' ? "+" : "") + Value;
-        for (long i = 0; i < Terms.LongLength; ++i)
-        {
-            if (Terms[i].Length != 0)
-            {
-                RetString = RetString.Replace("+" + Terms[i], "+1" + Terms[i]).Replace("-" + Terms[i], "-1" + Terms[i]);
-            }
-        }
-        return RetString;
+        return "(" + Pattern + (Optional ? "|" : "") + ")";
     }
-    private static string GetRegexString(string Term, bool With)
+    private static string FollowedBy(this string Pattern, string Text)
     {
-        return RealRegExp + (With ? Term : "") + "(?=" + (With ? "" : Term) + NotOthers + ")";
+        return Pattern + "(?=" + Text + ")";
     }
-    private static bool TestForValid(string Value, string[] Terms)
+    private static string GetPattern(string Term)
     {
-        string Test = Value;
-        for (long i = 0; i < Terms.LongLength; ++i) { Test = new Regex(GetRegexString(Terms[i], true)).Replace(Test, ""); }
-        return Test.Length == 0;
-    }
-    private static void SetForValue(string TheValue, double[] Numbers, string[] Terms)
-    {
-        if (Numbers.LongLength != Terms.LongLength) { throw new NotImplementedException("The branch should ensure not instantiated at compile time."); }
-        for (long i = 0; i < Numbers.LongLength; ++i)
-        {
-            MatchCollection Match = new Regex(GetRegexString(Terms[i], false)).Matches(TheValue);
-            for (int j = 0; j < Match.Count; ++j) { Numbers[i] += double.Parse(Match[j].Value); }
-        }
+        return (SignBefore + UnsignedReal.AddGroup(Term.Length > 0)).FollowedBy(Term + SignAfter);
     }
     internal static double[] ToNumbers(this string Value, params string[] Terms)
     {
+        string Replaced = Value.Replace(" ", "");
         double[] Numbers = new double[Terms.LongLength];
-        string TheValue = GetInitTermRegexString(Value.Replace(" ", ""), Terms);
-        if (!TestForValid(TheValue, Terms)) { throw new ArgumentException("The string is invalid."); }
-        if (TheValue.Length == 0) { throw new ArgumentException("The string is empty."); }
-        SetForValue(TheValue, Numbers, Terms);
+        int Vaild = Replaced.Length;
+        if (Vaild == 0) { throw new ArgumentException("The string is empty."); }
+        for (long i = 0; i < Numbers.LongLength; ++i)
+        {
+            MatchCollection Match = new Regex(GetPattern(Terms[i])).Matches(Replaced);
+            for (int j = 0; j < Match.Count; ++j)
+            {
+                string Capture = Match[j].Value;
+                Vaild -= Capture.Length + Terms[i].Length;
+                if (Capture.Length == 0 || Capture == "+") { ++Numbers[i]; }
+                else if (Capture == "-") { --Numbers[i]; }
+                else { Numbers[i] += double.Parse(Capture); }
+            }
+        }
+        if (Vaild > 0) { throw new ArgumentException("The string is invalid."); }
         return Numbers;
     }
     internal static long Period(Type Type)
