@@ -217,14 +217,14 @@ namespace ComplexTestingConsole
         }
         private static string GetOutputPrepend(string RightValue, long[] Temp)
         {
-            string ret = RightValue + "(";
+            string Result = RightValue + "(";
             for (long i = 0; i < Temp.LongLength; ++i)
             {
-                ret += Temp[i].ToString() + ", ";
+                Result += Temp[i].ToString() + ", ";
             }
-            ret = ret.Substring(0, ret.Length - 2);
-            ret += ") = ";
-            return ret;
+            Result = Result.Substring(0, Result.Length - 2);
+            Result += ") = ";
+            return Result;
         }
         private static string DoubleToString(this double Number)
         {
