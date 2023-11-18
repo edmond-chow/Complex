@@ -7,11 +7,25 @@
 #include <array>
 #include <functional>
 #include <stdexcept>
-inline std::wstring double_to_wstring(double Number)
+static constexpr const wchar_t SignBefore[] = LR"((-|\+|^))";
+static constexpr const wchar_t UnsignedReal[] = LR"((\d+)(\.\d+|)([Ee](-|\+|)(\d+)|))";
+static constexpr const wchar_t SignAfter[] = LR"((-|\+|$))";
+inline std::wstring DoubleToString(double Number)
 {
 	std::wstringstream TheString;
 	TheString << std::defaultfloat << std::setprecision(17) << Number;
 	return std::regex_replace(TheString.str(), std::wregex(L"e-0(?=[1-9])"), L"e-");
+};
+inline std::wstring Replace(const std::wstring& Input, const std::wstring& Search, const std::wstring& Replacement)
+{
+	std::wstring Result = Input;
+	std::size_t Position = Result.find(Search);
+	while (Position != std::wstring::npos)
+	{
+		Result = Result.replace(Position, Search.size(), Replacement);
+		Position = Result.find(Search, Position + Replacement.size());
+	}
+	return Result;
 };
 template <std::size_t I = 0, std::size_t N> requires (I <= N)
 std::wstring ToString(std::wstringstream& TheString, const std::array<double, N>& Numbers, const std::array<std::wstring, N>& Terms)
@@ -25,7 +39,7 @@ std::wstring ToString(std::wstringstream& TheString, const std::array<double, N>
 	}
 	else
 	{
-		std::wstring Result = double_to_wstring(std::get<I>(Numbers));
+		std::wstring Result = DoubleToString(std::get<I>(Numbers));
 		if (std::get<I>(Numbers) > 0)
 		{
 			if (std::get<I>(Terms).length() > 0) { Result = std::regex_replace(Result, std::wregex(L"^1$"), L""); }
@@ -57,87 +71,53 @@ std::wstring ToString(Args&&... args) requires (sizeof...(Args) % 2 == 0)
 {
 	return ToString(std::forward_as_tuple(std::forward<Args>(args)...), std::make_index_sequence<sizeof...(Args) / 2>{});
 };
-template <std::size_t I = 0, std::size_t N> requires (I <= N)
-std::wstring GetInitTermRegexString(std::wstring* TheValue, const std::array<std::wstring, N>& Terms)
+inline std::wstring AddGroup(const std::wstring& Pattern, bool Optional)
 {
-	if constexpr (I == N) { return *TheValue; }
-	else
-	{
-		if (!std::get<I>(Terms).empty())
-		{
-			std::wstring PlusSour = L"+" + std::get<I>(Terms);
-			std::wstring PlusRepl = L"+1" + std::get<I>(Terms);
-			std::size_t PlusPos = TheValue->find(PlusSour);
-			while (PlusPos != std::wstring::npos)
-			{
-				*TheValue = TheValue->replace(PlusPos, PlusSour.size(), PlusRepl);
-				PlusPos = TheValue->find(PlusSour, PlusPos + PlusRepl.size());
-			}
-			std::wstring MinusSour = L"-" + std::get<I>(Terms);
-			std::wstring MinusRepl = L"-1" + std::get<I>(Terms);
-			std::size_t MinusPos = TheValue->find(MinusSour);
-			while (MinusPos != std::wstring::npos)
-			{
-				*TheValue = TheValue->replace(MinusPos, MinusSour.size(), MinusRepl);
-				MinusPos = TheValue->find(MinusSour, MinusPos + MinusRepl.size());
-			}
-		}
-		return GetInitTermRegexString<I + 1, N>(TheValue, Terms);
-	}
+	return L"(" + Pattern + (Optional ? L"|" : L"") + L")";
+};
+inline std::wstring FollowedBy(const std::wstring& Pattern, const std::wstring& Text)
+{
+	return Pattern + L"(?=" + Text + L")";
+};
+inline std::wstring GetPattern(const std::wstring& Term)
+{
+	return FollowedBy(SignBefore + AddGroup(UnsignedReal, !Term.empty()), Term + SignAfter);
 };
 template <std::size_t I = 0, std::size_t N> requires (I <= N)
-std::wstring GetInitTermRegexString(const std::wstring& Value, const std::array<std::wstring, N>& Terms)
-{
-	std::wstring RetString = (Value[0] != L'-' && Value[0] != L'+' ? L"+" : L"") + Value;
-	return GetInitTermRegexString<I, N>(&RetString, Terms);
-};
-inline std::wstring GetRegexString(const std::wstring& Term, bool With)
-{
-	static constexpr const wchar_t RealRegExp[] = L"(-|\\+|^)(\\d+)(\\.\\d+|)([Ee](-|\\+|)(\\d+)|)";
-	static constexpr const wchar_t NotOthers[] = L"(-|\\+|$)";
-	return std::wstring().append(RealRegExp).append(With ? Term : L"").append(L"(?=").append(With ? L"" : Term).append(NotOthers).append(L")");
-};
-template <std::size_t I = 0, std::size_t N> requires (I <= N)
-bool TestForValid(std::wstring&& Test, const std::array<std::wstring, N>& Terms)
-{
-	if constexpr (I == N) { return Test.empty(); }
-	else
-	{
-		std::wregex Regex(GetRegexString(std::get<I>(Terms), true));
-		Test = std::regex_replace(Test, Regex, L"");
-		return TestForValid<I + 1, N>(std::move(Test), Terms);
-	}
-};
-template <std::size_t N>
-bool TestForValid(const std::wstring& Value, const std::array<std::wstring, N>& Terms)
-{
-	return TestForValid(std::wstring(Value), Terms);
-};
-template <std::size_t I = 0, std::size_t N> requires (I <= N)
-void SetForValue(const std::wstring& TheValue, const std::array<double*, N>& Numbers, const std::array<std::wstring, N>& Terms)
+void ToNumbers(const std::wstring& Replaced, std::size_t& Vaild, const std::array<double*, N>& Numbers, const std::array<std::wstring, N>& Terms)
 {
 	if constexpr (I < N)
 	{
 		double Data = 0;
-		std::wregex Regex(GetRegexString(std::get<I>(Terms), false));
-		std::wstring TheString = TheValue;
+		std::wregex Regex(GetPattern(std::get<I>(Terms)));
+		std::wstring Rest = Replaced;
 		std::wsmatch Match;
-		while (std::regex_search(TheString, Match, Regex))
+		std::regex_constants::match_flag_type Flag = std::regex_constants::match_default;
+		while (std::regex_search(Rest, Match, Regex, Flag))
 		{
-			Data += std::stod(Match.str());
-			TheString = Match.suffix().str();
+			std::wstring Captured = Match.str();
+			Vaild -= Captured.length() + std::get<I>(Terms).length();
+			if (Captured.empty() || Captured == L"+") { ++Data; }
+			else if (Captured == L"-") { --Data; }
+			else { Data += std::stod(Captured); }
+			Rest = Match.suffix().str();
+			Flag |= std::regex_constants::match_not_bol;
 		}
 		*std::get<I>(Numbers) = Data;
-		SetForValue<I + 1, N>(TheValue, Numbers, Terms);
+		ToNumbers<I + 1, N>(Replaced, Vaild, Numbers, Terms);
+	}
+	else
+	{
+		if (Vaild > 0) { throw std::invalid_argument("The string is invalid."); }
 	}
 };
 template <std::size_t N>
 void ToNumbers(const std::wstring& Value, const std::array<double*, N>& Numbers, const std::array<std::wstring, N>& Terms)
 {
-	std::wstring TheValue = GetInitTermRegexString(std::regex_replace(Value, std::wregex(L" "), L""), Terms);
-	if (!TestForValid(TheValue, Terms)) { throw std::invalid_argument("The string is invalid."); }
-	if (TheValue.empty()) { throw std::invalid_argument("The string is empty."); }
-	SetForValue(TheValue, Numbers, Terms);
+	std::wstring Replaced = Replace(Value, L" ", L"");
+	std::size_t Vaild = Replaced.length();
+	if (Vaild == 0) { throw std::invalid_argument("The string is empty."); }
+	ToNumbers(Replaced, Vaild, Numbers, Terms);
 };
 template <typename Args, std::size_t... I> requires (std::tuple_size_v<Args> == 2 * sizeof...(I))
 void ToNumbers(const std::wstring& Value, Args&& args, std::integer_sequence<std::size_t, I...>)

@@ -62,21 +62,32 @@ inline std::int64_t wtoi64_t(const wchar_t* str)
 	}
 	return output;
 };
-inline std::int64_t stoi64_t(const std::wstring& str)
-{
-	std::wstring result = std::regex_replace(str, std::wregex(L" "), L"");
-	return wtoi64_t(result.c_str());
-};
-inline std::wstring double_to_wstring(double Number)
+inline std::wstring DoubleToString(double Number)
 {
 	std::wstringstream TheString;
 	TheString << std::defaultfloat << std::setprecision(17) << Number;
 	return std::regex_replace(TheString.str(), std::wregex(L"e-0(?=[1-9])"), L"e-");
 };
+inline std::wstring Replace(const std::wstring& Input, const std::wstring& Search, const std::wstring& Replacement)
+{
+	std::wstring Result = Input;
+	std::size_t Position = Result.find(Search);
+	while (Position != std::wstring::npos)
+	{
+		Result = Result.replace(Position, Search.size(), Replacement);
+		Position = Result.find(Search, Position + Replacement.size());
+	}
+	return Result;
+};
+inline std::int64_t stoi64_t(const std::wstring& str)
+{
+	std::wstring result = Replace(str, L" ", L"");
+	return wtoi64_t(result.c_str());
+};
 template <typename T>
 inline std::wstring to_wstring(T o) { return T::GetString(o); };
 template <>
-inline std::wstring to_wstring<double>(double o) { return double_to_wstring(o); };
+inline std::wstring to_wstring<double>(double o) { return DoubleToString(o); };
 template <>
 inline std::wstring to_wstring<std::size_t>(std::size_t o) { return std::to_wstring(o); };
 template <>
