@@ -57,11 +57,11 @@ internal static class Module
             MatchCollection Match = new Regex(GetPattern(Terms[i])).Matches(Replaced);
             for (int j = 0; j < Match.Count; ++j)
             {
-                string Capture = Match[j].Value;
-                Vaild -= Capture.Length + Terms[i].Length;
-                if (Capture.Length == 0 || Capture == "+") { ++Numbers[i]; }
-                else if (Capture == "-") { --Numbers[i]; }
-                else { Numbers[i] += double.Parse(Capture); }
+                string Captured = Match[j].Value;
+                Vaild -= Captured.Length + Terms[i].Length;
+                if (Captured.Length == 0 || Captured == "+") { ++Numbers[i]; }
+                else if (Captured == "-") { --Numbers[i]; }
+                else { Numbers[i] += double.Parse(Captured); }
             }
         }
         if (Vaild > 0) { throw new ArgumentException("The string is invalid."); }
