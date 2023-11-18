@@ -7,18 +7,32 @@
 #include <array>
 #include <functional>
 #include <stdexcept>
-inline std::wstring double_to_wstring(double Number)
+static constexpr const wchar_t SignBefore[] = LR"((-|\+|^))";
+static constexpr const wchar_t UnsignedReal[] = LR"((\d+)(\.\d+|)([Ee](-|\+|)(\d+)|))";
+static constexpr const wchar_t SignAfter[] = LR"((-|\+|$))";
+inline std::wstring DoubleToString(double Number)
 {
 	std::wstringstream TheString;
 	TheString << std::defaultfloat << std::setprecision(17) << Number;
 	return std::regex_replace(TheString.str(), std::wregex(L"e-0(?=[1-9])"), L"e-");
+};
+inline std::wstring Replace(const std::wstring& Input, const std::wstring& Search, const std::wstring& Replacement)
+{
+	std::wstring Result = Input;
+	std::size_t Position = Result.find(Search);
+	while (Position != std::wstring::npos)
+	{
+		Result = Result.replace(Position, Search.size(), Replacement);
+		Position = Result.find(Search, Position + Replacement.size());
+	}
+	return Result;
 };
 inline std::wstring ToString(std::size_t Size, const double* Numbers, const std::wstring* Terms)
 {
 	std::wstringstream TheString;
 	for (std::size_t i = 0; i < Size; ++i)
 	{
-		std::wstring Result = double_to_wstring(Numbers[i]);
+		std::wstring Result = DoubleToString(Numbers[i]);
 		if (Numbers[i] > 0)
 		{
 			if (Terms[i].length() > 0) { Result = std::regex_replace(Result, std::wregex(L"^1$"), L""); }
@@ -35,73 +49,41 @@ inline std::wstring ToString(std::size_t Size, const double* Numbers, const std:
 	RetString = std::regex_replace(RetString, std::wregex(L"^\\+"), L"");
 	return RetString;
 };
-inline std::wstring GetInitTermRegexString(std::wstring* TheValue, std::size_t Size, const std::wstring* Terms)
+inline std::wstring AddGroup(const std::wstring& Pattern, bool Optional)
 {
-	for (std::size_t i = 0; i < Size; ++i)
-	{
-		if (!Terms[i].empty())
-		{
-			std::wstring PlusSour = L"+" + Terms[i];
-			std::wstring PlusRepl = L"+1" + Terms[i];
-			std::size_t PlusPos = TheValue->find(PlusSour);
-			while (PlusPos != std::wstring::npos)
-			{
-				*TheValue = TheValue->replace(PlusPos, PlusSour.size(), PlusRepl);
-				PlusPos = TheValue->find(PlusSour, PlusPos + PlusRepl.size());
-			}
-			std::wstring MinusSour = L"-" + Terms[i];
-			std::wstring MinusRepl = L"-1" + Terms[i];
-			std::size_t MinusPos = TheValue->find(MinusSour);
-			while (MinusPos != std::wstring::npos)
-			{
-				*TheValue = TheValue->replace(MinusPos, MinusSour.size(), MinusRepl);
-				MinusPos = TheValue->find(MinusSour, MinusPos + MinusRepl.size());
-			}
-		}
-	}
-	return *TheValue;
+	return L"(" + Pattern + (Optional ? L"|" : L"") + L")";
 };
-inline std::wstring GetInitTermRegexString(const std::wstring& Value, std::size_t Size, const std::wstring* Terms)
+inline std::wstring FollowedBy(const std::wstring& Pattern, const std::wstring& Text)
 {
-	std::wstring RetString = (Value[0] != L'-' && Value[0] != L'+' ? L"+" : L"") + Value;
-	return GetInitTermRegexString(&RetString, Size, Terms);
+	return Pattern + L"(?=" + Text + L")";
 };
-inline std::wstring GetRegexString(const std::wstring& Term, bool With)
+inline std::wstring GetPattern(const std::wstring& Term)
 {
-	static constexpr const wchar_t RealRegExp[] = L"(-|\\+|^)(\\d+)(\\.\\d+|)([Ee](-|\\+|)(\\d+)|)";
-	static constexpr const wchar_t NotOthers[] = L"(-|\\+|$)";
-	return std::wstring().append(RealRegExp).append(With ? Term : L"").append(L"(?=").append(With ? L"" : Term).append(NotOthers).append(L")");
-};
-inline bool TestForValid(const std::wstring& Value, std::size_t Size, const std::wstring* Terms)
-{
-	std::wstring Test(Value);
-	for (std::size_t i = 0; i < Size; ++i)
-	{
-		std::wregex Regex(GetRegexString(Terms[i], true));
-		Test = std::regex_replace(Test, Regex, L"");
-	}
-	return Test.empty();
-};
-inline void SetForValue(const std::wstring& TheValue, std::size_t Size, double* Numbers, const std::wstring* Terms)
-{
-	for (std::size_t i = 0; i < Size; ++i)
-	{
-		double Data = 0;
-		std::wregex Regex(GetRegexString(Terms[i], false));
-		std::wstring TheString = TheValue;
-		std::wsmatch Match;
-		while (std::regex_search(TheString, Match, Regex))
-		{
-			Data += std::stod(Match.str());
-			TheString = Match.suffix().str();
-		}
-		Numbers[i] = Data;
-	}
+	return FollowedBy(SignBefore + AddGroup(UnsignedReal, !Term.empty()), Term + SignAfter);
 };
 inline void ToNumbers(const std::wstring& Value, std::size_t Size, double* Numbers, const std::wstring* Terms)
 {
-	std::wstring TheValue = GetInitTermRegexString(std::regex_replace(Value, std::wregex(L" "), L""), Size, Terms);
-	if (!TestForValid(TheValue, Size, Terms)) { throw std::invalid_argument("The string is invalid."); }
-	if (TheValue.empty()) { throw std::invalid_argument("The string is empty."); }
-	SetForValue(TheValue, Size, Numbers, Terms);
+	std::wstring Replaced = Replace(Value, L" ", L"");
+	std::size_t Vaild = Replaced.length();
+	if (Vaild == 0) { throw std::invalid_argument("The string is empty."); }
+	for (std::size_t i = 0; i < Size; ++i)
+	{
+		double Data = 0;
+		std::wregex Regex(GetPattern(Terms[i]));
+		std::wstring Rest = Replaced;
+		std::wsmatch Match;
+		std::regex_constants::match_flag_type Flag = std::regex_constants::match_default;
+		while (std::regex_search(Rest, Match, Regex, Flag))
+		{
+			std::wstring Captured = Match.str();
+			Vaild -= Captured.length() + Terms[i].length();
+			if (Captured.empty() || Captured == L"+") { ++Data; }
+			else if (Captured == L"-") { --Data; }
+			else { Data += std::stod(Captured); }
+			Rest = Match.suffix().str();
+			Flag |= std::regex_constants::match_not_bol;
+		}
+		Numbers[i] = Data;
+	}
+	if (Vaild > 0) { throw std::invalid_argument("The string is invalid."); }
 };
