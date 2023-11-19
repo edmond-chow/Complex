@@ -13,25 +13,20 @@ internal static class Module
     internal static string ToString(this double[] Numbers, params string[] Terms)
     {
         if (Numbers.LongLength != Terms.LongLength) { throw new NotImplementedException("The branch should ensure not instantiated at compile time."); }
-        StringBuilder TheString = new StringBuilder();
+        StringBuilder Result = new StringBuilder();
+        bool First = true;
         for (long i = 0; i < Numbers.LongLength; ++i)
         {
-            string Result = Numbers[i].DoubleToString();
-            if (Numbers[i] > 0)
-            {
-                if (Terms[i].Length > 0) { Result = Regex.Replace(Result, "^1$", ""); }
-                TheString.Append('+').Append(Result).Append(Terms[i]);
-            }
-            else if (Numbers[i] < 0)
-            {
-                if (Terms[i].Length > 0) { Result = Regex.Replace(Result, "^-1$", "-"); }
-                TheString.Append(Result).Append(Terms[i]);
-            }
+            if (Numbers[i] == 0) { continue; }
+            if (Numbers[i] > 0 && First == false) { Result.Append("+"); }
+            else if (Numbers[i] == -1) { Result.Append("-"); }
+            if (Numbers[i] != 1 && Numbers[i] != -1) { Result.Append(Numbers[i].DoubleToString()); }
+            else if (Terms[i].Length == 0) { Result.Append("1"); }
+            if (Terms[i].Length > 0) { Result.Append(Terms[i]); }
+            First = false;
         }
-        string RetString = TheString.ToString();
-        RetString = Regex.Replace(RetString, "^$", "0");
-        RetString = Regex.Replace(RetString, @"^\+", "");
-        return RetString;
+        if (First == true) { Result.Append("0"); }
+        return Result.ToString();
     }
     private static string AddGroup(this string Pattern, bool Optional)
     {
