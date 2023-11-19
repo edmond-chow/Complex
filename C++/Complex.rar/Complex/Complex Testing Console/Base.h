@@ -64,9 +64,9 @@ inline std::int64_t wtoi64_t(const wchar_t* str)
 };
 inline std::wstring DoubleToString(double Number)
 {
-	std::wstringstream TheString;
-	TheString << std::defaultfloat << std::setprecision(17) << Number;
-	return std::regex_replace(TheString.str(), std::wregex(L"e-0(?=[1-9])"), L"e-");
+	std::wstringstream Result;
+	Result << std::defaultfloat << std::setprecision(17) << Number;
+	return std::regex_replace(Result.str(), std::wregex(L"e-0(?=[1-9])"), L"e-");
 };
 inline std::wstring Replace(const std::wstring& Input, const std::wstring& Search, const std::wstring& Replacement)
 {
