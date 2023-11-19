@@ -208,7 +208,7 @@ internal class Number : IEnumerable<double>
         double[] Scalar = { 0 };
         Number NumUnion = new Number(Scalar.Concat(Union).ToArray());
         Number NumValue = new Number(Scalar.Concat(Value).ToArray());
-        Number NumOutput = NumUnion * NumValue;
-        return new Number(NumOutput.Skip(1).ToArray());
+        Number NumResult = NumUnion * NumValue;
+        return new Number(NumResult.Skip(1).ToArray());
     }
 }

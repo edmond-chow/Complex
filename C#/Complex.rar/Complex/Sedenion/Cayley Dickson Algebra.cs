@@ -229,8 +229,8 @@ internal class Number : IEnumerable<double>
             VecValue[0] = 0;
             return NumberCross(VecUnion, VecValue);
         }
-        Number Output = Union * Value;
-        Output[0] = 0;
-        return Output;
+        Number Result = Union * Value;
+        Result[0] = 0;
+        return Result;
     }
 }
