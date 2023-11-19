@@ -234,7 +234,7 @@ constexpr Factor number_cross(const Factor& Union, const Factor& Value)
 	{
 		Factor VecUnion = Union;
 		VecUnion[0] = 0;
-		Factor VecValue = Union;
+		Factor VecValue = Value;
 		VecValue[0] = 0;
 		return number_cross(VecUnion, VecValue);
 	}
