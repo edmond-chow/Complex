@@ -225,7 +225,7 @@ internal class Number : IEnumerable<double>
         {
             Number VecUnion = Union;
             VecUnion[0] = 0;
-            Number VecValue = Union;
+            Number VecValue = Value;
             VecValue[0] = 0;
             return NumberCross(VecUnion, VecValue);
         }
