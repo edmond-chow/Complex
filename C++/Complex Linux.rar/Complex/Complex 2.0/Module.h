@@ -53,7 +53,7 @@ template <std::size_t N>
 std::wstring ToString(const std::array<double, N>& Numbers, const std::array<std::wstring, N>& Terms)
 {
 	std::wstringstream Result;
-	bool First = false;
+	bool First = true;
 	return ToString(Result, First, Numbers, Terms);
 };
 template <typename Args, std::size_t... I> requires (std::tuple_size_v<Args> == 2 * sizeof...(I))

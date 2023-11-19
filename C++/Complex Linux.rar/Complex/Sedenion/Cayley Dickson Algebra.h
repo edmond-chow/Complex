@@ -70,28 +70,29 @@ public:
 			std::copy(data, data + this->size, new_data);
 			delete[] data;
 			data = new_data;
+			this->size = size;
 		};
 		return *this;
 	};
 	static Factor merge(const Factor& Left, const Factor& Right)
 	{
-		Factor Output(Left.size + Right.size);
-		std::copy(Right.data, Right.data + Right.size, std::copy(Left.data, Left.data + Left.size, Output.data));
-		return Output;
+		Factor Result(Left.size + Right.size);
+		std::copy(Right.data, Right.data + Right.size, std::copy(Left.data, Left.data + Left.size, Result.data));
+		return Result;
 	};
 	constexpr Factor left(std::size_t count) const
 	{
 		if (0 >= count || count > size) { throw std::out_of_range("The count is out of range."); }
-		Factor Output(count);
-		std::copy(data, data + count, Output.data);
-		return Output;
+		Factor Result(count);
+		std::copy(data, data + count, Result.data);
+		return Result;
 	};
 	constexpr Factor right(std::size_t count) const
 	{
 		if (0 > count || count >= size) { throw std::out_of_range("The count is out of range."); }
-		Factor Output(size - count);
-		std::copy(data + count, data + size, Output.data);
-		return Output;
+		Factor Result(size - count);
+		std::copy(data + count, data + size, Result.data);
+		return Result;
 	};
 	constexpr Factor left() const
 	{
@@ -116,26 +117,26 @@ public:
 };
 constexpr Factor operator -(const Factor& Value)
 {
-	Factor Output{ Value.data, Value.size };
-	const double* ite_oe = Output.data + Output.size;
-	for (double* ite_o = Output.data; ite_o != ite_oe; ++ite_o) { *ite_o = -*ite_o; }
-	return Output;
+	Factor Result{ Value.data, Value.size };
+	const double* ite_oe = Result.data + Result.size;
+	for (double* ite_o = Result.data; ite_o != ite_oe; ++ite_o) { *ite_o = -*ite_o; }
+	return Result;
 };
 constexpr Factor operator ~(const Factor& Value)
 {
-	Factor Output{ Value.data, Value.size };
-	const double* ite_oe = Output.data + Output.size;
-	for (double* ite_o = Output.data + 1; ite_o != ite_oe; ++ite_o) { *ite_o = -*ite_o; }
-	return Output;
+	Factor Result{ Value.data, Value.size };
+	const double* ite_oe = Result.data + Result.size;
+	for (double* ite_o = Result.data + 1; ite_o != ite_oe; ++ite_o) { *ite_o = -*ite_o; }
+	return Result;
 };
 constexpr Factor operator +(const Factor& Union, const Factor& Value)
 {
 	if (Union.size > Value.size) { return Value + Union; }
-	Factor Output{ Value.data, Value.size };
+	Factor Result{ Value.data, Value.size };
 	const double* ite_u = Union.data;
 	const double* ite_ue = Union.data + Union.size;
-	for (double* ite_o = Output.data; ite_u != ite_ue; ++ite_o, ++ite_u) { *ite_o += *ite_u; }
-	return Output;
+	for (double* ite_o = Result.data; ite_u != ite_ue; ++ite_o, ++ite_u) { *ite_o += *ite_u; }
+	return Result;
 };
 constexpr Factor operator -(const Factor& Union, const Factor& Value)
 {
@@ -152,7 +153,7 @@ constexpr Factor operator *(const Factor& Union, const Factor& Value)
 		std::size_t NewSize = std::max(Union.size, Value.size);
 		Factor NewUnion = Union;
 		NewUnion.extend(NewSize);
-		Factor NewValue = Union;
+		Factor NewValue = Value;
 		NewValue.extend(NewSize);
 		return NewUnion * NewValue;
 	}
@@ -164,9 +165,9 @@ constexpr Factor operator *(const Factor& Union, const Factor& Value)
 };
 constexpr Factor operator *(double Union, const Factor& Value)
 {
-	Factor Output{ Value.data, Value.size };
+	Factor Result{ Value.data, Value.size };
 	for (double* ite = Value.data; ite != Value.data + Value.size; ++ite) { *ite *= Union; }
-	return Output;
+	return Result;
 };
 constexpr Factor operator *(const Factor& Union, double Value)
 {
@@ -187,16 +188,16 @@ constexpr double number_dot(const Factor& Union, const Factor& Value)
 		std::size_t NewSize = std::max(Union.size, Value.size);
 		Factor NewUnion = Union;
 		NewUnion.extend(NewSize);
-		Factor NewValue = Union;
+		Factor NewValue = Value;
 		NewValue.extend(NewSize);
 		return number_dot(NewUnion, NewValue);
 	}
-	double Output{ 0 };
+	double Result{ 0 };
 	for (std::size_t i = 0; i < Union.size; ++i)
 	{
-		Output += Union[i] * Value[i];
+		Result += Union[i] * Value[i];
 	}
-	return Output;
+	return Result;
 };
 constexpr Factor number_outer(const Factor& Union, const Factor& Value)
 {
@@ -225,7 +226,7 @@ constexpr Factor number_cross(const Factor& Union, const Factor& Value)
 		std::size_t NewSize = std::max(Union.size, Value.size);
 		Factor NewUnion = Union;
 		NewUnion.extend(NewSize);
-		Factor NewValue = Union;
+		Factor NewValue = Value;
 		NewValue.extend(NewSize);
 		return number_cross(NewUnion, NewValue);
 	}
@@ -233,11 +234,11 @@ constexpr Factor number_cross(const Factor& Union, const Factor& Value)
 	{
 		Factor VecUnion = Union;
 		VecUnion[0] = 0;
-		Factor VecValue = Union;
+		Factor VecValue = Value;
 		VecValue[0] = 0;
 		return number_cross(VecUnion, VecValue);
 	}
-	Factor Output = Union * Value;
-	Output[0] = 0;
-	return Output;
+	Factor Result = Union * Value;
+	Result[0] = 0;
+	return Result;
 };
