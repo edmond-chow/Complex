@@ -176,12 +176,22 @@ internal class Number : IEnumerable<double>
     }
     public static double VectorDot(Number Union, Number Value)
     {
-        double Output = 0;
+        if (!IsNumber(Union.LongLength + 1) || !IsNumber(Value.LongLength + 1)) { throw new ArgumentException("The size must be a number which is 2 to the power of a natural number."); }
+        else if (Union.LongLength != Value.LongLength)
+        {
+            int NewSize = Math.Max(Union.Length, Value.Length);
+            Number NewUnion = Union;
+            NewUnion.Extend(NewSize);
+            Number NewValue = Value;
+            NewValue.Extend(NewSize);
+            return VectorDot(NewUnion, NewValue);
+        }
+        double Result = 0;
         for (long i = 0; i < Union.LongLength; ++i)
         {
-            Output += Union[i] * Value[i];
+            Result += Union[i] * Value[i];
         }
-        return Output;
+        return Result;
     }
     public static Number VectorCross(Number Union, Number Value)
     {
