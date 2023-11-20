@@ -7,7 +7,7 @@ namespace SedenionTestingConsole
         ///
         /// Base
         ///
-        private static readonly string[] TestingConsole = new string[] { "Exit", "Complex Testing Console", "Quaternion Testing Console", "Octonion Testing Console", "SedenionMode" };
+        private static readonly string[] TestingConsole = new string[] { "Exit", "Complex Testing Console", "Quaternion Testing Console", "Octonion Testing Console", "Sedenion Extended Module" };
         private const long DefaultIndex = 3;
         private static long Index = DefaultIndex;
         private static string AddSquares(this string Option)
@@ -16,7 +16,7 @@ namespace SedenionTestingConsole
         }
         public static string GetTitle()
         {
-            return Index > DefaultIndex ? "SedenionMode (Sedenion, Pathion, Chingon, Routon, Voudon, ...)" : TestingConsole[Index];
+            return Index > DefaultIndex ? "Extended Module (Sedenion, Pathion, Chingon, Routon, Voudon, ...)" : TestingConsole[Index];
         }
         public static string GetStartupLine()
         {
