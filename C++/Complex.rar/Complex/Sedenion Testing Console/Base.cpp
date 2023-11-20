@@ -17,7 +17,7 @@ namespace SedenionTestingConsole
 		///
 		/// Base
 		///
-		static constexpr const wchar_t* TestingConsole[] { L"Exit", L"Complex Testing Console", L"Quaternion Testing Console", L"Octonion Testing Console", L"SedenionMode" };
+		static constexpr const wchar_t* TestingConsole[] { L"Exit", L"Complex Testing Console", L"Quaternion Testing Console", L"Octonion Testing Console", L"Sedenion Extended Module" };
 		static constexpr const std::size_t DefaultIndex = 3;
 		static std::size_t Index;
 		static std::wstring AddSquares(const std::wstring& Option) { return L"[" + Option + L"]"; };
@@ -52,7 +52,7 @@ namespace SedenionTestingConsole
 	std::size_t Base::Index = DefaultIndex;
 	std::wstring Base::GetTitle()
 	{
-		return Index > DefaultIndex ? L"SedenionMode (Sedenion, Pathion, Chingon, Routon, Voudon, ...)" : TestingConsole[Index];
+		return Index > DefaultIndex ? L"Extended Module (Sedenion, Pathion, Chingon, Routon, Voudon, ...)" : TestingConsole[Index];
 	};
 	std::wstring Base::GetStartupLine()
 	{
