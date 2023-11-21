@@ -215,8 +215,9 @@ namespace Cmplx
 		};
 		Vector1D CMPLX_FUNC_CALL Vector1D::GetInstance(const std::wstring& Value)
 		{
+			std::wstring Replaced = Replace(Value, L" ", L"");
 			Vector1D Object;
-			ToNumbers(Value, Object[index::e1], L"e1");
+			ToNumbers(Replaced, Object[index::e1], L"e1");
 			return Object;
 		};
 	}
@@ -739,8 +740,9 @@ namespace Cmplx
 		};
 		Complex CMPLX_FUNC_CALL Complex::GetInstance(const std::wstring& Value)
 		{
+			std::wstring Replaced = Replace(Value, L" ", L"");
 			Complex Object;
-			ToNumbers(Value, Object[index::s], L"", Object[index::i], L"i");
+			ToNumbers(Replaced, Object[index::s], L"", Object[index::i], L"i");
 			return Object;
 		};
 	}

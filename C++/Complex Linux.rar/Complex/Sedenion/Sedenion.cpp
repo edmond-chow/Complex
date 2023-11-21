@@ -65,7 +65,7 @@ inline std::size_t wtos_t(const wchar_t* str)
 };
 inline std::size_t stos_t(const std::wstring& str)
 {
-	std::wstring result = std::regex_replace(str, std::wregex(L" "), L"");
+	std::wstring result = Replace(str, L" ", L"");
 	return wtos_t(result.c_str());
 };
 namespace Seden
@@ -600,32 +600,33 @@ namespace Seden
 	///
 	std::wstring SEDEN_FUNC_CALL Sedenion::GetString(const Sedenion& Value)
 	{
-		const double* Numbers = Value.data;
-		std::wstring* Strings = new std::wstring[Value.size] {};
-		for (std::size_t i = 0; i < Value.size; ++i) { Strings[i] = L"e" + std::to_wstring(i); }
-		std::wstring Output = ToString(Value.size, Numbers, Strings);
-		delete[] Strings;
-		return Output;
+		std::wstring* Terms = new std::wstring[Value.size]{};
+		for (std::size_t i = 0; i < Value.size; ++i) { Terms[i] = L"e" + std::to_wstring(i); }
+		std::wstring Result = ToString(Value.size, Value.data, Terms);
+		delete[] Terms;
+		return Result;
 	};
 	Sedenion SEDEN_FUNC_CALL Sedenion::GetInstance(const std::wstring& Value)
 	{
+		std::wstring Replaced = Replace(Value, L" ", L"");
+		if (Replaced == L"0") { return Sedenion{}; };
 		std::size_t Dimension = 0;
-		std::wregex Regex(L"e\\d+(?=-|\\+|$)");
-		std::wstring TheString = std::regex_replace(Value, std::wregex(L" "), L"");
-		if (TheString == L"0") { return Sedenion{}; };
+		std::wstring Rest = Replaced;
 		std::wsmatch Match;
-		while (std::regex_search(TheString, Match, Regex))
+		while (std::regex_search(Rest, Match, std::wregex(LR"(e(\d+)(?=-|\+|$))")))
 		{
-			Dimension = std::max(Dimension, stos_t(Match.str().substr(1)));
-			TheString = Match.suffix().str();
+			Dimension = std::max(Dimension, stos_t(Match.str(1)));
+			Rest = Match.suffix().str();
 		}
 		std::size_t Size = GetDimension(Dimension);
 		double* Numbers = new double[Size] {};
-		std::wstring* Strings = new std::wstring[Size] {};
-		for (std::size_t i = 0; i < Size; ++i) { Strings[i] = L"e" + std::to_wstring(i); }
-		ToNumbers(Value, Size, Numbers, Strings);
-		delete[] Strings;
-		return Sedenion{ Numbers, Size };
+		std::wstring* Terms = new std::wstring[Size]{};
+		for (std::size_t i = 0; i < Size; ++i) { Terms[i] = L"e" + std::to_wstring(i); }
+		ToNumbers(Replaced, Size, Numbers, Terms);
+		Sedenion Result{ Numbers, Size };
+		delete[] Numbers;
+		delete[] Terms;
+		return Result;
 	};
 }
 #pragma pop_macro("SEDEN_FUNC_INSTANCE_CALL")
