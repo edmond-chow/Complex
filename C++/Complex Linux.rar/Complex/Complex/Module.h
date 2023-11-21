@@ -81,12 +81,12 @@ inline std::wstring GetPattern(const std::wstring& Term)
 	return FollowedBy(SignBefore + AddGroup(UnsignedReal, !Term.empty()), Term + SignAfter);
 };
 template <std::size_t I = 0, std::size_t N> requires (I <= N)
-void ToNumbers(const std::wstring& Replaced, std::size_t& Vaild, const std::array<double*, N>& Numbers, const std::array<std::wstring, N>& Terms)
+void ToNumbers(const std::wstring& Value, std::size_t& Vaild, const std::array<double*, N>& Numbers, const std::array<std::wstring, N>& Terms)
 {
 	if constexpr (I < N)
 	{
 		double Data = 0;
-		std::wstring Rest = Replaced;
+		std::wstring Rest = Value;
 		std::wsmatch Match;
 		std::regex_constants::match_flag_type Flag = std::regex_constants::match_default;
 		while (std::regex_search(Rest, Match, std::wregex(GetPattern(std::get<I>(Terms))), Flag))
@@ -100,7 +100,7 @@ void ToNumbers(const std::wstring& Replaced, std::size_t& Vaild, const std::arra
 			Flag |= std::regex_constants::match_not_bol;
 		}
 		*std::get<I>(Numbers) = Data;
-		ToNumbers<I + 1, N>(Replaced, Vaild, Numbers, Terms);
+		ToNumbers<I + 1, N>(Value, Vaild, Numbers, Terms);
 	}
 	else
 	{
