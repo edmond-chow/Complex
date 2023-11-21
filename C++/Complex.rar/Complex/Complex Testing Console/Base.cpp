@@ -55,12 +55,14 @@ namespace ComplexTestingConsole
 	};
 	std::wstring Base::GetStartupLine()
 	{
-		std::wstring Output = L" >> ";
-		for (std::size_t i = 1; i < std::extent_v<decltype(TestingConsole)>; ++i)
+		std::wstring Result = L" >> ";
+		bool First = true;
+		for (std::size_t i = 1; i < std::extent_v<decltype(TestingConsole)>; ++i, First = false)
 		{
-			Output.append(AddSquares(TestingConsole[i])).append(L"   ");
+			if (First == false) { Result += L"   "; }
+			Result += AddSquares(TestingConsole[i]);
 		}
-		return Output.substr(0, Output.length() - 3);
+		return Result;
 	};
 	bool Base::IsSwitchTo(const std::wstring& Option)
 	{

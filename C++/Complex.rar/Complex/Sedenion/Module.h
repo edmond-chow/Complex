@@ -58,13 +58,12 @@ inline std::wstring GetPattern(const std::wstring& Term)
 };
 inline void ToNumbers(const std::wstring& Value, std::size_t Size, double* Numbers, const std::wstring* Terms)
 {
-	std::wstring Replaced = Replace(Value, L" ", L"");
-	std::size_t Vaild = Replaced.length();
+	std::size_t Vaild = Value.length();
 	if (Vaild == 0) { throw std::invalid_argument("The string is empty."); }
 	for (std::size_t i = 0; i < Size; ++i)
 	{
 		double Data = 0;
-		std::wstring Rest = Replaced;
+		std::wstring Rest = Value;
 		std::wsmatch Match;
 		std::regex_constants::match_flag_type Flag = std::regex_constants::match_default;
 		while (std::regex_search(Rest, Match, std::wregex(GetPattern(Terms[i])), Flag))

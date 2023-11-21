@@ -257,8 +257,9 @@ namespace Cmplx2
 		};
 		Vector3D CMPLX2_FUNC_CALL Vector3D::GetInstance(const std::wstring& Value)
 		{
+			std::wstring Replaced = Replace(Value, L" ", L"");
 			Vector3D Object;
-			ToNumbers(Value, Object[index::e1], L"e1", Object[index::e2], L"e2", Object[index::e3], L"e3");
+			ToNumbers(Replaced, Object[index::e1], L"e1", Object[index::e2], L"e2", Object[index::e3], L"e3");
 			return Object;
 		};
 	}
@@ -791,8 +792,9 @@ namespace Cmplx2
 		};
 		Quaternion CMPLX2_FUNC_CALL Quaternion::GetInstance(const std::wstring& Value)
 		{
+			std::wstring Replaced = Replace(Value, L" ", L"");
 			Quaternion Object;
-			ToNumbers(Value, Object[index::s], L"", Object[index::i], L"i", Object[index::j], L"j", Object[index::k], L"k");
+			ToNumbers(Replaced, Object[index::s], L"", Object[index::i], L"i", Object[index::j], L"j", Object[index::k], L"k");
 			return Object;
 		};
 	}
