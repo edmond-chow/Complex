@@ -293,11 +293,11 @@ namespace Seden
         {
             string Replaced = Value.Replace(" ", "");
             if (Replaced == "0") { return new Sedenion(); }
-            MatchCollection Matches = new Regex(@"e(\d+)(?=-|\+|$)").Matches(Replaced);
+            MatchCollection Match = new Regex(@"e(\d+)(?=-|\+|$)").Matches(Replaced);
             long Dimension = 0;
-            for (int i = 0; i < Matches.Count; ++i)
+            for (int i = 0; i < Match.Count; ++i)
             {
-                Dimension = Math.Max(Dimension, long.Parse(Matches[i].Groups[1].Value));
+                Dimension = Math.Max(Dimension, long.Parse(Match[i].Groups[1].Value));
             }
             string[] Terms = new string[GetDimension(Dimension)];
             for (long i = 0; i < Terms.LongLength; ++i) { Terms[i] = "e" + i.ToString(); }
