@@ -48,10 +48,10 @@ internal static class Module
         if (Vaild == 0) { throw new ArgumentException("The string is empty."); }
         for (long i = 0; i < Numbers.LongLength; ++i)
         {
-            MatchCollection Matches = new Regex(GetPattern(Terms[i])).Matches(Value);
-            for (int j = 0; j < Matches.Count; ++j)
+            MatchCollection Match = new Regex(GetPattern(Terms[i])).Matches(Value);
+            for (int j = 0; j < Match.Count; ++j)
             {
-                string Captured = Matches[j].Value;
+                string Captured = Match[j].Value;
                 Vaild -= Captured.Length + Terms[i].Length;
                 if (Captured.Length == 0 || Captured == "+") { ++Numbers[i]; }
                 else if (Captured == "-") { --Numbers[i]; }

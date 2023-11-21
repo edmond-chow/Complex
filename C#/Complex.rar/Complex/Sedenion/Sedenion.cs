@@ -36,9 +36,9 @@ namespace Seden
         public override string ToString()
         {
             double[] Numbers = Data.ToArray();
-            string[] Strings = new string[LongLength];
-            for (long i = 0; i < Strings.LongLength; ++i) { Strings[i] = "e" + i.ToString(); }
-            return Numbers.ToString(Strings);
+            string[] Terms = new string[LongLength];
+            for (long i = 0; i < Terms.LongLength; ++i) { Terms[i] = "e" + i.ToString(); }
+            return Numbers.ToString(Terms);
         }
         public override bool Equals(object obj)
         {
