@@ -154,9 +154,10 @@ namespace Cmplx3
             public static string GetString(Vector7D Value) { return Value.ToString(); }
             public static Vector7D GetInstance(string Value)
             {
+                string Replaced = Value.Replace(" ", "");
                 Vector7D RetValue = 0;
                 double[] Numbers;
-                try { Numbers = Value.ToNumbers("e1", "e2", "e3", "e4", "e5", "e6", "e7"); }
+                try { Numbers = Replaced.ToNumbers("e1", "e2", "e3", "e4", "e5", "e6", "e7"); }
                 catch (Exception Exception) { throw new Vector7DException("The string cannot be converted as a number.", Exception); }
                 for (long i = 0; i < Numbers.LongLength; i++) { RetValue[i + 1] = Numbers[i]; }
                 return RetValue;
@@ -483,9 +484,10 @@ namespace Cmplx3
             public static string GetString(Octonion Value) { return Value.ToString(); }
             public static Octonion GetInstance(string Value)
             {
+                string Replaced = Value.Replace(" ", "");
                 Octonion RetValue = 0;
                 double[] Numbers;
-                try { Numbers = Value.ToNumbers("", "i", "j", "k", "l", "il", "jl", "kl"); }
+                try { Numbers = Replaced.ToNumbers("", "i", "j", "k", "l", "il", "jl", "kl"); }
                 catch (Exception Exception) { throw new OctonionException("The string cannot be converted as a number.", Exception); }
                 for (long i = 0; i < Numbers.LongLength; i++) { RetValue[i] = Numbers[i]; }
                 return RetValue;

@@ -291,17 +291,17 @@ namespace Seden
         public static string GetString(Sedenion Value) { return Value.ToString(); }
         public static Sedenion GetInstance(string Value)
         {
-            if (Value.Replace(" ", "") == "0") { return new Sedenion(); }
-            MatchCollection Matches = new Regex("e\\d+(?=-|\\+|$)").Matches(Value);
-            if (Matches.Count == 0) { throw new NotImplementedException("The branch should ensure not instantiated at compile time."); }
+            string Replaced = Value.Replace(" ", "");
+            if (Replaced == "0") { return new Sedenion(); }
+            MatchCollection Matches = new Regex(@"e(\d+)(?=-|\+|$)").Matches(Replaced);
             long Dimension = 0;
             for (int i = 0; i < Matches.Count; ++i)
             {
-                Dimension = Math.Max(Dimension, long.Parse(Matches[i].Value.Substring(1)));
+                Dimension = Math.Max(Dimension, long.Parse(Matches[i].Groups[1].Value));
             }
-            string[] Strings = new string[GetDimension(Dimension)];
-            for (long i = 0; i < Strings.LongLength; ++i) { Strings[i] = "e" + i.ToString(); }
-            return new Sedenion(Value.ToNumbers(Strings));
+            string[] Terms = new string[GetDimension(Dimension)];
+            for (long i = 0; i < Terms.LongLength; ++i) { Terms[i] = "e" + i.ToString(); }
+            return new Sedenion(Replaced.ToNumbers(Terms));
         }
         ///
         /// casing

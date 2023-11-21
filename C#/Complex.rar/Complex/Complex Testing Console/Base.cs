@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using System.Text.RegularExpressions;
 namespace ComplexTestingConsole
 {
@@ -20,12 +21,14 @@ namespace ComplexTestingConsole
         }
         public static string GetStartupLine()
         {
-            string Output = " >> ";
-            for (long i = 1; i < TestingConsole.LongLength; ++i)
+            string Result = " >> ";
+            bool First = true;
+            for (long i = 1; i < TestingConsole.LongLength; ++i, First = false)
             {
-                Output += TestingConsole[i].AddSquares() + "   ";
+                if (First == false) { Result += "   "; }
+                Result += TestingConsole[i].AddSquares();
             }
-            return Output.Substring(0, Output.Length - 3);
+            return Result;
         }
         public static bool IsSwitchTo(string Option)
         {
@@ -217,14 +220,16 @@ namespace ComplexTestingConsole
         }
         private static string GetOutputPrepend(string RightValue, long[] Temp)
         {
-            string Result = RightValue + "(";
-            for (long i = 0; i < Temp.LongLength; ++i)
+            StringBuilder Result = new StringBuilder();
+            Result.Append(RightValue).Append("(");
+            bool First = true;
+            for (long i = 0; i < Temp.LongLength; ++i, First = false)
             {
-                Result += Temp[i].ToString() + ", ";
+                if (First == false) { Result.Append(", "); }
+                Result.Append(Temp[i].ToString());
             }
-            Result = Result.Substring(0, Result.Length - 2);
-            Result += ") = ";
-            return Result;
+            Result.Append(") = ");
+            return Result.ToString();
         }
         private static string DoubleToString(this double Number)
         {

@@ -134,9 +134,10 @@ namespace Cmplx2
             public static string GetString(Vector3D Value) { return Value.ToString(); }
             public static Vector3D GetInstance(string Value)
             {
+                string Replaced = Value.Replace(" ", "");
                 Vector3D RetValue = 0;
                 double[] Numbers;
-                try { Numbers = Value.ToNumbers("e1", "e2", "e3"); }
+                try { Numbers = Replaced.ToNumbers("e1", "e2", "e3"); }
                 catch (Exception Exception) { throw new Vector3DException("The string cannot be converted as a number.", Exception); }
                 for (long i = 0; i < Numbers.LongLength; i++) { RetValue[i + 1] = Numbers[i]; }
                 return RetValue;
@@ -459,9 +460,10 @@ namespace Cmplx2
             public static string GetString(Quaternion Value) { return Value.ToString(); }
             public static Quaternion GetInstance(string Value)
             {
+                string Replaced = Value.Replace(" ", "");
                 Quaternion RetValue = 0;
                 double[] Numbers;
-                try { Numbers = Value.ToNumbers("", "i", "j", "k"); }
+                try { Numbers = Replaced.ToNumbers("", "i", "j", "k"); }
                 catch (Exception Exception) { throw new QuaternionException("The string cannot be converted as a number.", Exception); }
                 for (long i = 0; i < Numbers.LongLength; i++) { RetValue[i] = Numbers[i]; }
                 return RetValue;

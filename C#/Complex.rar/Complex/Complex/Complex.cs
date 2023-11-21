@@ -123,9 +123,10 @@ namespace Cmplx
             public static string GetString(Vector1D Value) { return Value.ToString(); }
             public static Vector1D GetInstance(string Value)
             {
+                string Replaced = Value.Replace(" ", "");
                 Vector1D RetValue = 0;
                 double[] Numbers;
-                try { Numbers = Value.ToNumbers("e1"); }
+                try { Numbers = Replaced.ToNumbers("e1"); }
                 catch (Exception Exception) { throw new Vector1DException("The string cannot be converted as a number.", Exception); }
                 for (long i = 0; i < Numbers.LongLength; i++) { RetValue[i + 1] = Numbers[i]; }
                 return RetValue;
@@ -448,9 +449,10 @@ namespace Cmplx
             public static string GetString(Complex Value) { return Value.ToString(); }
             public static Complex GetInstance(string Value)
             {
+                string Replaced = Value.Replace(" ", "");
                 Complex RetValue = 0;
                 double[] Numbers;
-                try { Numbers = Value.ToNumbers("", "i"); }
+                try { Numbers = Replaced.ToNumbers("", "i"); }
                 catch (Exception Exception) { throw new ComplexException("The string cannot be converted as a number.", Exception); }
                 for (long i = 0; i < Numbers.LongLength; i++) { RetValue[i] = Numbers[i]; }
                 return RetValue;

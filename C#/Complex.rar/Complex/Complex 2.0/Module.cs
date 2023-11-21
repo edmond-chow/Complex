@@ -43,16 +43,15 @@ internal static class Module
     }
     internal static double[] ToNumbers(this string Value, params string[] Terms)
     {
-        string Replaced = Value.Replace(" ", "");
         double[] Numbers = new double[Terms.LongLength];
-        int Vaild = Replaced.Length;
+        int Vaild = Value.Length;
         if (Vaild == 0) { throw new ArgumentException("The string is empty."); }
         for (long i = 0; i < Numbers.LongLength; ++i)
         {
-            MatchCollection Match = new Regex(GetPattern(Terms[i])).Matches(Replaced);
-            for (int j = 0; j < Match.Count; ++j)
+            MatchCollection Matches = new Regex(GetPattern(Terms[i])).Matches(Value);
+            for (int j = 0; j < Matches.Count; ++j)
             {
-                string Captured = Match[j].Value;
+                string Captured = Matches[j].Value;
                 Vaild -= Captured.Length + Terms[i].Length;
                 if (Captured.Length == 0 || Captured == "+") { ++Numbers[i]; }
                 else if (Captured == "-") { --Numbers[i]; }
@@ -64,15 +63,15 @@ internal static class Module
     }
     internal static long Period(Type Type)
     {
-        long Output = 0;
+        long Result = 0;
         if (!Type.IsValueType) { throw new NotImplementedException("The type should be a value type."); }
         foreach (FieldInfo Field in Type.GetRuntimeFields())
         {
-            if (Field.FieldType == typeof(double)) { ++Output; }
-            else if (Field.FieldType.IsValueType) { Output += Period(Field.FieldType); }
+            if (Field.FieldType == typeof(double)) { ++Result; }
+            else if (Field.FieldType.IsValueType) { Result += Period(Field.FieldType); }
             else { throw new NotImplementedException("The subobjects of an object should be an instance of the double type."); }
         }
-        return Output;
+        return Result;
     }
     internal static long PeriodShift(long Index, long LongLength)
     {

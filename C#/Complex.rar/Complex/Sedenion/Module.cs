@@ -42,13 +42,12 @@ internal static class Module
     }
     internal static double[] ToNumbers(this string Value, params string[] Terms)
     {
-        string Replaced = Value.Replace(" ", "");
         double[] Numbers = new double[Terms.LongLength];
-        int Vaild = Replaced.Length;
+        int Vaild = Value.Length;
         if (Vaild == 0) { throw new ArgumentException("The string is empty."); }
         for (long i = 0; i < Numbers.LongLength; ++i)
         {
-            MatchCollection Match = new Regex(GetPattern(Terms[i])).Matches(Replaced);
+            MatchCollection Match = new Regex(GetPattern(Terms[i])).Matches(Value);
             for (int j = 0; j < Match.Count; ++j)
             {
                 string Captured = Match[j].Value;
