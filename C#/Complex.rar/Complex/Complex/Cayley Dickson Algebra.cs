@@ -1,45 +1,6 @@
 ﻿using System;
-using System.Linq;
-using System.Collections;
-using System.Collections.Generic;
-internal class Number : IEnumerable<double>
+internal class Number
 {
-    public class NumberIterator : IEnumerator<double>
-    {
-        private readonly double[] Numbers;
-        private long Index;
-        public double Current
-        {
-            get { return Numbers[Index]; }
-        }
-        object IEnumerator.Current
-        {
-            get { return Numbers[Index]; }
-        }
-        public void Dispose() { }
-        public bool MoveNext()
-        {
-            ++Index;
-            return Index < Numbers.LongLength;
-        }
-        public void Reset()
-        {
-            Index = -1;
-        }
-        public NumberIterator(double[] Data)
-        {
-            Numbers = Data;
-            Index = -1;
-        }
-    }
-    public IEnumerator<double> GetEnumerator()
-    {
-        return new NumberIterator(Data);
-    }
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return new NumberIterator(Data);
-    }
     private static bool IsNumber(long Number)
     {
         if (Number < 0) { return false; }
@@ -71,53 +32,70 @@ internal class Number : IEnumerable<double>
     }
     public static bool Equal(Number Union, Number Value)
     {
-        return Enumerable.SequenceEqual(Union, Value);
+        if (Union.Data.LongLength != Value.Data.LongLength) { return false; }
+        for (long i = 0; i < Value.Data.LongLength; ++i)
+        {
+            if (Union.Data[i] != Value.Data[i]) { return false; }
+        }
+        return true;
     }
     public static Number Add(Number Union, Number Value)
     {
         if (Union.LongLength > Value.LongLength) { Add(Value, Union); }
-        return new Number(Enumerable.Zip(Union, Value, (double U, double V) => { return U + V; }).Concat(Value.Skip(Union.Length)).ToArray());
+        Number Result = Value;
+        for (long i = 0; i < Union.LongLength; ++i) { Result.Data[i] += Union.Data[i]; }
+        return Result;
     }
     public static Number Neg(Number Value)
     {
-        return new Number(Value.Select((double V) => { return -V; }).ToArray());
+        Number Result = Value;
+        for (long i = 0; i < Result.LongLength; ++i) { Result.Data[i] = -Result.Data[i]; }
+        return Result;
     }
     public static Number Conjg(Number Value)
     {
-        return new Number(Value.Take(1).Concat(Value.Skip(1).Select((double V) => { return -V; })).ToArray());
+        Number Result = Value;
+        for (long i = 1; i < Result.LongLength; ++i) { Result.Data[i] = -Result.Data[i]; }
+        return Result;
     }
-    public Number GetLeft(int Count)
+    public Number GetLeft(long Count)
     {
-        if (0 >= Count || Count > Length) { throw new NotImplementedException("The branch should ensure not instantiated at compile time."); }
-        return new Number(this.Take(Count).ToArray());
+        if (Count < 0 || Count > Data.LongLength) { throw new NotImplementedException("The branch should ensure not instantiated at compile time."); }
+        double[] Numbers = new double[Count];
+        for (long i = 0; i < Count; ++i) { Numbers[i] = Data[i]; }
+        return new Number(Numbers);
     }
-    public Number GetRight(int Count)
+    public Number GetRight(long Count)
     {
-        if (0 > Count || Count >= Length) { throw new NotImplementedException("The branch should ensure not instantiated at compile time."); }
-        return new Number(this.Skip(Count).ToArray());
+        if (Count < 0 || Count > Data.LongLength) { throw new NotImplementedException("The branch should ensure not instantiated at compile time."); }
+        double[] Numbers = new double[Count];
+        for (long o = Data.LongLength - Count, i = 0; i < Count; ++i) { Numbers[i] = Data[o + i]; }
+        return new Number(Numbers);
     }
     public Number Left
     {
-        get
-        {
-            return GetLeft(Length >> 1);
-        }
+        get { return GetLeft(Data.LongLength >> 1); }
     }
     public Number Right
     {
-        get
-        {
-            return GetRight(Length >> 1);
-        }
+        get { return GetRight(Data.LongLength >> 1); }
     }
-    public Number Extend(int Size)
+    public Number Extend(long Size)
     {
-        if (Size > Length) { Array.Resize(ref Data, Size); }
+        if (Size > Data.LongLength)
+        {
+            double[] Numbers = new double[Size];
+            for (long i = 0; i < Data.LongLength; ++i) { Numbers[i] = Data[i]; }
+            Data = Numbers;
+        }
         return this;
     }
     public static Number Merge(Number Union, Number Value)
     {
-        return new Number(Enumerable.Concat(Union, Value).ToArray());
+        double[] Numbers = new double[Union.Data.LongLength + Value.Data.LongLength];
+        for (long o = Union.Data.LongLength, i = 0; i < o; ++i) { Numbers[i] = Union.Data[i]; }
+        for (long o = Value.Data.LongLength, i = 0; i < o; ++i) { Numbers[o + i] = Value.Data[i]; }
+        return new Number(Numbers);
     }
     public override bool Equals(object obj)
     {
@@ -130,28 +108,30 @@ internal class Number : IEnumerable<double>
     }
     private static bool Check(ref Number Union, ref Number Value, bool Shift)
     {
-        int Offset = Shift ? 1 : 0;
-        if (!IsNumber(Union.Length + Offset) || !IsNumber(Value.Length + Offset))
+        long Offset = Shift ? 1 : 0;
+        if (!IsNumber(Union.LongLength + Offset) || !IsNumber(Value.LongLength + Offset))
         {
             throw new ArgumentException("The size must be a number which is 2 to the power of a natural number.");
         }
-        else if (Union.Length < Value.Length)
+        else if (Union.LongLength < Value.LongLength)
         {
-            Union.Extend(Value.Length);
+            Union.Extend(Value.LongLength);
         }
-        else if (Value.Length < Union.Length)
+        else if (Value.LongLength < Union.LongLength)
         {
-            Value.Extend(Union.Length);
+            Value.Extend(Union.LongLength);
         }
-        return Union.Length == 1;
+        return Union.LongLength == 1;
     }
     private static Number MakeNumber(Number Value)
     {
-        return new Number(new double[] { 0 }.Concat(Value).ToArray());
+        double[] Result = new double[Value.LongLength + 1];
+        for (long i = 0; i < Value.LongLength; ++i) { Result[i + 1] = Value.Data[i]; }
+        return new Number(Result);
     }
     private static Number MakeVector(Number Value)
     {
-        return new Number(Value.Skip(1).ToArray());
+        return Value.GetRight(Value.LongLength - 1);
     }
     private static void AsVector(ref Number Value)
     {
@@ -205,7 +185,9 @@ internal class Number : IEnumerable<double>
     }
     public static Number operator *(double Union, Number Value)
     {
-        return new Number(Value.Select((double V) => { return V * Union; }).ToArray());
+        Number Result = Value;
+        for (long i = 0; i < Result.LongLength; ++i) { Result.Data[i] *= Union; }
+        return Result;
     }
     public static Number operator *(Number Union, double Value)
     {
@@ -268,5 +250,9 @@ internal class Number : IEnumerable<double>
         Number Result = NumUnion * NumValue;
         AsVector(ref Result);
         return Result;
+    }
+    public double[] ToArray()
+    {
+        return Data;
     }
 }

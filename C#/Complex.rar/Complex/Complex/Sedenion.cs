@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Text.RegularExpressions;
 namespace Seden
 {
@@ -27,31 +26,19 @@ namespace Seden
         ///
         /// basis
         ///
-        private readonly Number numbers;
-        private Number Data
-        {
-            get { return numbers; }
-        }
-        private int Length
-        {
-            get { return numbers.Length; }
-        }
-        private long LongLength
-        {
-            get { return numbers.LongLength; }
-        }
+        private readonly Number Data;
         public Sedenion()
         {
-            numbers = new Number(16);
+            Data = new Number(16);
         }
-        public Sedenion(params double[] numbers)
+        public Sedenion(params double[] Numbers)
         {
-            this.numbers = new Number(numbers);
+            Data = new Number(Numbers);
         }
         public override string ToString()
         {
             double[] Numbers = Data.ToArray();
-            string[] Terms = new string[LongLength];
+            string[] Terms = new string[Numbers.LongLength];
             for (long i = 0; i < Terms.LongLength; ++i) { Terms[i] = "e" + i.ToString(); }
             return Numbers.ToString(Terms);
         }
@@ -60,42 +47,35 @@ namespace Seden
             if (obj is Sedenion o) { return this == o; }
             else { return false; }
         }
-        public double this[long index]
+        public double this[long Index]
         {
-            get { return numbers[index % numbers.LongLength]; }
-            set { numbers[index % numbers.LongLength] = value; }
+            get { return Data[Index % Data.LongLength]; }
+            set { Data[Index % Data.LongLength] = value; }
         }
         public override int GetHashCode() { return 0; }
         public static explicit operator Sedenion(string Value) { return GetInstance(Value); }
         public static explicit operator string(Sedenion Value) { return GetString(Value); }
         public static implicit operator Sedenion(double Value) { return new Sedenion(Value); }
         public static double Scalar(Sedenion Value) { return Value.ToNumber()[0]; }
-        public static Sedenion Vector(Sedenion Value) { return new Sedenion(new double[] { 0 }.Concat(Value.ToNumber().Skip(1)).ToArray()); }
+        public static Sedenion Vector(Sedenion Value)
+        {
+            Sedenion Result = Value;
+            Result[0] = 0;
+            return Result;
+        }
         ///
         /// operators
         ///
-        public static bool operator ==(Sedenion Union, Sedenion Value)
-        {
-            int Dimension = Math.Max(Union.Length, Value.Length);
-            return Union.ToNumber(Dimension) == Value.ToNumber(Dimension);
-        }
+        public static bool operator ==(Sedenion Union, Sedenion Value) { return Union.ToNumber() == Value.ToNumber(); }
         public static bool operator !=(Sedenion Union, Sedenion Value) { return !(Union == Value); }
         public static Sedenion operator +(Sedenion Value) { return Value; }
         public static Sedenion operator -(Sedenion Value) { return From(-Value.ToNumber()); }
         public static Sedenion operator ~(Sedenion Value) { return From(~Value.ToNumber()); }
         public static Sedenion operator ++(Sedenion Value) { return Value + 1; }
         public static Sedenion operator --(Sedenion Value) { return Value - 1; }
-        public static Sedenion operator +(Sedenion Union, Sedenion Value)
-        {
-            int Dimension = Math.Max(Union.Length, Value.Length);
-            return From(Union.ToNumber(Dimension) + Value.ToNumber(Dimension));
-        }
+        public static Sedenion operator +(Sedenion Union, Sedenion Value) { return From(Union.ToNumber() + Value.ToNumber()); }
         public static Sedenion operator -(Sedenion Union, Sedenion Value) { return Union + (-Value); }
-        public static Sedenion operator *(Sedenion Union, Sedenion Value)
-        {
-            int Dimension = Math.Max(Union.Length, Value.Length);
-            return From(Union.ToNumber(Dimension) * Value.ToNumber(Dimension));
-        }
+        public static Sedenion operator *(Sedenion Union, Sedenion Value) { return From(Union.ToNumber() * Value.ToNumber()); }
         public static Sedenion operator /(Sedenion Union, double Value) { return From(Union.ToNumber() / Value); }
         public static Sedenion operator ^(Sedenion Base, long Exponent) { return Power(Base, Exponent); }
         ///
@@ -321,13 +301,7 @@ namespace Seden
         ///
         /// casing
         ///
-        private Number ToNumber() { return numbers; }
-        private Number ToNumber(int Dimension)
-        {
-            double[] Numbers = Data.ToArray();
-            Array.Resize(ref Numbers, Math.Max(Length, Dimension));
-            return new Number(Numbers);
-        }
+        private Number ToNumber() { return Data; }
         private static Sedenion From(Number Number) { return new Sedenion(Number.ToArray()); }
     }
 }
