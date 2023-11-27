@@ -28,11 +28,26 @@ namespace Seden
         /// basis
         ///
         private readonly Number numbers;
-        private Number Data => numbers;
-        private int Length => numbers.Length;
-        private long LongLength => numbers.LongLength;
-        public Sedenion() { numbers = new Number(16); }
-        public Sedenion(params double[] numbers) { this.numbers = new Number(numbers); }
+        private Number Data
+        {
+            get { return numbers; }
+        }
+        private int Length
+        {
+            get { return numbers.Length; }
+        }
+        private long LongLength
+        {
+            get { return numbers.LongLength; }
+        }
+        public Sedenion()
+        {
+            numbers = new Number(16);
+        }
+        public Sedenion(params double[] numbers)
+        {
+            this.numbers = new Number(numbers);
+        }
         public override string ToString()
         {
             double[] Numbers = Data.ToArray();
@@ -45,10 +60,10 @@ namespace Seden
             if (obj is Sedenion o) { return this == o; }
             else { return false; }
         }
-        public double this[long Index]
+        public double this[long index]
         {
-            get => Data[Index % LongLength];
-            set => Data[Index % LongLength] = value;
+            get { return numbers[index % numbers.LongLength]; }
+            set { numbers[index % numbers.LongLength] = value; }
         }
         public override int GetHashCode() { return 0; }
         public static explicit operator Sedenion(string Value) { return GetInstance(Value); }

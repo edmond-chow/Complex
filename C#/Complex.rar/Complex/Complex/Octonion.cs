@@ -11,7 +11,7 @@ namespace Octon
 {
     namespace BaseType
     {
-        public struct Vector7D
+        public struct Vector7D : INumber
         {
             ///
             /// basis
@@ -156,10 +156,8 @@ namespace Octon
             {
                 string Replaced = Value.Replace(" ", "");
                 Vector7D Result = 0;
-                double[] Numbers;
-                try { Numbers = Replaced.ToNumbers("e1", "e2", "e3", "e4", "e5", "e6", "e7"); }
+                try { Replaced.ToNumbers(ref Result, true, "e1", "e2", "e3", "e4", "e5", "e6", "e7"); }
                 catch (Exception Exception) { throw new Vector7DException("The string cannot be converted as a number.", Exception); }
-                for (long i = 0; i < Numbers.LongLength; i++) { Result[i + 1] = Numbers[i]; }
                 return Result;
             }
             public static Vector7D ToVector7D(this string Value) { return GetInstance(Value); }
@@ -167,7 +165,7 @@ namespace Octon
     }
     namespace MainType
     {
-        public struct Octonion
+        public struct Octonion : INumber
         {
             ///
             /// basis
@@ -486,10 +484,8 @@ namespace Octon
             {
                 string Replaced = Value.Replace(" ", "");
                 Octonion Result = 0;
-                double[] Numbers;
-                try { Numbers = Replaced.ToNumbers("", "i", "j", "k", "l", "il", "jl", "kl"); }
+                try { Replaced.ToNumbers(ref Result, false, "", "i", "j", "k", "l", "il", "jl", "kl"); }
                 catch (Exception Exception) { throw new OctonionException("The string cannot be converted as a number.", Exception); }
-                for (long i = 0; i < Numbers.LongLength; i++) { Result[i] = Numbers[i]; }
                 return Result;
             }
             public static Octonion ToOctonion(this string Value) { return GetInstance(Value); }

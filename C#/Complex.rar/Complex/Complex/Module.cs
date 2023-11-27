@@ -4,6 +4,10 @@ using System.Text;
 using System.Text.RegularExpressions;
 internal static class Module
 {
+    internal interface INumber
+    {
+        double this[long index] { get; set; }
+    }
     private static readonly string SignBefore = @"(-|\+|^)";
     private static readonly string UnsignedReal = @"(\d+)(\.\d+|)([Ee](-|\+|)(\d+)|)";
     private static readonly string SignAfter = @"(-|\+|$)";
@@ -60,6 +64,12 @@ internal static class Module
         }
         if (Vaild > 0) { throw new ArgumentException("The string is invalid."); }
         return Numbers;
+    }
+    internal static void ToNumbers<N>(this string Value, ref N Result, bool Shift, params string[] Terms) where N : INumber
+    {
+        double[] Numbers = Value.ToNumbers(Terms);
+        long o = Shift ? 1 : 0;
+        for (long i = 0; i < Numbers.LongLength; ++i) { Result[i + o] = Numbers[i]; }
     }
     internal static long Period(Type Type)
     {

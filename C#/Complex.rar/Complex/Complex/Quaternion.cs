@@ -11,7 +11,7 @@ namespace Quter
 {
     namespace BaseType
     {
-        public struct Vector3D
+        public struct Vector3D : INumber
         {
             ///
             /// basis
@@ -136,10 +136,8 @@ namespace Quter
             {
                 string Replaced = Value.Replace(" ", "");
                 Vector3D Result = 0;
-                double[] Numbers;
-                try { Numbers = Replaced.ToNumbers("e1", "e2", "e3"); }
+                try { Replaced.ToNumbers(ref Result, true, "e1", "e2", "e3"); }
                 catch (Exception Exception) { throw new Vector3DException("The string cannot be converted as a number.", Exception); }
-                for (long i = 0; i < Numbers.LongLength; i++) { Result[i + 1] = Numbers[i]; }
                 return Result;
             }
             public static Vector3D ToVector3D(this string Value) { return GetInstance(Value); }
@@ -147,7 +145,7 @@ namespace Quter
     }
     namespace MainType
     {
-        public struct Quaternion
+        public struct Quaternion : INumber
         {
             ///
             /// basis
@@ -462,10 +460,8 @@ namespace Quter
             {
                 string Replaced = Value.Replace(" ", "");
                 Quaternion Result = 0;
-                double[] Numbers;
-                try { Numbers = Replaced.ToNumbers("", "i", "j", "k"); }
+                try { Replaced.ToNumbers(ref Result, false, "", "i", "j", "k"); }
                 catch (Exception Exception) { throw new QuaternionException("The string cannot be converted as a number.", Exception); }
-                for (long i = 0; i < Numbers.LongLength; i++) { Result[i] = Numbers[i]; }
                 return Result;
             }
             public static Quaternion ToQuaternion(this string Value) { return GetInstance(Value); }

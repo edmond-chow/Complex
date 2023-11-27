@@ -11,7 +11,7 @@ namespace Cmplx
 {
     namespace BaseType
     {
-        public struct Vector1D
+        public struct Vector1D : INumber
         {
             ///
             /// basis
@@ -125,10 +125,8 @@ namespace Cmplx
             {
                 string Replaced = Value.Replace(" ", "");
                 Vector1D Result = 0;
-                double[] Numbers;
-                try { Numbers = Replaced.ToNumbers("e1"); }
+                try { Replaced.ToNumbers(ref Result, true, "e1"); }
                 catch (Exception Exception) { throw new Vector1DException("The string cannot be converted as a number.", Exception); }
-                for (long i = 0; i < Numbers.LongLength; i++) { Result[i + 1] = Numbers[i]; }
                 return Result;
             }
             public static Vector1D ToVector1D(this string Value) { return GetInstance(Value); }
@@ -136,7 +134,7 @@ namespace Cmplx
     }
     namespace MainType
     {
-        public struct Complex
+        public struct Complex : INumber
         {
             ///
             /// basis
@@ -451,10 +449,8 @@ namespace Cmplx
             {
                 string Replaced = Value.Replace(" ", "");
                 Complex Result = 0;
-                double[] Numbers;
-                try { Numbers = Replaced.ToNumbers("", "i"); }
+                try { Replaced.ToNumbers(ref Result, false, "", "i"); }
                 catch (Exception Exception) { throw new ComplexException("The string cannot be converted as a number.", Exception); }
-                for (long i = 0; i < Numbers.LongLength; i++) { Result[i] = Numbers[i]; }
                 return Result;
             }
             public static Complex ToComplex(this string Value) { return GetInstance(Value); }

@@ -8,16 +8,24 @@ internal class Number : IEnumerable<double>
     {
         private readonly double[] Numbers;
         private long Index;
-        public double Current => Numbers[Index];
-        object IEnumerator.Current => Numbers[Index];
+        public double Current
+        {
+            get { return Numbers[Index]; }
+        }
+        object IEnumerator.Current
+        {
+            get { return Numbers[Index]; }
+        }
         public void Dispose() { }
         public bool MoveNext()
         {
-            if (Index < Numbers.LongLength) { ++Index; }
-            if (Index == Numbers.LongLength) { return false; }
-            return true;
+            ++Index;
+            return Index < Numbers.LongLength;
         }
-        public void Reset() { Index = -1; }
+        public void Reset()
+        {
+            Index = -1;
+        }
         public NumberIterator(double[] Data)
         {
             Numbers = Data;
@@ -42,16 +50,16 @@ internal class Number : IEnumerable<double>
     private double[] Data;
     public double this[long Index]
     {
-        get => Data[Index];
-        set => Data[Index] = value;
+        get { return Data[Index]; }
+        set { Data[Index] = value; }
     }
     public int Length
     {
-        get => Data.Length;
+        get { return Data.Length; }
     }
     public long LongLength
     {
-        get => Data.LongLength;
+        get { return Data.LongLength; }
     }
     public Number(long Size)
     {
