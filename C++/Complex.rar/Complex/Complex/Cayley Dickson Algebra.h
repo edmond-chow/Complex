@@ -195,39 +195,59 @@ private:
 	double* data;
 	std::size_t size;
 public:
-	constexpr const double* get_data() const { return data; };
-	constexpr std::size_t get_size() const { return size; };
-	constexpr double& operator [](std::int64_t i) & noexcept { return data[i % size]; };
-	constexpr const double& operator [](std::int64_t i) const& noexcept { return data[i % size]; };
-	constexpr Factor(std::size_t size)
-		: data{ nullptr }, size{ size }
+	constexpr const double* get_data() const
 	{
-		data = new double[size] {};
+		return data;
 	};
-	constexpr Factor(const double* data, std::size_t size)
-		: data{ nullptr }, size{ size }
+	constexpr std::size_t get_size() const
 	{
-		this->data = new double[size] {};
-		std::copy(data, data + size, this->data);
+		return size;
 	};
-	constexpr Factor(const std::initializer_list<double>& init)
-		: data{ nullptr }, size{ init.size() }
+	constexpr double& operator [](std::int64_t i) & noexcept
 	{
-		data = new double[size] {};
-		std::copy(init.begin(), init.end(), data);
+		return data[i % size];
 	};
-	constexpr Factor(const Factor& Value)
-		: data(new double[Value.size] {}), size(Value.size)
+	constexpr const double& operator [](std::int64_t i) const& noexcept
 	{
-		std::copy(Value.data, Value.data + Value.size, data);
+		return data[i % size];
 	};
-	constexpr Factor(Factor&& Value) noexcept
-		: data(Value.data), size(Value.size)
+	constexpr Factor(std::nullptr_t data, std::size_t size) : data{ nullptr }, size{ size }
+	{
+		if (this->size > 0)
+		{
+			this->data = new double[this->size] {};
+		}
+	};
+	constexpr Factor(const double* data, std::size_t size) : data{ nullptr }, size{ size }
+	{
+		if (this->size > 0)
+		{
+			this->data = new double[this->size] {};
+			std::copy(data, data + size, this->data);
+		}
+	};
+	constexpr Factor(const std::initializer_list<double>& list) : data{ nullptr }, size{ list.size() }
+	{
+		if (this->size > 0)
+		{
+			this->data = new double[this->size] {};
+			std::copy(list.begin(), list.end(), this->data);
+		}
+	};
+	constexpr Factor(const Factor& Value) : data{ nullptr }, size{ Value.size }
+	{
+		if (this->size > 0)
+		{
+			this->data = new double[this->size] {};
+			std::copy(Value.data, Value.data + Value.size, this->data);
+		}
+	};
+	constexpr Factor(Factor&& Value) noexcept : data{ Value.data }, size{ Value.size }
 	{
 		Value.data = nullptr;
 		Value.size = 0;
 	};
-	constexpr Factor& operator =(const Factor& Value)&
+	constexpr Factor& operator =(const Factor& Value) &
 	{
 		if (this == &Value) { return *this; }
 		delete[] data;
@@ -259,22 +279,22 @@ public:
 	};
 	static Factor merge(const Factor& Left, const Factor& Right)
 	{
-		Factor Result(Left.size + Right.size);
+		Factor Result{ nullptr, Left.size + Right.size };
 		std::copy(Right.data, Right.data + Right.size, std::copy(Left.data, Left.data + Left.size, Result.data));
 		return Result;
 	};
 	constexpr Factor left(std::size_t count) const
 	{
-		if (0 >= count || count > size) { throw std::out_of_range("The count is out of range."); }
-		Factor Result(count);
+		if (count > size) { throw std::out_of_range("The count is out of range."); }
+		Factor Result{ nullptr, count };
 		std::copy(data, data + count, Result.data);
 		return Result;
 	};
 	constexpr Factor right(std::size_t count) const
 	{
-		if (0 > count || count >= size) { throw std::out_of_range("The count is out of range."); }
-		Factor Result(size - count);
-		std::copy(data + count, data + size, Result.data);
+		if (count > size) { throw std::out_of_range("The count is out of range."); }
+		Factor Result{ nullptr, count };
+		std::copy(data + size - count, data + size, Result.data);
 		return Result;
 	};
 	constexpr Factor left() const
@@ -325,7 +345,7 @@ constexpr bool Check(Factor& Union, Factor& Value)
 };
 constexpr Factor MakeFactor(const Factor& Value)
 {
-	Factor Result(Value.size + 1);
+	Factor Result{ nullptr, Value.size + 1 };
 	std::copy(Value.data, Value.data + Value.size, Result.data + 1);
 	return Result;
 };
