@@ -56,7 +56,7 @@ namespace Seden
         public static explicit operator Sedenion(string Value) { return GetInstance(Value); }
         public static explicit operator string(Sedenion Value) { return GetString(Value); }
         public static implicit operator Sedenion(double Value) { return new Sedenion(Value); }
-        public static double Scalar(Sedenion Value) { return Value.ToNumber()[0]; }
+        public static double Scalar(Sedenion Value) { return Value[0]; }
         public static Sedenion Vector(Sedenion Value)
         {
             Sedenion Result = Value;
