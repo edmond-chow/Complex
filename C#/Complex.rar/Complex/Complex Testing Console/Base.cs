@@ -8,8 +8,9 @@ namespace ComplexTestingConsole
         ///
         /// Base
         ///
-        private static readonly string[] TestingConsole = new string[] { "Exit", "Complex Testing Console", "Quaternion Testing Console", "Octonion Testing Console", "Sedenion Extended Module" };
+        private static readonly string[] Alternative = new string[] { "Exit", "Complex Testing Console", "Quaternion Testing Console", "Octonion Testing Console", "Sedenion Extended Module" };
         private static readonly Action[] Subroutine = new Action[] { null, CmplxConsole.Load, QuterConsole.Load, OctonConsole.Load, SedenConsole.Load };
+        private const long HiddenLength = 1;
         private const long DefaultIndex = 3;
         private static long Index = DefaultIndex;
         private static string AddSquares(this string Option)
@@ -18,24 +19,24 @@ namespace ComplexTestingConsole
         }
         public static string GetTitle()
         {
-            return Index > DefaultIndex ? "Extended Module (Sedenion, Pathion, Chingon, Routon, Voudon, ...)" : TestingConsole[Index];
+            return Index > DefaultIndex ? "Extended Module (Sedenion, Pathion, Chingon, Routon, Voudon, ...)" : Alternative[Index];
         }
         public static string GetStartupLine()
         {
             string Result = " >> ";
             bool First = true;
-            for (long i = 1; i < TestingConsole.LongLength; ++i, First = false)
+            for (long i = HiddenLength; i < Alternative.LongLength; ++i, First = false)
             {
                 if (First == false) { Result += "   "; }
-                Result += TestingConsole[i].AddSquares();
+                Result += Alternative[i].AddSquares();
             }
             return Result;
         }
         public static bool IsSwitchTo(string Option)
         {
-            for (long i = 0; i < TestingConsole.LongLength; ++i)
+            for (long i = 0; i < Alternative.LongLength; ++i)
             {
-                if (Option == TestingConsole[i].AddSquares())
+                if (Option == Alternative[i].AddSquares())
                 {
                     Index = i;
                     return true;
