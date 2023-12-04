@@ -17,8 +17,9 @@ namespace ComplexTestingConsole
 		///
 		/// Base
 		///
-		static constexpr const wchar_t* const TestingConsole[] { L"Exit", L"Complex Testing Console", L"Quaternion Testing Console", L"Octonion Testing Console", L"Sedenion Extended Module" };
+		static constexpr const wchar_t* const Alternative[] { L"Exit", L"Complex Testing Console", L"Quaternion Testing Console", L"Octonion Testing Console", L"Sedenion Extended Module" };
 		static constexpr void(*const Subroutine[])() { nullptr, CmplxBasis::CmplxConsole::Load, QuterBasis::QuterConsole::Load, OctonBasis::OctonConsole::Load, SedenBasis::SedenConsole::Load };
+		static constexpr const std::size_t HiddenLength = 1;
 		static constexpr const std::size_t DefaultIndex = 3;
 		static std::size_t Index;
 		static std::wstring AddSquares(const std::wstring& Option) { return L"[" + Option + L"]"; };
@@ -53,24 +54,24 @@ namespace ComplexTestingConsole
 	std::size_t Base::Index = DefaultIndex;
 	std::wstring Base::GetTitle()
 	{
-		return Index > DefaultIndex ? L"Extended Module (Sedenion, Pathion, Chingon, Routon, Voudon, ...)" : TestingConsole[Index];
+		return Index > DefaultIndex ? L"Extended Module (Sedenion, Pathion, Chingon, Routon, Voudon, ...)" : Alternative[Index];
 	};
 	std::wstring Base::GetStartupLine()
 	{
 		std::wstring Result = L" >> ";
 		bool First = true;
-		for (std::size_t i = 1; i < std::extent_v<decltype(TestingConsole)>; ++i, First = false)
+		for (std::size_t i = HiddenLength; i < std::extent_v<decltype(Alternative)>; ++i, First = false)
 		{
 			if (First == false) { Result += L"   "; }
-			Result += AddSquares(TestingConsole[i]);
+			Result += AddSquares(Alternative[i]);
 		}
 		return Result;
 	};
 	bool Base::IsSwitchTo(const std::wstring& Option)
 	{
-		for (std::size_t i = 0; i < std::extent_v<decltype(TestingConsole)>; ++i)
+		for (std::size_t i = 0; i < std::extent_v<decltype(Alternative)>; ++i)
 		{
-			if (Option == AddSquares(TestingConsole[i]))
+			if (Option == AddSquares(Alternative[i]))
 			{
 				Index = i;
 				return true;

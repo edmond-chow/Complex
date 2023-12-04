@@ -282,9 +282,9 @@ namespace Seden
 	double SEDEN_FUNC_CALL Sedenion::Scalar(const Sedenion& Value) { return Value[0]; };
 	Sedenion SEDEN_FUNC_CALL Sedenion::Vector(const Sedenion& Value)
 	{
-		Sedenion ret = Value;
-		ret[0] = 0;
-		return ret;
+		Sedenion Result = Value;
+		Result[0] = 0;
+		return Result;
 	};
 	///
 	/// operators
