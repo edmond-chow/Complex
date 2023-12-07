@@ -94,19 +94,19 @@ public:
 	{
 		return mul_impl(Union, Value, std::make_index_sequence<N>{});
 	};
-	template <std::size_t N, std::size_t M, std::size_t... I, std::size_t... J>
-	friend constexpr Number<N + M> merge_impl(const Number<N>& Union, const Number<M>& Value, std::integer_sequence<std::size_t, I...>, std::integer_sequence<std::size_t, J...>) noexcept;
-	template <std::size_t N>
-	friend constexpr Number<N> operator *(const Number<N>& Union, const Number<N>& Value) noexcept requires (is_number(N));
-	template <std::size_t N, std::size_t... I>
-	friend constexpr double vector_dot_impl(const Number<N>& Union, const Number<N>& Value, std::integer_sequence<std::size_t, I...>) noexcept requires (is_number(N + 1));
-	template <std::size_t N, std::size_t... I>
-	friend constexpr Number<N> vector_cross_impl(const Number<N>& Union, const Number<N>& Value, std::integer_sequence<std::size_t, I...>) noexcept requires (is_number(N + 1));
+	template <std::size_t U, std::size_t V, std::size_t... I, std::size_t... J>
+	friend constexpr Number<U + V> merge_impl(const Number<U>& Union, const Number<V>& Value, std::integer_sequence<std::size_t, I...>, std::integer_sequence<std::size_t, J...>) noexcept;
+	template <std::size_t S>
+	friend constexpr Number<S> operator *(const Number<S>& Union, const Number<S>& Value) noexcept requires (is_number(S));
+	template <std::size_t S, std::size_t... I>
+	friend constexpr double vector_dot_impl(const Number<S>& Union, const Number<S>& Value, std::integer_sequence<std::size_t, I...>) noexcept requires (is_number(S + 1));
+	template <std::size_t S, std::size_t... I>
+	friend constexpr Number<S> vector_cross_impl(const Number<S>& Union, const Number<S>& Value, std::integer_sequence<std::size_t, I...>) noexcept requires (is_number(S + 1));
 };
-template <std::size_t N, std::size_t M, std::size_t... I, std::size_t... J>
-constexpr Number<N + M> merge_impl(const Number<N>& Union, const Number<M>& Value, std::integer_sequence<std::size_t, I...>, std::integer_sequence<std::size_t, J...>) noexcept
+template <std::size_t U, std::size_t V, std::size_t... I, std::size_t... J>
+constexpr Number<U + V> merge_impl(const Number<U>& Union, const Number<V>& Value, std::integer_sequence<std::size_t, I...>, std::integer_sequence<std::size_t, J...>) noexcept
 {
-	return Number<N + M>{ Union.data[I]..., Value.data[J]... };
+	return Number<U + V>{ Union.data[I]..., Value.data[J]... };
 };
 template <std::size_t U, std::size_t V>
 constexpr Number<U + V> merge(const Number<U>& Union, const Number<V>& Value) noexcept
