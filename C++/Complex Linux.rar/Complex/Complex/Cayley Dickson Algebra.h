@@ -16,8 +16,8 @@ struct Number
 private:
 	double data[N];
 public:
-	constexpr double& operator [](std::size_t i) & noexcept { return data[i]; };
-	constexpr const double& operator [](std::size_t i) const& noexcept { return data[i]; };
+	constexpr double& operator [](std::size_t i) & noexcept { return data[i % N]; };
+	constexpr const double& operator [](std::size_t i) const& noexcept { return data[i % N]; };
 private:
 	template <typename... Args> requires (sizeof...(Args) == N)
 	constexpr void store_impl(Args... args) const noexcept {};
@@ -29,22 +29,22 @@ private:
 	template <std::size_t... I>
 	static constexpr bool equal_impl(const Number<N>& Union, const Number<N>& Value, std::integer_sequence<std::size_t, I...>) noexcept
 	{
-		return ((Union[I] == Value[I]) && ...);
+		return ((Union.data[I] == Value.data[I]) && ...);
 	};
 	template <std::size_t... I> requires (N == sizeof...(I))
 	static constexpr Number<N> add_impl(const Number<N>& Union, const Number<N>& Value, std::integer_sequence<std::size_t, I...>) noexcept
 	{
-		return Number<N>{ (Union[I] + Value[I])... };
+		return Number<N>{ (Union.data[I] + Value.data[I])... };
 	};
 	template <std::size_t... I> requires (N == sizeof...(I))
 	static constexpr Number<N> neg_impl(const Number<N>& Value, std::integer_sequence<std::size_t, I...>) noexcept
 	{
-		return Number<N>{ -Value[I]... };
+		return Number<N>{ -Value.data[I]... };
 	};
 	template <std::size_t... I> requires (N == sizeof...(I) + 1)
 	static constexpr Number<N> conjg_impl(const Number<N>& Value, std::integer_sequence<std::size_t, I...>) noexcept
 	{
-		return Number<N>{ Value[0], -Value[I]... };
+		return Number<N>{ Value.data[0], -Value.data[I]... };
 	};
 	template <std::size_t... I>
 	constexpr Number<sizeof...(I)> get(std::integer_sequence<std::size_t, I...>) const noexcept
@@ -54,7 +54,7 @@ private:
 	template <std::size_t... I> requires (N == sizeof...(I))
 	static constexpr Number<N> mul_impl(double Union, const Number<N>& Value, std::integer_sequence<std::size_t, I...>) noexcept
 	{
-		return Number<N>{ (Union * Value[I])... };
+		return Number<N>{ (Union * Value.data[I])... };
 	};
 public:
 	template <typename... Args>
@@ -94,16 +94,24 @@ public:
 	{
 		return mul_impl(Union, Value, std::make_index_sequence<N>{});
 	};
+	template <std::size_t U, std::size_t V, std::size_t... I, std::size_t... J>
+	friend constexpr Number<U + V> merge_impl(const Number<U>& Union, const Number<V>& Value, std::integer_sequence<std::size_t, I...>, std::integer_sequence<std::size_t, J...>) noexcept;
+	template <std::size_t S>
+	friend constexpr Number<S> operator *(const Number<S>& Union, const Number<S>& Value) noexcept requires (is_number(S));
+	template <std::size_t S, std::size_t... I>
+	friend constexpr double vector_dot_impl(const Number<S>& Union, const Number<S>& Value, std::integer_sequence<std::size_t, I...>) noexcept requires (is_number(S + 1));
+	template <std::size_t S, std::size_t... I>
+	friend constexpr Number<S> vector_cross_impl(const Number<S>& Union, const Number<S>& Value, std::integer_sequence<std::size_t, I...>) noexcept requires (is_number(S + 1));
 };
-template <std::size_t N, std::size_t... U, std::size_t... V>
-static constexpr Number<sizeof...(U) + sizeof...(V)> merge(const Number<N>& Union, const Number<N>& Value, std::integer_sequence<std::size_t, U...>, std::integer_sequence<std::size_t, V...>) noexcept
+template <std::size_t U, std::size_t V, std::size_t... I, std::size_t... J>
+constexpr Number<U + V> merge_impl(const Number<U>& Union, const Number<V>& Value, std::integer_sequence<std::size_t, I...>, std::integer_sequence<std::size_t, J...>) noexcept
 {
-	return Number<sizeof...(U) + sizeof...(V)>{ Union[U]..., Value[V]... };
+	return Number<U + V>{ Union.data[I]..., Value.data[J]... };
 };
 template <std::size_t U, std::size_t V>
-static constexpr Number<U + V> merge(const Number<U>& Union, const Number<V>& Value) noexcept
+constexpr Number<U + V> merge(const Number<U>& Union, const Number<V>& Value) noexcept
 {
-	return merge(Union, Value, std::make_index_sequence<U>{}, std::make_index_sequence<V>{});
+	return merge_impl(Union, Value, std::make_index_sequence<U>{}, std::make_index_sequence<V>{});
 };
 template <typename... Args>
 constexpr Number<sizeof...(Args)> forward_as_number(Args... args) noexcept
@@ -138,7 +146,7 @@ constexpr Number<N> operator ~(const Number<N>& Value) noexcept
 template <std::size_t N>
 constexpr Number<N> operator *(const Number<N>& Union, const Number<N>& Value) noexcept requires (is_number(N))
 {
-	if constexpr (N == 1) { return Number<1>{ Union[0] * Value[0] }; }
+	if constexpr (N == 1) { return Number<1>{ Union.data[0] * Value.data[0] }; }
 	else
 	{
 		return merge(
@@ -163,25 +171,25 @@ constexpr Number<N> operator /(const Number<N>& Union, double Value) noexcept
 	return Union * (1 / Value);
 };
 template <std::size_t N, std::size_t... I>
-constexpr double vector_dot(const Number<N>& Union, const Number<N>& Value, std::integer_sequence<std::size_t, I...>) noexcept requires (is_number(N + 1))
+constexpr double vector_dot_impl(const Number<N>& Union, const Number<N>& Value, std::integer_sequence<std::size_t, I...>) noexcept requires (is_number(N + 1))
 {
-	return ((Union[I] * Value[I]) + ...);
+	return ((Union.data[I] * Value.data[I]) + ...);
 };
 template <std::size_t N>
 constexpr double vector_dot(const Number<N>& Union, const Number<N>& Value) noexcept requires (is_number(N + 1))
 {
-	return vector_dot(Union, Value, std::make_index_sequence<N>{});
+	return vector_dot_impl(Union, Value, std::make_index_sequence<N>{});
 };
 template <std::size_t N, std::size_t... I>
-constexpr Number<N> vector_cross(const Number<N>& Union, const Number<N>& Value, std::integer_sequence<std::size_t, I...>) noexcept requires (is_number(N + 1))
+constexpr Number<N> vector_cross_impl(const Number<N>& Union, const Number<N>& Value, std::integer_sequence<std::size_t, I...>) noexcept requires (is_number(N + 1))
 {
-	Number<N + 1> Temp = Number<N + 1>{ 0, Union[I]... } * Number<N + 1>{ 0, Value[I]... };
-	return Number<N>{ Temp[I + 1]... };
+	Number<N + 1> Result = Number<N + 1>{ 0, Union.data[I]... } * Number<N + 1>{ 0, Value.data[I]... };
+	return Number<N>{ Result.data[I + 1]... };
 };
 template <std::size_t N>
 constexpr Number<N> vector_cross(const Number<N>& Union, const Number<N>& Value) noexcept requires (is_number(N + 1))
 {
-	return vector_cross(Union, Value, std::make_index_sequence<N>{});
+	return vector_cross_impl(Union, Value, std::make_index_sequence<N>{});
 };
 constexpr bool is_factor(std::size_t n) noexcept
 {
@@ -265,7 +273,7 @@ public:
 		return *this;
 	};
 	constexpr ~Factor() noexcept { delete[] data; };
-	constexpr Factor& extend(std::size_t size)&
+	constexpr Factor& extend(std::size_t size) &
 	{
 		if (size > this->size)
 		{

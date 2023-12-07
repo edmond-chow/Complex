@@ -135,7 +135,7 @@ public:
 template <typename T>
 inline constexpr std::int64_t Period = PeriodImpl<T>::Size;
 template <std::int64_t Length, bool Shift>
-void Adjust(std::int64_t& Index)
+void Adjust(std::int64_t& Index) noexcept
 {
 	if constexpr (Shift)
 	{
