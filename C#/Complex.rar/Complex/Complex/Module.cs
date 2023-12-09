@@ -68,8 +68,7 @@ internal static class Module
     internal static void ToNumbers<N>(this string Value, ref N Result, bool Shift, params string[] Terms) where N : INumber
     {
         double[] Numbers = Value.ToNumbers(Terms);
-        long o = Shift ? 1 : 0;
-        for (long i = 0; i < Numbers.LongLength; ++i) { Result[i + o] = Numbers[i]; }
+        for (long i = 0, o = Shift ? 1 : 0; i < Numbers.LongLength; ++i) { Result[i + o] = Numbers[i]; }
     }
     internal static long Period(Type Type)
     {
@@ -85,12 +84,7 @@ internal static class Module
     }
     internal static void Adjust(ref long Index, long LongLength, bool Shift)
     {
-        if (Shift)
-        {
-            --Index;
-            Index %= LongLength;
-            ++Index;
-        }
-        else { Index %= LongLength; }
+        Index %= LongLength;
+        if (Shift && LongLength == 0) { Index = LongLength; }
     }
 }
