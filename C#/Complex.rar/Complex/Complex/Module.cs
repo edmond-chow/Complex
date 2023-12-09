@@ -84,7 +84,8 @@ internal static class Module
     }
     internal static void Adjust(ref long Index, long LongLength, bool Shift)
     {
+        if (LongLength <= 0) { throw new ArgumentOutOfRangeException(nameof(LongLength)); }
         Index %= LongLength;
-        if (Shift && LongLength == 0) { Index = LongLength; }
+        if (Shift && Index == 0) { Index = LongLength; }
     }
 }

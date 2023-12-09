@@ -9,13 +9,13 @@ namespace Seden
         ///
         private static long GetDimension(long Value)
         {
-            int Result = 0;
+            long Result = 1;
             while (Value > 0)
             {
                 Value >>= 1;
-                ++Result;
+                Result <<= 1;
             }
-            return 1 << Result;
+            return Result;
         }
         ///
         /// constants
