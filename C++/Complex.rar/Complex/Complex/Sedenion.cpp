@@ -102,13 +102,13 @@ namespace Seden
 		///
 		static std::size_t GetDimension(std::size_t Value)
 		{
-			std::size_t Result = 0;
+			std::size_t Result = 1;
 			while (Value > 0)
 			{
-				Value >>= static_cast<size_t>(1);
-				++Result;
+				Value >>= 1;
+				Result <<= 1;
 			}
-			return static_cast<size_t>(1) << Result;
+			return Result;
 		};
 	public:
 		///
