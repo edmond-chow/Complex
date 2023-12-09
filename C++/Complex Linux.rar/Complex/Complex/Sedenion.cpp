@@ -99,8 +99,11 @@ namespace Seden
 		///
 		double* data;
 		std::size_t size;
-		explicit Sedenion(const double* data, std::size_t size) : data{ new double[size] {} }, size{ size }
+		static constexpr const std::size_t basic_size = 16;
+		explicit Sedenion(const double* data, std::size_t size)
+			: data{ nullptr }, size{ size > basic_size ? size : basic_size }
 		{
+			this->data = new double[this->size] {};
 			std::copy(data, data + size, this->data);
 		};
 	public:
@@ -116,8 +119,8 @@ namespace Seden
 		/// operators
 		///
 		Sedenion SEDEN_FUNC_INSTANCE_CALL operator ()() const;
-		double& SEDEN_FUNC_INSTANCE_CALL operator [](std::int64_t i) &;
-		const double& SEDEN_FUNC_INSTANCE_CALL operator [](std::int64_t i) const&;
+		double& SEDEN_FUNC_INSTANCE_CALL operator [](std::size_t i) & noexcept;
+		const double& SEDEN_FUNC_INSTANCE_CALL operator [](std::size_t i) const& noexcept;
 		friend bool SEDEN_INTERFACE SEDEN_FUNC_CALL operator ==(const Sedenion& Union, const Sedenion& Value);
 		friend bool SEDEN_INTERFACE SEDEN_FUNC_CALL operator !=(const Sedenion& Union, const Sedenion& Value);
 		friend Sedenion SEDEN_INTERFACE SEDEN_FUNC_CALL operator +(const Sedenion& Value);
@@ -230,9 +233,9 @@ namespace Seden
 			std::size_t Size = number.get_size();
 			double* Temp = new double[Size] {};
 			std::copy(number.get_data(), number.get_data() + Size, Temp);
-			Sedenion Output{ Temp, Size };
+			Sedenion Result{ Temp, Size };
 			delete[] Temp;
-			return Output;
+			return Result;
 		};
 	};
 	///
@@ -259,26 +262,39 @@ namespace Seden
 	/// basis
 	///
 	SEDEN_FUNC_INSTANCE_CALL Sedenion::Sedenion()
-		: data(new double[16] {}), size(16) {};
-	SEDEN_FUNC_INSTANCE_CALL Sedenion::Sedenion(const std::initializer_list<double>& numbers)
-		: data(new double[numbers.size()] {}), size(numbers.size())
+		: data{ nullptr }, size{ basic_size }
 	{
+		this->data = new double[this->size] {};
+	};
+	SEDEN_FUNC_INSTANCE_CALL Sedenion::Sedenion(const std::initializer_list<double>& numbers)
+		: data{ nullptr }, size{ numbers.size() > basic_size ? numbers.size() : basic_size }
+	{
+		this->data = new double[this->size] {};
 		std::copy(numbers.begin(), numbers.end(), this->data);
 	};
 	SEDEN_FUNC_INSTANCE_CALL Sedenion::Sedenion(double Value)
-		: data(new double[1] { Value }), size(1) {};
-	SEDEN_FUNC_INSTANCE_CALL Sedenion::Sedenion(const Sedenion& Value)
-		: data(new double[Value.size] {}), size(Value.size)
+		: data{ nullptr }, size{ basic_size }
 	{
+		this->data = new double[this->size] { Value };
+	};
+	SEDEN_FUNC_INSTANCE_CALL Sedenion::Sedenion(const Sedenion& Value)
+		: data{ nullptr }, size{ Value.size }
+	{
+		this->data = new double[this->size] {};
 		std::copy(Value.data, Value.data + Value.size, this->data);
 	};
 	SEDEN_FUNC_INSTANCE_CALL Sedenion::Sedenion(Sedenion&& Value) noexcept
-		: data(Value.data), size(Value.size)
+		: data{ Value.data }, size{ Value.size }
 	{
 		Value.data = nullptr;
 		Value.size = 0;
 	};
-	SEDEN_FUNC_INSTANCE_CALL Sedenion::~Sedenion() noexcept { delete[] this->data; };
+	SEDEN_FUNC_INSTANCE_CALL Sedenion::~Sedenion() noexcept
+	{
+		delete[] this->data;
+		this->data = nullptr;
+		this->size = 0;
+	};
 	double SEDEN_FUNC_CALL Sedenion::Scalar(const Sedenion& Value) { return Value[0]; };
 	Sedenion SEDEN_FUNC_CALL Sedenion::Vector(const Sedenion& Value)
 	{
@@ -290,12 +306,14 @@ namespace Seden
 	/// operators
 	///
 	Sedenion SEDEN_FUNC_INSTANCE_CALL Sedenion::operator ()() const { return *this; };
-	double& SEDEN_FUNC_INSTANCE_CALL Sedenion::operator [](std::int64_t i) &
+	double& SEDEN_FUNC_INSTANCE_CALL Sedenion::operator [](std::size_t i) & noexcept
 	{
+		if (this->size == 0) { return null_data[0]; }
 		return this->data[i % this->size];
 	};
-	const double& SEDEN_FUNC_INSTANCE_CALL Sedenion::operator [](std::int64_t i) const&
+	const double& SEDEN_FUNC_INSTANCE_CALL Sedenion::operator [](std::size_t i) const& noexcept
 	{
+		if (this->size == 0) { return null_data[0]; }
 		return this->data[i % this->size];
 	};
 	bool SEDEN_FUNC_CALL operator ==(const Sedenion& Union, const Sedenion& Value) { return Union.to_factor() == Value.to_factor(); };

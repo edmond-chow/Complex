@@ -4,6 +4,7 @@ template <std::size_t S, std::size_t E, std::size_t... I> requires (S <= E)
 struct make_range_sequence : public make_range_sequence<S, E - 1, E - 1, I...> {};
 template <std::size_t S, std::size_t... I>
 struct make_range_sequence<S, S, I...> : public std::index_sequence<I...> {};
+inline thread_local double null_data[1]{};
 consteval bool is_number(std::size_t n) noexcept
 {
 	if (n == 1) { return true; }
@@ -224,19 +225,21 @@ private:
 public:
 	constexpr const double* get_data() const
 	{
-		return data;
+		return this->data;
 	};
 	constexpr std::size_t get_size() const
 	{
-		return size;
+		return this->size;
 	};
-	constexpr double& operator [](std::int64_t i) & noexcept
+	constexpr double& operator [](std::size_t i) & noexcept
 	{
-		return data[i % size];
+		if (this->size == 0) { return null_data[0]; }
+		return this->data[i % this->size];
 	};
-	constexpr const double& operator [](std::int64_t i) const& noexcept
+	constexpr const double& operator [](std::size_t i) const& noexcept
 	{
-		return data[i % size];
+		if (this->size == 0) { return null_data[0]; }
+		return this->data[i % this->size];
 	};
 	constexpr Factor(std::nullptr_t data, std::size_t size) : data{ nullptr }, size{ size }
 	{
@@ -277,29 +280,34 @@ public:
 	constexpr Factor& operator =(const Factor& Value) &
 	{
 		if (this == &Value) { return *this; }
-		delete[] data;
-		data = new double[Value.size] {};
-		size = Value.size;
-		std::copy(Value.data, Value.data + Value.size, data);
+		delete[] this->data;
+		this->data = new double[Value.size] {};
+		this->size = Value.size;
+		std::copy(Value.data, Value.data + Value.size, this->data);
 		return *this;
 	};
 	constexpr Factor& operator =(Factor&& Value) & noexcept
 	{
-		data = Value.data;
-		size = Value.size;
+		this->data = Value.data;
+		this->size = Value.size;
 		Value.data = nullptr;
 		Value.size = 0;
 		return *this;
 	};
-	constexpr ~Factor() noexcept { delete[] data; };
+	constexpr ~Factor() noexcept
+	{
+		delete[] data;
+		this->data = nullptr;
+		this->size = 0;
+	};
 	constexpr Factor& extend(std::size_t size) &
 	{
 		if (size > this->size)
 		{
-			double* new_data = new double[size] {};
-			std::copy(data, data + this->size, new_data);
-			delete[] data;
-			data = new_data;
+			double* data = new double[size] {};
+			std::copy(this->data, this->data + this->size, data);
+			delete[] this->data;
+			this->data = data;
 			this->size = size;
 		};
 		return *this;

@@ -55,9 +55,9 @@ namespace Quter
 			///
 			const Vector3D QUTER_FUNC_INSTANCE_CALL operator ()() const noexcept;
 			double& QUTER_FUNC_INSTANCE_CALL operator [](index i) &;
-			double& QUTER_FUNC_INSTANCE_CALL operator [](std::int64_t i) & noexcept;
+			double& QUTER_FUNC_INSTANCE_CALL operator [](std::size_t i) & noexcept;
 			const double& QUTER_FUNC_INSTANCE_CALL operator [](index i) const&;
-			const double& QUTER_FUNC_INSTANCE_CALL operator [](std::int64_t i) const& noexcept;
+			const double& QUTER_FUNC_INSTANCE_CALL operator [](std::size_t i) const& noexcept;
 			Vector3D& QUTER_FUNC_INSTANCE_CALL operator =(const Vector3D& Value) & noexcept;
 			Vector3D& QUTER_FUNC_INSTANCE_CALL operator +=(const Vector3D& Value) & noexcept;
 			Vector3D& QUTER_FUNC_INSTANCE_CALL operator +=(const std::initializer_list<Vector3D>& Value) & noexcept;
@@ -133,9 +133,9 @@ namespace Quter
 			///
 			const Quaternion QUTER_FUNC_INSTANCE_CALL operator ()() const noexcept;
 			double& QUTER_FUNC_INSTANCE_CALL operator [](index i) &;
-			double& QUTER_FUNC_INSTANCE_CALL operator [](std::int64_t i) & noexcept;
+			double& QUTER_FUNC_INSTANCE_CALL operator [](std::size_t i) & noexcept;
 			const double& QUTER_FUNC_INSTANCE_CALL operator [](index i) const&;
-			const double& QUTER_FUNC_INSTANCE_CALL operator [](std::int64_t i) const& noexcept;
+			const double& QUTER_FUNC_INSTANCE_CALL operator [](std::size_t i) const& noexcept;
 			Quaternion& QUTER_FUNC_INSTANCE_CALL operator ++() & noexcept;
 			const Quaternion QUTER_FUNC_INSTANCE_CALL operator ++(int) & noexcept;
 			Quaternion& QUTER_FUNC_INSTANCE_CALL operator --() & noexcept;
