@@ -127,23 +127,15 @@ void ToNumbers(const std::wstring& Value, Args&&... args)
 	ToNumbers(Value, std::forward_as_tuple(args...), std::make_index_sequence<sizeof...(Args) / 2>{});
 };
 template <typename T> requires (sizeof(T) % sizeof(double) == 0)
-struct PeriodImpl
+inline constexpr std::size_t Period = sizeof(T) / sizeof(double);
+template <std::size_t Length, bool Shift> requires (Length > 0)
+void Adjust(std::size_t& Index) noexcept
 {
-public:
-	static constexpr const std::int64_t Size = sizeof(T) / sizeof(double);
-};
-template <typename T>
-inline constexpr std::int64_t Period = PeriodImpl<T>::Size;
-template <std::int64_t Length, bool Shift>
-void Adjust(std::int64_t& Index) noexcept
-{
+	Index %= Length;
 	if constexpr (Shift)
 	{
-		--Index;
-		Index %= Length;
-		++Index;
+		if (Index == 0) { Index = Length; }
 	}
-	else { Index %= Length; }
 };
 inline std::wstring ToString(std::size_t Size, const double* Numbers, const std::wstring* Terms)
 {

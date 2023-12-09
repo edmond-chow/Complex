@@ -72,9 +72,9 @@ namespace Cmplx
 			///
 			Vector1D CMPLX_FUNC_INSTANCE_CALL operator ()() const noexcept;
 			double& CMPLX_FUNC_INSTANCE_CALL operator [](index i) &;
-			double& CMPLX_FUNC_INSTANCE_CALL operator [](std::int64_t i) & noexcept;
+			double& CMPLX_FUNC_INSTANCE_CALL operator [](std::size_t i) & noexcept;
 			const double& CMPLX_FUNC_INSTANCE_CALL operator [](index i) const&;
-			const double& CMPLX_FUNC_INSTANCE_CALL operator [](std::int64_t i) const& noexcept;
+			const double& CMPLX_FUNC_INSTANCE_CALL operator [](std::size_t i) const& noexcept;
 			friend bool CMPLX_INTERFACE CMPLX_FUNC_CALL operator ==(const Vector1D& Union, const Vector1D& Value) noexcept;
 			friend bool CMPLX_INTERFACE CMPLX_FUNC_CALL operator !=(const Vector1D& Union, const Vector1D& Value) noexcept;
 			friend Vector1D CMPLX_INTERFACE CMPLX_FUNC_CALL operator +(const Vector1D& Value) noexcept;
@@ -159,7 +159,7 @@ namespace Cmplx
 				throw std::out_of_range("The index is out of range.");
 			}
 		};
-		double& CMPLX_FUNC_INSTANCE_CALL Vector1D::operator [](std::int64_t i) & noexcept
+		double& CMPLX_FUNC_INSTANCE_CALL Vector1D::operator [](std::size_t i) & noexcept
 		{
 			try
 			{
@@ -178,7 +178,7 @@ namespace Cmplx
 				throw std::out_of_range("The index is out of range.");
 			}
 		};
-		const double& CMPLX_FUNC_INSTANCE_CALL Vector1D::operator [](std::int64_t i) const& noexcept
+		const double& CMPLX_FUNC_INSTANCE_CALL Vector1D::operator [](std::size_t i) const& noexcept
 		{
 			try
 			{
@@ -291,9 +291,9 @@ namespace Cmplx
 			///
 			Complex CMPLX_FUNC_INSTANCE_CALL operator ()() const noexcept;
 			double& CMPLX_FUNC_INSTANCE_CALL operator [](index i) &;
-			double& CMPLX_FUNC_INSTANCE_CALL operator [](std::int64_t i) & noexcept;
+			double& CMPLX_FUNC_INSTANCE_CALL operator [](std::size_t i) & noexcept;
 			const double& CMPLX_FUNC_INSTANCE_CALL operator [](index i) const&;
-			const double& CMPLX_FUNC_INSTANCE_CALL operator [](std::int64_t i) const& noexcept;
+			const double& CMPLX_FUNC_INSTANCE_CALL operator [](std::size_t i) const& noexcept;
 			friend bool CMPLX_INTERFACE CMPLX_FUNC_CALL operator ==(const Complex& Union, const Complex& Value) noexcept;
 			friend bool CMPLX_INTERFACE CMPLX_FUNC_CALL operator !=(const Complex& Union, const Complex& Value) noexcept;
 			friend Complex CMPLX_INTERFACE CMPLX_FUNC_CALL operator +(const Complex& Value) noexcept;
@@ -459,7 +459,7 @@ namespace Cmplx
 				throw std::out_of_range("The index is out of range.");
 			}
 		};
-		double& CMPLX_FUNC_INSTANCE_CALL Complex::operator [](std::int64_t i) & noexcept
+		double& CMPLX_FUNC_INSTANCE_CALL Complex::operator [](std::size_t i) & noexcept
 		{
 			try
 			{
@@ -480,7 +480,7 @@ namespace Cmplx
 				throw std::out_of_range("The index is out of range.");
 			}
 		};
-		const double& CMPLX_FUNC_INSTANCE_CALL Complex::operator [](std::int64_t i) const& noexcept
+		const double& CMPLX_FUNC_INSTANCE_CALL Complex::operator [](std::size_t i) const& noexcept
 		{
 			try
 			{

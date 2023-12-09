@@ -71,8 +71,8 @@ namespace Seden
 		/// operators
 		///
 		Sedenion SEDEN_FUNC_INSTANCE_CALL operator ()() const;
-		double& SEDEN_FUNC_INSTANCE_CALL operator [](std::int64_t i)&;
-		const double& SEDEN_FUNC_INSTANCE_CALL operator [](std::int64_t i) const&;
+		double& SEDEN_FUNC_INSTANCE_CALL operator [](std::size_t i) &;
+		const double& SEDEN_FUNC_INSTANCE_CALL operator [](std::size_t i) const&;
 		Sedenion& SEDEN_FUNC_INSTANCE_CALL operator ++()&;
 		Sedenion SEDEN_FUNC_INSTANCE_CALL operator ++(int)&;
 		Sedenion& SEDEN_FUNC_INSTANCE_CALL operator --()&;

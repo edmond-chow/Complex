@@ -73,9 +73,9 @@ namespace Cmplx
 			///
 			Vector1D CMPLX_FUNC_INSTANCE_CALL operator ()() const noexcept;
 			double& CMPLX_FUNC_INSTANCE_CALL operator [](index i) &;
-			double& CMPLX_FUNC_INSTANCE_CALL operator [](std::int64_t i) & noexcept;
+			double& CMPLX_FUNC_INSTANCE_CALL operator [](std::size_t i) & noexcept;
 			const double& CMPLX_FUNC_INSTANCE_CALL operator [](index i) const&;
-			const double& CMPLX_FUNC_INSTANCE_CALL operator [](std::int64_t i) const& noexcept;
+			const double& CMPLX_FUNC_INSTANCE_CALL operator [](std::size_t i) const& noexcept;
 			Vector1D& CMPLX_FUNC_INSTANCE_CALL operator =(const Vector1D& Value) & noexcept;
 			Vector1D& CMPLX_FUNC_INSTANCE_CALL operator +=(const Vector1D& Value) & noexcept;
 			Vector1D& CMPLX_FUNC_INSTANCE_CALL operator +=(const std::initializer_list<Vector1D>& Value) & noexcept;
@@ -149,9 +149,9 @@ namespace Cmplx
 			///
 			Complex CMPLX_FUNC_INSTANCE_CALL operator ()() const noexcept;
 			double& CMPLX_FUNC_INSTANCE_CALL operator [](index i) &;
-			double& CMPLX_FUNC_INSTANCE_CALL operator [](std::int64_t i) & noexcept;
+			double& CMPLX_FUNC_INSTANCE_CALL operator [](std::size_t i) & noexcept;
 			const double& CMPLX_FUNC_INSTANCE_CALL operator [](index i) const&;
-			const double& CMPLX_FUNC_INSTANCE_CALL operator [](std::int64_t i) const& noexcept;
+			const double& CMPLX_FUNC_INSTANCE_CALL operator [](std::size_t i) const& noexcept;
 			Complex& CMPLX_FUNC_INSTANCE_CALL operator ++() & noexcept;
 			Complex CMPLX_FUNC_INSTANCE_CALL operator ++(int) & noexcept;
 			Complex& CMPLX_FUNC_INSTANCE_CALL operator --() & noexcept;

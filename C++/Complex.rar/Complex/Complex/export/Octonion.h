@@ -91,9 +91,9 @@ namespace Octon
 			///
 			Vector7D OCTON_FUNC_INSTANCE_CALL operator ()() const noexcept;
 			double& OCTON_FUNC_INSTANCE_CALL operator [](index i) &;
-			double& OCTON_FUNC_INSTANCE_CALL operator [](std::int64_t i) &;
+			double& OCTON_FUNC_INSTANCE_CALL operator [](std::size_t i) & noexcept;
 			const double& OCTON_FUNC_INSTANCE_CALL operator [](index i) const&;
-			const double& OCTON_FUNC_INSTANCE_CALL operator [](std::int64_t i) const&;
+			const double& OCTON_FUNC_INSTANCE_CALL operator [](std::size_t i) const& noexcept;
 			Vector7D& OCTON_FUNC_INSTANCE_CALL operator =(const Vector7D& Value) & noexcept;
 			Vector7D& OCTON_FUNC_INSTANCE_CALL operator +=(const Vector7D& Value) & noexcept;
 			Vector7D& OCTON_FUNC_INSTANCE_CALL operator +=(const std::initializer_list<Vector7D>& Value) & noexcept;
@@ -177,9 +177,9 @@ namespace Octon
 			///
 			Octonion OCTON_FUNC_INSTANCE_CALL operator ()() const noexcept;
 			double& OCTON_FUNC_INSTANCE_CALL operator [](index i) &;
-			double& OCTON_FUNC_INSTANCE_CALL operator [](std::int64_t i) &;
+			double& OCTON_FUNC_INSTANCE_CALL operator [](std::size_t i) & noexcept;
 			const double& OCTON_FUNC_INSTANCE_CALL operator [](index i) const&;
-			const double& OCTON_FUNC_INSTANCE_CALL operator [](std::int64_t i) const&;
+			const double& OCTON_FUNC_INSTANCE_CALL operator [](std::size_t i) const& noexcept;
 			Octonion& OCTON_FUNC_INSTANCE_CALL operator ++() & noexcept;
 			Octonion OCTON_FUNC_INSTANCE_CALL operator ++(int) & noexcept;
 			Octonion& OCTON_FUNC_INSTANCE_CALL operator --() & noexcept;
