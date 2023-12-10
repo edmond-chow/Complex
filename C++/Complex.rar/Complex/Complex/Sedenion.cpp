@@ -89,8 +89,7 @@ inline std::size_t wtos_t(const wchar_t* str)
 };
 inline std::size_t stos_t(const std::wstring& str)
 {
-	std::wstring result = Replace(str, L" ", L"");
-	return wtos_t(result.c_str());
+	return wtos_t(str.c_str());
 };
 namespace Seden
 {

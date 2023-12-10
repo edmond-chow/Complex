@@ -31,7 +31,7 @@ namespace CmplxBasis
 		if (LeftValue == RightValue)
 		{
 			Complex Base = Complex::GetInstance(Base::Input(L"Base = "));
-			std::int64_t Exponent = stoi64_t(Base::Input(L"Exponent = "));
+			std::int64_t Exponent = ParseAsInteger(Base::Input(L"Exponent = "));
 			Base::Output(to_wstring(std::invoke(Subroutine, Base, Exponent)));
 		}
 	};
@@ -70,14 +70,14 @@ namespace CmplxBasis
 		if (LeftValue == RightValue)
 		{
 			Complex Value = Complex::GetInstance(Base::Input(L"Value = "));
-			std::int64_t Theta = stoi64_t(Base::Input(L"Theta = "));
+			std::int64_t Theta = ParseAsInteger(Base::Input(L"Theta = "));
 			Base::Output(to_wstring(std::invoke(Subroutine, Value, Theta)));
 		}
 		else if (LeftValue == RightValue + L"()")
 		{
 			Complex Value = Complex::GetInstance(Base::Input(L"Value = "));
-			std::int64_t ThetaMin = stoi64_t(Base::Input(L"ThetaMin = "));
-			std::int64_t ThetaMax = stoi64_t(Base::Input(L"ThetaMax = "));
+			std::int64_t ThetaMin = ParseAsInteger(Base::Input(L"ThetaMin = "));
+			std::int64_t ThetaMax = ParseAsInteger(Base::Input(L"ThetaMax = "));
 			for (std::int64_t Theta = ThetaMin; Theta <= ThetaMax; ++Theta)
 			{
 				Base::Output(RightValue + L"(" + to_wstring(Theta) + L") = ", to_wstring(std::invoke(Subroutine, Value, Theta)));
@@ -103,14 +103,14 @@ namespace CmplxBasis
 			std::wstring Input = std::regex_replace(Base::Input(L"Sign : "), std::wregex(L" "), L"");
 			if (Input == L"+") { Sign = true; }
 			else if (Input != L"-") { throw std::invalid_argument("A string interpretation of the sign cannot be converted as a bool value."); }
-			std::int64_t Period = stoi64_t(Base::Input(L"Period = "));
+			std::int64_t Period = ParseAsInteger(Base::Input(L"Period = "));
 			Base::Output(to_wstring(std::invoke(Subroutine, Value, Sign, Period)));
 		}
 		else if (LeftValue == RightValue + L"()")
 		{
 			Complex Value = Complex::GetInstance(Base::Input(L"Value = "));
-			std::int64_t PeriodMin = stoi64_t(Base::Input(L"PeriodMin = "));
-			std::int64_t PeriodMax = stoi64_t(Base::Input(L"PeriodMax = "));
+			std::int64_t PeriodMin = ParseAsInteger(Base::Input(L"PeriodMin = "));
+			std::int64_t PeriodMax = ParseAsInteger(Base::Input(L"PeriodMax = "));
 			for (std::int64_t Period = PeriodMin; Period <= PeriodMax; ++Period)
 			{
 				Base::Output(RightValue + L"(+, " + to_wstring(Period) + L") = ", to_wstring(std::invoke(Subroutine, Value, true, Period)));
