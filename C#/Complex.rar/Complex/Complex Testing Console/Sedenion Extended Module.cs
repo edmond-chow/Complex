@@ -30,7 +30,7 @@ internal static class SedenBasis
         if (LeftValue == RightValue)
         {
             Sedenion Union = GetInstance(Base.Input("Union = "));
-            double Value = double.Parse(Base.Input("Value = ").Replace(" ", ""));
+            double Value = Base.Input("Value = ").AsReal();
             Base.Output(Subroutine.Invoke(Union, Value).ToModuleString());
         }
     }
@@ -39,7 +39,7 @@ internal static class SedenBasis
         if (LeftValue == RightValue)
         {
             Sedenion BaseNumber = GetInstance(Base.Input("Base = "));
-            long ExponentNumber = long.Parse(Base.Input("Exponent = ").Replace(" ", ""));
+            long ExponentNumber = Base.Input("Exponent = ").AsInteger();
             Base.Output(Subroutine.Invoke(BaseNumber, ExponentNumber).ToModuleString());
         }
     }
@@ -83,14 +83,14 @@ internal static class SedenBasis
         if (LeftValue == RightValue)
         {
             Sedenion Value = GetInstance(Base.Input("Value = "));
-            long Theta = long.Parse(Base.Input("Theta = ").Replace(" ", ""));
+            long Theta = Base.Input("Theta = ").AsInteger();
             Base.Output(Subroutine.Invoke(Value, Theta).ToModuleString());
         }
         else if (LeftValue == RightValue + "()")
         {
             Sedenion Value = GetInstance(Base.Input("Value = "));
-            long ThetaMin = long.Parse(Base.Input("ThetaMin = ").Replace(" ", ""));
-            long ThetaMax = long.Parse(Base.Input("ThetaMax = ").Replace(" ", ""));
+            long ThetaMin = Base.Input("ThetaMin = ").AsInteger();
+            long ThetaMax = Base.Input("ThetaMax = ").AsInteger();
             for (long Theta = ThetaMin; Theta <= ThetaMax; ++Theta)
             {
                 Base.Output(RightValue + "(" + Theta.ToModuleString() + ") = ", Subroutine.Invoke(Value, Theta).ToModuleString());
@@ -114,14 +114,14 @@ internal static class SedenBasis
             string Input = Base.Input("Sign : ").Replace(" ", "");
             if (Input == "+") { Sign = true; }
             else if (Input != "-") { throw new ArgumentException("A string interpretation of the sign cannot be converted as a bool value."); }
-            long Period = long.Parse(Base.Input("Period = ").Replace(" ", ""));
+            long Period = Base.Input("Period = ").AsInteger();
             Base.Output(Subroutine.Invoke(Value, Sign, Period).ToModuleString());
         }
         else if (LeftValue == RightValue + "()")
         {
             Sedenion Value = GetInstance(Base.Input("Value = "));
-            long PeriodMin = long.Parse(Base.Input("PeriodMin = ").Replace(" ", ""));
-            long PeriodMax = long.Parse(Base.Input("PeriodMax = ").Replace(" ", ""));
+            long PeriodMin = Base.Input("PeriodMin = ").AsInteger();
+            long PeriodMax = Base.Input("PeriodMax = ").AsInteger();
             for (long Period = PeriodMin; Period <= PeriodMax; ++Period)
             {
                 Base.Output(RightValue + "(+, " + Period.ToModuleString() + ") = ", Subroutine.Invoke(Value, true, Period).ToModuleString());

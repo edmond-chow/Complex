@@ -162,15 +162,15 @@ namespace ComplexTestingConsole
         {
             for (long I = 0; I < Data.LongLength; ++I)
             {
-                Data[I] = long.Parse(Base.Input(GetAngleName(I, Angle) + Assign));
+                Data[I] = Base.Input(GetAngleName(I, Angle) + Assign).AsInteger();
             }
         }
         internal static void PowerGet(Tuple<long, long>[] Data)
         {
             for (long I = 0; I < Data.LongLength; ++I)
             {
-                long Min = long.Parse(Base.Input(GetAngleName(I, Angle) + "Min" + Assign));
-                long Max = long.Parse(Base.Input(GetAngleName(I, Angle) + "Max" + Assign));
+                long Min = Base.Input(GetAngleName(I, Angle) + "Min" + Assign).AsInteger();
+                long Max = Base.Input(GetAngleName(I, Angle) + "Max" + Assign).AsInteger();
                 Data[I] = new Tuple<long, long>(Min, Max);
             }
         }
@@ -228,6 +228,14 @@ namespace ComplexTestingConsole
             else if (Object is long LongValue) { return LongValue.ToString(); }
             else if (Object is bool BoolValue) { return BoolValue ? "true" : "false"; }
             return Object.ToString();
+        }
+        internal static long AsInteger(this string Value)
+        {
+            return long.Parse(Value.Replace(" ", ""));
+        }
+        internal static double AsReal(this string Value)
+        {
+            return double.Parse(Value.Replace(" ", ""));
         }
     }
 }
