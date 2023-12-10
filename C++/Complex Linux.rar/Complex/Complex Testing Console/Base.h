@@ -81,8 +81,7 @@ inline std::wstring Replace(const std::wstring& Input, const std::wstring& Searc
 };
 inline std::int64_t stoi64_t(const std::wstring& str)
 {
-	std::wstring result = Replace(str, L" ", L"");
-	return wtoi64_t(result.c_str());
+	return wtoi64_t(str.c_str());
 };
 template <typename T>
 inline std::wstring to_wstring(T o) { return T::GetString(o); };
@@ -94,6 +93,14 @@ template <>
 inline std::wstring to_wstring<std::int64_t>(std::int64_t o) { return std::to_wstring(o); };
 template <>
 inline std::wstring to_wstring<bool>(bool o) { return o ? L"true" : L"false"; };
+inline std::int64_t PraseAsInteger(const std::wstring& Value)
+{
+	return stoi64_t(Replace(Value, L" ", L""));
+};
+inline double PraseAsReal(const std::wstring& Value)
+{
+	return std::stod(Replace(Value, L" ", L""));
+};
 namespace ComplexTestingConsole
 {
 	class Base final
@@ -157,12 +164,12 @@ namespace ComplexTestingConsole
 			const wchar_t* Assign = L" = ";
 			if constexpr (std::is_same_v<T, std::int64_t>)
 			{
-				std::get<I>(Data) = stoi64_t(Base::Input(get_angle_name(std::integral_constant<std::size_t, I>{}, Angle) + Assign));
+				std::get<I>(Data) = PraseAsInteger(Base::Input(get_angle_name(std::integral_constant<std::size_t, I>{}, Angle) + Assign));
 			}
 			else if constexpr (std::is_same_v<T, std::pair<std::int64_t, std::int64_t>>)
 			{
-				std::int64_t Min = stoi64_t(Base::Input(get_angle_name(std::integral_constant<std::size_t, I>{}, Angle) + L"Min" + Assign));
-				std::int64_t Max = stoi64_t(Base::Input(get_angle_name(std::integral_constant<std::size_t, I>{}, Angle) + L"Max" + Assign));
+				std::int64_t Min = PraseAsInteger(Base::Input(get_angle_name(std::integral_constant<std::size_t, I>{}, Angle) + L"Min" + Assign));
+				std::int64_t Max = PraseAsInteger(Base::Input(get_angle_name(std::integral_constant<std::size_t, I>{}, Angle) + L"Max" + Assign));
 				std::get<I>(Data) = std::make_pair<std::int64_t, std::int64_t>(std::move(Min), std::move(Max));
 			}
 			if constexpr (I < A)
