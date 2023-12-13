@@ -69,7 +69,7 @@ namespace ComplexTestingConsole
                 Console.ForegroundColor = ConsoleColor.Cyan;
                 Console.WriteLine(Exception.Message);
                 Console.ForegroundColor = ConsoleColor.Gray;
-                Console.WriteLine(Regex.Replace(Exception.StackTrace, "(^|\n)", "${0}   "));
+                Console.WriteLine(Regex.Replace(Exception.StackTrace, "^", "   ", RegexOptions.Multiline));
                 Exception = Exception.InnerException;
             }
             Console.ForegroundColor = ConsoleColor.White;
