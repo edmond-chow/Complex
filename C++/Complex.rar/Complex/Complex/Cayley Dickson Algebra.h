@@ -30,10 +30,16 @@ public:
 		else { return data[0]; }
 	};
 private:
-	template <typename T, std::size_t... I>
-	constexpr void store_impl(T&& tuple, std::integer_sequence<std::size_t, I...>) const noexcept
+	template <std::size_t I, typename... Args>
+	constexpr void store_impl(Args&... args) const noexcept {};
+	template <std::size_t I = 0, typename Head, typename... Tail>
+	constexpr void store_impl(Head& head, Tail&... tail) const noexcept
 	{
-		((*std::get<I>(tuple) = data[I]), ...);
+		if constexpr (I < N)
+		{
+			head = data[I];
+			store_impl<I + 1, Tail...>(tail...);
+		}
 	};
 	template <std::size_t... I>
 	static constexpr bool equal_impl(const Number<N>& Union, const Number<N>& Value, std::integer_sequence<std::size_t, I...>) noexcept
@@ -71,14 +77,7 @@ public:
 	template <typename... Args>
 	constexpr void store(Args&... args) const noexcept
 	{
-		if constexpr (sizeof...(Args) <= N)
-		{
-			store_impl(std::forward_as_tuple(&args...), std::index_sequence_for<Args...>{});
-		}
-		else
-		{
-			store_impl(std::forward_as_tuple(&args...), std::make_index_sequence<N>{});
-		}
+		store_impl(args...);
 	};
 	static constexpr bool equal(const Number<N>& Union, const Number<N>& Value) noexcept
 	{
