@@ -7,9 +7,9 @@
 #include <array>
 #include <functional>
 #include <stdexcept>
-static constexpr const wchar_t SignBefore[] = LR"((-|\+|^))";
-static constexpr const wchar_t UnsignedReal[] = LR"((\d+)(\.\d+|)([Ee](-|\+|)(\d+)|))";
-static constexpr const wchar_t SignAfter[] = LR"((-|\+|$))";
+inline constexpr const wchar_t SignBefore[] = LR"((-|\+|^))";
+inline constexpr const wchar_t UnsignedReal[] = LR"((\d+)(\.\d+|)([Ee](-|\+|)(\d+)|))";
+inline constexpr const wchar_t SignAfter[] = LR"((-|\+|$))";
 inline std::wstring AddGroup(const std::wstring& Pattern, bool Optional)
 {
 	return L"(" + Pattern + (Optional ? L"|" : L"") + L")";
