@@ -1,12 +1,15 @@
 #include <cmath>
+#include <limits>
+#include <numbers>
 #include <iomanip>
 #include <string>
 #include <regex>
 #include <sstream>
 #include <tuple>
 #include <array>
-#include <functional>
+#include <algorithm>
 #include <stdexcept>
+#include "Cayley Dickson Algebra.h"
 inline constexpr const wchar_t SignBefore[] = LR"((-|\+|^))";
 inline constexpr const wchar_t UnsignedReal[] = LR"((\d+)(\.\d+|)([Ee](-|\+|)(\d+)|))";
 inline constexpr const wchar_t SignAfter[] = LR"((-|\+|$))";
