@@ -1,4 +1,5 @@
 ﻿#include "Module.h"
+#include "Cayley Dickson Algebra.h"
 #pragma pack(push)
 #pragma push_macro("CALL")
 #pragma push_macro("QUTER_INTERFACE")

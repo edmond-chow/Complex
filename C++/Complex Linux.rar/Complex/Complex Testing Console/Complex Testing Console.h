@@ -1,6 +1,4 @@
 ﻿#pragma once
-#ifndef CMPLX_UNIT_TEST_MOD
-#define CMPLX_UNIT_TEST_MOD
 namespace CmplxBasis
 {
 	class CmplxConsole final
@@ -12,4 +10,3 @@ namespace CmplxBasis
 		static void Load() noexcept;
 	};
 }
-#endif
