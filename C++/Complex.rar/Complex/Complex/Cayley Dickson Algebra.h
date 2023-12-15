@@ -1,3 +1,16 @@
+#pragma once
+#include <cmath>
+#include <cstdint>
+#include <limits>
+#include <numbers>
+#include <iomanip>
+#include <string>
+#include <regex>
+#include <sstream>
+#include <tuple>
+#include <array>
+#include <algorithm>
+#include <stdexcept>
 template <std::size_t S, std::size_t E, std::size_t... I> requires (S <= E)
 struct make_range_sequence : public make_range_sequence<S, E - 1, E - 1, I...> {};
 template <std::size_t S, std::size_t... I>

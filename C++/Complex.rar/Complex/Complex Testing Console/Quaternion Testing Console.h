@@ -1,6 +1,4 @@
 ﻿#pragma once
-#ifndef QUTER_UNIT_TEST_MOD
-#define QUTER_UNIT_TEST_MOD
 namespace QuterBasis
 {
 	class QuterConsole final
@@ -12,4 +10,3 @@ namespace QuterBasis
 		static void Load() noexcept;
 	};
 }
-#endif

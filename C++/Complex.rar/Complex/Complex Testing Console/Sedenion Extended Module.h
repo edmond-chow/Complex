@@ -1,6 +1,4 @@
 ﻿#pragma once
-#ifndef SEDEN_UNIT_TEST_MOD
-#define SEDEN_UNIT_TEST_MOD
 namespace SedenBasis
 {
 	class SedenConsole final
@@ -12,4 +10,3 @@ namespace SedenBasis
 		static void Load() noexcept;
 	};
 }
-#endif
