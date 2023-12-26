@@ -237,8 +237,8 @@ namespace Cmplx
             public static readonly double pi = Math.PI;
             public static readonly double e = Math.E;
             public static readonly Complex i = new Complex(0, 1);
-            public static double Re(Complex z) { return Scalar(z); }
-            public static double Im(Complex z) { return Vector(z)[0]; }
+            public static double Re(this Complex Value) { return Scalar(Value); }
+            public static double Im(this Complex Value) { return Vector(Value)[1]; }
             ///
             /// fundamentals
             ///
