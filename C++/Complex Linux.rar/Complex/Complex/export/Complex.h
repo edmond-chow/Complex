@@ -118,8 +118,8 @@ namespace Cmplx
 			CMPLX_FUNC_INSTANCE_CALL Complex(const Complex& Value) noexcept;
 			static double CMPLX_FUNC_CALL Scalar(const Complex& Value) noexcept;
 			static BaseType::Vector1D CMPLX_FUNC_CALL Vector(const Complex& Value) noexcept;
-			static double CMPLX_FUNC_CALL Re(const Complex& z) noexcept;
-			static double CMPLX_FUNC_CALL Im(const Complex& z) noexcept;
+			static double CMPLX_FUNC_CALL Re(const Complex& Value) noexcept;
+			static double CMPLX_FUNC_CALL Im(const Complex& Value) noexcept;
 			///
 			/// operators
 			///
