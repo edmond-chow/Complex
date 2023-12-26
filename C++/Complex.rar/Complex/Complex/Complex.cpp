@@ -281,8 +281,8 @@ namespace Cmplx
 			CMPLX_FUNC_INSTANCE_CALL Complex(const Complex& Value) noexcept;
 			static double CMPLX_FUNC_CALL Scalar(const Complex& Value) noexcept;
 			static BaseType::Vector1D CMPLX_FUNC_CALL Vector(const Complex& Value) noexcept;
-			static double CMPLX_FUNC_CALL Re(const Complex& z) noexcept;
-			static double CMPLX_FUNC_CALL Im(const Complex& z) noexcept;
+			static double CMPLX_FUNC_CALL Re(const Complex& Value) noexcept;
+			static double CMPLX_FUNC_CALL Im(const Complex& Value) noexcept;
 			///
 			/// operators
 			///
@@ -438,8 +438,8 @@ namespace Cmplx
 		CMPLX_FUNC_INSTANCE_CALL Complex::Complex(const Complex& Value) noexcept : real(Value.real), imaginary(Value.imaginary) {};
 		double CMPLX_FUNC_CALL Complex::Scalar(const Complex& Value) noexcept { return Value.real; };
 		BaseType::Vector1D CMPLX_FUNC_CALL Complex::Vector(const Complex& Value) noexcept { return Value.imaginary; };
-		double CMPLX_FUNC_CALL Complex::Re(const Complex& z) noexcept { return Scalar(z); };
-		double CMPLX_FUNC_CALL Complex::Im(const Complex& z) noexcept { return BaseType::Vector1D::dot(Vector(z), BaseType::Vector1D::e1); };
+		double CMPLX_FUNC_CALL Complex::Re(const Complex& Value) noexcept { return Scalar(Value); };
+		double CMPLX_FUNC_CALL Complex::Im(const Complex& Value) noexcept { return Vector(Value)[1]; };
 		///
 		/// operators
 		///
