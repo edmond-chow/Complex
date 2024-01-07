@@ -637,11 +637,9 @@ namespace Seden
 	///
 	std::wstring SEDEN_FUNC_CALL Sedenion::GetString(const Sedenion& Value)
 	{
-		std::wstring* Terms = new std::wstring[Value.size] {};
+		std::vector<std::wstring> Terms(Value.size);
 		for (std::size_t i = 0; i < Value.size; ++i) { Terms[i] = L"e" + std::to_wstring(i); }
-		std::wstring Result = ToString(Value.size, Value.data, Terms);
-		delete[] Terms;
-		return Result;
+		return ToString(Value.size, Value.data, Terms.data());
 	};
 	Sedenion SEDEN_FUNC_CALL Sedenion::GetInstance(const std::wstring& Value)
 	{
@@ -656,14 +654,11 @@ namespace Seden
 			Rest = Match.suffix().str();
 		}
 		std::size_t Size = GetDimension(Dimension);
-		double* Numbers = new double[Size] {};
-		std::wstring* Terms = new std::wstring[Size] {};
+		std::vector<double> Numbers(Size);
+		std::vector<std::wstring> Terms(Size);
 		for (std::size_t i = 0; i < Size; ++i) { Terms[i] = L"e" + std::to_wstring(i); }
-		ToNumbers(Replaced, Size, Numbers, Terms);
-		Sedenion Result{ Numbers, Size };
-		delete[] Numbers;
-		delete[] Terms;
-		return Result;
+		ToNumbers(Replaced, Size, Numbers.data(), Terms.data());
+		return Sedenion{ Numbers.data(), Size };
 	};
 }
 #pragma pop_macro("SEDEN_FUNC_INSTANCE_CALL")
