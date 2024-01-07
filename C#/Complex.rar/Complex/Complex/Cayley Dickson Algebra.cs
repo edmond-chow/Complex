@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 internal class Number
 {
     private static bool IsNumber(long Number)
@@ -29,7 +28,8 @@ internal class Number
     }
     public Number(params double[] Args)
     {
-        Data = Args;
+        Data = new double[Args.LongLength];
+        for (long i = 0; i < Data.LongLength; ++i) { Data[i] = Args[i]; }
     }
     public static bool Equal(Number Union, Number Value)
     {
@@ -85,9 +85,9 @@ internal class Number
     {
         if (Size > Data.LongLength)
         {
-            double[] Numbers = new double[Size];
-            for (long i = 0; i < Data.LongLength; ++i) { Numbers[i] = Data[i]; }
-            Data = Numbers;
+            double[] Extended = new double[Size];
+            for (long i = 0; i < Data.LongLength; ++i) { Extended[i] = Data[i]; }
+            Data = Extended;
         }
         return this;
     }
@@ -254,6 +254,8 @@ internal class Number
     }
     public double[] ToArray()
     {
-        return Data.ToArray();
+        double[] Result = new double[Data.LongLength];
+        for (long i = 0; i < Result.LongLength; ++i) { Result[i] = Data[i]; }
+        return Result;
     }
 }
