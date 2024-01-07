@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 internal class Number
 {
     private static bool IsNumber(long Number)
@@ -253,6 +254,6 @@ internal class Number
     }
     public double[] ToArray()
     {
-        return Data;
+        return Data.ToArray();
     }
 }
