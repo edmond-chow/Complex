@@ -17,18 +17,18 @@
 inline std::size_t wtos_t(const wchar_t* str)
 {
 	static const std::wstring limit = std::to_wstring(std::numeric_limits<std::size_t>::max());
-	if (str[0] == L'\0' || str[0] == L'-') { throw std::invalid_argument("The string cannot not be converted as an integer."); }
+	if (str[0] == L'\0' || str[0] == L'-') { throw std::invalid_argument("The string cannot be converted as an integer."); }
 	const wchar_t* number = str;
 	if (str[0] == L'+')
 	{
-		if (str[1] == L'\0') { throw std::invalid_argument("The string cannot not be converted as an integer."); }
+		if (str[1] == L'\0') { throw std::invalid_argument("The string cannot be converted as an integer."); }
 		++number;
 	}
 	std::size_t number_size = std::wcslen(str);
 	const wchar_t* number_end = number;
 	while (*number_end != L'\0')
 	{
-		if (static_cast<std::uint16_t>(*number_end) < 48 || static_cast<std::uint16_t>(*number_end) > 57) { throw std::invalid_argument("The string cannot not be converted as an integer."); }
+		if (static_cast<std::uint16_t>(*number_end) < 48 || static_cast<std::uint16_t>(*number_end) > 57) { throw std::invalid_argument("The string cannot be converted as an integer."); }
 		++number_end;
 	}
 	const wchar_t* wchars = limit.c_str();
