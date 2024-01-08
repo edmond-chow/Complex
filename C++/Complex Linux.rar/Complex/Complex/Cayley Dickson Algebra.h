@@ -455,7 +455,8 @@ constexpr Factor operator *(const Factor& Union, const Factor& Value)
 constexpr Factor operator *(double Union, const Factor& Value)
 {
 	Factor Result{ Value.data, Value.size };
-	for (double* ite = Value.data; ite != Value.data + Value.size; ++ite) { *ite *= Union; }
+	const double* ite_oe = Result.data + Result.size;
+	for (double* ite_o = Result.data; ite_o != ite_oe; ++ite_o) { *ite_o *= Union; }
 	return Result;
 };
 constexpr Factor operator *(const Factor& Union, double Value)
