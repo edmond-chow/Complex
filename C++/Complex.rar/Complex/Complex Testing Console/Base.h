@@ -98,9 +98,11 @@ inline double ParseAsReal(const std::wstring& Value)
 {
 	std::wstring Replaced = Replace(Value, L" ", L"");
 	std::size_t Processed = 0;
-	double Result = std::stod(Replaced, &Processed);
-	if (Processed < Replaced.size()) { throw std::invalid_argument("The string cannot be converted as a real."); }
-	return Result;
+	double Result = 0;
+	try { Result = std::stod(Replaced, &Processed); }
+	catch (...) { Processed = std::wstring::npos; }
+	if (Processed == Replaced.size()) { return Result; }
+	throw std::invalid_argument("The string cannot be converted as a real.");
 };
 namespace ComplexTestingConsole
 {
