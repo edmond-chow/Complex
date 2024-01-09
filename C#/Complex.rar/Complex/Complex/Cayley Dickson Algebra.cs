@@ -26,10 +26,22 @@ internal class Number
     {
         Data = new double[Size];
     }
-    public Number(params double[] Args)
+    public Number(params double[] Numbers)
     {
-        Data = new double[Args.LongLength];
-        for (long i = 0; i < Data.LongLength; ++i) { Data[i] = Args[i]; }
+        Data = new double[Numbers.LongLength];
+        for (long i = 0; i < Data.LongLength; ++i) { Data[i] = Numbers[i]; }
+    }
+    public Number(in double[] Numbers)
+    {
+        Data = Numbers;
+    }
+    public Number Clone()
+    {
+        return new Number(Data);
+    }
+    public double[] GetMemberwiseData()
+    {
+        return Data;
     }
     public static bool Equal(Number Union, Number Value)
     {
@@ -43,19 +55,19 @@ internal class Number
     public static Number Add(Number Union, Number Value)
     {
         if (Union.LongLength > Value.LongLength) { Add(Value, Union); }
-        Number Result = Value;
+        Number Result = Value.Clone();
         for (long i = 0; i < Union.LongLength; ++i) { Result.Data[i] += Union.Data[i]; }
         return Result;
     }
     public static Number Neg(Number Value)
     {
-        Number Result = Value;
+        Number Result = Value.Clone();
         for (long i = 0; i < Result.LongLength; ++i) { Result.Data[i] = -Result.Data[i]; }
         return Result;
     }
     public static Number Conjg(Number Value)
     {
-        Number Result = Value;
+        Number Result = Value.Clone();
         for (long i = 1; i < Result.LongLength; ++i) { Result.Data[i] = -Result.Data[i]; }
         return Result;
     }
@@ -64,14 +76,14 @@ internal class Number
         if (Count < 0 || Count > Data.LongLength) { throw new NotImplementedException("The branch should ensure not instantiated at compile time."); }
         double[] Numbers = new double[Count];
         for (long i = 0; i < Count; ++i) { Numbers[i] = Data[i]; }
-        return new Number(Numbers);
+        return new Number(in Numbers);
     }
     public Number GetRight(long Count)
     {
         if (Count < 0 || Count > Data.LongLength) { throw new NotImplementedException("The branch should ensure not instantiated at compile time."); }
         double[] Numbers = new double[Count];
         for (long o = Data.LongLength - Count, i = 0; i < Count; ++i) { Numbers[i] = Data[o + i]; }
-        return new Number(Numbers);
+        return new Number(in Numbers);
     }
     public Number Left
     {
@@ -96,7 +108,7 @@ internal class Number
         double[] Numbers = new double[Union.Data.LongLength + Value.Data.LongLength];
         for (long o = Union.Data.LongLength, i = 0; i < o; ++i) { Numbers[i] = Union.Data[i]; }
         for (long o = Value.Data.LongLength, i = 0; i < o; ++i) { Numbers[o + i] = Value.Data[i]; }
-        return new Number(Numbers);
+        return new Number(in Numbers);
     }
     public override bool Equals(object obj)
     {
@@ -126,9 +138,9 @@ internal class Number
     }
     private static Number MakeNumber(Number Value)
     {
-        double[] Result = new double[Value.LongLength + 1];
-        for (long i = 0; i < Value.LongLength; ++i) { Result[i + 1] = Value.Data[i]; }
-        return new Number(Result);
+        double[] Numbers = new double[Value.LongLength + 1];
+        for (long i = 0; i < Value.LongLength; ++i) { Numbers[i + 1] = Value.Data[i]; }
+        return new Number(in Numbers);
     }
     private static Number MakeVector(Number Value)
     {
@@ -177,8 +189,8 @@ internal class Number
     }
     public static Number operator *(Number Union, Number Value)
     {
-        Number NumUnion = Union;
-        Number NumValue = Value;
+        Number NumUnion = Union.Clone();
+        Number NumValue = Value.Clone();
         if (Check(ref NumUnion, ref NumValue, false)) { return new Number(GetScalar(NumUnion) * GetScalar(NumValue)); };
         Number MergeLeft = NumUnion.Left * NumValue.Left - ~NumValue.Right * NumUnion.Right;
         Number MergeRight = NumValue.Right * NumUnion.Left + NumUnion.Right * ~NumValue.Left;
@@ -186,7 +198,7 @@ internal class Number
     }
     public static Number operator *(double Union, Number Value)
     {
-        Number Result = Value;
+        Number Result = Value.Clone();
         for (long i = 0; i < Result.LongLength; ++i) { Result.Data[i] *= Union; }
         return Result;
     }
@@ -200,62 +212,56 @@ internal class Number
     }
     public static double VectorDot(Number Union, Number Value)
     {
-        Number VecUnion = Union;
-        Number VecValue = Value;
+        Number VecUnion = Union.Clone();
+        Number VecValue = Value.Clone();
         Check(ref VecUnion, ref VecValue, true);
         return Dot(VecUnion, VecValue);
     }
     public static Number VectorCross(Number Union, Number Value)
     {
-        Number VecUnion = Union;
-        Number VecValue = Value;
+        Number VecUnion = Union.Clone();
+        Number VecValue = Value.Clone();
         Check(ref VecUnion, ref VecValue, true);
         return MakeVector(MakeNumber(VecUnion) * MakeNumber(VecValue));
     }
     public static double NumberDot(Number Union, Number Value)
     {
-        Number NumUnion = Union;
-        Number NumValue = Value;
+        Number NumUnion = Union.Clone();
+        Number NumValue = Value.Clone();
         Check(ref NumUnion, ref NumValue, false);
         return Dot(NumUnion, NumValue);
     }
     public static Number NumberOuter(Number Union, Number Value)
     {
         double ScaUnion = GetScalar(Union);
-        Number VecUnion = Union;
+        Number VecUnion = Union.Clone();
         AsVector(ref VecUnion);
         double ScaValue = GetScalar(Value);
-        Number VecValue = Value;
+        Number VecValue = Value.Clone();
         AsVector(ref VecValue);
-        Check(ref VecUnion, ref VecValue, true);
+        Check(ref VecUnion, ref VecValue, false);
         return NumberCross(VecUnion, VecValue) + ScaUnion * VecValue - ScaValue * VecUnion;
     }
     public static Number NumberEven(Number Union, Number Value)
     {
         double ScaUnion = GetScalar(Union);
-        Number VecUnion = Union;
+        Number VecUnion = Union.Clone();
         AsVector(ref VecUnion);
         double ScaValue = GetScalar(Value);
-        Number VecValue = Value;
+        Number VecValue = Value.Clone();
         AsVector(ref VecValue);
-        Check(ref VecUnion, ref VecValue, true);
+        Check(ref VecUnion, ref VecValue, false);
         return new Number(ScaUnion * ScaValue - Dot(VecUnion, VecValue)) + ScaUnion * VecValue + ScaValue * VecUnion;
     }
     public static Number NumberCross(Number Union, Number Value)
     {
-        Number NumUnion = Union;
-        Number NumValue = Value;
+        Number NumUnion = Union.Clone();
+        Number NumValue = Value.Clone();
         Check(ref NumUnion, ref NumValue, false);
         AsVector(ref NumUnion);
         AsVector(ref NumValue);
         Number Result = NumUnion * NumValue;
         AsVector(ref Result);
-        return Result;
-    }
-    public double[] ToArray()
-    {
-        double[] Result = new double[Data.LongLength];
-        for (long i = 0; i < Result.LongLength; ++i) { Result[i] = Data[i]; }
         return Result;
     }
 }

@@ -35,9 +35,21 @@ namespace Seden
         {
             Data = new Number(Numbers);
         }
+        public Sedenion(in double[] Numbers)
+        {
+            Data = new Number(in Numbers);
+        }
+        public Sedenion Clone()
+        {
+            return new Sedenion(Data.GetMemberwiseData());
+        }
+        internal Number GetMemberwiseData()
+        {
+            return Data;
+        }
         public override string ToString()
         {
-            double[] Numbers = Data.ToArray();
+            double[] Numbers = Data.GetMemberwiseData();
             string[] Terms = new string[Numbers.LongLength];
             for (long i = 0; i < Terms.LongLength; ++i) { Terms[i] = "e" + i.ToString(); }
             return Numbers.ToString(Terms);
@@ -59,7 +71,7 @@ namespace Seden
         public static double Scalar(Sedenion Value) { return Value[0]; }
         public static Sedenion Vector(Sedenion Value)
         {
-            Sedenion Result = Value;
+            Sedenion Result = Value.Clone();
             Result[0] = 0;
             return Result;
         }
@@ -296,12 +308,13 @@ namespace Seden
             }
             string[] Terms = new string[GetDimension(Dimension)];
             for (long i = 0; i < Terms.LongLength; ++i) { Terms[i] = "e" + i.ToString(); }
-            return new Sedenion(Replaced.ToNumbers(Terms));
+            double[] Numbers = Replaced.ToNumbers(Terms);
+            return new Sedenion(in Numbers);
         }
         ///
         /// casing
         ///
-        private Number ToNumber() { return Data; }
-        private static Sedenion From(Number Number) { return new Sedenion(Number.ToArray()); }
+        private Number ToNumber() { return GetMemberwiseData(); }
+        private static Sedenion From(Number Number) { return new Sedenion(Number.GetMemberwiseData()); }
     }
 }
