@@ -116,9 +116,10 @@ namespace Seden
 		///
 		/// basis
 		///
+		static constexpr const std::size_t basic_size = 16;
+		static constexpr const std::size_t null = 0;
 		double* data;
 		std::size_t size;
-		static constexpr const std::size_t basic_size = 16;
 		explicit Sedenion(const double* data, std::size_t size)
 			: data{ nullptr }, size{ size > basic_size ? size : basic_size }
 		{
@@ -327,12 +328,12 @@ namespace Seden
 	Sedenion SEDEN_FUNC_INSTANCE_CALL Sedenion::operator ()() const { return *this; };
 	double& SEDEN_FUNC_INSTANCE_CALL Sedenion::operator [](std::size_t i) & noexcept
 	{
-		if (this->size == 0) { return null_data[0]; }
+		if (this->size == 0) { return this->data[null]; }
 		return this->data[i % this->size];
 	};
 	const double& SEDEN_FUNC_INSTANCE_CALL Sedenion::operator [](std::size_t i) const& noexcept
 	{
-		if (this->size == 0) { return null_data[0]; }
+		if (this->size == 0) { return this->data[null]; }
 		return this->data[i % this->size];
 	};
 	bool SEDEN_FUNC_CALL operator ==(const Sedenion& Union, const Sedenion& Value) { return Union.to_factor() == Value.to_factor(); };

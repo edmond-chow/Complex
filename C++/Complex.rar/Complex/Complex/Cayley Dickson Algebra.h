@@ -15,7 +15,6 @@ template <std::size_t S, std::size_t E, std::size_t... I> requires (S <= E)
 struct make_range_sequence : public make_range_sequence<S, E - 1, E - 1, I...> {};
 template <std::size_t S, std::size_t... I>
 struct make_range_sequence<S, S, I...> : public std::index_sequence<I...> {};
-inline thread_local double null_data[1]{};
 consteval bool is_number(std::size_t n) noexcept
 {
 	if (n == 1) { return true; }
@@ -28,17 +27,19 @@ struct Number
 public:
 	static constexpr const std::size_t Half = N >> 1;
 private:
-	double data[N > 0 ? N : 1];
+	static constexpr const std::size_t reserved_capacity = 1;
+	static constexpr const std::size_t null = 0;
+	double data[N > reserved_capacity ? N : reserved_capacity];
 public:
 	constexpr double& operator [](std::size_t i) & noexcept
 	{
 		if constexpr (N > 0) { return data[i % N]; }
-		else { return data[0]; }
+		else { return data[null]; }
 	};
 	constexpr const double& operator [](std::size_t i) const& noexcept
 	{
 		if constexpr (N > 0) { return data[i % N]; }
-		else { return data[0]; }
+		else { return data[null]; }
 	};
 private:
 	template <std::size_t I, typename... Args>
@@ -230,6 +231,8 @@ constexpr bool is_factor(std::size_t n) noexcept
 class Factor
 {
 private:
+	static constexpr const std::size_t reserved_capacity = 16;
+	static constexpr const std::size_t null = 0;
 	double* data;
 	std::size_t size;
 public:
@@ -243,44 +246,32 @@ public:
 	};
 	constexpr double& operator [](std::size_t i) & noexcept
 	{
-		if (this->size == 0) { return null_data[0]; }
+		if (this->size == 0) { return this->data[null]; }
 		return this->data[i % this->size];
 	};
 	constexpr const double& operator [](std::size_t i) const& noexcept
 	{
-		if (this->size == 0) { return null_data[0]; }
+		if (this->size == 0) { return this->data[null]; }
 		return this->data[i % this->size];
 	};
 	constexpr Factor(std::nullptr_t data, std::size_t size) : data{ nullptr }, size{ size }
 	{
-		if (this->size > 0)
-		{
-			this->data = new double[this->size] {};
-		}
+		this->data = new double[this->size > reserved_capacity ? this->size : reserved_capacity] {};
 	};
 	constexpr Factor(const double* data, std::size_t size) : data{ nullptr }, size{ size }
 	{
-		if (this->size > 0)
-		{
-			this->data = new double[this->size] {};
-			std::copy(data, data + size, this->data);
-		}
+		this->data = new double[this->size > reserved_capacity ? this->size : reserved_capacity] {};
+		std::copy(data, data + size, this->data);
 	};
 	constexpr Factor(const std::initializer_list<double>& list) : data{ nullptr }, size{ list.size() }
 	{
-		if (this->size > 0)
-		{
-			this->data = new double[this->size] {};
-			std::copy(list.begin(), list.end(), this->data);
-		}
+		this->data = new double[this->size > reserved_capacity ? this->size : reserved_capacity] {};
+		std::copy(list.begin(), list.end(), this->data);
 	};
 	constexpr Factor(const Factor& Value) : data{ nullptr }, size{ Value.size }
 	{
-		if (this->size > 0)
-		{
-			this->data = new double[this->size] {};
-			std::copy(Value.data, Value.data + Value.size, this->data);
-		}
+		this->data = new double[this->size > reserved_capacity ? this->size : reserved_capacity] {};
+		std::copy(Value.data, Value.data + Value.size, this->data);
 	};
 	constexpr Factor(Factor&& Value) noexcept : data{ Value.data }, size{ Value.size }
 	{
@@ -312,7 +303,7 @@ public:
 	};
 	constexpr Factor& extend(std::size_t size) &
 	{
-		if (size > this->size)
+		if (size > reserved_capacity && size > this->size)
 		{
 			double* data = new double[size] {};
 			std::copy(this->data, this->data + this->size, data);
