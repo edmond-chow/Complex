@@ -224,15 +224,7 @@ namespace Seden
 		///
 	private:
 		Factor to_factor() const& noexcept { return Factor{ data, size }; };
-		static Sedenion from(const Factor& number)
-		{
-			std::size_t Size = number.get_size();
-			double* Temp = new double[Size] {};
-			std::copy(number.get_data(), number.get_data() + Size, Temp);
-			Sedenion Result{ Temp, Size };
-			delete[] Temp;
-			return Result;
-		};
+		static Sedenion from(const Factor& number) { return Sedenion{ number.get_data(), number.get_size() }; };
 	};
 	///
 	/// operators
