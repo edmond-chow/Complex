@@ -31,9 +31,19 @@ internal class Number
         Data = new double[Numbers.LongLength];
         for (long i = 0; i < Data.LongLength; ++i) { Data[i] = Numbers[i]; }
     }
+    public Number(double[] Numbers, long Size)
+    {
+        Data = new double[Size > Numbers.LongLength ? Size : Numbers.LongLength];
+        for (long i = 0; i < Numbers.LongLength; ++i) { Data[i] = Numbers[i]; }
+    }
     public Number(in double[] Numbers)
     {
         Data = Numbers;
+    }
+    public Number(in double[] Numbers, long Size)
+    {
+        Data = Numbers;
+        Extend(Size);
     }
     public Number Clone()
     {

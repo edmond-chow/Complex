@@ -26,18 +26,19 @@ namespace Seden
         ///
         /// basis
         ///
+        private const long BasicSize = 16;
         private readonly Number Data;
         public Sedenion()
         {
-            Data = new Number(16);
+            Data = new Number(BasicSize);
         }
         public Sedenion(params double[] Numbers)
         {
-            Data = new Number(Numbers);
+            Data = new Number(Numbers, BasicSize);
         }
         public Sedenion(in double[] Numbers)
         {
-            Data = new Number(in Numbers);
+            Data = new Number(in Numbers, BasicSize);
         }
         public Sedenion Clone()
         {
