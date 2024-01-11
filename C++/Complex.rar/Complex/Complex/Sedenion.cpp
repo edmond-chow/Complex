@@ -247,7 +247,7 @@ namespace Seden
 		/// casing
 		///
 	private:
-		Factor to_factor() const& noexcept { return Factor{ data, size }; };
+		Factor to_factor() const& { return Factor{ data, size }; };
 		static Sedenion from(const Factor& number) { return Sedenion{ number.get_data(), number.get_size() }; };
 	};
 	///

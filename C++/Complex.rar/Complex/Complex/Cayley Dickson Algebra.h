@@ -297,7 +297,7 @@ public:
 	};
 	constexpr ~Factor() noexcept
 	{
-		delete[] data;
+		delete[] this->data;
 		this->data = nullptr;
 		this->size = 0;
 	};
