@@ -71,7 +71,7 @@ namespace CmplxConExt
 		FillConsoleOutputAttribute(Console, FOREGROUND_GREEN | FOREGROUND_RED | FOREGROUND_BLUE, Screen.dwSize.X * Screen.dwSize.Y, TopLeft, &Written);
 		SetConsoleCursorPosition(Console, TopLeft);
 	};
-	void PressAnyKey() { int ret = _getwch(); };
+	void PressAnyKey() { wint_t ret = _getwch(); };
 }
 int main()
 {
