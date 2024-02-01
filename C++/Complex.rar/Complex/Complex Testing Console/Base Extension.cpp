@@ -5,6 +5,7 @@
 /* ============= */
 #include <conio.h>
 #include <Windows.h>
+#include <memory>
 #include <string>
 #include <iostream>
 #include "Base.h"
@@ -43,20 +44,17 @@ namespace CmplxConExt
 	};
 	std::wstring GetTitle()
 	{
-		constexpr const std::size_t stack_size = 64;
-		wchar_t stack_str[stack_size];
-		GetConsoleTitleW(stack_str, static_cast<DWORD>(stack_size));
-		if (wcslen(stack_str) + 1 < stack_size) { return std::wstring(stack_str); }
-		std::size_t capacity = 256;
-		const std::size_t increase = 128;
-		wchar_t* heap_str = nullptr;
-		while (true)
+		static constexpr const std::size_t stack_capacity = 64;
 		{
-			heap_str = new wchar_t[capacity];
-			GetConsoleTitleW(heap_str, static_cast<DWORD>(capacity));
-			if (wcslen(heap_str) + 1 < capacity) { return std::wstring(heap_str); }
-			delete[] heap_str;
-			capacity += increase;
+			wchar_t stack_result[stack_capacity];
+			GetConsoleTitleW(stack_result, static_cast<DWORD>(stack_capacity));
+			if (wcslen(stack_result) + 1 < stack_capacity) { return stack_result; }
+		}
+		for (std::size_t heap_capacity = 256; true; heap_capacity += 128)
+		{
+			std::unique_ptr<wchar_t[]> heap_result = std::make_unique<wchar_t[]>(heap_capacity);
+			GetConsoleTitleW(heap_result.get(), static_cast<DWORD>(heap_capacity));
+			if (wcslen(heap_result.get()) + 1 < heap_capacity) { return heap_result.get(); }
 		}
 	};
 	void SetForegroundColor(ConsoleColor Color) { SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), static_cast<WORD>(Color) + static_cast<WORD>(GetBackgroundColor()) * 16); };
