@@ -310,7 +310,7 @@ public:
 			delete[] this->data;
 			this->data = data;
 			this->size = size;
-		};
+		}
 		return *this;
 	};
 	static Factor merge(const Factor& Left, const Factor& Right)
