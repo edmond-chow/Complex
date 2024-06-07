@@ -60,6 +60,11 @@ namespace CmplxConExt
 	void SetForegroundColor(ConsoleColor Color) { SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), static_cast<WORD>(Color) + static_cast<WORD>(GetBackgroundColor()) * 16); };
 	void SetBackgroundColor(ConsoleColor Color) { SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), static_cast<WORD>(GetForegroundColor()) + static_cast<WORD>(Color) * 16); };
 	void SetTitle(const std::wstring& Text) { SetConsoleTitleW(Text.c_str()); };
+	void PressAnyKey()
+	{
+		std::fflush(stdout);
+		wint_t result = _getwch();
+	};
 	void Clear()
 	{
 		COORD TopLeft{ 0, 0 };
@@ -71,7 +76,6 @@ namespace CmplxConExt
 		FillConsoleOutputAttribute(Console, FOREGROUND_GREEN | FOREGROUND_RED | FOREGROUND_BLUE, Screen.dwSize.X * Screen.dwSize.Y, TopLeft, &Written);
 		SetConsoleCursorPosition(Console, TopLeft);
 	};
-	void PressAnyKey() { wint_t ret = _getwch(); };
 }
 int main()
 {

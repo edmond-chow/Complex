@@ -32,6 +32,6 @@ namespace CmplxConExt
 	void SetForegroundColor(ConsoleColor Color);
 	void SetBackgroundColor(ConsoleColor Color);
 	void SetTitle(const std::wstring& Text);
-	void Clear();
 	void PressAnyKey();
+	void Clear();
 }
