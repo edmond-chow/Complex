@@ -12,19 +12,20 @@ namespace CmplxConExt
 {
 	static char getch()
 	{
-		char buf = 0;
-		termios capture{ 0 };
-		fflush(stdout);
-		tcgetattr(0, &capture);
-		termios now = capture;
-		now.c_lflag &= ~ICANON;
-		now.c_lflag &= ~ECHO;
-		now.c_cc[VMIN] = 1;
-		now.c_cc[VTIME] = 0;
-		tcsetattr(0, TCSANOW, &now);
-		[[maybe_unused]] ssize_t ret = read(0, &buf, 1);
-		tcsetattr(0, TCSADRAIN, &capture);
-		return buf;
+		if (std::fflush(stdout) != 0) { return EOF; }
+		char result{};
+		termios captured{};
+		tcgetattr(0, &captured);
+		termios current = captured;
+		current.c_lflag &= ~ICANON;
+		current.c_lflag &= ~ECHO;
+		current.c_cc[VTIME] = 0;
+		current.c_cc[VMIN] = 1;
+		tcsetattr(0, TCSANOW, &current);
+		ssize_t count = read(0, &result, 1);
+		if (count == 0 || count == -1) { result = EOF; }
+		tcsetattr(0, TCSANOW, &captured);
+		return result;
 	};
 	enum class ConsoleColor : std::uint8_t
 	{
@@ -173,8 +174,8 @@ namespace CmplxConExt
 		std::wcout << L"\033]0;" << Text << L"\007";
 		Title = Text;
 	};
-	void Clear() { [[maybe_unused]] int ret = system("clear"); };
 	void PressAnyKey() { getch(); };
+	void Clear() { std::system("clear"); };
 }
 int main()
 {
