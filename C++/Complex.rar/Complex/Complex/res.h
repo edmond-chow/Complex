@@ -2,7 +2,7 @@
 // Microsoft Visual C++ generated include file.
 // Used by res.rc
 
-// 下一個新增物件的預設值
+// Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS

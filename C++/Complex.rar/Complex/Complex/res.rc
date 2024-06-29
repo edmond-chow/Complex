@@ -27,7 +27,7 @@ LANGUAGE LANG_CHINESE, SUBLANG_CHINESE_TRADITIONAL
 
 1 TEXTINCLUDE 
 BEGIN
-    "resource.h\0"
+    "res.h\0"
 END
 
 2 TEXTINCLUDE 
@@ -44,6 +44,16 @@ END
 
 #endif    // APSTUDIO_INVOKED
 
+#endif    // 中文 (繁體，台灣) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// 中性 resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_NEU)
+LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
+#pragma code_page(1252)
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -65,9 +75,9 @@ VS_VERSION_INFO VERSIONINFO
 BEGIN
     BLOCK "StringFileInfo"
     BEGIN
-        BLOCK "040404b0"
+        BLOCK "000004b0"
         BEGIN
-            VALUE "FileDescription", "Vector1D & Complex"
+            VALUE "FileDescription", "Complex"
             VALUE "FileVersion", "0.0.0.0"
             VALUE "InternalName", "Complex.dll"
             VALUE "LegalCopyright", "Edmond Chow"
@@ -78,11 +88,11 @@ BEGIN
     END
     BLOCK "VarFileInfo"
     BEGIN
-        VALUE "Translation", 0x404, 1200
+        VALUE "Translation", 0x0, 1200
     END
 END
 
-#endif    // 中文 (繁體，台灣) resources
+#endif    // 中性 resources
 /////////////////////////////////////////////////////////////////////////////
 
 
