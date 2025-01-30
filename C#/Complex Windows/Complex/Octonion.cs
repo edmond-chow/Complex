@@ -13,497 +13,702 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-using Octon.BaseType;
-using Octon.MainType;
 using System;
-using System.Security;
-using System.Runtime.Serialization;
 using static Module;
-using static Octon.BaseType.Vector7DModule;
-using static Octon.MainType.Octonion;
-using static Octon.MainType.OctonionModule;
-namespace Octon
+namespace Num
 {
-    namespace BaseType
+    public struct Vec7D : INum
     {
-        public struct Vector7D : INumber
+        ///
+        /// constants
+        ///
+        public static readonly Vec7D Zero = new Vec7D(0, 0, 0, 0, 0, 0, 0);
+        public static readonly Vec7D e1 = new Vec7D(1, 0, 0, 0, 0, 0, 0);
+        public static readonly Vec7D e2 = new Vec7D(0, 1, 0, 0, 0, 0, 0);
+        public static readonly Vec7D e3 = new Vec7D(0, 0, 1, 0, 0, 0, 0);
+        public static readonly Vec7D e4 = new Vec7D(0, 0, 0, 1, 0, 0, 0);
+        public static readonly Vec7D e5 = new Vec7D(0, 0, 0, 0, 1, 0, 0);
+        public static readonly Vec7D e6 = new Vec7D(0, 0, 0, 0, 0, 1, 0);
+        public static readonly Vec7D e7 = new Vec7D(0, 0, 0, 0, 0, 0, 1);
+        ///
+        /// basis
+        ///
+        private double x1;
+        private double x2;
+        private double x3;
+        private double x4;
+        private double x5;
+        private double x6;
+        private double x7;
+        public Vec7D(double e1, double e2, double e3, double e4, double e5, double e6, double e7)
         {
-            ///
-            /// basis
-            ///
-            private double x1;
-            private double x2;
-            private double x3;
-            private double x4;
-            private double x5;
-            private double x6;
-            private double x7;
-            public Vector7D(double x1, double x2, double x3, double x4, double x5, double x6, double x7)
+            x1 = e1;
+            x2 = e2;
+            x3 = e3;
+            x4 = e4;
+            x5 = e5;
+            x6 = e6;
+            x7 = e7;
+        }
+        public override string ToString()
+        {
+            double[] Numbers = new double[] { x1, x2, x3, x4, x5, x6, x7 };
+            return Numbers.ToString("e1", "e2", "e3", "e4", "e5", "e6", "e7");
+        }
+        public override bool Equals(object obj)
+        {
+            if (obj is Vec7D o) { return this == o; }
+            else { return false; }
+        }
+        public double this[int i]
+        {
+            get
             {
-                this.x1 = x1;
-                this.x2 = x2;
-                this.x3 = x3;
-                this.x4 = x4;
-                this.x5 = x5;
-                this.x6 = x6;
-                this.x7 = x7;
-            }
-            public override string ToString()
-            {
-                double[] Numbers = new double[] { x1, x2, x3, x4, x5, x6, x7 };
-                return Numbers.ToString("e1", "e2", "e3", "e4", "e5", "e6", "e7");
-            }
-            public override bool Equals(object obj)
-            {
-                if (obj is Vector7D o) { return this == o; }
-                else { return false; }
-            }
-            public double this[long index]
-            {
-                get
+                switch (i)
                 {
-                    Adjust(ref index, Period(GetType()), true);
-                    switch (index)
-                    {
-                        case 1: return x1;
-                        case 2: return x2;
-                        case 3: return x3;
-                        case 4: return x4;
-                        case 5: return x5;
-                        case 6: return x6;
-                        case 7: return x7;
-                        default: return this[index];
-                    }
-                }
-                set
-                {
-                    Adjust(ref index, Period(GetType()), true);
-                    switch (index)
-                    {
-                        case 1: x1 = value; break;
-                        case 2: x2 = value; break;
-                        case 3: x3 = value; break;
-                        case 4: x4 = value; break;
-                        case 5: x5 = value; break;
-                        case 6: x6 = value; break;
-                        case 7: x7 = value; break;
-                        default: this[index] = value; break;
-                    }
+                    case 1: return x1;
+                    case 2: return x2;
+                    case 3: return x3;
+                    case 4: return x4;
+                    case 5: return x5;
+                    case 6: return x6;
+                    case 7: return x7;
+                    default: return 0;
                 }
             }
-            public override int GetHashCode() { return 0; }
-            public static explicit operator Vector7D(string Value) { return Vector7DModule.GetInstance(Value); }
-            public static explicit operator string(Vector7D Value) { return GetString(Value); }
-            public static implicit operator Vector7D(double Value)
+            set
             {
-                if (Value == 0) { return new Vector7D(); }
-                else { throw new Vector7DException("Non-zero value is not satisfy isomorphism to be a vector."); }
-            }
-            ///
-            /// operators
-            ///
-            public static bool operator ==(Vector7D Union, Vector7D Value) { return Union.ToNumber() == Value.ToNumber(); }
-            public static bool operator !=(Vector7D Union, Vector7D Value) { return !(Union == Value); }
-            public static Vector7D operator +(Vector7D Value) { return Value; }
-            public static Vector7D operator -(Vector7D Value) { return From(-Value.ToNumber()); }
-            public static Vector7D operator +(Vector7D Union, Vector7D Value) { return From(Union.ToNumber() + Value.ToNumber()); }
-            public static Octonion operator +(double Union, Vector7D Value) { return new Octonion(Union, Value); }
-            public static Octonion operator +(Vector7D Union, double Value) { return Value + Union; }
-            public static Vector7D operator -(Vector7D Union, Vector7D Value) { return From(Union.ToNumber() - Value.ToNumber()); }
-            public static Octonion operator -(double s, Vector7D Value) { return s + (-Value); }
-            public static Octonion operator -(Vector7D Union, double Value) { return Union + (-Value); }
-            public static Vector7D operator *(double Union, Vector7D Value) { return From(Union * Value.ToNumber()); }
-            public static Vector7D operator *(Vector7D Union, double Value) { return From(Union.ToNumber() * Value); }
-            public static Vector7D operator /(Vector7D Union, double Value) { return From(Union.ToNumber() / Value); }
-            ///
-            /// casing
-            ///
-            internal Number ToNumber()
-            {
-                return new Number(x1, x2, x3, x4, x5, x6, x7);
-            }
-            internal static Vector7D From(Number Number)
-            {
-                return new Vector7D(Number[0], Number[1], Number[2], Number[3], Number[4], Number[5], Number[6]);
+                switch (i)
+                {
+                    case 1: x1 = value; break;
+                    case 2: x2 = value; break;
+                    case 3: x3 = value; break;
+                    case 4: x4 = value; break;
+                    case 5: x5 = value; break;
+                    case 6: x6 = value; break;
+                    case 7: x7 = value; break;
+                    default: break;
+                }
             }
         }
-        [Serializable]
-        internal class Vector7DException : Exception
+        public override int GetHashCode()
         {
-            public Vector7DException() : base() { }
-            public Vector7DException(string message) : base(message) { }
-            public Vector7DException(string message, Exception innerException) : base(message, innerException) { }
-            [SecuritySafeCritical]
-            protected Vector7DException(SerializationInfo info, StreamingContext context) : base(info, context) { }
+            return base.GetHashCode();
         }
-        public static class Vector7DModule
+        public static explicit operator Vec7D(string V)
         {
-            ///
-            /// constants
-            ///
-            public static readonly double pi = Math.PI;
-            public static readonly double e = Math.E;
-            public static readonly Vector7D e1 = new Vector7D(1, 0, 0, 0, 0, 0, 0);
-            public static readonly Vector7D e2 = new Vector7D(0, 1, 0, 0, 0, 0, 0);
-            public static readonly Vector7D e3 = new Vector7D(0, 0, 1, 0, 0, 0, 0);
-            public static readonly Vector7D e4 = new Vector7D(0, 0, 0, 1, 0, 0, 0);
-            public static readonly Vector7D e5 = new Vector7D(0, 0, 0, 0, 1, 0, 0);
-            public static readonly Vector7D e6 = new Vector7D(0, 0, 0, 0, 0, 1, 0);
-            public static readonly Vector7D e7 = new Vector7D(0, 0, 0, 0, 0, 0, 1);
-            ///
-            /// fundamentals
-            ///
-            public static double Abs(Vector7D Value) { return Math.Sqrt(Dot(Value, Value)); }
-            public static Vector7D Sgn(Vector7D Value) { return Value / Abs(Value); }
-            public static double Dot(Vector7D Union, Vector7D Value)
-            {
-                return Number.VectorDot(Union.ToNumber(), Value.ToNumber());
-            }
-            public static Vector7D Cross(Vector7D Union, Vector7D Value)
-            {
-                return Vector7D.From(Number.VectorCross(Union.ToNumber(), Value.ToNumber()));
-            }
-            ///
-            /// conventions
-            ///
-            public static string GetString(Vector7D Value) { return Value.ToString(); }
-            public static Vector7D GetInstance(string Value)
-            {
-                string Replaced = Value.Replace(" ", "");
-                Vector7D Result = 0;
-                try { Replaced.ToNumbers(ref Result, true, "e1", "e2", "e3", "e4", "e5", "e6", "e7"); }
-                catch (Exception Exception) { throw new Vector7DException("The string cannot be converted as a number.", Exception); }
-                return Result;
-            }
-            public static Vector7D ToVector7D(this string Value) { return GetInstance(Value); }
+            return Val(V);
+        }
+        public static explicit operator string(Vec7D V)
+        {
+            return Str(V);
+        }
+        ///
+        /// operators
+        ///
+        public static bool operator ==(Vec7D U, Vec7D V)
+        {
+            return U.Num() == V.Num();
+        }
+        public static bool operator !=(Vec7D U, Vec7D V)
+        {
+            return !(U == V);
+        }
+        public static Vec7D operator +(Vec7D V)
+        {
+            return V;
+        }
+        public static Vec7D operator -(Vec7D V)
+        {
+            return Val(-V.Num());
+        }
+        public static Vec7D operator +(Vec7D U, Vec7D V)
+        {
+            return Val(U.Num() + V.Num());
+        }
+        public static Octon operator +(double U, Vec7D V)
+        {
+            return new Octon(U, V);
+        }
+        public static Octon operator +(Vec7D U, double V)
+        {
+            return V + U;
+        }
+        public static Vec7D operator -(Vec7D U, Vec7D V)
+        {
+            return Val(U.Num() - V.Num());
+        }
+        public static Octon operator -(double U, Vec7D V)
+        {
+            return U + (-V);
+        }
+        public static Octon operator -(Vec7D U, double V)
+        {
+            return U + (-V);
+        }
+        public static Vec7D operator *(Vec7D U, double V)
+        {
+            return Val(U.Num() * V);
+        }
+        public static Vec7D operator *(double U, Vec7D V)
+        {
+            return Val(U * V.Num());
+        }
+        public static Vec7D operator /(Vec7D U, double V)
+        {
+            return Val(U.Num() / V);
+        }
+        ///
+        /// multiples
+        ///
+        public static double Dot(Vec7D U, Vec7D V)
+        {
+            return Number.Dot(U.Num(), V.Num());
+        }
+        public static Vec7D Cross(Vec7D U, Vec7D V)
+        {
+            return Val(Number.Cross(U.Num(), V.Num()));
+        }
+        ///
+        /// fundamentals
+        ///
+        public static double Abs(Vec7D V)
+        {
+            return Ev.Sqrt(Dot(V, V));
+        }
+        public static Vec7D Sgn(Vec7D V)
+        {
+            return V / Abs(V);
+        }
+        ///
+        /// conventions
+        ///
+        public static string Str(Vec7D V)
+        {
+            return V.ToString();
+        }
+        public static Vec7D Val(string V)
+        {
+            string Str = V.Replace(" ", "");
+            Vec7D Rst = Zero;
+            try { Str.ToNumbers(ref Rst, true, "e1", "e2", "e3", "e4", "e5", "e6", "e7"); }
+            catch (Exception Ex) { throw new ArgumentException("The string cannot be converted as a number.", Ex); }
+            return Rst;
+        }
+        ///
+        /// casing
+        ///
+        internal Number Num()
+        {
+            return new Number(0, x1, x2, x3, x4, x5, x6, x7);
+        }
+        internal static Vec7D Val(Number N)
+        {
+            return new Vec7D(N[1], N[2], N[3], N[4], N[5], N[6], N[7]);
         }
     }
-    namespace MainType
+    public struct Octon : INum
     {
-        public struct Octonion : INumber
+        ///
+        /// constants
+        ///
+        public static readonly Octon Zero = new Octon(0, Vec7D.Zero);
+        public static readonly Octon i = new Octon(0, Vec7D.e1);
+        public static readonly Octon j = new Octon(0, Vec7D.e2);
+        public static readonly Octon k = new Octon(0, Vec7D.e3);
+        public static readonly Octon l = new Octon(0, Vec7D.e4);
+        public static readonly Octon il = new Octon(0, Vec7D.e5);
+        public static readonly Octon jl = new Octon(0, Vec7D.e6);
+        public static readonly Octon kl = new Octon(0, Vec7D.e7);
+        ///
+        /// basis
+        ///
+        private double Re;
+        private Vec7D Im;
+        public Octon(double s, Vec7D v)
         {
-            ///
-            /// basis
-            ///
-            private double real;
-            private Vector7D imaginary;
-            public Octonion(double s, Vector7D v)
+            Re = s;
+            Im = v;
+        }
+        public Octon(double s, double i, double j, double k, double l, double il, double jl, double kl)
+        {
+            Re = s;
+            Im = new Vec7D(i, j, k, l, il, jl, kl);
+        }
+        public override string ToString()
+        {
+            double[] Numbers = new double[] { Re, Im[1], Im[2], Im[3], Im[4], Im[5], Im[6], Im[7] };
+            return Numbers.ToString("", "i", "j", "k", "l", "il", "jl", "kl");
+        }
+        public override bool Equals(object obj)
+        {
+            if (obj is Octon o) { return this == o; }
+            else { return false; }
+        }
+        public double this[int i]
+        {
+            get
             {
-                real = s;
-                imaginary = v;
-            }
-            public Octonion(double s, double i, double j, double k, double l, double il, double jl, double kl)
-            {
-                real = s;
-                imaginary = new Vector7D(i, j, k, l, il, jl, kl);
-            }
-            public override string ToString()
-            {
-                double[] Numbers = new double[] { real, imaginary[1], imaginary[2], imaginary[3], imaginary[4], imaginary[5], imaginary[6], imaginary[7] };
-                return Numbers.ToString("", "i", "j", "k", "l", "il", "jl", "kl");
-            }
-            public override bool Equals(object obj)
-            {
-                if (obj is Octonion o) { return this == o; }
-                else { return false; }
-            }
-            public double this[long index]
-            {
-                get
+                switch (i)
                 {
-                    Adjust(ref index, Period(GetType()), false);
-                    switch (index)
-                    {
-                        case 0: return real;
-                        default: return imaginary[index];
-                    }
-                }
-                set
-                {
-                    Adjust(ref index, Period(GetType()), false);
-                    switch (index)
-                    {
-                        case 0: real = value; break;
-                        default: imaginary[index] = value; break;
-                    }
+                    case 0: return Re;
+                    default: return Im[i];
                 }
             }
-            public override int GetHashCode() { return 0; }
-            public static explicit operator Octonion(string Value) { return OctonionModule.GetInstance(Value); }
-            public static explicit operator string(Octonion Value) { return GetString(Value); }
-            public static implicit operator Octonion(double Value) { return new Octonion(Value, new Vector7D()); }
-            public static implicit operator Octonion(Vector7D Value) { return new Octonion(0, Value); }
-            public static double Scalar(Octonion Value) { return Value.real; }
-            public static Vector7D Vector(Octonion Value) { return Value.imaginary; }
-            ///
-            /// operators
-            ///
-            public static bool operator ==(Octonion Union, Octonion Value) { return Union.ToNumber() == Value.ToNumber(); }
-            public static bool operator !=(Octonion Union, Octonion Value) { return !(Union == Value); }
-            public static Octonion operator +(Octonion Value) { return Value; }
-            public static Octonion operator -(Octonion Value) { return From(-Value.ToNumber()); }
-            public static Octonion operator ~(Octonion Value) { return From(~Value.ToNumber()); }
-            public static Octonion operator ++(Octonion Value) { return Value + 1; }
-            public static Octonion operator --(Octonion Value) { return Value - 1; }
-            public static Octonion operator +(Octonion Union, Octonion Value) { return From(Union.ToNumber() + Value.ToNumber()); }
-            public static Octonion operator -(Octonion Union, Octonion Value) { return From(Union.ToNumber() - Value.ToNumber()); }
-            public static Octonion operator *(Octonion Union, Octonion Value) { return From(Union.ToNumber() * Value.ToNumber()); }
-            public static Octonion operator /(Octonion Union, Octonion Value)
+            set
             {
-                if (Vector(Value) == 0) { return From(Union.ToNumber() / Scalar(Value)); }
-                return Union * Inverse(Value);
-            }
-            public static Octonion operator ^(Octonion Base, long Exponent) { return Power(Base, Exponent); }
-            ///
-            /// casing
-            ///
-            internal Number ToNumber()
-            {
-                return new Number(real, imaginary[1], imaginary[2], imaginary[3], imaginary[4], imaginary[5], imaginary[6], imaginary[7]);
-            }
-            internal static Octonion From(Number Number)
-            {
-                return new Octonion(Number[0], Number[1], Number[2], Number[3], Number[4], Number[5], Number[6], Number[7]);
+                switch (i)
+                {
+                    case 0: Re = value; break;
+                    default: Im[i] = value; break;
+                }
             }
         }
-        [Serializable]
-        internal class OctonionException : Exception
+        public override int GetHashCode()
         {
-            public OctonionException() : base() { }
-            public OctonionException(string message) : base(message) { }
-            public OctonionException(string message, Exception innerException) : base(message, innerException) { }
-            [SecuritySafeCritical]
-            protected OctonionException(SerializationInfo info, StreamingContext context) : base(info, context) { }
+            return base.GetHashCode();
         }
-        public static class OctonionModule
+        public static explicit operator Octon(string V)
         {
-            ///
-            /// constants
-            ///
-            public static readonly double pi = Math.PI;
-            public static readonly double e = Math.E;
-            public static readonly Octonion i = new Octonion(0, 1, 0, 0, 0, 0, 0, 0);
-            public static readonly Octonion j = new Octonion(0, 0, 1, 0, 0, 0, 0, 0);
-            public static readonly Octonion k = new Octonion(0, 0, 0, 1, 0, 0, 0, 0);
-            public static readonly Octonion l = new Octonion(0, 0, 0, 0, 1, 0, 0, 0);
-            public static readonly Octonion il = new Octonion(0, 0, 0, 0, 0, 1, 0, 0);
-            public static readonly Octonion jl = new Octonion(0, 0, 0, 0, 0, 0, 1, 0);
-            public static readonly Octonion kl = new Octonion(0, 0, 0, 0, 0, 0, 0, 1);
-            ///
-            /// fundamentals
-            ///
-            public static double Abs(Octonion Value) { return Math.Sqrt(Dot(Value, Value)); }
-            public static double Arg(Octonion Value) { return Arg(Value, 0); }
-            public static double Arg(Octonion Value, long Theta) { return Math.Acos(Scalar(Value) / Abs(Value)) + 2 * pi * Theta; }
-            public static Octonion Conjg(Octonion Value) { return ~Value; }
-            public static Octonion Sgn(Octonion Value) { return Value / Abs(Value); }
-            public static Octonion Inverse(Octonion Value) { return Conjg(Value) / Dot(Value, Value); }
-            public static Octonion Exp(Octonion Value)
+            return Val(V);
+        }
+        public static explicit operator string(Octon V)
+        {
+            return Str(V);
+        }
+        public static implicit operator Octon(double V)
+        {
+            return new Octon(V, Vec7D.Zero);
+        }
+        public static implicit operator Octon(Vec7D V)
+        {
+            return new Octon(0, V);
+        }
+        public static double Scalar(Octon V)
+        {
+            return V.Re;
+        }
+        public static Vec7D Vector(Octon V)
+        {
+            return V.Im;
+        }
+        ///
+        /// operators
+        ///
+        public static bool operator ==(Octon U, Octon V)
+        {
+            return U.Num() == V.Num();
+        }
+        public static bool operator !=(Octon U, Octon V)
+        {
+            return !(U == V);
+        }
+        public static Octon operator +(Octon V)
+        {
+            return V;
+        }
+        public static Octon operator -(Octon V)
+        {
+            return Val(-V.Num());
+        }
+        public static Octon operator ~(Octon V)
+        {
+            return Val(~V.Num());
+        }
+        public static Octon operator ++(Octon V)
+        {
+            return V + 1;
+        }
+        public static Octon operator --(Octon V)
+        {
+            return V - 1;
+        }
+        public static Octon operator +(Octon U, Octon V)
+        {
+            return Val(U.Num() + V.Num());
+        }
+        public static Octon operator -(Octon U, Octon V)
+        {
+            return Val(U.Num() - V.Num());
+        }
+        public static Octon operator *(Octon U, Octon V)
+        {
+            return Val(U.Num() * V.Num());
+        }
+        public static Octon operator /(Octon U, Octon V)
+        {
+            if (Vector(V) == Vec7D.Zero) { return Val(U.Num() / Scalar(V)); }
+            return U * Inverse(V);
+        }
+        public static Octon operator ^(Octon U, long V)
+        {
+            return Power(U, V);
+        }
+        ///
+        /// multiples
+        ///
+        public static double Dot(Octon U, Octon V)
+        {
+            return Number.Dot(U.Num(), V.Num());
+        }
+        public static Vec7D Outer(Octon U, Octon V)
+        {
+            return Vec7D.Val(Number.Outer(U.Num(), V.Num()));
+        }
+        public static Octon Even(Octon U, Octon V)
+        {
+            return Val(Number.Even(U.Num(), V.Num()));
+        }
+        public static Vec7D Cross(Octon U, Octon V)
+        {
+            return Vec7D.Val(Number.Cross(U.Num(), V.Num()));
+        }
+        ///
+        /// fundamentals
+        ///
+        public static double Abs(Octon V)
+        {
+            return Ev.Sqrt(Dot(V, V));
+        }
+        public static double Arg(Octon V, long P)
+        {
+            return Ev.Arccos(Scalar(V) / Abs(V)) + 2 * Ev.PI * P;
+        }
+        public static double Arg(Octon V)
+        {
+            return Arg(V, 0);
+        }
+        public static Octon Conjg(Octon V)
+        {
+            return ~V;
+        }
+        public static Octon Sgn(Octon V)
+        {
+            return V / Abs(V);
+        }
+        public static Octon Inverse(Octon V)
+        {
+            return Conjg(V) / Dot(V, V);
+        }
+        public static Octon Exp(Octon V)
+        {
+            double Re = Scalar(V);
+            Vec7D Im = Vector(V);
+            if (Im == Vec7D.Zero) { return Ev.Exp(Re); }
+            double Sz = Abs(Im);
+            Octon Or = Sgn(Im);
+            return Ev.Exp(Re) * (Ev.Cos(Sz) + Or * Ev.Sin(Sz));
+        }
+        public static Octon Ln(Octon V, long P)
+        {
+            double Re = Scalar(V);
+            Vec7D Im = Vector(V);
+            if (Im == Vec7D.Zero)
             {
-                var S = Scalar(Value);
-                var V = Vector(Value);
-                if (V == 0) { return Math.Exp(S); }
-                return Math.Exp(S) * (Math.Cos(Abs(V)) + Sgn(V) * Math.Sin(Abs(V)));
+                if (Re >= 0) { return Ev.Ln(Re) + 2 * P * Ev.PI * i; }
+                else { return Ev.Ln(-Re) + (2 * P + 1) * Ev.PI * i; }
             }
-            public static Octonion Ln(Octonion Value) { return Ln(Value, 0); }
-            public static Octonion Ln(Octonion Value, long Theta)
+            Octon Or = Sgn(Im);
+            return Ev.Ln(Abs(V)) + Or * Arg(V, P);
+        }
+        public static Octon Ln(Octon V)
+        {
+            return Ln(V, 0);
+        }
+        ///
+        /// exponentials
+        ///
+        public static Octon Power(Octon U, Octon V, long z1, long z2, long z3)
+        {
+            return Exp(Exp(Ln(V, z3) + Ln(Ln(U, z1), z2)));
+        }
+        public static Octon Power(Octon U, Octon V)
+        {
+            return Power(U, V, 0, 0, 0);
+        }
+        public static Octon Power(Octon U, double V, long P)
+        {
+            double Re = Scalar(V);
+            Vec7D Im = Vector(V);
+            if (Im == Vec7D.Zero)
             {
-                var S = Scalar(Value);
-                var V = Vector(Value);
-                if (V == 0)
+                if (Re >= 0)
                 {
-                    if (S < 0) { return Math.Log(-S) + (2 * Theta + 1) * i * pi; }
-                    return Math.Log(S);
+                    double Ai = 2 * P * Ev.PI * V;
+                    return Ev.Power(Re, V) * (Ev.Cos(Ai) + i * Ev.Sin(Ai));
                 }
-                return Math.Log(Abs(Value)) + Sgn(V) * Arg(Value, Theta);
-            }
-            ///
-            /// multiples
-            ///
-            public static double Dot(Octonion Union, Octonion Value)
-            {
-                return Scalar(Union) * Scalar(Value) + Vector7DModule.Dot(Vector(Union), Vector(Value));
-            }
-            public static Vector7D Outer(Octonion Union, Octonion Value)
-            {
-                return Vector7DModule.Cross(Vector(Union), Vector(Value)) + Scalar(Union) * Vector(Value) - Scalar(Value) * Vector(Union);
-            }
-            public static Octonion Even(Octonion Union, Octonion Value)
-            {
-                return Scalar(Union) * Scalar(Value) - Vector7DModule.Dot(Vector(Union), Vector(Value)) + Scalar(Union) * Vector(Value) + Scalar(Value) * Vector(Union);
-            }
-            public static Vector7D Cross(Octonion Union, Octonion Value)
-            {
-                return Vector7DModule.Cross(Vector(Union), Vector(Value));
-            }
-            ///
-            /// exponentials
-            ///
-            public static Octonion Power(Octonion Base, Octonion Exponent) { return Power(Base, Exponent, 0, 0, 0); }
-            public static Octonion Power(Octonion Base, Octonion Exponent, long Theta, long Phi, long Tau)
-            {
-                return Exp(Exp(Ln(Ln(Base, Theta), Phi) + Ln(Exponent, Tau)));
-            }
-            public static Octonion Power(Octonion Base, double Exponent) { return Power(Base, Exponent, 0); }
-            public static Octonion Power(Octonion Base, double Exponent, long Theta)
-            {
-                if (Base == 0) { return Exponent == 0 ? 1 : 0; }
-                return Math.Pow(Abs(Base), Exponent) *
-                    (Math.Cos(Exponent * Arg(Base, Theta)) + Sgn(Vector(Base)) * Math.Sin(Exponent * Arg(Base, Theta)));
-            }
-            public static Octonion Root(Octonion Base, Octonion Exponent) { return Root(Base, Exponent, 0, 0, 0); }
-            public static Octonion Root(Octonion Base, Octonion Exponent, long Theta, long Phi, long Tau) { return Power(Base, Inverse(Exponent), Theta, Phi, Tau); }
-            public static Octonion Root(Octonion Base, double Exponent) { return Root(Base, Exponent, 0); }
-            public static Octonion Root(Octonion Base, double Exponent, long Theta) { return Power(Base, 1 / Exponent, Theta); }
-            public static Octonion Log(Octonion Base, Octonion Number) { return Log(Base, Number, 0, 0, 0, 0); }
-            public static Octonion Log(Octonion Base, Octonion Number, long Theta, long Phi, long Tau, long Omega)
-            {
-                return Exp(Ln(Ln(Number, Theta), Phi) - Ln(Ln(Base, Tau), Omega));
-            }
-            ///
-            /// trigonometrics
-            ///
-            public static Octonion Sin(Octonion Value)
-            {
-                var S = Scalar(Value);
-                var V = Vector(Value);
-                if (V == 0) { return Math.Sin(S); }
-                return Math.Sin(S) * Math.Cosh(Abs(V)) + Sgn(V) * (Math.Cos(S) * Math.Sinh(Abs(V)));
-            }
-            public static Octonion Arcsin(Octonion Value) { return Arcsin(Value, true, 0); }
-            public static Octonion Arcsin(Octonion Value, bool Sign, long Period)
-            {
-                if (Sign == true)
+                else
                 {
-                    var S = Scalar(Value);
-                    var V = Vector(Value);
-                    if (V == 0) { return -i * Ln(i * S + Root(1 - S * S, 2), Period); }
-                    return -Sgn(V) * Ln(Sgn(V) * Value + Root(1 - Value * Value, 2), Period);
+                    double Ai = (2 * P + 1) * Ev.PI * V;
+                    return Ev.Power(-Re, V) * (Ev.Cos(Ai) + i * Ev.Sin(Ai));
                 }
-                return pi - Arcsin(Value, true, Period);
             }
-            public static Octonion Sinh(Octonion Value)
-            {
-                var S = Scalar(Value);
-                var V = Vector(Value);
-                if (V == 0) { return Math.Sinh(S); }
-                return Math.Sinh(S) * Math.Cos(Abs(V)) + Sgn(V) * (Math.Cosh(S) * Math.Sin(Abs(V)));
-            }
-            public static Octonion Arcsinh(Octonion Value) { return Arcsinh(Value, true, 0); }
-            public static Octonion Arcsinh(Octonion Value, bool Sign, long Period)
-            {
-                if (Sign == true) { return Ln(Value + Root(Value * Value + 1, 2), Period); }
-                var V = Vector(Value);
-                if (V == 0) { return pi * i - Arcsinh(Value, true, Period); }
-                return pi * Sgn(V) - Arcsinh(Value, true, Period);
-            }
-            public static Octonion Cos(Octonion Value)
-            {
-                var S = Scalar(Value);
-                var V = Vector(Value);
-                if (V == 0) { return Math.Cos(S); }
-                return Math.Cos(S) * Math.Cosh(Abs(V)) - Sgn(V) * (Math.Sin(S) * Math.Sinh(Abs(V)));
-            }
-            public static Octonion Arccos(Octonion Value) { return Arccos(Value, true, 0); }
-            public static Octonion Arccos(Octonion Value, bool Sign, long Period)
-            {
-                if (Sign == true)
-                {
-                    var S = Scalar(Value);
-                    var V = Vector(Value);
-                    if (V == 0) { return -i * Ln(S + Root(S * S - 1, 2), Period); }
-                    return -Sgn(V) * Ln(Value + Root(Value * Value - 1, 2), Period);
-                }
-                return 2 * pi - Arccos(Value, true, Period);
-            }
-            public static Octonion Cosh(Octonion Value)
-            {
-                var S = Scalar(Value);
-                var V = Vector(Value);
-                if (V == 0) { return Math.Cosh(S); }
-                return Math.Cosh(S) * Math.Cos(Abs(V)) + Sgn(V) * (Math.Sinh(S) * Math.Sin(Abs(V)));
-            }
-            public static Octonion Arccosh(Octonion Value) { return Arccosh(Value, true, 0); }
-            public static Octonion Arccosh(Octonion Value, bool Sign, long Period)
-            {
-                if (Sign == true) { return Ln(Value + Root(Value * Value - 1, 2), Period); }
-                var V = Vector(Value);
-                if (V == 0) { return 2 * pi * i - Arccosh(Value, true, Period); }
-                return 2 * pi * Sgn(V) - Arccosh(Value, true, Period);
-            }
-            public static Octonion Tan(Octonion Value)
-            {
-                var S = Scalar(Value);
-                var V = Vector(Value);
-                var TanS = Math.Tan(S);
-                if (V == 0) { return TanS; }
-                var TanS2 = TanS * TanS;
-                var TanhV = Math.Tanh(Abs(V));
-                var TanhV2 = TanhV * TanhV;
-                return (TanS * (1 - TanhV2) + Sgn(V) * (TanhV * (1 + TanS2))) / (1 + TanS2 * TanhV2);
-            }
-            public static Octonion Arctan(Octonion Value) { return Arctan(Value, true, 0); }
-            public static Octonion Arctan(Octonion Value, bool Sign, long Period)
-            {
-                if (Sign == true)
-                {
-                    var S = Scalar(Value);
-                    var V = Vector(Value);
-                    if (V == 0) { return i / 2 * (Ln(1 - i * S, Period) - Ln(1 + i * S)); }
-                    return Sgn(V) / 2 * (Ln(1 - Sgn(V) * Value, Period) - Ln(1 + Sgn(V) * Value));
-                }
-                return pi + Arctan(Value, true, Period);
-            }
-            public static Octonion Tanh(Octonion Value)
-            {
-                var S = Scalar(Value);
-                var V = Vector(Value);
-                var TanhS = Math.Tanh(S);
-                if (V == 0) { return TanhS; }
-                var TanhS2 = TanhS * TanhS;
-                var TanV = Math.Tan(Abs(V));
-                var TanV2 = TanV * TanV;
-                return (TanhS * (1 - TanV2) + Sgn(V) * (TanV * (1 + TanhS2))) / (1 + TanhS2 * TanV2);
-            }
-            public static Octonion Arctanh(Octonion Value) { return Arctanh(Value, true, 0); }
-            public static Octonion Arctanh(Octonion Value, bool Sign, long Period)
-            {
-                if (Sign == true) { return 1 / 2 * (Ln(1 + Value, Period) - Ln(1 - Value)); }
-                var V = Vector(Value);
-                if (V == 0) { return pi * i + Arctanh(Value, true, Period); }
-                return pi * Sgn(V) + Arctanh(Value, true, Period);
-            }
-            public static Octonion Csc(Octonion Value) { return Inverse(Sin(Value)); }
-            public static Octonion Arccsc(Octonion Value) { return Arccsc(Value, true, 0); }
-            public static Octonion Arccsc(Octonion Value, bool Sign, long Period) { return Arcsin(Inverse(Value), Sign, Period); }
-            public static Octonion Csch(Octonion Value) { return Inverse(Sinh(Value)); }
-            public static Octonion Arccsch(Octonion Value) { return Arccsch(Value, true, 0); }
-            public static Octonion Arccsch(Octonion Value, bool Sign, long Period) { return Arcsinh(Inverse(Value), Sign, Period); }
-            public static Octonion Sec(Octonion Value) { return Inverse(Cos(Value)); }
-            public static Octonion Arcsec(Octonion Value) { return Arcsec(Value, true, 0); }
-            public static Octonion Arcsec(Octonion Value, bool Sign, long Period) { return Arccos(Inverse(Value), Sign, Period); }
-            public static Octonion Sech(Octonion Value) { return Inverse(Cosh(Value)); }
-            public static Octonion Arcsech(Octonion Value) { return Arcsech(Value, true, 0); }
-            public static Octonion Arcsech(Octonion Value, bool Sign, long Period) { return Arccosh(Inverse(Value), Sign, Period); }
-            public static Octonion Cot(Octonion Value) { return Inverse(Tan(Value)); }
-            public static Octonion Arccot(Octonion Value) { return Arccot(Value, true, 0); }
-            public static Octonion Arccot(Octonion Value, bool Sign, long Period) { return Arctan(Inverse(Value), Sign, Period); }
-            public static Octonion Coth(Octonion Value) { return Inverse(Tanh(Value)); }
-            public static Octonion Arccoth(Octonion Value) { return Arccoth(Value, true, 0); }
-            public static Octonion Arccoth(Octonion Value, bool Sign, long Period) { return Arctanh(Inverse(Value), Sign, Period); }
-            ///
-            /// conventions
-            ///
-            public static string GetString(Octonion Value) { return Value.ToString(); }
-            public static Octonion GetInstance(string Value)
-            {
-                string Replaced = Value.Replace(" ", "");
-                Octonion Result = 0;
-                try { Replaced.ToNumbers(ref Result, false, "", "i", "j", "k", "l", "il", "jl", "kl"); }
-                catch (Exception Exception) { throw new OctonionException("The string cannot be converted as a number.", Exception); }
-                return Result;
-            }
-            public static Octonion ToOctonion(this string Value) { return GetInstance(Value); }
+            Octon Or = Sgn(Im);
+            double A = Arg(U, P) * V;
+            return Ev.Power(Abs(U), V) * (Ev.Cos(A) + Or * Ev.Sin(A));
+        }
+        public static Octon Power(Octon U, double V)
+        {
+            return Power(U, V, 0);
+        }
+        public static Octon Root(Octon U, Octon V, long z1, long z2, long z3)
+        {
+            return Power(U, Inverse(V), z1, z2, z3);
+        }
+        public static Octon Root(Octon U, Octon V)
+        {
+            return Root(U, V, 0, 0, 0);
+        }
+        public static Octon Root(Octon U, double V, long P)
+        {
+            return Power(U, 1 / V, P);
+        }
+        public static Octon Root(Octon U, double V)
+        {
+            return Root(U, V, 0);
+        }
+        public static Octon Log(Octon U, Octon V, long z1, long z2, long z3, long z4)
+        {
+            return Exp(Ln(Ln(V, z1), z3) - Ln(Ln(U, z2), z4));
+        }
+        public static Octon Log(Octon U, Octon V)
+        {
+            return Log(U, V, 0, 0, 0, 0);
+        }
+        ///
+        /// trigonometrics
+        ///
+        public static Octon Sin(Octon V)
+        {
+            double Re = Scalar(V);
+            Vec7D Im = Vector(V);
+            if (Im == Vec7D.Zero) { return Ev.Sin(Re); }
+            double Sz = Abs(Im);
+            Octon Or = Sgn(Im);
+            return Ev.Sin(Re) * Ev.Cosh(Sz) + Ev.Cos(Re) * Ev.Sinh(Sz) * Or;
+        }
+        public static Octon Cos(Octon V)
+        {
+            double Re = Scalar(V);
+            Vec7D Im = Vector(V);
+            if (Im == Vec7D.Zero) { return Ev.Cos(Re); }
+            double Sz = Abs(Im);
+            Octon Or = Sgn(Im);
+            return Ev.Cos(Re) * Ev.Cosh(Sz) - Ev.Sin(Re) * Ev.Sinh(Sz) * Or;
+        }
+        public static Octon Tan(Octon V)
+        {
+            double Re = Scalar(V);
+            Vec7D Im = Vector(V);
+            double T = Ev.Tan(Re);
+            if (Im == Vec7D.Zero) { return T; }
+            double Sz = Abs(Im);
+            Octon Or = Sgn(Im);
+            double Th = Ev.Tanh(Sz);
+            double T2 = T * T;
+            double Th2 = Th * Th;
+            return (T * (1 - Th2) + Th * (1 + T2) * Or) / (1 + T2 * Th2);
+        }
+        public static Octon Csc(Octon V)
+        {
+            return Inverse(Sin(V));
+        }
+        public static Octon Sec(Octon V)
+        {
+            return Inverse(Cos(V));
+        }
+        public static Octon Cot(Octon V)
+        {
+            return Inverse(Tan(V));
+        }
+        public static Octon Sinh(Octon V)
+        {
+            double Re = Scalar(V);
+            Vec7D Im = Vector(V);
+            if (Im == Vec7D.Zero) { return Ev.Sinh(Re); }
+            double Sz = Abs(Im);
+            Octon Or = Sgn(Im);
+            return Ev.Sinh(Re) * Ev.Cos(Sz) + Ev.Cosh(Re) * Ev.Sin(Sz) * Or;
+        }
+        public static Octon Cosh(Octon V)
+        {
+            double Re = Scalar(V);
+            Vec7D Im = Vector(V);
+            if (Im == Vec7D.Zero) { return Ev.Cosh(Re); }
+            double Sz = Abs(Im);
+            Octon Or = Sgn(Im);
+            return Ev.Cosh(Re) * Ev.Cos(Sz) + Ev.Sinh(Re) * Ev.Sin(Sz) * Or;
+        }
+        public static Octon Tanh(Octon V)
+        {
+            double Re = Scalar(V);
+            Vec7D Im = Vector(V);
+            var Th = Ev.Tanh(Re);
+            if (Im == Vec7D.Zero) { return Th; }
+            double Sz = Abs(Im);
+            Octon Or = Sgn(Im);
+            var T = Ev.Tan(Sz);
+            var Th2 = Th * Th;
+            var T2 = T * T;
+            return (Th * (1 - T2) + T * (1 + Th2) * Or) / (1 + Th2 * T2);
+        }
+        public static Octon Csch(Octon V)
+        {
+            return Inverse(Sinh(V));
+        }
+        public static Octon Sech(Octon V)
+        {
+            return Inverse(Cosh(V));
+        }
+        public static Octon Coth(Octon V)
+        {
+            return Inverse(Tanh(V));
+        }
+        public static Octon Arcsin(Octon V, bool S, long P)
+        {
+            if (!S) { return Ev.PI - Arcsin(V, true, P); }
+            double Re = Scalar(V);
+            Vec7D Im = Vector(V);
+            if (Im == Vec7D.Zero) { return -i * Ln(i * Re + Root(1 - Re * Re, 2), P); }
+            Octon Or = Sgn(Im);
+            return -Or * Ln(Or * V + Root(1 - V * V, 2), P);
+        }
+        public static Octon Arcsin(Octon V)
+        {
+            return Arcsin(V, true, 0);
+        }
+        public static Octon Arccos(Octon V, bool S, long P)
+        {
+            if (!S) { return 2 * Ev.PI - Arccos(V, true, P); }
+            double Re = Scalar(V);
+            Vec7D Im = Vector(V);
+            if (Im == Vec7D.Zero) { return -i * Ln(Re + Root(Re * Re - 1, 2), P); }
+            Octon Or = Sgn(Im);
+            return -Or * Ln(V + Root(V * V - 1, 2), P);
+        }
+        public static Octon Arccos(Octon V)
+        {
+            return Arccos(V, true, 0);
+        }
+        public static Octon Arctan(Octon V, bool S, long P)
+        {
+            if (!S) { return Ev.PI + Arctan(V, true, P); }
+            double Re = Scalar(V);
+            Vec7D Im = Vector(V);
+            if (Im == Vec7D.Zero) { return 2 * Ev.PI * P + i * (Ln(1 - i * Re) - Ln(1 + i * Re)) / 2; }
+            Octon Or = Sgn(Im);
+            return 2 * Ev.PI * P + Or * (Ln(1 - Or * V) - Ln(1 + Or * V)) / 2;
+        }
+        public static Octon Arctan(Octon V)
+        {
+            return Arctan(V, true, 0);
+        }
+        public static Octon Arccsc(Octon V, bool S, long P)
+        {
+            return Arcsin(Inverse(V), S, P);
+        }
+        public static Octon Arccsc(Octon V)
+        {
+            return Arccsc(V, true, 0);
+        }
+        public static Octon Arcsec(Octon V, bool S, long P)
+        {
+            return Arccos(Inverse(V), S, P);
+        }
+        public static Octon Arcsec(Octon V)
+        {
+            return Arcsec(V, true, 0);
+        }
+        public static Octon Arccot(Octon V, bool S, long P)
+        {
+            return Arctan(Inverse(V), S, P);
+        }
+        public static Octon Arccot(Octon V)
+        {
+            return Arccot(V, true, 0);
+        }
+        public static Octon Arcsinh(Octon V, bool S, long P)
+        {
+            Vec7D Im = Vector(V);
+            Octon Or = Sgn(Im);
+            if (!S) { return Ev.PI * Or - Arcsinh(V, true, P); }
+            return Ln(V + Root(V * V + 1, 2), P);
+        }
+        public static Octon Arcsinh(Octon V)
+        {
+            return Arcsinh(V, true, 0);
+        }
+        public static Octon Arccosh(Octon V, bool S, long P)
+        {
+            Vec7D Im = Vector(V);
+            Octon Or = Sgn(Im);
+            if (!S) { return 2 * Ev.PI * Or - Arccosh(V, true, P); }
+            return Ln(V + Root(V * V - 1, 2), P);
+        }
+        public static Octon Arccosh(Octon V)
+        {
+            return Arccosh(V, true, 0);
+        }
+        public static Octon Arctanh(Octon V, bool S, long P)
+        {
+            Vec7D Im = Vector(V);
+            Octon Or = Sgn(Im);
+            if (!S) { return Ev.PI * Or + Arctan(V, true, P); }
+            return 2 * Ev.PI * P * Or + (Ln(1 + V) - Ln(1 - V)) / 2;
+        }
+        public static Octon Arctanh(Octon V)
+        {
+            return Arctanh(V, true, 0);
+        }
+        public static Octon Arccsch(Octon V, bool S, long P)
+        {
+            return Arcsinh(Inverse(V), S, P);
+        }
+        public static Octon Arccsch(Octon V)
+        {
+            return Arccsch(V, true, 0);
+        }
+        public static Octon Arcsech(Octon V, bool S, long P)
+        {
+            return Arccosh(Inverse(V), S, P);
+        }
+        public static Octon Arcsech(Octon V)
+        {
+            return Arcsech(V, true, 0);
+        }
+        public static Octon Arccoth(Octon V, bool S, long P)
+        {
+            return Arctanh(Inverse(V), S, P);
+        }
+        public static Octon Arccoth(Octon V)
+        {
+            return Arccoth(V, true, 0);
+        }
+        ///
+        /// conventions
+        ///
+        public static string Str(Octon V)
+        {
+            return V.ToString();
+        }
+        public static Octon Val(string V)
+        {
+            string Str = V.Replace(" ", "");
+            Octon Rst = Zero;
+            try { Str.ToNumbers(ref Rst, false, "", "i", "j", "k", "l", "il", "jl", "kl"); }
+            catch (Exception Ex) { throw new ArgumentException("The string cannot be converted as a number.", Ex); }
+            return Rst;
+        }
+        ///
+        /// casing
+        ///
+        internal Number Num()
+        {
+            return new Number(Re, Im[1], Im[2], Im[3], Im[4], Im[5], Im[6], Im[7]);
+        }
+        internal static Octon Val(Number N)
+        {
+            return new Octon(N[0], N[1], N[2], N[3], N[4], N[5], N[6], N[7]);
         }
     }
 }

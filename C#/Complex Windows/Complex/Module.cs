@@ -14,93 +14,74 @@
  *   limitations under the License.
  */
 using System;
-using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 internal static class Module
 {
-    internal interface INumber
+    internal interface INum
     {
-        double this[long index] { get; set; }
+        double this[int i] { get; set; }
     }
     private static readonly string SignBefore = @"(-|\+|^)";
     private static readonly string UnsignedReal = @"(\d+)(\.\d+|)([Ee](-|\+|)(\d+)|)";
     private static readonly string SignAfter = @"(-|\+|$)";
-    private static string AddGroup(this string Pattern, bool Optional)
+    private static string AddGroup(this string Pat, bool Opt)
     {
-        return "(" + Pattern + (Optional ? "|" : "") + ")";
+        return "(" + Pat + (Opt ? "|" : "") + ")";
     }
-    private static string FollowedBy(this string Pattern, string Text)
+    private static string FollowedBy(this string Pat, string Chr)
     {
-        return Pattern + "(?=" + Text + ")";
+        return Pat + "(?=" + Chr + ")";
     }
-    private static string GetPattern(string Term)
+    private static string GetPattern(string Trm)
     {
-        return (SignBefore + UnsignedReal.AddGroup(Term.Length > 0)).FollowedBy(Term + SignAfter);
+        return (SignBefore + UnsignedReal.AddGroup(Trm.Length > 0)).FollowedBy(Trm + SignAfter);
     }
-    private static string DoubleToString(this double Number)
+    private static string Str(this double Num)
     {
-        return Regex.Replace(Number.ToString("G17").ToLower(), "e-0(?=[1-9])", "e-");
+        return Regex.Replace(Num.ToString("G17").ToLower(), "e-0(?=[1-9])", "e-");
     }
-    internal static string ToString(this double[] Numbers, params string[] Terms)
+    internal static string ToString(this double[] Num, params string[] Trm)
     {
-        if (Numbers.LongLength != Terms.LongLength) { throw new NotImplementedException("The branch should ensure not instantiated at compile time."); }
-        StringBuilder Result = new StringBuilder();
-        bool First = true;
-        for (long i = 0; i < Numbers.LongLength; ++i)
+        if (Num.Length != Trm.Length) { throw new NotImplementedException("The branch should ensure not instantiated at compile time."); }
+        StringBuilder Rst = new StringBuilder();
+        bool Fst = true;
+        for (int i = 0; i < Num.Length; ++i)
         {
-            if (Numbers[i] == 0) { continue; }
-            if (Numbers[i] > 0 && First == false) { Result.Append("+"); }
-            else if (Numbers[i] == -1) { Result.Append("-"); }
-            if (Numbers[i] != 1 && Numbers[i] != -1) { Result.Append(Numbers[i].DoubleToString()); }
-            else if (Terms[i].Length == 0) { Result.Append("1"); }
-            if (Terms[i].Length > 0) { Result.Append(Terms[i]); }
-            First = false;
+            if (Num[i] == 0) { continue; }
+            if (Num[i] > 0 && !Fst) { Rst.Append("+"); }
+            else if (Num[i] == -1) { Rst.Append("-"); }
+            if (Num[i] != 1 && Num[i] != -1) { Rst.Append(Num[i].Str()); }
+            else if (Trm[i].Length == 0) { Rst.Append("1"); }
+            Rst.Append(Trm[i]);
+            Fst = false;
         }
-        if (First == true) { Result.Append("0"); }
-        return Result.ToString();
+        if (Fst) { Rst.Append("0"); }
+        return Rst.ToString();
     }
-    internal static double[] ToNumbers(this string Value, params string[] Terms)
+    internal static double[] ToNumbers(this string Val, params string[] Trm)
     {
-        double[] Numbers = new double[Terms.LongLength];
-        int Vaild = Value.Length;
-        if (Vaild == 0) { throw new ArgumentException("The string is empty."); }
-        for (long i = 0; i < Numbers.LongLength; ++i)
+        double[] Num = new double[Trm.Length];
+        int Cnt = Val.Length;
+        if (Cnt == 0) { throw new ArgumentException("The string is empty."); }
+        for (int i = 0; i < Num.Length; ++i)
         {
-            MatchCollection Match = new Regex(GetPattern(Terms[i])).Matches(Value);
-            for (int j = 0; j < Match.Count; ++j)
+            MatchCollection Mat = new Regex(GetPattern(Trm[i])).Matches(Val);
+            for (int j = 0; j < Mat.Count; ++j)
             {
-                string Captured = Match[j].Value;
-                Vaild -= Captured.Length + Terms[i].Length;
-                if (Captured.Length == 0 || Captured == "+") { ++Numbers[i]; }
-                else if (Captured == "-") { --Numbers[i]; }
-                else { Numbers[i] += double.Parse(Captured); }
+                string Cap = Mat[j].Value;
+                Cnt -= Cap.Length + Trm[i].Length;
+                if (Cap.Length == 0 || Cap == "+") { ++Num[i]; }
+                else if (Cap == "-") { --Num[i]; }
+                else { Num[i] += double.Parse(Cap); }
             }
         }
-        if (Vaild > 0) { throw new ArgumentException("The string is invalid."); }
-        return Numbers;
+        if (Cnt != 0) { throw new ArgumentException("The string is invalid."); }
+        return Num;
     }
-    internal static void ToNumbers<N>(this string Value, ref N Result, bool Shift, params string[] Terms) where N : INumber
+    internal static void ToNumbers<N>(this string Val, ref N Rst, bool Vec, params string[] Trm) where N : INum
     {
-        double[] Numbers = Value.ToNumbers(Terms);
-        for (long i = 0, o = Shift ? 1 : 0; i < Numbers.LongLength; ++i) { Result[i + o] = Numbers[i]; }
-    }
-    internal static long Period(Type Type)
-    {
-        long Result = 0;
-        if (!Type.IsValueType) { throw new NotImplementedException("The type should be a value type."); }
-        foreach (FieldInfo Field in Type.GetRuntimeFields())
-        {
-            if (Field.FieldType == typeof(double)) { ++Result; }
-            else if (Field.FieldType.IsValueType) { Result += Period(Field.FieldType); }
-            else { throw new NotImplementedException("The subobjects of an object should be an instance of the double type."); }
-        }
-        return Result;
-    }
-    internal static void Adjust(ref long Index, long LongLength, bool Shift)
-    {
-        if (LongLength <= 0) { throw new ArgumentOutOfRangeException(nameof(LongLength)); }
-        Index %= LongLength;
-        if (Shift && Index == 0) { Index = LongLength; }
+        double[] Num = Val.ToNumbers(Trm);
+        for (int i = 0, o = Vec ? 1 : 0; i < Num.Length; ++i) { Rst[i + o] = Num[i]; }
     }
 }

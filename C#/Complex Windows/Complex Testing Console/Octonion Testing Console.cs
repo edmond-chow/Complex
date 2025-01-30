@@ -13,130 +13,135 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-using Octon.MainType;
 using System;
 using System.Reflection;
 using ComplexTestingConsole;
 using static ComplexTestingConsole.Module;
+using Num;
+using static Num.Octon;
 using static OctonBasis;
-using static Octon.MainType.OctonionModule;
 internal static class OctonBasis
 {
-    internal static void Multiple<R>(string LeftValue, string RightValue, Func<Octonion, Octonion, R> Subroutine)
+    internal static void Mul<T>(string L, string R, Func<Octon, Octon, T> S)
     {
-        if (LeftValue == RightValue)
+        if (L == R)
         {
-            Octonion Union = GetInstance(Base.Input("Union = "));
-            Octonion Value = GetInstance(Base.Input("Value = "));
-            object Result = Subroutine.Invoke(Union, Value);
-            if (Result is Octon.BaseType.Vector7D V) { Result = new Octonion(0, V); }
-            Base.Output(Result.ToModuleString());
+            Octon U = Val(Base.Input("U = "));
+            Octon V = Val(Base.Input("V = "));
+            object Result = S.Invoke(U, V);
+            if (Result is Vec7D Ve) { Result = new Octon(0, Ve); }
+            Base.Output(Result.ToModStr());
         }
     }
-    internal static void Op<R>(string LeftValue, string RightValue, Func<Octonion, Octonion, R> Subroutine)
+    internal static void Op<T>(string L, string R, Func<Octon, Octon, T> S)
     {
-        if (LeftValue == RightValue)
+        if (L == R)
         {
-            Octonion Union = GetInstance(Base.Input("Union = "));
-            Octonion Value = GetInstance(Base.Input("Value = "));
-            Base.Output(Subroutine.Invoke(Union, Value).ToModuleString());
+            Octon U = Val(Base.Input("U = "));
+            Octon V = Val(Base.Input("V = "));
+            Base.Output(S.Invoke(U, V).ToModStr());
         }
     }
-    internal static void PowerOp(string LeftValue, string RightValue, Func<Octonion, long, Octonion> Subroutine)
+    internal static void PowOp(string L, string R, Func<Octon, long, Octon> S)
     {
-        if (LeftValue == RightValue)
+        if (L == R)
         {
-            Octonion BaseNumber = GetInstance(Base.Input("Base = "));
-            long ExponentNumber = Base.Input("Exponent = ").AsInteger();
-            Base.Output(Subroutine.Invoke(BaseNumber, ExponentNumber).ToModuleString());
+            Octon U = Val(Base.Input("U = "));
+            long V = Base.Input("V = ").AsInt();
+            Base.Output(S.Invoke(U, V).ToModStr());
         }
     }
-    internal static void Power(string LeftValue, string RightValue, Func<Octonion, Octonion, long, long, long, Octonion> Subroutine)
+    internal static void Pow(string L, string R, Func<Octon, Octon, long, long, long, Octon> S)
     {
-        Power(LeftValue, RightValue, Delegate.CreateDelegate(Subroutine.GetType(), Subroutine.GetMethodInfo()));
+        Pow(L, R, Delegate.CreateDelegate(S.GetType(), S.GetMethodInfo()));
     }
-    internal static void Power(string LeftValue, string RightValue, Func<Octonion, Octonion, long, long, long, long, Octonion> Subroutine)
+    internal static void Pow(string L, string R, Func<Octon, Octon, long, long, long, long, Octon> S)
     {
-        Power(LeftValue, RightValue, Delegate.CreateDelegate(Subroutine.GetType(), Subroutine.GetMethodInfo()));
+        Pow(L, R, Delegate.CreateDelegate(S.GetType(), S.GetMethodInfo()));
     }
-    internal static void Power(string LeftValue, string RightValue, Delegate Subroutine)
+    internal static void Pow(string L, string R, Delegate S)
     {
-        if (LeftValue == RightValue)
+        if (L == R)
         {
-            Octonion Union = GetInstance(Base.Input("Union = "));
-            Octonion Value = GetInstance(Base.Input("Value = "));
-            long[] Data = new long[Subroutine.GetMethodInfo().GetParameters().LongLength - 2];
-            PowerGet(Data);
-            PowerResult(Subroutine, RightValue, Union, Value, Data);
+            Octon U = Val(Base.Input("U = "));
+            Octon V = Val(Base.Input("V = "));
+            object[] Args = new object[S.GetMethodInfo().GetParameters().Length];
+            Args[0] = U;
+            Args[1] = V;
+            PowGet(Args);
+            PowRst(S, Args);
         }
-        else if (LeftValue == RightValue + "()")
+        else if (L == R + "()")
         {
-            Octonion Union = GetInstance(Base.Input("Union = "));
-            Octonion Value = GetInstance(Base.Input("Value = "));
-            Tuple<long, long>[] Data = new Tuple<long, long>[Subroutine.GetMethodInfo().GetParameters().LongLength - 2];
-            PowerGet(Data);
-            PowerResult(Subroutine, RightValue, Union, Value, Data);
-        }
-    }
-    internal static void Basic<R>(string LeftValue, string RightValue, Func<Octonion, R> Subroutine)
-    {
-        if (LeftValue == RightValue)
-        {
-            Octonion Value = GetInstance(Base.Input("Value = "));
-            Base.Output(Subroutine.Invoke(Value).ToModuleString());
+            Octon U = Val(Base.Input("U = "));
+            Octon V = Val(Base.Input("V = "));
+            object[] Args = new object[S.GetMethodInfo().GetParameters().Length];
+            long[] Upper = new long[Args.Length - 2];
+            Args[0] = U;
+            Args[1] = V;
+            PowGet(Args, Upper);
+            PowRst(S, R, Args, Upper);
         }
     }
-    internal static void BasicWith<R>(string LeftValue, string RightValue, Func<Octonion, long, R> Subroutine)
+    internal static void Bas<T>(string L, string R, Func<Octon, T> S)
     {
-        if (LeftValue == RightValue)
+        if (L == R)
         {
-            Octonion Value = GetInstance(Base.Input("Value = "));
-            long Theta = Base.Input("Theta = ").AsInteger();
-            Base.Output(Subroutine.Invoke(Value, Theta).ToModuleString());
+            Octon V = Val(Base.Input("V = "));
+            Base.Output(S.Invoke(V).ToModStr());
         }
-        else if (LeftValue == RightValue + "()")
+    }
+    internal static void BasP<T>(string L, string R, Func<Octon, long, T> S)
+    {
+        if (L == R)
         {
-            Octonion Value = GetInstance(Base.Input("Value = "));
-            long ThetaMin = Base.Input("ThetaMin = ").AsInteger();
-            long ThetaMax = Base.Input("ThetaMax = ").AsInteger();
-            for (long Theta = ThetaMin; Theta <= ThetaMax; ++Theta)
+            Octon V = Val(Base.Input("V = "));
+            long P = Base.Input("P = ").AsInt();
+            Base.Output(S.Invoke(V, P).ToModStr());
+        }
+        else if (L == R + "()")
+        {
+            Octon V = Val(Base.Input("V = "));
+            long PMin = Base.Input("P(min) = ").AsInt();
+            long PMax = Base.Input("P(max) = ").AsInt();
+            for (long P = PMin; P <= PMax; ++P)
             {
-                Base.Output(RightValue + "(" + Theta.ToModuleString() + ") = ", Subroutine.Invoke(Value, Theta).ToModuleString());
+                Base.Output(R + "(" + P.ToModStr() + ") = ", S.Invoke(V, P).ToModStr());
             }
         }
     }
-    internal static void Tri(string LeftValue, string RightValue, Func<Octonion, Octonion> Subroutine)
+    internal static void Tri(string L, string R, Func<Octon, Octon> S)
     {
-        if (LeftValue == RightValue)
+        if (L == R)
         {
-            Octonion Value = GetInstance(Base.Input("Value = "));
-            Base.Output(Subroutine.Invoke(Value).ToModuleString());
+            Octon V = Val(Base.Input("V = "));
+            Base.Output(S.Invoke(V).ToModStr());
         }
     }
-    internal static void Arctri(string LeftValue, string RightValue, Func<Octonion, bool, long, Octonion> Subroutine)
+    internal static void Atri(string L, string R, Func<Octon, bool, long, Octon> S)
     {
-        if (LeftValue == RightValue)
+        if (L == R)
         {
-            Octonion Value = GetInstance(Base.Input("Value = "));
+            Octon V = Val(Base.Input("V = "));
             bool Sign = false;
             string Input = Base.Input("Sign : ").Replace(" ", "");
             if (Input == "+") { Sign = true; }
             else if (Input != "-") { throw new ArgumentException("A string interpretation of the sign cannot be converted as a bool value."); }
-            long Period = Base.Input("Period = ").AsInteger();
-            Base.Output(Subroutine.Invoke(Value, Sign, Period).ToModuleString());
+            long P = Base.Input("P = ").AsInt();
+            Base.Output(S.Invoke(V, Sign, P).ToModStr());
         }
-        else if (LeftValue == RightValue + "()")
+        else if (L == R + "()")
         {
-            Octonion Value = GetInstance(Base.Input("Value = "));
-            long PeriodMin = Base.Input("PeriodMin = ").AsInteger();
-            long PeriodMax = Base.Input("PeriodMax = ").AsInteger();
-            for (long Period = PeriodMin; Period <= PeriodMax; ++Period)
+            Octon V = Val(Base.Input("V = "));
+            long PMin = Base.Input("P(min) = ").AsInt();
+            long PMax = Base.Input("P(max) = ").AsInt();
+            for (long P = PMin; P <= PMax; ++P)
             {
-                Base.Output(RightValue + "(+, " + Period.ToModuleString() + ") = ", Subroutine.Invoke(Value, true, Period).ToModuleString());
+                Base.Output(R + "(+, " + P.ToModStr() + ") = ", S.Invoke(V, true, P).ToModStr());
             }
-            for (long Period = PeriodMin; Period <= PeriodMax; ++Period)
+            for (long P = PMin; P <= PMax; ++P)
             {
-                Base.Output(RightValue + "(-, " + Period.ToModuleString() + ") = ", Subroutine.Invoke(Value, false, Period).ToModuleString());
+                Base.Output(R + "(-, " + P.ToModStr() + ") = ", S.Invoke(V, false, P).ToModStr());
             }
         }
     }
@@ -151,60 +156,61 @@ internal static class OctonConsole
         Base.Selection("sin   cos   tan   csc   sec   cot   arcsin()   arccos()   arctan()   arccsc()   arcsec()   arccot()");
         Base.Selection("sinh   cosh   tanh   csch   sech   coth   arcsinh()   arccosh()   arctanh()   arccsch()   arcsech()   arccoth()");
         Base.Selection(Base.GetStartupLine());
-        for (string Line = ""; !Base.IsSwitchTo(Line); Line = Base.Input())
+        for (string Ln = ""; !Base.IsSwitchTo(Ln); Ln = Base.Input())
         {
-            if (Line == "") { continue; }
+            if (Ln == "") { continue; }
             try
             {
-                Op(Line, "=", (Octonion Union, Octonion Value) => { return Union == Value; });
-                Op(Line, "+", (Octonion Union, Octonion Value) => { return Union + Value; });
-                Op(Line, "-", (Octonion Union, Octonion Value) => { return Union - Value; });
-                Op(Line, "*", (Octonion Union, Octonion Value) => { return Union * Value; });
-                Op(Line, "/", (Octonion Union, Octonion Value) => { return Union / Value; });
+                Op(Ln, "=", (Octon U, Octon V) => { return U == V; });
+                Op(Ln, "+", (Octon U, Octon V) => { return U + V; });
+                Op(Ln, "-", (Octon U, Octon V) => { return U - V; });
+                Op(Ln, "*", (Octon U, Octon V) => { return U * V; });
+                Op(Ln, "/", (Octon U, Octon V) => { return U / V; });
                 /****/
-                PowerOp(Line, "^", (Octonion Union, long Value) => { return Union ^ Value; });
-                Power(Line, "power", Power);
-                Power(Line, "root", Root);
-                Power(Line, "log", Log);
+                PowOp(Ln, "^", (Octon U, long V) => { return U ^ V; });
+                Pow(Ln, "power", Power);
+                Pow(Ln, "root", Root);
+                Pow(Ln, "log", Log);
                 /****/
-                Basic(Line, "abs", Abs);
-                BasicWith(Line, "arg", Arg);
-                Basic(Line, "conjg", Conjg);
-                Basic(Line, "sgn", Sgn);
-                Basic(Line, "inverse", Inverse);
-                Basic(Line, "exp", Exp);
-                BasicWith(Line, "ln", Ln);
-                Multiple(Line, "dot", Dot);
-                Multiple(Line, "outer", Outer);
-                Multiple(Line, "even", Even);
-                Multiple(Line, "cross", Cross);
+                Mul(Ln, "dot", Dot);
+                Mul(Ln, "outer", Outer);
+                Mul(Ln, "even", Even);
+                Mul(Ln, "cross", Cross);
                 /****/
-                Tri(Line, "sin", Sin);
-                Tri(Line, "cos", Cos);
-                Tri(Line, "tan", Tan);
-                Tri(Line, "csc", Csc);
-                Tri(Line, "sec", Sec);
-                Tri(Line, "cot", Cot);
-                Tri(Line, "sinh", Sinh);
-                Tri(Line, "cosh", Cosh);
-                Tri(Line, "tanh", Tanh);
-                Tri(Line, "csch", Csch);
-                Tri(Line, "sech", Sech);
-                Tri(Line, "coth", Coth);
-                Arctri(Line, "arcsin", Arcsin);
-                Arctri(Line, "arccos", Arccos);
-                Arctri(Line, "arctan", Arctan);
-                Arctri(Line, "arccsc", Arccsc);
-                Arctri(Line, "arcsec", Arcsec);
-                Arctri(Line, "arccot", Arccot);
-                Arctri(Line, "arcsinh", Arcsinh);
-                Arctri(Line, "arccosh", Arccosh);
-                Arctri(Line, "arctanh", Arctanh);
-                Arctri(Line, "arccsch", Arccsch);
-                Arctri(Line, "arcsech", Arcsech);
-                Arctri(Line, "arccoth", Arccoth);
+                Bas(Ln, "abs", Abs);
+                BasP(Ln, "arg", Arg);
+                Bas(Ln, "conjg", Conjg);
+                Bas(Ln, "sgn", Sgn);
+                Bas(Ln, "inverse", Inverse);
+                Bas(Ln, "exp", Exp);
+                BasP(Ln, "ln", Octon.Ln);
+                /****/
+                Tri(Ln, "sin", Sin);
+                Tri(Ln, "cos", Cos);
+                Tri(Ln, "tan", Tan);
+                Tri(Ln, "csc", Csc);
+                Tri(Ln, "sec", Sec);
+                Tri(Ln, "cot", Cot);
+                Tri(Ln, "sinh", Sinh);
+                Tri(Ln, "cosh", Cosh);
+                Tri(Ln, "tanh", Tanh);
+                Tri(Ln, "csch", Csch);
+                Tri(Ln, "sech", Sech);
+                Tri(Ln, "coth", Coth);
+                Atri(Ln, "arcsin", Arcsin);
+                Atri(Ln, "arccos", Arccos);
+                Atri(Ln, "arctan", Arctan);
+                Atri(Ln, "arccsc", Arccsc);
+                Atri(Ln, "arcsec", Arcsec);
+                Atri(Ln, "arccot", Arccot);
+                Atri(Ln, "arcsinh", Arcsinh);
+                Atri(Ln, "arccosh", Arccosh);
+                Atri(Ln, "arctanh", Arctanh);
+                Atri(Ln, "arccsch", Arccsch);
+                Atri(Ln, "arcsech", Arcsech);
+                Atri(Ln, "arccoth", Arccoth);
             }
-            catch (Exception Exception) { Base.Exception(Exception); }
+            catch (Exception Ex) { Base.Exception(Ex); }
         }
     }
 }

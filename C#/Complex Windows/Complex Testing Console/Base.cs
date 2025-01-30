@@ -40,7 +40,7 @@ namespace ComplexTestingConsole
         {
             string Result = " >> ";
             bool First = true;
-            for (long i = HiddenLength; i < Alternative.LongLength; ++i, First = false)
+            for (long i = HiddenLength; i < Alternative.Length; ++i, First = false)
             {
                 if (First == false) { Result += "   "; }
                 Result += Alternative[i].AddSquares();
@@ -49,7 +49,7 @@ namespace ComplexTestingConsole
         }
         public static bool IsSwitchTo(string Option)
         {
-            for (long i = 0; i < Alternative.LongLength; ++i)
+            for (long i = 0; i < Alternative.Length; ++i)
             {
                 if (Option == Alternative[i].AddSquares())
                 {
@@ -167,90 +167,90 @@ namespace ComplexTestingConsole
     }
     internal static class Module
     {
-        private static readonly string Assign = " = ";
-        private static readonly string[] Angle = { "Theta", "Phi", "Tau", "Omega" };
-        private static string GetAngleName(long I, string[] Angle)
+        private const string Assign = " = ";
+        private static string GetName(int i)
         {
-            return I < Angle.LongLength ? Angle[I] : ("Angle" + I.ToString());
+            return "z" + i.ToString();
         }
-        internal static void PowerGet(long[] Data)
+        internal static void PowGet(object[] Args)
         {
-            for (long I = 0; I < Data.LongLength; ++I)
+            for (int i = 2; i < Args.Length; ++i)
             {
-                Data[I] = Base.Input(GetAngleName(I, Angle) + Assign).AsInteger();
+                Args[i] = Base.Input(GetName(i) + Assign).AsInt();
             }
         }
-        internal static void PowerGet(Tuple<long, long>[] Data)
+        internal static void PowGet(object[] Args, long[] Upper)
         {
-            for (long I = 0; I < Data.LongLength; ++I)
+            for (int i = 2; i < Args.Length; ++i)
             {
-                long Min = Base.Input(GetAngleName(I, Angle) + "Min" + Assign).AsInteger();
-                long Max = Base.Input(GetAngleName(I, Angle) + "Max" + Assign).AsInteger();
-                Data[I] = new Tuple<long, long>(Min, Max);
+                long Min = Base.Input(GetName(i - 2) + "(min)" + Assign).AsInt();
+                long Max = Base.Input(GetName(i - 2) + "(max)" + Assign).AsInt();
+                if (Min <= Max)
+                {
+                    Args[i] = Min;
+                    Upper[i - 2] = Max;
+                }
+                else
+                {
+                    Args[i] = Max;
+                    Upper[i - 2] = Min;
+                }
             }
         }
-        internal static void PowerResult<N>(Delegate Subroutine, string RightValue, N Union, N Value, long[] Data)
+        internal static void PowRst(Delegate S, object[] Args)
         {
-            if (RightValue == null) { return; }
-            object[] Params = new object[Data.LongLength + 2];
-            Params[0] = Union;
-            Params[1] = Value;
-            for (long i = 0; i < Data.LongLength; ++i) { Params[i + 2] = Data[i]; }
-            Base.Output(((N)Subroutine.DynamicInvoke(Params)).ToString());
+            Base.Output(S.DynamicInvoke(Args).ToString());
         }
-        internal static void PowerResult<N>(Delegate Subroutine, string RightValue, N Union, N Value, Tuple<long, long>[] Data)
+        internal static void PowRst(Delegate S, string R, object[] Args, long[] Upper)
         {
-            long[] Temp = new long[Data.LongLength];
-            PowerResultImpl(Subroutine, RightValue, Union, Value, Data, Temp, 0);
+            PowRstImpl(S, R, Args, Upper, 0);
         }
-        private static void PowerResultImpl<N>(Delegate Subroutine, string RightValue, N Union, N Value, Tuple<long, long>[] Data, long[] Temp, long X)
+        private static void PowRstImpl(Delegate S, string R, object[] Args, long[] Upper, int Dim)
         {
-            if (X == Temp.LongLength)
+            if (Dim == Upper.Length)
             {
-                object[] Params = new object[Temp.LongLength + 2];
-                Params[0] = Union;
-                Params[1] = Value;
-                for (long i = 0; i < Temp.LongLength; ++i) { Params[i + 2] = Temp[i]; }
-                Base.Output(GetOutputPrepend(RightValue, Temp), ((N)Subroutine.DynamicInvoke(Params)).ToString());
+                Base.Output(PowPrepend(R, Args), S.DynamicInvoke(Args).ToString());
                 return;
             }
-            for (long I = Data[X].Item1; I <= Data[X].Item2; ++I)
+            object Lower = Args[Dim + 2];
+            while ((long)Args[Dim + 2] <= Upper[Dim])
             {
-                Temp[X] = I;
-                PowerResultImpl(Subroutine, RightValue, Union, Value, Data, Temp, X + 1);
+                PowRstImpl(S, R, Args, Upper, Dim + 1);
+                Args[Dim + 2] = (long)Args[Dim + 2] + 1;
             }
+            Args[Dim + 2] = Lower;
         }
-        private static string GetOutputPrepend(string RightValue, long[] Temp)
+        private static string PowPrepend(string R, object[] Args)
         {
-            StringBuilder Result = new StringBuilder();
-            Result.Append(RightValue).Append("(");
-            bool First = true;
-            for (long i = 0; i < Temp.LongLength; ++i, First = false)
+            StringBuilder Rst = new StringBuilder();
+            Rst.Append(R).Append("(");
+            bool Fst = true;
+            for (int i = 2; i < Args.Length; ++i, Fst = false)
             {
-                if (First == false) { Result.Append(", "); }
-                Result.Append(Temp[i].ToString());
+                if (!Fst) { Rst.Append(", "); }
+                Rst.Append(Args[i].ToString());
             }
-            Result.Append(") = ");
-            return Result.ToString();
+            Rst.Append(") = ");
+            return Rst.ToString();
         }
-        private static string DoubleToString(this double Number)
+        private static string Str(this double Num)
         {
-            return Regex.Replace(Number.ToString("G17").ToLower(), "e-0(?=[1-9])", "e-");
+            return Regex.Replace(Num.ToString("G17").ToLower(), "e-0(?=[1-9])", "e-");
         }
-        internal static string ToModuleString(this object Object)
+        internal static string ToModStr(this object Obj)
         {
-            if (Object is double DoubleValue) { return DoubleValue.DoubleToString(); }
-            else if (Object is long LongValue) { return LongValue.ToString(); }
-            else if (Object is bool BoolValue) { return BoolValue ? "true" : "false"; }
-            return Object.ToString();
+            if (Obj is double D) { return D.Str(); }
+            else if (Obj is long L) { return L.ToString(); }
+            else if (Obj is bool B) { return B ? "true" : "false"; }
+            return Obj.ToString();
         }
-        internal static long AsInteger(this string Value)
+        internal static long AsInt(this string Val)
         {
-            return long.Parse(Value.Replace(" ", ""));
+            return long.Parse(Val.Replace(" ", ""));
         }
-        internal static double AsReal(this string Value)
+        internal static double AsReal(this string Val)
         {
-            return double.Parse(Value.Replace(" ", ""));
+            return double.Parse(Val.Replace(" ", ""));
         }
     }
 }
