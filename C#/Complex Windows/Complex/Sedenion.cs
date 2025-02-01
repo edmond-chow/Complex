@@ -359,13 +359,13 @@ namespace Num
         {
             double Re = Scalar(V);
             Seden Im = Vector(V);
-            var Th = Ev.Tanh(Re);
+            double Th = Ev.Tanh(Re);
             if (Im == Zero) { return Th; }
             double Sz = Abs(Im);
             Seden Or = Sgn(Im);
-            var T = Ev.Tan(Sz);
-            var Th2 = Th * Th;
-            var T2 = T * T;
+            double T = Ev.Tan(Sz);
+            double Th2 = Th * Th;
+            double T2 = T * T;
             return (Th * (1 - T2) + T * (1 + Th2) * Or) / (1 + Th2 * T2);
         }
         public static Seden Csch(Seden V)
