@@ -68,35 +68,35 @@ public class Number
     }
     public Number Retrieve(int Begin, int End)
     {
-        if (Begin < 0 || End > Size) { return null; }
+        if (Begin < 0 || Begin >= End || End > Data.Count) { return null; }
         int Cap = End - Begin;
-        Number Result = new Number(Cap);
+        Number Rst = new Number(Cap);
         for (int i = 0; i < Cap; ++i)
         {
-            Result.Data[i] = Data[i + Begin];
+            Rst.Data[i] = Data[i + Begin];
         }
-        return Result;
+        return Rst;
     }
     public Number L
     {
-        get { return Retrieve(0, Size >> 1); }
+        get { return Retrieve(0, Data.Count >> 1); }
     }
     public Number R
     {
-        get { return Retrieve(Size >> 1, Size); }
+        get { return Retrieve(Data.Count >> 1, Data.Count); }
     }
     public Number Extend(int Size)
     {
         if (Size < Data.Count) { Size = Data.Count; }
-        Number Result = new Number(Size);
-        for (int i = 0; i < Data.Count; ++i) { Result.Data[i] = Data[i]; }
-        return Result;
+        Number Rst = new Number(Size);
+        for (int i = 0; i < Data.Count; ++i) { Rst.Data[i] = Data[i]; }
+        return Rst;
     }
     public static Number Merge(Number U, Number V)
     {
-        Number Result = U.Clone();
-        Result.Data.AddRange(V.Data);
-        return Result;
+        Number Rst = U.Clone();
+        Rst.Data.AddRange(V.Data);
+        return Rst;
     }
     public override bool Equals(object obj)
     {
@@ -130,15 +130,15 @@ public class Number
     public static Number operator +(Number U, Number V)
     {
         if (U.Data.Count > V.Data.Count) { return V + U; }
-        Number Result = V.Clone();
-        for (int i = 0; i < U.Data.Count; ++i) { Result.Data[i] += U.Data[i]; }
-        return Result;
+        Number Rst = V.Clone();
+        for (int i = 0; i < U.Data.Count; ++i) { Rst.Data[i] += U.Data[i]; }
+        return Rst;
     }
     public static Number operator -(Number V)
     {
-        Number Result = V.Clone();
-        for (int i = 0; i < Result.Data.Count; ++i) { Result.Data[i] = -Result.Data[i]; }
-        return Result;
+        Number Rst = V.Clone();
+        for (int i = 0; i < Rst.Data.Count; ++i) { Rst.Data[i] = -Rst.Data[i]; }
+        return Rst;
     }
     public static Number operator -(Number U, Number V)
     {
@@ -146,15 +146,15 @@ public class Number
     }
     public static Number operator ~(Number V)
     {
-        Number Result = V.Clone();
-        for (int i = 1; i < Result.Data.Count; ++i) { Result.Data[i] = -Result.Data[i]; }
-        return Result;
+        Number Rst = V.Clone();
+        for (int i = 1; i < Rst.Data.Count; ++i) { Rst.Data[i] = -Rst.Data[i]; }
+        return Rst;
     }
     public static Number operator *(Number U, Number V)
     {
         int Near = U.Near < V.Near ? V.Near : U.Near;
-        if (U.Size != Near) { return U.Extend(Near) * V; }
-        else if (V.Size != Near) { return U * V.Extend(Near); }
+        if (U.Data.Count != Near) { return U.Extend(Near) * V; }
+        else if (V.Data.Count != Near) { return U * V.Extend(Near); }
         else if (Near == 1) {  return new Number(U[0] * V[0]); }
         Number L = U.L * V.L - ~V.R * U.R;
         Number R = V.R * U.L + U.R * ~V.L;
@@ -162,9 +162,9 @@ public class Number
     }
     public static Number operator *(Number U, double V)
     {
-        Number Result = U.Clone();
-        for (int i = 0; i < U.Data.Count; ++i) { Result.Data[i] *= V; }
-        return Result;
+        Number Rst = U.Clone();
+        for (int i = 0; i < U.Data.Count; ++i) { Rst.Data[i] *= V; }
+        return Rst;
     }
     public static Number operator *(double U, Number V)
     {
@@ -180,59 +180,59 @@ public class Number
     public static double Dot(Number U, Number V)
     {
         if (U.Data.Count > V.Data.Count) { return Dot(V, U); }
-        double Result = 0;
+        double Rst = 0;
         for (int i = 0; i < U.Data.Count; ++i)
         {
-            Result += U.Data[i] * V.Data[i];
+            Rst += U.Data[i] * V.Data[i];
         }
-        return Result;
+        return Rst;
     }
     public static Number Cross(Number U, Number V)
     {
         int Near = U.Near < V.Near ? V.Near : U.Near;
-        if (U.Size != Near) { return Cross(U.Extend(Near), V); }
-        else if (V.Size != Near) { return Cross(U, V.Extend(Near)); }
+        if (U.Data.Count != Near) { return Cross(U.Extend(Near), V); }
+        else if (V.Data.Count != Near) { return Cross(U, V.Extend(Near)); }
         Number X = U.Clone();
         Number Y = V.Clone();
         X[0] = 0;
         Y[0] = 0;
-        Number Result = X * Y;
-        Result[0] = 0;
-        return Result;
+        Number Rst = X * Y;
+        Rst[0] = 0;
+        return Rst;
     }
     public static Number Outer(Number U, Number V)
     {
         int Near = U.Near < V.Near ? V.Near : U.Near;
-        if (U.Size != Near) { return Outer(U.Extend(Near), V); }
-        else if (V.Size != Near) { return Outer(U, V.Extend(Near)); }
+        if (U.Data.Count != Near) { return Outer(U.Extend(Near), V); }
+        else if (V.Data.Count != Near) { return Outer(U, V.Extend(Near)); }
         Number X = U.Clone();
         Number Y = V.Clone();
         X[0] = 0;
         Y[0] = 0;
-        Number Result = X * Y;
-        Result[0] = 0;
+        Number Rst = X * Y;
+        Rst[0] = 0;
         X *= V[0];
         Y *= U[0];
-        Result -= X;
-        Result += Y;
-        return Result;
+        Rst -= X;
+        Rst += Y;
+        return Rst;
     }
     public static Number Even(Number U, Number V)
     {
         int Near = U.Near < V.Near ? V.Near : U.Near;
-        if (U.Size != Near) { return Even(U.Extend(Near), V); }
-        else if (V.Size != Near) { return Even(U, V.Extend(Near)); }
+        if (U.Data.Count != Near) { return Even(U.Extend(Near), V); }
+        else if (V.Data.Count != Near) { return Even(U, V.Extend(Near)); }
         Number X = U.Clone();
         Number Y = V.Clone();
         X[0] = 0;
         Y[0] = 0;
-        Number Result = new Number(V.Size);
+        Number Rst = new Number(V.Data.Count);
         X *= V[0];
         Y *= U[0];
-        Result += X;
-        Result += Y;
-        Result[0] = Dot(U, ~V);
-        return Result;
+        Rst += X;
+        Rst += Y;
+        Rst[0] = Dot(U, ~V);
+        return Rst;
     }
 }
 internal class Ev
