@@ -60,6 +60,21 @@ namespace Num
             if (obj is Vec7D o) { return this == o; }
             else { return false; }
         }
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+        public static explicit operator Vec7D(string V)
+        {
+            return Val(V);
+        }
+        public static explicit operator string(Vec7D V)
+        {
+            return Str(V);
+        }
+        ///
+        /// operators
+        ///
         public double this[int i]
         {
             get
@@ -91,21 +106,6 @@ namespace Num
                 }
             }
         }
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
-        }
-        public static explicit operator Vec7D(string V)
-        {
-            return Val(V);
-        }
-        public static explicit operator string(Vec7D V)
-        {
-            return Str(V);
-        }
-        ///
-        /// operators
-        ///
         public static bool operator ==(Vec7D U, Vec7D V)
         {
             return U.Num() == V.Num();
@@ -245,25 +245,6 @@ namespace Num
             if (obj is Octon o) { return this == o; }
             else { return false; }
         }
-        public double this[int i]
-        {
-            get
-            {
-                switch (i)
-                {
-                    case 0: return Re;
-                    default: return Im[i];
-                }
-            }
-            set
-            {
-                switch (i)
-                {
-                    case 0: Re = value; break;
-                    default: Im[i] = value; break;
-                }
-            }
-        }
         public override int GetHashCode()
         {
             return base.GetHashCode();
@@ -295,6 +276,25 @@ namespace Num
         ///
         /// operators
         ///
+        public double this[int i]
+        {
+            get
+            {
+                switch (i)
+                {
+                    case 0: return Re;
+                    default: return Im[i];
+                }
+            }
+            set
+            {
+                switch (i)
+                {
+                    case 0: Re = value; break;
+                    default: Im[i] = value; break;
+                }
+            }
+        }
         public static bool operator ==(Octon U, Octon V)
         {
             return U.Num() == V.Num();
@@ -317,11 +317,13 @@ namespace Num
         }
         public static Octon operator ++(Octon V)
         {
-            return V + 1;
+            ++V[0];
+            return V;
         }
         public static Octon operator --(Octon V)
         {
-            return V - 1;
+            --V[0];
+            return V;
         }
         public static Octon operator +(Octon U, Octon V)
         {

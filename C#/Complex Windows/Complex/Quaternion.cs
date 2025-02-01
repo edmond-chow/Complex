@@ -48,6 +48,21 @@ namespace Num
             if (obj is Vec3D o) { return this == o; }
             else { return false; }
         }
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+        public static explicit operator Vec3D(string V)
+        {
+            return Val(V);
+        }
+        public static explicit operator string(Vec3D V)
+        {
+            return Str(V);
+        }
+        ///
+        /// operators
+        ///
         public double this[int i]
         {
             get
@@ -71,21 +86,6 @@ namespace Num
                 }
             }
         }
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
-        }
-        public static explicit operator Vec3D(string V)
-        {
-            return Val(V);
-        }
-        public static explicit operator string(Vec3D V)
-        {
-            return Str(V);
-        }
-        ///
-        /// operators
-        ///
         public static bool operator ==(Vec3D U, Vec3D V)
         {
             return U.Num() == V.Num();
@@ -221,25 +221,6 @@ namespace Num
             if (obj is Quter o) { return this == o; }
             else { return false; }
         }
-        public double this[int i]
-        {
-            get
-            {
-                switch (i)
-                {
-                    case 0: return Re;
-                    default: return Im[i];
-                }
-            }
-            set
-            {
-                switch (i)
-                {
-                    case 0: Re = value; break;
-                    default: Im[i] = value; break;
-                }
-            }
-        }
         public override int GetHashCode()
         {
             return base.GetHashCode();
@@ -271,6 +252,25 @@ namespace Num
         ///
         /// operators
         ///
+        public double this[int i]
+        {
+            get
+            {
+                switch (i)
+                {
+                    case 0: return Re;
+                    default: return Im[i];
+                }
+            }
+            set
+            {
+                switch (i)
+                {
+                    case 0: Re = value; break;
+                    default: Im[i] = value; break;
+                }
+            }
+        }
         public static bool operator ==(Quter U, Quter V)
         {
             return U.Num() == V.Num();
@@ -293,11 +293,13 @@ namespace Num
         }
         public static Quter operator ++(Quter V)
         {
-            return V + 1;
+            ++V[0];
+            return V;
         }
         public static Quter operator --(Quter V)
         {
-            return V - 1;
+            --V[0];
+            return V;
         }
         public static Quter operator +(Quter U, Quter V)
         {

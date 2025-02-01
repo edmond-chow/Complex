@@ -131,11 +131,13 @@ namespace Num
         }
         public static Seden operator ++(Seden V)
         {
-            return V + 1;
+            ++V[0];
+            return V;
         }
         public static Seden operator --(Seden V)
         {
-            return V - 1;
+            --V[0];
+            return V;
         }
         public static Seden operator +(Seden U, Seden V)
         {
