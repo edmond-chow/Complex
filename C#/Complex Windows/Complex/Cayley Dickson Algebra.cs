@@ -112,6 +112,8 @@ public class Number
     ///
     public static bool operator ==(Number U, Number V)
     {
+        if (ReferenceEquals(U, V)) { return true; }
+        else if (U == null || V == null) { return false; }
         if (U.Data.Count > V.Data.Count) { return V == U; }
         for (int i = 0; i < U.Data.Count; ++i)
         {

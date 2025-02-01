@@ -100,15 +100,17 @@ namespace Num
         }
         public static Seden Vector(Seden V)
         {
-            Seden Result = V.Clone();
-            Result[0] = 0;
-            return Result;
+            Seden Rst = V.Clone();
+            Rst[0] = 0;
+            return Rst;
         }
         ///
         /// operators
         ///
         public static bool operator ==(Seden U, Seden V)
         {
+            if (ReferenceEquals(U, V)) { return true; }
+            else if (U == null || V == null) { return false; }
             return U.Num() == V.Num();
         }
         public static bool operator !=(Seden U, Seden V)
