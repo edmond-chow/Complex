@@ -55,7 +55,9 @@ public class Number
             {
                 ++Shift;
             }
-            return 0b1 << Shift;
+            int Rst = 0b1;
+            Rst <<= Shift;
+            return Rst;
         }
     }
     public Number Clone()

@@ -23,12 +23,14 @@ namespace Num
         ///
         private static int Near(int Dim)
         {
-            int Shift = 1;
+            int Shift = 0;
             while (Dim >> Shift != 0)
             {
                 ++Shift;
             }
-            return 0b1 << Shift;
+            int Rst = 0b1;
+            Rst <<= Shift;
+            return Rst;
         }
         ///
         /// constants
