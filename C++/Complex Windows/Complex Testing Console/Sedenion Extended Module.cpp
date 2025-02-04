@@ -21,36 +21,36 @@ using namespace Num;
 namespace SedenBasis
 {
 	template <typename T>
-	void Mul(const std::wstring& L, const wchar_t* R, T(Gbl* S)(const Seden&, const Seden&))
+	void Mul(const std::wstring& L, const wchar_t* R, T(Gbl* F)(const Seden&, const Seden&))
 	{
 		if (L == R)
 		{
 			Seden U = Seden::Val(Base::Input(L"U = "));
 			Seden V = Seden::Val(Base::Input(L"V = "));
-			Base::Output(ToModStr(std::invoke(S, U, V)));
+			Base::Output(ToModStr(std::invoke(F, U, V)));
 		}
 	};
 	template <typename T>
-	void Op(const std::wstring& L, const wchar_t* R, T(Gbl* S)(const Seden&, const Seden&))
+	void Op(const std::wstring& L, const wchar_t* R, T(Gbl* F)(const Seden&, const Seden&))
 	{
 		if (L == R)
 		{
 			Seden U = Seden::Val(Base::Input(L"U = "));
 			Seden V = Seden::Val(Base::Input(L"V = "));
-			Base::Output(ToModStr(std::invoke(S, U, V)));
+			Base::Output(ToModStr(std::invoke(F, U, V)));
 		}
 	};
-	inline void Pow(const std::wstring& L, const wchar_t* R, Seden(Gbl* S)(const Seden&, std::int64_t))
+	inline void Pow(const std::wstring& L, const wchar_t* R, Seden(Gbl* F)(const Seden&, std::int64_t))
 	{
 		if (L == R)
 		{
 			Seden U = Seden::Val(Base::Input(L"U = "));
 			std::int64_t V = AsInt(Base::Input(L"V = "));
-			Base::Output(ToModStr(std::invoke(S, U, V)));
+			Base::Output(ToModStr(std::invoke(F, U, V)));
 		}
 	};
 	template <typename... As>
-	void Pow(const std::wstring& L, std::wstring&& R, Seden(Gbl* S)(const Seden&, const Seden&, std::int64_t, As...))
+	void Pow(const std::wstring& L, std::wstring&& R, Seden(Gbl* F)(const Seden&, const Seden&, std::int64_t, As...))
 	{
 		if (L == R)
 		{
@@ -58,7 +58,7 @@ namespace SedenBasis
 			Seden V = Seden::Val(Base::Input(L"V = "));
 			std::array<std::int64_t, 1 + sizeof...(As)> Dat{};
 			PowGet(Dat);
-			PowRst(S, U, V, Dat);
+			PowRst(F, U, V, Dat);
 		}
 		else if (L == R + L"()")
 		{
@@ -66,26 +66,26 @@ namespace SedenBasis
 			Seden V = Seden::Val(Base::Input(L"V = "));
 			std::array<std::pair<std::int64_t, std::int64_t>, 1 + sizeof...(As)> Dat{};
 			PowGet(Dat);
-			PowRst(S, R, U, V, Dat);
+			PowRst(F, R, U, V, Dat);
 		}
 	};
 	template <typename T>
-	void Bas(const std::wstring& L, const wchar_t* R, T(Gbl* S)(const Seden&))
+	void Bas(const std::wstring& L, const wchar_t* R, T(Gbl* F)(const Seden&))
 	{
 		if (L == R)
 		{
 			Seden V = Seden::Val(Base::Input(L"V = "));
-			Base::Output(ToModStr(std::invoke(S, V)));
+			Base::Output(ToModStr(std::invoke(F, V)));
 		}
 	};
 	template <typename T>
-	void Bas(const std::wstring& L, std::wstring&& R, T(Gbl* S)(const Seden&, std::int64_t))
+	void Bas(const std::wstring& L, std::wstring&& R, T(Gbl* F)(const Seden&, std::int64_t))
 	{
 		if (L == R)
 		{
 			Seden V = Seden::Val(Base::Input(L"V = "));
 			std::int64_t P = AsInt(Base::Input(L"P = "));
-			Base::Output(ToModStr(std::invoke(S, V, P)));
+			Base::Output(ToModStr(std::invoke(F, V, P)));
 		}
 		else if (L == R + L"()")
 		{
@@ -94,29 +94,29 @@ namespace SedenBasis
 			std::int64_t PMax = AsInt(Base::Input(L"P(max) = "));
 			for (std::int64_t P = PMin; P <= PMax; ++P)
 			{
-				Base::Output(R + L"(" + ToModStr(P) + L") = ", ToModStr(std::invoke(S, V, P)));
+				Base::Output(R + L"(" + ToModStr(P) + L") = ", ToModStr(std::invoke(F, V, P)));
 			}
 		}
 	};
-	inline void Tri(const std::wstring& L, const wchar_t* R, Seden(Gbl* S)(const Seden&))
+	inline void Tri(const std::wstring& L, const wchar_t* R, Seden(Gbl* F)(const Seden&))
 	{
 		if (L == R)
 		{
 			Seden V = Seden::Val(Base::Input(L"V = "));
-			Base::Output(ToModStr(std::invoke(S, V)));
+			Base::Output(ToModStr(std::invoke(F, V)));
 		}
 	};
-	inline void Atri(const std::wstring& L, std::wstring&& R, Seden(Gbl* S)(const Seden&, bool, std::int64_t))
+	inline void Atri(const std::wstring& L, std::wstring&& R, Seden(Gbl* F)(const Seden&, bool, std::int64_t))
 	{
 		if (L == R)
 		{
 			Seden V = Seden::Val(Base::Input(L"V = "));
-			bool Sign = false;
+			bool S = false;
 			std::wstring Input = std::regex_replace(Base::Input(L"Sign : "), std::wregex(L" "), L"");
-			if (Input == L"+") { Sign = true; }
+			if (Input == L"+") { S = true; }
 			else if (Input != L"-") { throw std::invalid_argument("A String interpretation of the sign cannot be converted as a bool value."); }
 			std::int64_t P = AsInt(Base::Input(L"P = "));
-			Base::Output(ToModStr(std::invoke(S, V, Sign, P)));
+			Base::Output(ToModStr(std::invoke(F, V, S, P)));
 		}
 		else if (L == R + L"()")
 		{
@@ -125,11 +125,11 @@ namespace SedenBasis
 			std::int64_t PMax = AsInt(Base::Input(L"P(max) = "));
 			for (std::int64_t P = PMin; P <= PMax; ++P)
 			{
-				Base::Output(R + L"(+, " + ToModStr(P) + L") = ", ToModStr(std::invoke(S, V, true, P)));
+				Base::Output(R + L"(+, " + ToModStr(P) + L") = ", ToModStr(std::invoke(F, V, true, P)));
 			}
 			for (std::int64_t P = PMin; P <= PMax; ++P)
 			{
-				Base::Output(R + L"(-, " + ToModStr(P) + L") = ", ToModStr(std::invoke(S, V, false, P)));
+				Base::Output(R + L"(-, " + ToModStr(P) + L") = ", ToModStr(std::invoke(F, V, false, P)));
 			}
 		}
 	};

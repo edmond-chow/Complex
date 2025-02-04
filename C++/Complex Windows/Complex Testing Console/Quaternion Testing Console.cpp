@@ -21,13 +21,13 @@ using namespace Num;
 namespace QuterBasis
 {
 	template <typename T>
-	void Mul(const std::wstring& L, const wchar_t* R, T(Gbl* S)(const Quter&, const Quter&))
+	void Mul(const std::wstring& L, const wchar_t* R, T(Gbl* F)(const Quter&, const Quter&))
 	{
 		if (L == R)
 		{
 			Quter U = Quter::Val(Base::Input(L"U = "));
 			Quter V = Quter::Val(Base::Input(L"V = "));
-			T Rst = std::invoke(S, U, V);
+			T Rst = std::invoke(F, U, V);
 			std::wstring Str;
 			if constexpr (std::is_same_v<T, Vec3D>) { Str = ToModStr(Quter{ 0, Rst }); }
 			else { Str = ToModStr(Rst); }
@@ -35,26 +35,26 @@ namespace QuterBasis
 		}
 	};
 	template <typename T>
-	void Op(const std::wstring& L, const wchar_t* R, T(Gbl* S)(const Quter&, const Quter&))
+	void Op(const std::wstring& L, const wchar_t* R, T(Gbl* F)(const Quter&, const Quter&))
 	{
 		if (L == R)
 		{
 			Quter U = Quter::Val(Base::Input(L"U = "));
 			Quter V = Quter::Val(Base::Input(L"V = "));
-			Base::Output(ToModStr(std::invoke(S, U, V)));
+			Base::Output(ToModStr(std::invoke(F, U, V)));
 		}
 	};
-	inline void Pow(const std::wstring& L, const wchar_t* R, Quter(Gbl* S)(const Quter&, std::int64_t))
+	inline void Pow(const std::wstring& L, const wchar_t* R, Quter(Gbl* F)(const Quter&, std::int64_t))
 	{
 		if (L == R)
 		{
 			Quter U = Quter::Val(Base::Input(L"U = "));
 			std::int64_t V = AsInt(Base::Input(L"V = "));
-			Base::Output(ToModStr(std::invoke(S, U, V)));
+			Base::Output(ToModStr(std::invoke(F, U, V)));
 		}
 	};
 	template <typename... As>
-	void Pow(const std::wstring& L, std::wstring&& R, Quter(Gbl* S)(const Quter&, const Quter&, std::int64_t, As...))
+	void Pow(const std::wstring& L, std::wstring&& R, Quter(Gbl* F)(const Quter&, const Quter&, std::int64_t, As...))
 	{
 		if (L == R)
 		{
@@ -62,7 +62,7 @@ namespace QuterBasis
 			Quter V = Quter::Val(Base::Input(L"V = "));
 			std::array<std::int64_t, 1 + sizeof...(As)> Dat{};
 			PowGet(Dat);
-			PowRst(S, U, V, Dat);
+			PowRst(F, U, V, Dat);
 		}
 		else if (L == R + L"()")
 		{
@@ -70,26 +70,26 @@ namespace QuterBasis
 			Quter V = Quter::Val(Base::Input(L"V = "));
 			std::array<std::pair<std::int64_t, std::int64_t>, 1 + sizeof...(As)> Dat{};
 			PowGet(Dat);
-			PowRst(S, R, U, V, Dat);
+			PowRst(F, R, U, V, Dat);
 		}
 	};
 	template <typename T>
-	void Bas(const std::wstring& L, const wchar_t* R, T(Gbl* S)(const Quter&))
+	void Bas(const std::wstring& L, const wchar_t* R, T(Gbl* F)(const Quter&))
 	{
 		if (L == R)
 		{
 			Quter V = Quter::Val(Base::Input(L"V = "));
-			Base::Output(ToModStr(std::invoke(S, V)));
+			Base::Output(ToModStr(std::invoke(F, V)));
 		}
 	};
 	template <typename T>
-	void Bas(const std::wstring& L, std::wstring&& R, T(Gbl* S)(const Quter&, std::int64_t))
+	void Bas(const std::wstring& L, std::wstring&& R, T(Gbl* F)(const Quter&, std::int64_t))
 	{
 		if (L == R)
 		{
 			Quter V = Quter::Val(Base::Input(L"V = "));
 			std::int64_t P = AsInt(Base::Input(L"P = "));
-			Base::Output(ToModStr(std::invoke(S, V, P)));
+			Base::Output(ToModStr(std::invoke(F, V, P)));
 		}
 		else if (L == R + L"()")
 		{
@@ -98,29 +98,29 @@ namespace QuterBasis
 			std::int64_t PMax = AsInt(Base::Input(L"P(max) = "));
 			for (std::int64_t P = PMin; P <= PMax; ++P)
 			{
-				Base::Output(R + L"(" + ToModStr(P) + L") = ", ToModStr(std::invoke(S, V, P)));
+				Base::Output(R + L"(" + ToModStr(P) + L") = ", ToModStr(std::invoke(F, V, P)));
 			}
 		}
 	};
-	inline void Tri(const std::wstring& L, const wchar_t* R, Quter(Gbl* S)(const Quter&))
+	inline void Tri(const std::wstring& L, const wchar_t* R, Quter(Gbl* F)(const Quter&))
 	{
 		if (L == R)
 		{
 			Quter V = Quter::Val(Base::Input(L"V = "));
-			Base::Output(ToModStr(std::invoke(S, V)));
+			Base::Output(ToModStr(std::invoke(F, V)));
 		}
 	};
-	inline void Atri(const std::wstring& L, std::wstring&& R, Quter(Gbl* S)(const Quter&, bool, std::int64_t))
+	inline void Atri(const std::wstring& L, std::wstring&& R, Quter(Gbl* F)(const Quter&, bool, std::int64_t))
 	{
 		if (L == R)
 		{
 			Quter V = Quter::Val(Base::Input(L"V = "));
-			bool Sign = false;
+			bool S = false;
 			std::wstring Input = std::regex_replace(Base::Input(L"Sign : "), std::wregex(L" "), L"");
-			if (Input == L"+") { Sign = true; }
+			if (Input == L"+") { S = true; }
 			else if (Input != L"-") { throw std::invalid_argument("A String interpretation of the sign cannot be converted as a bool value."); }
 			std::int64_t P = AsInt(Base::Input(L"P = "));
-			Base::Output(ToModStr(std::invoke(S, V, Sign, P)));
+			Base::Output(ToModStr(std::invoke(F, V, S, P)));
 		}
 		else if (L == R + L"()")
 		{
@@ -129,11 +129,11 @@ namespace QuterBasis
 			std::int64_t PMax = AsInt(Base::Input(L"P(max) = "));
 			for (std::int64_t P = PMin; P <= PMax; ++P)
 			{
-				Base::Output(R + L"(+, " + ToModStr(P) + L") = ", ToModStr(std::invoke(S, V, true, P)));
+				Base::Output(R + L"(+, " + ToModStr(P) + L") = ", ToModStr(std::invoke(F, V, true, P)));
 			}
 			for (std::int64_t P = PMin; P <= PMax; ++P)
 			{
-				Base::Output(R + L"(-, " + ToModStr(P) + L") = ", ToModStr(std::invoke(S, V, false, P)));
+				Base::Output(R + L"(-, " + ToModStr(P) + L") = ", ToModStr(std::invoke(F, V, false, P)));
 			}
 		}
 	};
