@@ -16,42 +16,18 @@
 #include "Module.h"
 #include "Cayley Dickson Algebra.h"
 #pragma pack(push)
-#pragma push_macro("CALL")
-#pragma push_macro("SEDEN_INTERFACE")
-#pragma push_macro("SEDEN_FUNC_CALL")
-#pragma push_macro("SEDEN_FUNC_INSTANCE_CALL")
-#if defined(X86) || defined(ARM)
-#pragma pack(4)
-#elif defined(X64) || defined(ARM64)
+#pragma push_macro("I")
+#pragma push_macro("Gbl")
+#pragma push_macro("Ths")
 #pragma pack(8)
-#endif
-#if defined(__GNUG__)
-#define CALL(c) __attribute__((c))
-#define SEDEN_INTERFACE __attribute__((dllexport))
-#if defined(DEBUG) || defined(X86) || defined(X64)
-#define SEDEN_FUNC_CALL CALL(__stdcall__)
-#elif defined(RELEASE) || defined(X86) || defined(X64)
-#define SEDEN_FUNC_CALL CALL(__fastcall__)
+#if defined(_MSVC_LANG)
+#define I __declspec(dllexport)
+#define Gbl __stdcall
+#define Ths __thiscall
 #else
-#define SEDEN_FUNC_CALL
-#endif
-#define SEDEN_FUNC_INSTANCE_CALL CALL(__thiscall__)
-#elif defined(_MSVC_LANG)
-#define CALL(c) c
-#define SEDEN_INTERFACE __declspec(dllexport)
-#if defined(DEBUG) || defined(X86) || defined(X64)
-#define SEDEN_FUNC_CALL CALL(__stdcall)
-#elif defined(RELEASE) || defined(X86) || defined(X64)
-#define SEDEN_FUNC_CALL CALL(__fastcall)
-#else
-#define SEDEN_FUNC_CALL
-#endif
-#define SEDEN_FUNC_INSTANCE_CALL CALL(__thiscall)
-#else
-#define CALL(c)
-#define SEDEN_INTERFACE
-#define SEDEN_FUNC_CALL
-#define SEDEN_FUNC_INSTANCE_CALL
+#define I
+#define Gbl
+#define Ths
 #endif
 inline std::size_t wtos_t(const wchar_t* str)
 {
@@ -102,575 +78,601 @@ inline std::size_t stos_t(const std::wstring& str)
 {
 	return wtos_t(str.c_str());
 };
-namespace Seden
+namespace Num
 {
-	class SEDEN_INTERFACE Sedenion
+	class Seden
 	{
-	private:
 		///
 		/// helpers
 		///
-		static std::size_t GetDimension(std::size_t Value)
+	private:
+		static std::size_t Near(std::size_t Dim)
 		{
-			std::size_t Result = 1;
-			while (Value > 0)
+			int Shift = 0;
+			while (Dim >> Shift != 0)
 			{
-				Value >>= 1;
-				Result <<= 1;
+				++Shift;
 			}
-			return Result;
+			std::size_t Rst = 0b1;
+			Rst <<= Shift;
+			return Rst;
 		};
-	public:
 		///
 		/// constants
 		///
-		static const double pi;
-		static const double e;
-		static const Sedenion i;
+	public:
+		static const Seden Zero;
 	private:
+		static const Seden i;
 		///
 		/// basis
 		///
-		static constexpr const std::size_t basic_size = 16;
-		static constexpr const std::size_t null = 0;
-		double* data;
-		std::size_t size;
-		explicit Sedenion(const double* data, std::size_t size)
-			: data{ nullptr }, size{ size > basic_size ? size : basic_size }
-		{
-			this->data = new double[this->size] {};
-			std::copy(data, data + size, this->data);
-		};
+	private:
+		static constexpr const std::size_t BasicSize = 16;
+		std::vector<double> Data;
 	public:
-		explicit SEDEN_FUNC_INSTANCE_CALL Sedenion();
-		explicit SEDEN_FUNC_INSTANCE_CALL Sedenion(const std::initializer_list<double>& numbers);
-		SEDEN_FUNC_INSTANCE_CALL Sedenion(double Value);
-		SEDEN_FUNC_INSTANCE_CALL Sedenion(const Sedenion& Value);
-		SEDEN_FUNC_INSTANCE_CALL Sedenion(Sedenion&& Value) noexcept;
-		SEDEN_FUNC_INSTANCE_CALL ~Sedenion() noexcept;
-		static double SEDEN_FUNC_CALL Scalar(const Sedenion& Value);
-		static Sedenion SEDEN_FUNC_CALL Vector(const Sedenion& Value);
+		I explicit Ths Seden()
+			: Data(BasicSize, 0)
+		{};
+		I explicit Ths Seden(const std::initializer_list<double>& N)
+			: Data{ N }
+		{
+			while (Data.size() < BasicSize) { Data.push_back(0); }
+		};
+		I Ths Seden(double V)
+			: Data{ V }
+		{
+			while (Data.size() < BasicSize) { Data.push_back(0); }
+		};
+	private:
+		explicit Seden(const std::vector<double>& N)
+			: Data{ N }
+		{};
+	public:
+		I Ths Seden(const Seden& Self) = default;
+		I Ths Seden(Seden&& Self) = default;
+		I Ths ~Seden() noexcept = default;
+		static double I Gbl Scalar(const Seden& V)
+		{
+			return V[0];
+		};
+		static Seden I Gbl Vector(const Seden& V)
+		{
+			Seden Rst = V;
+			Rst[0] = 0;
+			return Rst;
+		};
 		///
 		/// operators
 		///
-		Sedenion SEDEN_FUNC_INSTANCE_CALL operator ()() const;
-		double& SEDEN_FUNC_INSTANCE_CALL operator [](std::size_t i) & noexcept;
-		const double& SEDEN_FUNC_INSTANCE_CALL operator [](std::size_t i) const& noexcept;
-		friend bool SEDEN_INTERFACE SEDEN_FUNC_CALL operator ==(const Sedenion& Union, const Sedenion& Value);
-		friend bool SEDEN_INTERFACE SEDEN_FUNC_CALL operator !=(const Sedenion& Union, const Sedenion& Value);
-		friend Sedenion SEDEN_INTERFACE SEDEN_FUNC_CALL operator +(const Sedenion& Value);
-		friend Sedenion SEDEN_INTERFACE SEDEN_FUNC_CALL operator -(const Sedenion& Value);
-		friend Sedenion SEDEN_INTERFACE SEDEN_FUNC_CALL operator ~(const Sedenion& Value);
-		Sedenion& SEDEN_FUNC_INSTANCE_CALL operator ++() &;
-		Sedenion SEDEN_FUNC_INSTANCE_CALL operator ++(int) &;
-		Sedenion& SEDEN_FUNC_INSTANCE_CALL operator --() &;
-		Sedenion SEDEN_FUNC_INSTANCE_CALL operator --(int) &;
-		friend Sedenion SEDEN_INTERFACE SEDEN_FUNC_CALL operator +(const Sedenion& Union, const Sedenion& Value);
-		friend Sedenion SEDEN_INTERFACE SEDEN_FUNC_CALL operator -(const Sedenion& Union, const Sedenion& Value);
-		friend Sedenion SEDEN_INTERFACE SEDEN_FUNC_CALL operator *(const Sedenion& Union, const Sedenion& Value);
-		friend Sedenion SEDEN_INTERFACE SEDEN_FUNC_CALL operator /(const Sedenion& Union, double Value);
-		friend Sedenion SEDEN_INTERFACE SEDEN_FUNC_CALL operator ^(const Sedenion& Base, std::int64_t Exponent);
-		Sedenion& SEDEN_FUNC_INSTANCE_CALL operator =(const Sedenion& Value) &;
-		Sedenion& SEDEN_FUNC_INSTANCE_CALL operator =(Sedenion&& Value) & noexcept;
-		Sedenion& SEDEN_FUNC_INSTANCE_CALL operator +=(const Sedenion& Value) &;
-		Sedenion& SEDEN_FUNC_INSTANCE_CALL operator +=(const std::initializer_list<Sedenion>& Value) &;
-		Sedenion& SEDEN_FUNC_INSTANCE_CALL operator -=(const Sedenion& Value) &;
-		Sedenion& SEDEN_FUNC_INSTANCE_CALL operator -=(const std::initializer_list<Sedenion>& Value) &;
-		Sedenion& SEDEN_FUNC_INSTANCE_CALL operator *=(const Sedenion& Value) &;
-		Sedenion& SEDEN_FUNC_INSTANCE_CALL operator *=(const std::initializer_list<Sedenion>& Value) &;
-		Sedenion& SEDEN_FUNC_INSTANCE_CALL operator /=(double Value) &;
-		Sedenion& SEDEN_FUNC_INSTANCE_CALL operator /=(const std::initializer_list<double>& Value) &;
-		Sedenion& SEDEN_FUNC_INSTANCE_CALL operator ^=(std::int64_t Exponent) &;
-		Sedenion& SEDEN_FUNC_INSTANCE_CALL operator ^=(const std::initializer_list<std::int64_t>& Exponent) &;
-		///
-		/// fundamentals
-		///
-		static double SEDEN_FUNC_CALL abs(const Sedenion& Value);
-		static double SEDEN_FUNC_CALL arg(const Sedenion& Value);
-		static double SEDEN_FUNC_CALL arg(const Sedenion& Value, std::int64_t Theta);
-		static Sedenion SEDEN_FUNC_CALL conjg(const Sedenion& Value);
-		static Sedenion SEDEN_FUNC_CALL sgn(const Sedenion& Value);
-		static Sedenion SEDEN_FUNC_CALL inverse(const Sedenion& Value);
-		static Sedenion SEDEN_FUNC_CALL exp(const Sedenion& Value);
-		static Sedenion SEDEN_FUNC_CALL ln(const Sedenion& Value);
-		static Sedenion SEDEN_FUNC_CALL ln(const Sedenion& Value, std::int64_t Theta);
+	public:
+		I Seden Ths operator ()() const
+		{
+			return *this;
+		};
+		I double& Ths operator [](std::size_t i) &
+		{
+			return Data[i];
+		};
+		I const double& Ths operator [](std::size_t i) const&
+		{
+			return Data[i];
+		};
+		I Seden& Ths operator =(const Seden& O) = default;
+		I Seden& Ths operator =(Seden&& O) = default;
+		friend bool I Gbl operator ==(const Seden& U, const Seden& V);
+		friend bool I Gbl operator !=(const Seden& U, const Seden& V);
+		friend Seden I Gbl operator +(const Seden& V);
+		friend Seden I Gbl operator -(const Seden& V);
+		friend Seden I Gbl operator ~(const Seden& V);
+		I Seden& Ths operator ++() &
+		{
+			++(*this)[0];
+			return *this;
+		};
+		I Seden Ths operator ++(int) &
+		{
+			Seden Rst = *this;
+			++(*this)[0];
+			return Rst;
+		};
+		I Seden& Ths operator --() &
+		{
+			--(*this)[0];
+			return *this;
+		};
+		I Seden Ths operator --(int) &
+		{
+			Seden Rst = *this;
+			--(*this)[0];
+			return Rst;
+		};
+		friend Seden I Gbl operator +(const Seden& U, const Seden& V);
+		friend Seden I Gbl operator -(const Seden& U, const Seden& V);
+		friend Seden I Gbl operator *(const Seden& U, const Seden& V);
+		friend Seden I Gbl operator /(const Seden& U, const Seden& V);
+		friend Seden I Gbl operator ^(const Seden& U, std::int64_t V);
+		I Seden& Ths operator +=(const Seden& O) &
+		{
+			return *this = *this + O;
+		};
+		I Seden& Ths operator +=(const std::initializer_list<Seden>& O) &
+		{
+			for (std::initializer_list<Seden>::const_iterator ite = O.begin(); ite != O.end(); ++ite) { *this += *ite; }
+			return *this;
+		};
+		I Seden& Ths operator -=(const Seden& O) &
+		{
+			return *this = *this - O;
+		};
+		I Seden& Ths operator -=(const std::initializer_list<Seden>& O) &
+		{
+			for (std::initializer_list<Seden>::const_iterator ite = O.begin(); ite != O.end(); ++ite) { *this -= *ite; }
+			return *this;
+		};
+		I Seden& Ths operator *=(const Seden& O) &
+		{
+			return *this = *this * O;
+		};
+		I Seden& Ths operator *=(const std::initializer_list<Seden>& O) &
+		{
+			for (std::initializer_list<Seden>::const_iterator ite = O.begin(); ite != O.end(); ++ite) { *this *= *ite; }
+			return *this;
+		};
+		I Seden& Ths operator /=(const Seden& O) &
+		{
+			return *this = *this / O;
+		};
+		I Seden& Ths operator /=(const std::initializer_list<Seden>& O) &
+		{
+			for (std::initializer_list<Seden>::const_iterator ite = O.begin(); ite != O.end(); ++ite) { *this /= *ite; }
+			return *this;
+		};
+		I Seden& Ths operator ^=(std::int64_t O) &
+		{
+			return *this = *this ^ O;
+		};
+		I Seden& Ths operator ^=(const std::initializer_list<std::int64_t>& O) &
+		{
+			for (std::initializer_list<std::int64_t>::const_iterator ite = O.begin(); ite != O.end(); ++ite) { *this ^= *ite; }
+			return *this;
+		};
 		///
 		/// multiples
 		///
-		static double SEDEN_FUNC_CALL dot(const Sedenion& Union, const Sedenion& Value);
-		static Sedenion SEDEN_FUNC_CALL outer(const Sedenion& Union, const Sedenion& Value);
-		static Sedenion SEDEN_FUNC_CALL even(const Sedenion& Union, const Sedenion& Value);
-		static Sedenion SEDEN_FUNC_CALL cross(const Sedenion& Union, const Sedenion& Value);
+	public:
+		static double I Gbl Dot(const Seden& U, const Seden& V)
+		{
+			return Number::Dot(U.Num(), V.Num());
+		};
+		static Seden I Gbl Outer(const Seden& U, const Seden& V)
+		{
+			return Seden::Val(Number::Outer(U.Num(), V.Num()));
+		};
+		static Seden I Gbl Even(const Seden& U, const Seden& V)
+		{
+			return Val(Number::Even(U.Num(), V.Num()));
+		};
+		static Seden I Gbl Cross(const Seden& U, const Seden& V)
+		{
+			return Seden::Val(Number::Cross(U.Num(), V.Num()));
+		};
+		///
+		/// fundamentals
+		///
+	public:
+		static double I Gbl Abs(const Seden& V)
+		{
+			return Ev::Sqrt(Dot(V, V));
+		};
+		static double I Gbl Arg(const Seden& V, std::int64_t P)
+		{
+			return Ev::Arccos(Scalar(V) / Abs(V)) + 2 * Ev::PI * P;
+		};
+		static double I Gbl Arg(const Seden& V)
+		{
+			return Arg(V, 0);
+		};
+		static Seden I Gbl Conjg(const Seden& V)
+		{
+			return ~V;
+		};
+		static Seden I Gbl Sgn(const Seden& V)
+		{
+			return V / Abs(V);
+		};
+		static Seden I Gbl Inverse(const Seden& V)
+		{
+			return Conjg(V) / Dot(V, V);
+		};
+		static Seden I Gbl Exp(const Seden& V)
+		{
+			double Re = Scalar(V);
+			Seden Im = Vector(V);
+			if (Im == Seden::Zero) { return Ev::Exp(Re); }
+			double Sz = Abs(Im);
+			Seden Or = Sgn(Im);
+			return Ev::Exp(Re) * (Ev::Cos(Sz) + Or * Ev::Sin(Sz));
+		};
+		static Seden I Gbl Ln(const Seden& V, std::int64_t P)
+		{
+			double Re = Scalar(V);
+			Seden Im = Vector(V);
+			if (Im == Seden::Zero)
+			{
+				if (Re >= 0) { return Ev::Ln(Re) + 2 * P * Ev::PI * i; }
+				else { return Ev::Ln(-Re) + (2 * P + 1) * Ev::PI * i; }
+			}
+			Seden Or = Sgn(Im);
+			return Ev::Ln(Abs(V)) + Or * Arg(V, P);
+		};
+		static Seden I Gbl Ln(const Seden& V)
+		{
+			return Ln(V, 0);
+		};
 		///
 		/// exponentials
 		///
-		static Sedenion SEDEN_FUNC_CALL power(const Sedenion& Base, const Sedenion& Exponent);
-		static Sedenion SEDEN_FUNC_CALL power(const Sedenion& Base, const Sedenion& Exponent, std::int64_t Theta, std::int64_t Phi, std::int64_t Tau);
-		static Sedenion SEDEN_FUNC_CALL power(const Sedenion& Base, double Exponent);
-		static Sedenion SEDEN_FUNC_CALL power(const Sedenion& Base, double Exponent, std::int64_t Theta);
-		static Sedenion SEDEN_FUNC_CALL root(const Sedenion& Base, const Sedenion& Exponent);
-		static Sedenion SEDEN_FUNC_CALL root(const Sedenion& Base, const Sedenion& Exponent, std::int64_t Theta, std::int64_t Phi, std::int64_t Tau);
-		static Sedenion SEDEN_FUNC_CALL root(const Sedenion& Base, double Exponent);
-		static Sedenion SEDEN_FUNC_CALL root(const Sedenion& Base, double Exponent, std::int64_t Theta);
-		static Sedenion SEDEN_FUNC_CALL log(const Sedenion& Base, const Sedenion& Number);
-		static Sedenion SEDEN_FUNC_CALL log(const Sedenion& Base, const Sedenion& Number, std::int64_t Theta, std::int64_t Phi, std::int64_t Tau, std::int64_t Omega);
+	public:
+		static Seden I Gbl Power(const Seden& U, const Seden& V, std::int64_t z1, std::int64_t z2, std::int64_t z3)
+		{
+			return Exp(Exp(Ln(V, z3) + Ln(Ln(U, z1), z2)));
+		};
+		static Seden I Gbl Power(const Seden& U, const Seden& V)
+		{
+			return Power(U, V, 0, 0, 0);
+		};
+		static Seden I Gbl Power(const Seden& U, double V, std::int64_t P)
+		{
+			double Re = Scalar(V);
+			Seden Im = Vector(V);
+			if (Im == Seden::Zero)
+			{
+				if (Re >= 0)
+				{
+					double Ai = 2 * P * Ev::PI * V;
+					return Ev::Power(Re, V) * (Ev::Cos(Ai) + i * Ev::Sin(Ai));
+				}
+				else
+				{
+					double Ai = (2 * P + 1) * Ev::PI * V;
+					return Ev::Power(-Re, V) * (Ev::Cos(Ai) + i * Ev::Sin(Ai));
+				}
+			}
+			Seden Or = Sgn(Im);
+			double A = Arg(U, P) * V;
+			return Ev::Power(Abs(U), V) * (Ev::Cos(A) + Or * Ev::Sin(A));
+		};
+		static Seden I Gbl Power(const Seden& U, double V)
+		{
+			return Power(U, V, 0);
+		};
+		static Seden I Gbl Root(const Seden& U, const Seden& V, std::int64_t z1, std::int64_t z2, std::int64_t z3)
+		{
+			return Power(U, Inverse(V), z1, z2, z3);
+		};
+		static Seden I Gbl Root(const Seden& U, const Seden& V)
+		{
+			return Root(U, V, 0, 0, 0);
+		};
+		static Seden I Gbl Root(const Seden& U, double V, std::int64_t P)
+		{
+			return Power(U, 1 / V, P);
+		};
+		static Seden I Gbl Root(const Seden& U, double V)
+		{
+			return Root(U, V, 0);
+		};
+		static Seden I Gbl Log(const Seden& U, const Seden& V, std::int64_t z1, std::int64_t z2, std::int64_t z3, std::int64_t z4)
+		{
+			return Exp(Ln(Ln(V, z1), z3) - Ln(Ln(U, z2), z4));
+		};
+		static Seden I Gbl Log(const Seden& U, const Seden& V)
+		{
+			return Log(U, V, 0, 0, 0, 0);
+		};
 		///
 		/// trigonometrics
 		///
-		static Sedenion SEDEN_FUNC_CALL sin(const Sedenion& Value);
-		static Sedenion SEDEN_FUNC_CALL arcsin(const Sedenion& Value);
-		static Sedenion SEDEN_FUNC_CALL arcsin(const Sedenion& Value, bool Sign, std::int64_t Period);
-		static Sedenion SEDEN_FUNC_CALL sinh(const Sedenion& Value);
-		static Sedenion SEDEN_FUNC_CALL arcsinh(const Sedenion& Value);
-		static Sedenion SEDEN_FUNC_CALL arcsinh(const Sedenion& Value, bool Sign, std::int64_t Period);
-		static Sedenion SEDEN_FUNC_CALL cos(const Sedenion& Value);
-		static Sedenion SEDEN_FUNC_CALL arccos(const Sedenion& Value);
-		static Sedenion SEDEN_FUNC_CALL arccos(const Sedenion& Value, bool Sign, std::int64_t Period);
-		static Sedenion SEDEN_FUNC_CALL cosh(const Sedenion& Value);
-		static Sedenion SEDEN_FUNC_CALL arccosh(const Sedenion& Value);
-		static Sedenion SEDEN_FUNC_CALL arccosh(const Sedenion& Value, bool Sign, std::int64_t Period);
-		static Sedenion SEDEN_FUNC_CALL tan(const Sedenion& Value);
-		static Sedenion SEDEN_FUNC_CALL arctan(const Sedenion& Value);
-		static Sedenion SEDEN_FUNC_CALL arctan(const Sedenion& Value, bool Sign, std::int64_t Period);
-		static Sedenion SEDEN_FUNC_CALL tanh(const Sedenion& Value);
-		static Sedenion SEDEN_FUNC_CALL arctanh(const Sedenion& Value);
-		static Sedenion SEDEN_FUNC_CALL arctanh(const Sedenion& Value, bool Sign, std::int64_t Period);
-		static Sedenion SEDEN_FUNC_CALL csc(const Sedenion& Value);
-		static Sedenion SEDEN_FUNC_CALL arccsc(const Sedenion& Value);
-		static Sedenion SEDEN_FUNC_CALL arccsc(const Sedenion& Value, bool Sign, std::int64_t Period);
-		static Sedenion SEDEN_FUNC_CALL csch(const Sedenion& Value);
-		static Sedenion SEDEN_FUNC_CALL arccsch(const Sedenion& Value);
-		static Sedenion SEDEN_FUNC_CALL arccsch(const Sedenion& Value, bool Sign, std::int64_t Period);
-		static Sedenion SEDEN_FUNC_CALL sec(const Sedenion& Value);
-		static Sedenion SEDEN_FUNC_CALL arcsec(const Sedenion& Value);
-		static Sedenion SEDEN_FUNC_CALL arcsec(const Sedenion& Value, bool Sign, std::int64_t Period);
-		static Sedenion SEDEN_FUNC_CALL sech(const Sedenion& Value);
-		static Sedenion SEDEN_FUNC_CALL arcsech(const Sedenion& Value);
-		static Sedenion SEDEN_FUNC_CALL arcsech(const Sedenion& Value, bool Sign, std::int64_t Period);
-		static Sedenion SEDEN_FUNC_CALL cot(const Sedenion& Value);
-		static Sedenion SEDEN_FUNC_CALL arccot(const Sedenion& Value);
-		static Sedenion SEDEN_FUNC_CALL arccot(const Sedenion& Value, bool Sign, std::int64_t Period);
-		static Sedenion SEDEN_FUNC_CALL coth(const Sedenion& Value);
-		static Sedenion SEDEN_FUNC_CALL arccoth(const Sedenion& Value);
-		static Sedenion SEDEN_FUNC_CALL arccoth(const Sedenion& Value, bool Sign, std::int64_t Period);
+	public:
+		static Seden I Gbl Sin(const Seden& V)
+		{
+			double Re = Scalar(V);
+			Seden Im = Vector(V);
+			if (Im == Seden::Zero) { return Ev::Sin(Re); }
+			double Sz = Abs(Im);
+			Seden Or = Sgn(Im);
+			return Ev::Sin(Re) * Ev::Cosh(Sz) + Ev::Cos(Re) * Ev::Sinh(Sz) * Or;
+		};
+		static Seden I Gbl Cos(const Seden& V)
+		{
+			double Re = Scalar(V);
+			Seden Im = Vector(V);
+			if (Im == Seden::Zero) { return Ev::Cos(Re); }
+			double Sz = Abs(Im);
+			Seden Or = Sgn(Im);
+			return Ev::Cos(Re) * Ev::Cosh(Sz) - Ev::Sin(Re) * Ev::Sinh(Sz) * Or;
+		};
+		static Seden I Gbl Tan(const Seden& V)
+		{
+			double Re = Scalar(V);
+			Seden Im = Vector(V);
+			double T = Ev::Tan(Re);
+			if (Im == Seden::Zero) { return T; }
+			double Sz = Abs(Im);
+			Seden Or = Sgn(Im);
+			double Th = Ev::Tanh(Sz);
+			double T2 = T * T;
+			double Th2 = Th * Th;
+			return (T * (1 - Th2) + Th * (1 + T2) * Or) / (1 + T2 * Th2);
+		};
+		static Seden I Gbl Csc(const Seden& V)
+		{
+			return Inverse(Sin(V));
+		};
+		static Seden I Gbl Sec(const Seden& V)
+		{
+			return Inverse(Cos(V));
+		};
+		static Seden I Gbl Cot(const Seden& V)
+		{
+			return Inverse(Tan(V));
+		};
+		static Seden I Gbl Sinh(const Seden& V)
+		{
+			double Re = Scalar(V);
+			Seden Im = Vector(V);
+			if (Im == Seden::Zero) { return Ev::Sinh(Re); }
+			double Sz = Abs(Im);
+			Seden Or = Sgn(Im);
+			return Ev::Sinh(Re) * Ev::Cos(Sz) + Ev::Cosh(Re) * Ev::Sin(Sz) * Or;
+		};
+		static Seden I Gbl Cosh(const Seden& V)
+		{
+			double Re = Scalar(V);
+			Seden Im = Vector(V);
+			if (Im == Seden::Zero) { return Ev::Cosh(Re); }
+			double Sz = Abs(Im);
+			Seden Or = Sgn(Im);
+			return Ev::Cosh(Re) * Ev::Cos(Sz) + Ev::Sinh(Re) * Ev::Sin(Sz) * Or;
+		};
+		static Seden I Gbl Tanh(const Seden& V)
+		{
+			double Re = Scalar(V);
+			Seden Im = Vector(V);
+			double Th = Ev::Tanh(Re);
+			if (Im == Seden::Zero) { return Th; }
+			double Sz = Abs(Im);
+			Seden Or = Sgn(Im);
+			double T = Ev::Tan(Sz);
+			double Th2 = Th * Th;
+			double T2 = T * T;
+			return (Th * (1 - T2) + T * (1 + Th2) * Or) / (1 + Th2 * T2);
+		};
+		static Seden I Gbl Csch(const Seden& V)
+		{
+			return Inverse(Sinh(V));
+		};
+		static Seden I Gbl Sech(const Seden& V)
+		{
+			return Inverse(Cosh(V));
+		};
+		static Seden I Gbl Coth(const Seden& V)
+		{
+			return Inverse(Tanh(V));
+		};
+		static Seden I Gbl Arcsin(const Seden& V, bool S, std::int64_t P)
+		{
+			if (!S) { return Ev::PI - Arcsin(V, true, P); }
+			double Re = Scalar(V);
+			Seden Im = Vector(V);
+			if (Im == Seden::Zero) { return -i * Ln(i * Re + Root(1 - Re * Re, 2), P); }
+			Seden Or = Sgn(Im);
+			return -Or * Ln(Or * V + Root(1 - V * V, 2), P);
+		};
+		static Seden I Gbl Arcsin(const Seden& V)
+		{
+			return Arcsin(V, true, 0);
+		};
+		static Seden I Gbl Arccos(const Seden& V, bool S, std::int64_t P)
+		{
+			if (!S) { return 2 * Ev::PI - Arccos(V, true, P); }
+			double Re = Scalar(V);
+			Seden Im = Vector(V);
+			if (Im == Seden::Zero) { return -i * Ln(Re + Root(Re * Re - 1, 2), P); }
+			Seden Or = Sgn(Im);
+			return -Or * Ln(V + Root(V * V - 1, 2), P);
+		};
+		static Seden I Gbl Arccos(const Seden& V)
+		{
+			return Arccos(V, true, 0);
+		};
+		static Seden I Gbl Arctan(const Seden& V, bool S, std::int64_t P)
+		{
+			if (!S) { return Ev::PI + Arctan(V, true, P); }
+			double Re = Scalar(V);
+			Seden Im = Vector(V);
+			if (Im == Seden::Zero) { return 2 * Ev::PI * P + i * (Ln(1 - i * Re) - Ln(1 + i * Re)) / 2; }
+			Seden Or = Sgn(Im);
+			return 2 * Ev::PI * P + Or * (Ln(1 - Or * V) - Ln(1 + Or * V)) / 2;
+		};
+		static Seden I Gbl Arctan(const Seden& V)
+		{
+			return Arctan(V, true, 0);
+		};
+		static Seden I Gbl Arccsc(const Seden& V, bool S, std::int64_t P)
+		{
+			return Arcsin(Inverse(V), S, P);
+		};
+		static Seden I Gbl Arccsc(const Seden& V)
+		{
+			return Arccsc(V, true, 0);
+		};
+		static Seden I Gbl Arcsec(const Seden& V, bool S, std::int64_t P)
+		{
+			return Arccos(Inverse(V), S, P);
+		};
+		static Seden I Gbl Arcsec(const Seden& V)
+		{
+			return Arcsec(V, true, 0);
+		};
+		static Seden I Gbl Arccot(const Seden& V, bool S, std::int64_t P)
+		{
+			return Arctan(Inverse(V), S, P);
+		};
+		static Seden I Gbl Arccot(const Seden& V)
+		{
+			return Arccot(V, true, 0);
+		};
+		static Seden I Gbl Arcsinh(const Seden& V, bool S, std::int64_t P)
+		{
+			Seden Im = Vector(V);
+			Seden Or = Sgn(Im);
+			if (!S) { return Ev::PI * Or - Arcsinh(V, true, P); }
+			return Ln(V + Root(V * V + 1, 2), P);
+		};
+		static Seden I Gbl Arcsinh(const Seden& V)
+		{
+			return Arcsinh(V, true, 0);
+		};
+		static Seden I Gbl Arccosh(const Seden& V, bool S, std::int64_t P)
+		{
+			Seden Im = Vector(V);
+			Seden Or = Sgn(Im);
+			if (!S) { return 2 * Ev::PI * Or - Arccosh(V, true, P); }
+			return Ln(V + Root(V * V - 1, 2), P);
+		};
+		static Seden I Gbl Arccosh(const Seden& V)
+		{
+			return Arccosh(V, true, 0);
+		};
+		static Seden I Gbl Arctanh(const Seden& V, bool S, std::int64_t P)
+		{
+			Seden Im = Vector(V);
+			Seden Or = Sgn(Im);
+			if (!S) { return Ev::PI * Or + Arctan(V, true, P); }
+			return 2 * Ev::PI * P * Or + (Ln(1 + V) - Ln(1 - V)) / 2;
+		};
+		static Seden I Gbl Arctanh(const Seden& V)
+		{
+			return Arctanh(V, true, 0);
+		};
+		static Seden I Gbl Arccsch(const Seden& V, bool S, std::int64_t P)
+		{
+			return Arcsinh(Inverse(V), S, P);
+		};
+		static Seden I Gbl Arccsch(const Seden& V)
+		{
+			return Arccsch(V, true, 0);
+		};
+		static Seden I Gbl Arcsech(const Seden& V, bool S, std::int64_t P)
+		{
+			return Arccosh(Inverse(V), S, P);
+		};
+		static Seden I Gbl Arcsech(const Seden& V)
+		{
+			return Arcsech(V, true, 0);
+		};
+		static Seden I Gbl Arccoth(const Seden& V, bool S, std::int64_t P)
+		{
+			return Arctanh(Inverse(V), S, P);
+		};
+		static Seden I Gbl Arccoth(const Seden& V)
+		{
+			return Arccoth(V, true, 0);
+		};
 		///
 		/// conventions
 		///
-		static std::wstring SEDEN_FUNC_CALL GetString(const Sedenion& Value);
-		static Sedenion SEDEN_FUNC_CALL GetInstance(const std::wstring& Value);
+		static std::wstring I Gbl Str(const Seden& V)
+		{
+			std::size_t Dim = V.Data.size();
+			std::vector<std::wstring> Trm(Dim, L"e");
+			for (std::size_t i = 0; i < Dim; ++i) { Trm[i] += std::to_wstring(i); }
+			return ToString(V.Data, Trm);
+		};
+		static Seden I Gbl Val(const std::wstring& V)
+		{
+			std::wstring Str = Replace(V, L" ", L"");
+			if (Str == L"0") { return Seden::Zero; };
+			std::size_t Dim = 0;
+			std::wstring Rest = Str;
+			std::wsmatch Mat;
+			while (std::regex_search(Rest, Mat, std::wregex(LR"(e(\d+)(?=-|\+|$))")))
+			{
+				Dim = std::max(Dim, stos_t(Mat.str(1)));
+				Rest = Mat.suffix().str();
+			}
+			Dim = Near(Dim);
+			std::vector<std::wstring> Trm(Dim, L"e");
+			for (std::size_t i = 0; i < Dim; ++i) { Trm[i] += std::to_wstring(i); }
+			return Seden(ToNumbers(Str, Trm));
+		};
 		///
 		/// casing
 		///
 	private:
-		Factor to_factor() const& { return Factor{ data, size }; };
-		static Sedenion from(const Factor& number) { return Sedenion{ number.get_data(), number.get_size() }; };
+		Number Num() const&
+		{
+			return Number(Data);
+		};
+		static Seden Val(const Number& N)
+		{
+			return Seden(N());
+		};
 	};
-	///
-	/// operators
-	///
-	bool SEDEN_INTERFACE SEDEN_FUNC_CALL operator ==(const Sedenion& Union, const Sedenion& Value);
-	bool SEDEN_INTERFACE SEDEN_FUNC_CALL operator !=(const Sedenion& Union, const Sedenion& Value);
-	Sedenion SEDEN_INTERFACE SEDEN_FUNC_CALL operator +(const Sedenion& Value);
-	Sedenion SEDEN_INTERFACE SEDEN_FUNC_CALL operator -(const Sedenion& Value);
-	Sedenion SEDEN_INTERFACE SEDEN_FUNC_CALL operator ~(const Sedenion& Value);
-	Sedenion SEDEN_INTERFACE SEDEN_FUNC_CALL operator +(const Sedenion& Union, const Sedenion& Value);
-	Sedenion SEDEN_INTERFACE SEDEN_FUNC_CALL operator -(const Sedenion& Union, const Sedenion& Value);
-	Sedenion SEDEN_INTERFACE SEDEN_FUNC_CALL operator *(const Sedenion& Union, const Sedenion& Value);
-	Sedenion SEDEN_INTERFACE SEDEN_FUNC_CALL operator /(const Sedenion& Union, double Value);
-	Sedenion SEDEN_INTERFACE SEDEN_FUNC_CALL operator ^(const Sedenion& Base, std::int64_t Exponent);
-	/* class Sedenion */
+	/* class Seden */
 	///
 	/// constants
 	///
-	const double Sedenion::pi = std::numbers::pi;
-	const double Sedenion::e = std::numbers::e;
-	const Sedenion Sedenion::i{ 0, 1 };
-	///
-	/// basis
-	///
-	SEDEN_FUNC_INSTANCE_CALL Sedenion::Sedenion()
-		: data{ nullptr }, size{ basic_size }
-	{
-		this->data = new double[this->size] {};
-	};
-	SEDEN_FUNC_INSTANCE_CALL Sedenion::Sedenion(const std::initializer_list<double>& numbers)
-		: data{ nullptr }, size{ numbers.size() > basic_size ? numbers.size() : basic_size }
-	{
-		this->data = new double[this->size] {};
-		std::copy(numbers.begin(), numbers.end(), this->data);
-	};
-	SEDEN_FUNC_INSTANCE_CALL Sedenion::Sedenion(double Value)
-		: data{ nullptr }, size{ basic_size }
-	{
-		this->data = new double[this->size] { Value };
-	};
-	SEDEN_FUNC_INSTANCE_CALL Sedenion::Sedenion(const Sedenion& Value)
-		: data{ nullptr }, size{ Value.size }
-	{
-		this->data = new double[this->size] {};
-		std::copy(Value.data, Value.data + Value.size, this->data);
-	};
-	SEDEN_FUNC_INSTANCE_CALL Sedenion::Sedenion(Sedenion&& Value) noexcept
-		: data{ Value.data }, size{ Value.size }
-	{
-		Value.data = nullptr;
-		Value.size = 0;
-	};
-	SEDEN_FUNC_INSTANCE_CALL Sedenion::~Sedenion() noexcept
-	{
-		delete[] this->data;
-		this->data = nullptr;
-		this->size = 0;
-	};
-	double SEDEN_FUNC_CALL Sedenion::Scalar(const Sedenion& Value) { return Value[0]; };
-	Sedenion SEDEN_FUNC_CALL Sedenion::Vector(const Sedenion& Value)
-	{
-		Sedenion Result = Value;
-		Result[0] = 0;
-		return Result;
-	};
+	const Seden Seden::Zero{};
+	const Seden Seden::i{ 0, 1 };
 	///
 	/// operators
 	///
-	Sedenion SEDEN_FUNC_INSTANCE_CALL Sedenion::operator ()() const { return *this; };
-	double& SEDEN_FUNC_INSTANCE_CALL Sedenion::operator [](std::size_t i) & noexcept
+	bool I Gbl operator ==(const Seden& U, const Seden& V)
 	{
-		if (this->size == 0) { return this->data[null]; }
-		return this->data[i % this->size];
+		return U.Num() == V.Num();
 	};
-	const double& SEDEN_FUNC_INSTANCE_CALL Sedenion::operator [](std::size_t i) const& noexcept
+	bool I Gbl operator !=(const Seden& U, const Seden& V)
 	{
-		if (this->size == 0) { return this->data[null]; }
-		return this->data[i % this->size];
+		return !(U == V);
 	};
-	bool SEDEN_FUNC_CALL operator ==(const Sedenion& Union, const Sedenion& Value) { return Union.to_factor() == Value.to_factor(); };
-	bool SEDEN_FUNC_CALL operator !=(const Sedenion& Union, const Sedenion& Value) { return !(Union == Value); };
-	Sedenion SEDEN_FUNC_CALL operator +(const Sedenion& Value) { return Value; };
-	Sedenion SEDEN_FUNC_CALL operator -(const Sedenion& Value) { return Sedenion::from(-Value.to_factor()); };
-	Sedenion SEDEN_FUNC_CALL operator ~(const Sedenion& Value) { return Sedenion::from(~Value.to_factor()); };
-	Sedenion& SEDEN_FUNC_INSTANCE_CALL Sedenion::operator ++() &
+	Seden I Gbl operator +(const Seden& V)
 	{
-		++this->operator[](0);
-		return *this;
+		return V;
 	};
-	Sedenion SEDEN_FUNC_INSTANCE_CALL Sedenion::operator ++(int) &
+	Seden I Gbl operator -(const Seden& V)
 	{
-		Sedenion temp = *this;
-		++this->operator[](0);
-		return temp;
+		return Seden::Val(-V.Num());
 	};
-	Sedenion& SEDEN_FUNC_INSTANCE_CALL Sedenion::operator --() &
+	Seden I Gbl operator ~(const Seden& V)
 	{
-		--this->operator[](0);
-		return *this;
+		return Seden::Val(~V.Num());
 	};
-	Sedenion SEDEN_FUNC_INSTANCE_CALL Sedenion::operator --(int) &
+	Seden I Gbl operator +(const Seden& U, const Seden& V)
 	{
-		Sedenion temp = *this;
-		--this->operator[](0);
-		return temp;
+		return Seden::Val(U.Num() + V.Num());
 	};
-	Sedenion SEDEN_FUNC_CALL operator +(const Sedenion& Union, const Sedenion& Value)
+	Seden I Gbl operator -(const Seden& U, const Seden& V)
 	{
-		return Sedenion::from(Union.to_factor() + Value.to_factor());
+		return Seden::Val(U.Num() - V.Num());
 	};
-	Sedenion SEDEN_FUNC_CALL operator -(const Sedenion& Union, const Sedenion& Value)
+	Seden I Gbl operator *(const Seden& U, const Seden& V)
 	{
-		return Sedenion::from(Union.to_factor() - Value.to_factor());
+		return Seden::Val(U.Num() * V.Num());
 	};
-	Sedenion SEDEN_FUNC_CALL operator *(const Sedenion& Union, const Sedenion& Value)
+	Seden I Gbl operator /(const Seden& U, const Seden& V)
 	{
-		return Sedenion::from(Union.to_factor() * Value.to_factor());
+		if (Seden::Vector(V) == Seden::Zero) { return Seden::Val(U.Num() / Seden::Scalar(V)); }
+		return U * Seden::Inverse(V);
 	};
-	Sedenion SEDEN_FUNC_CALL operator /(const Sedenion& Union, double Value)
+	Seden I Gbl operator ^(const Seden& U, std::int64_t V)
 	{
-		return Sedenion::from(Union.to_factor() / Value);
-	};
-	Sedenion SEDEN_FUNC_CALL operator ^(const Sedenion& Base, std::int64_t Exponent)
-	{
-		try { return Sedenion::power(Base, static_cast<double>(Exponent)); }
-		catch (...) { return 0; }
-	};
-	Sedenion& SEDEN_FUNC_INSTANCE_CALL Sedenion::operator =(const Sedenion& Value) &
-	{
-		if (this == &Value) { return *this; }
-		delete[] this->data;
-		this->data = new double[Value.size] {};
-		std::copy(Value.data, Value.data + Value.size, this->data);
-		this->size = Value.size;
-		return *this;
-	};
-	Sedenion& SEDEN_FUNC_INSTANCE_CALL Sedenion::operator =(Sedenion&& Value) & noexcept
-	{
-		this->data = Value.data;
-		this->size = Value.size;
-		Value.data = nullptr;
-		Value.size = 0;
-		return *this;
-	};
-	Sedenion& SEDEN_FUNC_INSTANCE_CALL Sedenion::operator +=(const Sedenion& Value) & { return *this = *this + Value; };
-	Sedenion& SEDEN_FUNC_INSTANCE_CALL Sedenion::operator +=(const std::initializer_list<Sedenion>& Value) &
-	{
-		for (std::initializer_list<Sedenion>::const_iterator ite = Value.begin(); ite != Value.end(); ++ite) { *this += *ite; }
-		return *this;
-	};
-	Sedenion& SEDEN_FUNC_INSTANCE_CALL Sedenion::operator -=(const Sedenion& Value) & { return *this = *this - Value; };
-	Sedenion& SEDEN_FUNC_INSTANCE_CALL Sedenion::operator -=(const std::initializer_list<Sedenion>& Value) &
-	{
-		for (std::initializer_list<Sedenion>::const_iterator ite = Value.begin(); ite != Value.end(); ++ite) { *this -= *ite; }
-		return *this;
-	};
-	Sedenion& SEDEN_FUNC_INSTANCE_CALL Sedenion::operator *=(const Sedenion& Value) & { return *this = *this * Value; };
-	Sedenion& SEDEN_FUNC_INSTANCE_CALL Sedenion::operator *=(const std::initializer_list<Sedenion>& Value) &
-	{
-		for (std::initializer_list<Sedenion>::const_iterator ite = Value.begin(); ite != Value.end(); ++ite) { *this *= *ite; }
-		return *this;
-	};
-	Sedenion& SEDEN_FUNC_INSTANCE_CALL Sedenion::operator /=(double Value) & { return *this = *this / Value; };
-	Sedenion& SEDEN_FUNC_INSTANCE_CALL Sedenion::operator /=(const std::initializer_list<double>& Value) &
-	{
-		for (std::initializer_list<double>::const_iterator ite = Value.begin(); ite != Value.end(); ++ite) { *this /= *ite; }
-		return *this;
-	};
-	Sedenion& SEDEN_FUNC_INSTANCE_CALL Sedenion::operator ^=(std::int64_t Exponent) & { return *this = *this ^ Exponent; };
-	Sedenion& SEDEN_FUNC_INSTANCE_CALL Sedenion::operator ^=(const std::initializer_list<std::int64_t>& Exponent) &
-	{
-		for (std::initializer_list<std::int64_t>::const_iterator ite = Exponent.begin(); ite != Exponent.end(); ++ite) { *this ^= *ite; }
-		return *this;
-	};
-	///
-	/// fundamentals
-	///
-	double SEDEN_FUNC_CALL Sedenion::abs(const Sedenion& Value) { return std::sqrt(dot(Value, Value)); };
-	double SEDEN_FUNC_CALL Sedenion::arg(const Sedenion& Value) { return arg(Value, 0); };
-	double SEDEN_FUNC_CALL Sedenion::arg(const Sedenion& Value, std::int64_t Theta) { return std::acos(Scalar(Value) / abs(Value)) + 2 * pi * static_cast<double>(Theta); };
-	Sedenion SEDEN_FUNC_CALL Sedenion::conjg(const Sedenion& Value) { return ~Value; };
-	Sedenion SEDEN_FUNC_CALL Sedenion::sgn(const Sedenion& Value) { return Value / abs(Value); };
-	Sedenion SEDEN_FUNC_CALL Sedenion::inverse(const Sedenion& Value) { return conjg(Value) / dot(Value, Value); };
-	Sedenion SEDEN_FUNC_CALL Sedenion::exp(const Sedenion& Value)
-	{
-		auto S = Scalar(Value);
-		auto V = Vector(Value);
-		if (V == 0) { return std::exp(S); }
-		return std::exp(S) * (std::cos(abs(V)) + sgn(V) * std::sin(abs(V)));
-	};
-	Sedenion SEDEN_FUNC_CALL Sedenion::ln(const Sedenion& Value) { return ln(Value, 0); };
-	Sedenion SEDEN_FUNC_CALL Sedenion::ln(const Sedenion& Value, std::int64_t Theta)
-	{
-		auto S = Scalar(Value);
-		auto V = Vector(Value);
-		if (V == 0)
-		{
-			if (S < 0) { return std::log(-S) + static_cast<double>(2 * Theta + 1) * i * pi; }
-			return std::log(S);
-		}
-		return std::log(abs(Value)) + sgn(V) * arg(Value, Theta);
-	};
-	///
-	/// multiples
-	///
-	double SEDEN_FUNC_CALL Sedenion::dot(const Sedenion& Union, const Sedenion& Value)
-	{
-		return number_dot(Union.to_factor(), Value.to_factor());
-	};
-	Sedenion SEDEN_FUNC_CALL Sedenion::outer(const Sedenion& Union, const Sedenion& Value)
-	{
-		return Sedenion::from(number_outer(Union.to_factor(), Value.to_factor()));
-	};
-	Sedenion SEDEN_FUNC_CALL Sedenion::even(const Sedenion& Union, const Sedenion& Value)
-	{
-		return Sedenion::from(number_even(Union.to_factor(), Value.to_factor()));
-	};
-	Sedenion SEDEN_FUNC_CALL Sedenion::cross(const Sedenion& Union, const Sedenion& Value)
-	{
-		return Sedenion::from(number_cross(Union.to_factor(), Value.to_factor()));
-	};
-	///
-	/// exponentials
-	///
-	Sedenion SEDEN_FUNC_CALL Sedenion::power(const Sedenion& Base, const Sedenion& Exponent) { return power(Base, Exponent, 0, 0, 0); };
-	Sedenion SEDEN_FUNC_CALL Sedenion::power(const Sedenion& Base, const Sedenion& Exponent, std::int64_t Theta, std::int64_t Phi, std::int64_t Tau)
-	{
-		return exp(exp(ln(ln(Base, Theta), Phi) + ln(Exponent, Tau)));
-	};
-	Sedenion SEDEN_FUNC_CALL Sedenion::power(const Sedenion& Base, double Exponent) { return power(Base, Exponent, 0); }
-	Sedenion SEDEN_FUNC_CALL Sedenion::power(const Sedenion& Base, double Exponent, std::int64_t Theta)
-	{
-		if (Base == 0) { return Exponent == 0 ? 1 : 0; }
-		return std::pow(abs(Base), Exponent) *
-			(std::cos(Exponent * arg(Base, Theta)) + sgn(Vector(Base)) * std::sin(Exponent * arg(Base, Theta)));
-	};
-	Sedenion SEDEN_FUNC_CALL Sedenion::root(const Sedenion& Base, const Sedenion& Exponent) { return root(Base, Exponent, 0, 0, 0); };
-	Sedenion SEDEN_FUNC_CALL Sedenion::root(const Sedenion& Base, const Sedenion& Exponent, std::int64_t Theta, std::int64_t Phi, std::int64_t Tau) { return power(Base, inverse(Exponent), Theta, Phi, Tau); };
-	Sedenion SEDEN_FUNC_CALL Sedenion::root(const Sedenion& Base, double Exponent) { return power(Base, 1 / Exponent); };
-	Sedenion SEDEN_FUNC_CALL Sedenion::root(const Sedenion& Base, double Exponent, std::int64_t Theta) { return power(Base, 1 / Exponent, Theta); };
-	Sedenion SEDEN_FUNC_CALL Sedenion::log(const Sedenion& Base, const Sedenion& Number) { return log(Base, Number, 0, 0, 0, 0); };
-	Sedenion SEDEN_FUNC_CALL Sedenion::log(const Sedenion& Base, const Sedenion& Number, std::int64_t Theta, std::int64_t Phi, std::int64_t Tau, std::int64_t Omega)
-	{
-		return exp(ln(ln(Number, Theta), Phi) - ln(ln(Base, Tau), Omega));
-	};
-	///
-	/// trigonometrics
-	///
-	Sedenion SEDEN_FUNC_CALL Sedenion::sin(const Sedenion& Value)
-	{
-		auto S = Scalar(Value);
-		auto V = Vector(Value);
-		if (V == 0) { return std::sin(S); }
-		return std::sin(S) * std::cosh(abs(V)) + sgn(V) * (std::cos(S) * std::sinh(abs(V)));
-	};
-	Sedenion SEDEN_FUNC_CALL Sedenion::arcsin(const Sedenion& Value) { return arcsin(Value, true, 0); };
-	Sedenion SEDEN_FUNC_CALL Sedenion::arcsin(const Sedenion& Value, bool Sign, std::int64_t Period)
-	{
-		if (Sign == true)
-		{
-			auto S = Scalar(Value);
-			auto V = Vector(Value);
-			if (V == 0) { return -i * ln(i * S + root(1 - S * S, 2), Period); }
-			return -sgn(V) * ln(sgn(V) * Value + root(1 - Value * Value, 2), Period);
-		}
-		return pi - arcsin(Value, true, Period);
-	};
-	Sedenion SEDEN_FUNC_CALL Sedenion::sinh(const Sedenion& Value)
-	{
-		auto S = Scalar(Value);
-		auto V = Vector(Value);
-		if (V == 0) { return std::sinh(S); }
-		return std::sinh(S) * std::cos(abs(V)) + sgn(V) * (std::cosh(S) * std::sin(abs(V)));
-	};
-	Sedenion SEDEN_FUNC_CALL Sedenion::arcsinh(const Sedenion& Value) { return arcsinh(Value, true, 0); };
-	Sedenion SEDEN_FUNC_CALL Sedenion::arcsinh(const Sedenion& Value, bool Sign, std::int64_t Period)
-	{
-		if (Sign == true) { return ln(Value + root(Value * Value + 1, 2), Period); }
-		auto V = Vector(Value);
-		if (V == 0) { return pi * i - arcsinh(Value, true, Period); }
-		return pi * sgn(V) - arcsinh(Value, true, Period);
-	};
-	Sedenion SEDEN_FUNC_CALL Sedenion::cos(const Sedenion& Value)
-	{
-		auto S = Scalar(Value);
-		auto V = Vector(Value);
-		if (V == 0) { return std::cos(S); }
-		return std::cos(S) * std::cosh(abs(V)) - sgn(V) * (std::sin(S) * std::sinh(abs(V)));
-	};
-	Sedenion SEDEN_FUNC_CALL Sedenion::arccos(const Sedenion& Value) { return arccos(Value, true, 0); };
-	Sedenion SEDEN_FUNC_CALL Sedenion::arccos(const Sedenion& Value, bool Sign, std::int64_t Period)
-	{
-		if (Sign == true)
-		{
-			auto S = Scalar(Value);
-			auto V = Vector(Value);
-			if (V == 0) { return -i * ln(S + root(S * S - 1, 2), Period); }
-			return -sgn(V) * ln(Value + root(Value * Value - 1, 2), Period);
-		}
-		return 2 * pi - arccos(Value, true, Period);
-	};
-	Sedenion SEDEN_FUNC_CALL Sedenion::cosh(const Sedenion& Value)
-	{
-		auto S = Scalar(Value);
-		auto V = Vector(Value);
-		if (V == 0) { return std::cosh(S); }
-		return std::cosh(S) * std::cos(abs(V)) + sgn(V) * (std::sinh(S) * std::sin(abs(V)));
-	};
-	Sedenion SEDEN_FUNC_CALL Sedenion::arccosh(const Sedenion& Value) { return arccosh(Value, true, 0); };
-	Sedenion SEDEN_FUNC_CALL Sedenion::arccosh(const Sedenion& Value, bool Sign, std::int64_t Period)
-	{
-		if (Sign == true) { return ln(Value + root(Value * Value - 1, 2), Period); }
-		auto V = Vector(Value);
-		if (V == 0) { return 2 * pi * i - arccosh(Value, true, Period); }
-		return 2 * pi * sgn(V) - arccosh(Value, true, Period);
-	};
-	Sedenion SEDEN_FUNC_CALL Sedenion::tan(const Sedenion& Value)
-	{
-		auto S = Scalar(Value);
-		auto V = Vector(Value);
-		auto TanS = std::tan(S);
-		if (V == 0) { return TanS; }
-		auto TanS2 = TanS * TanS;
-		auto TanhV = std::tanh(abs(V));
-		auto TanhV2 = TanhV * TanhV;
-		return (TanS * (1 - TanhV2) + sgn(V) * (TanhV * (1 + TanS2))) / (1 + TanS2 * TanhV2);
-	};
-	Sedenion SEDEN_FUNC_CALL Sedenion::arctan(const Sedenion& Value) { return arctan(Value, true, 0); };
-	Sedenion SEDEN_FUNC_CALL Sedenion::arctan(const Sedenion& Value, bool Sign, std::int64_t Period)
-	{
-		if (Sign == true)
-		{
-			auto S = Scalar(Value);
-			auto V = Vector(Value);
-			if (V == 0) { return i / 2 * (ln(1 - i * S, Period) - ln(1 + i * S)); }
-			return sgn(V) / 2 * (ln(1 - sgn(V) * Value, Period) - ln(1 + sgn(V) * Value));
-		}
-		return pi + arctan(Value, true, Period);
-	};
-	Sedenion SEDEN_FUNC_CALL Sedenion::tanh(const Sedenion& Value)
-	{
-		auto S = Scalar(Value);
-		auto V = Vector(Value);
-		auto TanhS = std::tanh(S);
-		if (V == 0) { return TanhS; }
-		auto TanhS2 = TanhS * TanhS;
-		auto TanV = std::tan(abs(V));
-		auto TanV2 = TanV * TanV;
-		return (TanhS * (1 - TanV2) + sgn(V) * (TanV * (1 + TanhS2))) / (1 + TanhS2 * TanV2);
-	};
-	Sedenion SEDEN_FUNC_CALL Sedenion::arctanh(const Sedenion& Value) { return arctanh(Value, true, 0); };
-	Sedenion SEDEN_FUNC_CALL Sedenion::arctanh(const Sedenion& Value, bool Sign, std::int64_t Period)
-	{
-		if (Sign == true) { return 1 / 2 * (ln(1 + Value, Period) - ln(1 - Value)); }
-		auto V = Vector(Value);
-		if (V == 0) { return pi * i + arctanh(Value, true, Period); }
-		return pi * sgn(V) + arctanh(Value, true, Period);
-	};
-	Sedenion SEDEN_FUNC_CALL Sedenion::csc(const Sedenion& Value) { return inverse(sin(Value)); };
-	Sedenion SEDEN_FUNC_CALL Sedenion::arccsc(const Sedenion& Value) { return arccsc(Value, true, 0); };
-	Sedenion SEDEN_FUNC_CALL Sedenion::arccsc(const Sedenion& Value, bool Sign, std::int64_t Period) { return arcsin(inverse(Value), Sign, Period); };
-	Sedenion SEDEN_FUNC_CALL Sedenion::csch(const Sedenion& Value) { return inverse(sinh(Value)); };
-	Sedenion SEDEN_FUNC_CALL Sedenion::arccsch(const Sedenion& Value) { return arccsch(Value, true, 0); };
-	Sedenion SEDEN_FUNC_CALL Sedenion::arccsch(const Sedenion& Value, bool Sign, std::int64_t Period) { return arcsinh(inverse(Value), Sign, Period); };
-	Sedenion SEDEN_FUNC_CALL Sedenion::sec(const Sedenion& Value) { return inverse(cos(Value)); };
-	Sedenion SEDEN_FUNC_CALL Sedenion::arcsec(const Sedenion& Value) { return arcsec(Value, true, 0); };
-	Sedenion SEDEN_FUNC_CALL Sedenion::arcsec(const Sedenion& Value, bool Sign, std::int64_t Period) { return arccos(inverse(Value), Sign, Period); };
-	Sedenion SEDEN_FUNC_CALL Sedenion::sech(const Sedenion& Value) { return inverse(cosh(Value)); };
-	Sedenion SEDEN_FUNC_CALL Sedenion::arcsech(const Sedenion& Value) { return arcsech(Value, true, 0); };
-	Sedenion SEDEN_FUNC_CALL Sedenion::arcsech(const Sedenion& Value, bool Sign, std::int64_t Period) { return arccosh(inverse(Value), Sign, Period); };
-	Sedenion SEDEN_FUNC_CALL Sedenion::cot(const Sedenion& Value) { return inverse(tan(Value)); };
-	Sedenion SEDEN_FUNC_CALL Sedenion::arccot(const Sedenion& Value) { return arccot(Value, true, 0); };
-	Sedenion SEDEN_FUNC_CALL Sedenion::arccot(const Sedenion& Value, bool Sign, std::int64_t Period) { return arctan(inverse(Value), Sign, Period); };
-	Sedenion SEDEN_FUNC_CALL Sedenion::coth(const Sedenion& Value) { return inverse(tanh(Value)); };
-	Sedenion SEDEN_FUNC_CALL Sedenion::arccoth(const Sedenion& Value) { return arccoth(Value, true, 0); };
-	Sedenion SEDEN_FUNC_CALL Sedenion::arccoth(const Sedenion& Value, bool Sign, std::int64_t Period) { return arctanh(inverse(Value), Sign, Period); };
-	///
-	/// conventions
-	///
-	std::wstring SEDEN_FUNC_CALL Sedenion::GetString(const Sedenion& Value)
-	{
-		std::vector<std::wstring> Terms(Value.size);
-		for (std::size_t i = 0; i < Value.size; ++i) { Terms[i] = L"e" + std::to_wstring(i); }
-		return ToString(Value.size, Value.data, Terms.data());
-	};
-	Sedenion SEDEN_FUNC_CALL Sedenion::GetInstance(const std::wstring& Value)
-	{
-		std::wstring Replaced = Replace(Value, L" ", L"");
-		if (Replaced == L"0") { return Sedenion{}; };
-		std::size_t Dimension = 0;
-		std::wstring Rest = Replaced;
-		std::wsmatch Match;
-		while (std::regex_search(Rest, Match, std::wregex(LR"(e(\d+)(?=-|\+|$))")))
-		{
-			Dimension = std::max(Dimension, stos_t(Match.str(1)));
-			Rest = Match.suffix().str();
-		}
-		std::size_t Size = GetDimension(Dimension);
-		std::vector<double> Numbers(Size);
-		std::vector<std::wstring> Terms(Size);
-		for (std::size_t i = 0; i < Size; ++i) { Terms[i] = L"e" + std::to_wstring(i); }
-		ToNumbers(Replaced, Size, Numbers.data(), Terms.data());
-		return Sedenion{ Numbers.data(), Size };
+		return Seden::Power(U, static_cast<double>(V));
 	};
 }
-#pragma pop_macro("SEDEN_FUNC_INSTANCE_CALL")
-#pragma pop_macro("SEDEN_FUNC_CALL")
-#pragma pop_macro("SEDEN_INTERFACE")
-#pragma pop_macro("CALL")
+#pragma pop_macro("Ths")
+#pragma pop_macro("Gbl")
+#pragma pop_macro("I")
 #pragma pack(pop)

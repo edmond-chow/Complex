@@ -18,183 +18,167 @@
 #ifndef SEDEN
 #define SEDEN
 #include <string>
-#include <stdexcept>
 #pragma pack(push)
-#pragma push_macro("CALL")
-#pragma push_macro("SEDEN_INTERFACE")
-#pragma push_macro("SEDEN_FUNC_CALL")
-#pragma push_macro("SEDEN_FUNC_INSTANCE_CALL")
-#if defined(X86) || defined(ARM)
-#pragma pack(4)
-#elif defined(X64) || defined(ARM64)
+#pragma push_macro("I")
+#pragma push_macro("Gbl")
+#pragma push_macro("Ths")
 #pragma pack(8)
-#endif
-#if defined(__GNUG__)
-#define CALL(c) __attribute__((c))
-#define SEDEN_INTERFACE __attribute__((dllimport))
-#if defined(DEBUG) || defined(X86) || defined(X64)
-#define SEDEN_FUNC_CALL CALL(__stdcall__)
-#elif defined(RELEASE) || defined(X86) || defined(X64)
-#define SEDEN_FUNC_CALL CALL(__fastcall__)
+#if defined(_MSVC_LANG)
+#define I __declspec(dllimport)
+#define Gbl __stdcall
+#define Ths __thiscall
 #else
-#define SEDEN_FUNC_CALL
+#define I
+#define Gbl
+#define Ths
 #endif
-#define SEDEN_FUNC_INSTANCE_CALL CALL(__thiscall__)
-#elif defined(_MSVC_LANG)
-#define CALL(c) c
-#define SEDEN_INTERFACE __declspec(dllimport)
-#if defined(DEBUG) || defined(X86) || defined(X64)
-#define SEDEN_FUNC_CALL CALL(__stdcall)
-#elif defined(RELEASE) || defined(X86) || defined(X64)
-#define SEDEN_FUNC_CALL CALL(__fastcall)
-#else
-#define SEDEN_FUNC_CALL
-#endif
-#define SEDEN_FUNC_INSTANCE_CALL CALL(__thiscall)
-#else
-#define CALL(c)
-#define SEDEN_INTERFACE
-#define SEDEN_FUNC_CALL
-#define SEDEN_FUNC_INSTANCE_CALL
-#endif
-namespace Seden
+namespace Num
 {
-	class SEDEN_INTERFACE Sedenion
+	class I Seden
 	{
 	public:
 		///
 		/// constants
 		///
-		static const double pi;
-		static const double e;
-	private:
+	public:
+		static const Seden Zero;
 		///
 		/// basis
 		///
-		double* data;
-		std::size_t size;
+	private:
+		std::vector<double> Data;
 	public:
-		explicit SEDEN_FUNC_INSTANCE_CALL Sedenion();
-		explicit SEDEN_FUNC_INSTANCE_CALL Sedenion(const std::initializer_list<double>& numbers);
-		SEDEN_FUNC_INSTANCE_CALL Sedenion(double Value);
-		SEDEN_FUNC_INSTANCE_CALL Sedenion(const Sedenion& Value);
-		SEDEN_FUNC_INSTANCE_CALL Sedenion(Sedenion&& Value) noexcept;
-		SEDEN_FUNC_INSTANCE_CALL ~Sedenion() noexcept;
-		static double SEDEN_FUNC_CALL Scalar(const Sedenion& Value);
-		static Sedenion SEDEN_FUNC_CALL Vector(const Sedenion& Value);
+		explicit Ths Seden();
+		explicit Ths Seden(const std::initializer_list<double>& N);
+		Ths Seden(double V);
+		Ths Seden(const Seden& Self);
+		Ths Seden(Seden&& Self);
+		Ths ~Seden() noexcept;
+		static double Gbl Scalar(const Seden& V);
+		static Seden Gbl Vector(const Seden& V);
 		///
 		/// operators
 		///
-		Sedenion SEDEN_FUNC_INSTANCE_CALL operator ()() const;
-		double& SEDEN_FUNC_INSTANCE_CALL operator [](std::size_t i) &;
-		const double& SEDEN_FUNC_INSTANCE_CALL operator [](std::size_t i) const&;
-		Sedenion& SEDEN_FUNC_INSTANCE_CALL operator ++()&;
-		Sedenion SEDEN_FUNC_INSTANCE_CALL operator ++(int)&;
-		Sedenion& SEDEN_FUNC_INSTANCE_CALL operator --()&;
-		Sedenion SEDEN_FUNC_INSTANCE_CALL operator --(int)&;
-		Sedenion& SEDEN_FUNC_INSTANCE_CALL operator =(const Sedenion& Value) &;
-		Sedenion& SEDEN_FUNC_INSTANCE_CALL operator =(Sedenion&& Value) & noexcept;
-		Sedenion& SEDEN_FUNC_INSTANCE_CALL operator +=(const Sedenion& Value) &;
-		Sedenion& SEDEN_FUNC_INSTANCE_CALL operator +=(const std::initializer_list<Sedenion>& Value) &;
-		Sedenion& SEDEN_FUNC_INSTANCE_CALL operator -=(const Sedenion& Value) &;
-		Sedenion& SEDEN_FUNC_INSTANCE_CALL operator -=(const std::initializer_list<Sedenion>& Value) &;
-		Sedenion& SEDEN_FUNC_INSTANCE_CALL operator *=(const Sedenion& Value) &;
-		Sedenion& SEDEN_FUNC_INSTANCE_CALL operator *=(const std::initializer_list<Sedenion>& Value) &;
-		Sedenion& SEDEN_FUNC_INSTANCE_CALL operator /=(double Value) &;
-		Sedenion& SEDEN_FUNC_INSTANCE_CALL operator /=(const std::initializer_list<double>& Value) &;
-		Sedenion& SEDEN_FUNC_INSTANCE_CALL operator ^=(std::int64_t Exponent)&;
-		Sedenion& SEDEN_FUNC_INSTANCE_CALL operator ^=(const std::initializer_list<std::int64_t>& Exponent)&;
-		///
-		/// fundamentals
-		///
-		static double SEDEN_FUNC_CALL abs(const Sedenion& Value);
-		static double SEDEN_FUNC_CALL arg(const Sedenion& Value);
-		static double SEDEN_FUNC_CALL arg(const Sedenion& Value, std::int64_t Theta);
-		static Sedenion SEDEN_FUNC_CALL conjg(const Sedenion& Value);
-		static Sedenion SEDEN_FUNC_CALL sgn(const Sedenion& Value);
-		static Sedenion SEDEN_FUNC_CALL inverse(const Sedenion& Value);
-		static Sedenion SEDEN_FUNC_CALL exp(const Sedenion& Value);
-		static Sedenion SEDEN_FUNC_CALL ln(const Sedenion& Value);
-		static Sedenion SEDEN_FUNC_CALL ln(const Sedenion& Value, std::int64_t Theta);
+	public:
+		Seden Ths operator ()() const;
+		double& Ths operator [](std::size_t i) &;
+		const double& Ths operator [](std::size_t i) const&;
+		Seden& Ths operator =(const Seden& O) = default;
+		Seden& Ths operator =(Seden&& O) = default;
+		Seden& Ths operator ++() &;
+		Seden Ths operator ++(int) &;
+		Seden& Ths operator --() &;
+		Seden Ths operator --(int) &;
+		Seden& Ths operator +=(const Seden& O) &;
+		Seden& Ths operator +=(const std::initializer_list<Seden>& O) &;
+		Seden& Ths operator -=(const Seden& O) &;
+		Seden& Ths operator -=(const std::initializer_list<Seden>& O) &;
+		Seden& Ths operator *=(const Seden& O) &;
+		Seden& Ths operator *=(const std::initializer_list<Seden>& O) &;
+		Seden& Ths operator /=(const Seden& O) &;
+		Seden& Ths operator /=(const std::initializer_list<Seden>& O) &;
+		Seden& Ths operator ^=(std::int64_t O) &;
+		Seden& Ths operator ^=(const std::initializer_list<std::int64_t>& O) &;
 		///
 		/// multiples
 		///
-		static double SEDEN_FUNC_CALL dot(const Sedenion& Union, const Sedenion& Value);
-		static Sedenion SEDEN_FUNC_CALL outer(const Sedenion& Union, const Sedenion& Value);
-		static Sedenion SEDEN_FUNC_CALL even(const Sedenion& Union, const Sedenion& Value);
-		static Sedenion SEDEN_FUNC_CALL cross(const Sedenion& Union, const Sedenion& Value);
+	public:
+		static double Gbl Dot(const Seden& U, const Seden& V);
+		static Seden Gbl Outer(const Seden& U, const Seden& V);
+		static Seden Gbl Even(const Seden& U, const Seden& V);
+		static Seden Gbl Cross(const Seden& U, const Seden& V);
+		///
+		/// fundamentals
+		///
+	public:
+		static double Gbl Abs(const Seden& V);
+		static double Gbl Arg(const Seden& V, std::int64_t P);
+		static double Gbl Arg(const Seden& V);
+		static Seden Gbl Conjg(const Seden& V);
+		static Seden Gbl Sgn(const Seden& V);
+		static Seden Gbl Inverse(const Seden& V);
+		static Seden Gbl Exp(const Seden& V);
+		static Seden Gbl Ln(const Seden& V, std::int64_t P);
+		static Seden Gbl Ln(const Seden& V);
 		///
 		/// exponentials
 		///
-		static Sedenion SEDEN_FUNC_CALL power(const Sedenion& Base, const Sedenion& Exponent);
-		static Sedenion SEDEN_FUNC_CALL power(const Sedenion& Base, const Sedenion& Exponent, std::int64_t Theta, std::int64_t Phi, std::int64_t Tau);
-		static Sedenion SEDEN_FUNC_CALL power(const Sedenion& Base, double Exponent);
-		static Sedenion SEDEN_FUNC_CALL power(const Sedenion& Base, double Exponent, std::int64_t Theta);
-		static Sedenion SEDEN_FUNC_CALL root(const Sedenion& Base, const Sedenion& Exponent);
-		static Sedenion SEDEN_FUNC_CALL root(const Sedenion& Base, const Sedenion& Exponent, std::int64_t Theta, std::int64_t Phi, std::int64_t Tau);
-		static Sedenion SEDEN_FUNC_CALL root(const Sedenion& Base, double Exponent);
-		static Sedenion SEDEN_FUNC_CALL root(const Sedenion& Base, double Exponent, std::int64_t Theta);
-		static Sedenion SEDEN_FUNC_CALL log(const Sedenion& Base, const Sedenion& Number);
-		static Sedenion SEDEN_FUNC_CALL log(const Sedenion& Base, const Sedenion& Number, std::int64_t Theta, std::int64_t Phi, std::int64_t Tau, std::int64_t Omega);
+	public:
+		static Seden Gbl Power(const Seden& U, const Seden& V, std::int64_t z1, std::int64_t z2, std::int64_t z3);
+		static Seden Gbl Power(const Seden& U, const Seden& V);
+		static Seden Gbl Power(const Seden& U, double V, std::int64_t P);
+		static Seden Gbl Power(const Seden& U, double V);
+		static Seden Gbl Root(const Seden& U, const Seden& V, std::int64_t z1, std::int64_t z2, std::int64_t z3);
+		static Seden Gbl Root(const Seden& U, const Seden& V);
+		static Seden Gbl Root(const Seden& U, double V, std::int64_t P);
+		static Seden Gbl Root(const Seden& U, double V);
+		static Seden Gbl Log(const Seden& U, const Seden& V, std::int64_t z1, std::int64_t z2, std::int64_t z3, std::int64_t z4);
+		static Seden Gbl Log(const Seden& U, const Seden& V);
 		///
 		/// trigonometrics
 		///
-		static Sedenion SEDEN_FUNC_CALL sin(const Sedenion& Value);
-		static Sedenion SEDEN_FUNC_CALL arcsin(const Sedenion& Value);
-		static Sedenion SEDEN_FUNC_CALL arcsin(const Sedenion& Value, bool Sign, std::int64_t Period);
-		static Sedenion SEDEN_FUNC_CALL sinh(const Sedenion& Value);
-		static Sedenion SEDEN_FUNC_CALL arcsinh(const Sedenion& Value);
-		static Sedenion SEDEN_FUNC_CALL arcsinh(const Sedenion& Value, bool Sign, std::int64_t Period);
-		static Sedenion SEDEN_FUNC_CALL cos(const Sedenion& Value);
-		static Sedenion SEDEN_FUNC_CALL arccos(const Sedenion& Value);
-		static Sedenion SEDEN_FUNC_CALL arccos(const Sedenion& Value, bool Sign, std::int64_t Period);
-		static Sedenion SEDEN_FUNC_CALL cosh(const Sedenion& Value);
-		static Sedenion SEDEN_FUNC_CALL arccosh(const Sedenion& Value);
-		static Sedenion SEDEN_FUNC_CALL arccosh(const Sedenion& Value, bool Sign, std::int64_t Period);
-		static Sedenion SEDEN_FUNC_CALL tan(const Sedenion& Value);
-		static Sedenion SEDEN_FUNC_CALL arctan(const Sedenion& Value);
-		static Sedenion SEDEN_FUNC_CALL arctan(const Sedenion& Value, bool Sign, std::int64_t Period);
-		static Sedenion SEDEN_FUNC_CALL tanh(const Sedenion& Value);
-		static Sedenion SEDEN_FUNC_CALL arctanh(const Sedenion& Value);
-		static Sedenion SEDEN_FUNC_CALL arctanh(const Sedenion& Value, bool Sign, std::int64_t Period);
-		static Sedenion SEDEN_FUNC_CALL csc(const Sedenion& Value);
-		static Sedenion SEDEN_FUNC_CALL arccsc(const Sedenion& Value);
-		static Sedenion SEDEN_FUNC_CALL arccsc(const Sedenion& Value, bool Sign, std::int64_t Period);
-		static Sedenion SEDEN_FUNC_CALL csch(const Sedenion& Value);
-		static Sedenion SEDEN_FUNC_CALL arccsch(const Sedenion& Value);
-		static Sedenion SEDEN_FUNC_CALL arccsch(const Sedenion& Value, bool Sign, std::int64_t Period);
-		static Sedenion SEDEN_FUNC_CALL sec(const Sedenion& Value);
-		static Sedenion SEDEN_FUNC_CALL arcsec(const Sedenion& Value);
-		static Sedenion SEDEN_FUNC_CALL arcsec(const Sedenion& Value, bool Sign, std::int64_t Period);
-		static Sedenion SEDEN_FUNC_CALL sech(const Sedenion& Value);
-		static Sedenion SEDEN_FUNC_CALL arcsech(const Sedenion& Value);
-		static Sedenion SEDEN_FUNC_CALL arcsech(const Sedenion& Value, bool Sign, std::int64_t Period);
-		static Sedenion SEDEN_FUNC_CALL cot(const Sedenion& Value);
-		static Sedenion SEDEN_FUNC_CALL arccot(const Sedenion& Value);
-		static Sedenion SEDEN_FUNC_CALL arccot(const Sedenion& Value, bool Sign, std::int64_t Period);
-		static Sedenion SEDEN_FUNC_CALL coth(const Sedenion& Value);
-		static Sedenion SEDEN_FUNC_CALL arccoth(const Sedenion& Value);
-		static Sedenion SEDEN_FUNC_CALL arccoth(const Sedenion& Value, bool Sign, std::int64_t Period);
+	public:
+		static Seden Gbl Sin(const Seden& V);
+		static Seden Gbl Cos(const Seden& V);
+		static Seden Gbl Tan(const Seden& V);
+		static Seden Gbl Csc(const Seden& V);
+		static Seden Gbl Sec(const Seden& V);
+		static Seden Gbl Cot(const Seden& V);
+		static Seden Gbl Sinh(const Seden& V);
+		static Seden Gbl Cosh(const Seden& V);
+		static Seden Gbl Tanh(const Seden& V);
+		static Seden Gbl Csch(const Seden& V);
+		static Seden Gbl Sech(const Seden& V);
+		static Seden Gbl Coth(const Seden& V);
+		static Seden Gbl Arcsin(const Seden& V, bool S, std::int64_t P);
+		static Seden Gbl Arcsin(const Seden& V);
+		static Seden Gbl Arccos(const Seden& V, bool S, std::int64_t P);
+		static Seden Gbl Arccos(const Seden& V);
+		static Seden Gbl Arctan(const Seden& V, bool S, std::int64_t P);
+		static Seden Gbl Arctan(const Seden& V);
+		static Seden Gbl Arccsc(const Seden& V, bool S, std::int64_t P);
+		static Seden Gbl Arccsc(const Seden& V);
+		static Seden Gbl Arcsec(const Seden& V, bool S, std::int64_t P);
+		static Seden Gbl Arcsec(const Seden& V);
+		static Seden Gbl Arccot(const Seden& V, bool S, std::int64_t P);
+		static Seden Gbl Arccot(const Seden& V);
+		static Seden Gbl Arcsinh(const Seden& V, bool S, std::int64_t P);
+		static Seden Gbl Arcsinh(const Seden& V);
+		static Seden Gbl Arccosh(const Seden& V, bool S, std::int64_t P);
+		static Seden Gbl Arccosh(const Seden& V);
+		static Seden Gbl Arctanh(const Seden& V, bool S, std::int64_t P);
+		static Seden Gbl Arctanh(const Seden& V);
+		static Seden Gbl Arccsch(const Seden& V, bool S, std::int64_t P);
+		static Seden Gbl Arccsch(const Seden& V);
+		static Seden Gbl Arcsech(const Seden& V, bool S, std::int64_t P);
+		static Seden Gbl Arcsech(const Seden& V);
+		static Seden Gbl Arccoth(const Seden& V, bool S, std::int64_t P);
+		static Seden Gbl Arccoth(const Seden& V);
 		///
 		/// conventions
 		///
-		static std::wstring SEDEN_FUNC_CALL GetString(const Sedenion& Value);
-		static Sedenion SEDEN_FUNC_CALL GetInstance(const std::wstring& Value);
+	public:
+		static std::wstring Gbl Str(const Seden& V);
+		static Seden Gbl Val(const std::wstring& V);
 	};
+	/* class Seden */
 	///
 	/// operators
 	///
-	bool SEDEN_INTERFACE SEDEN_FUNC_CALL operator ==(const Sedenion& Union, const Sedenion& Value);
-	bool SEDEN_INTERFACE SEDEN_FUNC_CALL operator !=(const Sedenion& Union, const Sedenion& Value);
-	Sedenion SEDEN_INTERFACE SEDEN_FUNC_CALL operator +(const Sedenion& Value);
-	Sedenion SEDEN_INTERFACE SEDEN_FUNC_CALL operator -(const Sedenion& Value);
-	Sedenion SEDEN_INTERFACE SEDEN_FUNC_CALL operator ~(const Sedenion& Value);
-	Sedenion SEDEN_INTERFACE SEDEN_FUNC_CALL operator +(const Sedenion& Union, const Sedenion& Value);
-	Sedenion SEDEN_INTERFACE SEDEN_FUNC_CALL operator -(const Sedenion& Union, const Sedenion& Value);
-	Sedenion SEDEN_INTERFACE SEDEN_FUNC_CALL operator *(const Sedenion& Union, const Sedenion& Value);
-	Sedenion SEDEN_INTERFACE SEDEN_FUNC_CALL operator /(const Sedenion& Union, double Value);
-	Sedenion SEDEN_INTERFACE SEDEN_FUNC_CALL operator ^(const Sedenion& Base, std::int64_t Exponent);
+	bool I Gbl operator ==(const Seden& U, const Seden& V);
+	bool I Gbl operator !=(const Seden& U, const Seden& V);
+	Seden I Gbl operator +(const Seden& V);
+	Seden I Gbl operator -(const Seden& V);
+	Seden I Gbl operator ~(const Seden& V);
+	Seden I Gbl operator +(const Seden& U, const Seden& V);
+	Seden I Gbl operator -(const Seden& U, const Seden& V);
+	Seden I Gbl operator *(const Seden& U, const Seden& V);
+	Seden I Gbl operator /(const Seden& U, const Seden& V);
+	Seden I Gbl operator ^(const Seden& U, std::int64_t V);
 }
+#pragma pop_macro("Ths")
+#pragma pop_macro("Gbl")
+#pragma pop_macro("I")
 #pragma pack(pop)
 #endif
 #endif

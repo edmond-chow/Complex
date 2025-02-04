@@ -18,270 +18,232 @@
 #ifndef QUTER
 #define QUTER
 #include <string>
-#include <stdexcept>
 #pragma pack(push)
-#pragma push_macro("CALL")
-#pragma push_macro("QUTER_INTERFACE")
-#pragma push_macro("QUTER_FUNC_CALL")
-#pragma push_macro("QUTER_FUNC_INSTANCE_CALL")
-#if defined(X86) || defined(ARM)
-#pragma pack(4)
-#elif defined(X64) || defined(ARM64)
+#pragma push_macro("I")
+#pragma push_macro("Gbl")
+#pragma push_macro("Ths")
 #pragma pack(8)
-#endif
-#if defined(__GNUG__)
-#define CALL(c) __attribute__((c))
-#define QUTER_INTERFACE __attribute__((dllimport))
-#if defined(DEBUG) || defined(X86) || defined(X64)
-#define QUTER_FUNC_CALL CALL(__stdcall__)
-#elif defined(RELEASE) || defined(X86) || defined(X64)
-#define QUTER_FUNC_CALL CALL(__fastcall__)
+#if defined(_MSVC_LANG)
+#define I __declspec(dllimport)
+#define Gbl __stdcall
+#define Ths __thiscall
 #else
-#define QUTER_FUNC_CALL
+#define I
+#define Gbl
+#define Ths
 #endif
-#define QUTER_FUNC_INSTANCE_CALL CALL(__thiscall__)
-#elif defined(_MSVC_LANG)
-#define CALL(c) c
-#define QUTER_INTERFACE __declspec(dllimport)
-#if defined(DEBUG) || defined(X86) || defined(X64)
-#define QUTER_FUNC_CALL CALL(__stdcall)
-#elif defined(RELEASE) || defined(X86) || defined(X64)
-#define QUTER_FUNC_CALL CALL(__fastcall)
-#else
-#define QUTER_FUNC_CALL
-#endif
-#define QUTER_FUNC_INSTANCE_CALL CALL(__thiscall)
-#else
-#define CALL(c)
-#define QUTER_INTERFACE
-#define QUTER_FUNC_CALL
-#define QUTER_FUNC_INSTANCE_CALL
-#endif
-namespace Quter
+namespace Num
 {
-	namespace BaseType
+	struct I Vec3D
 	{
-		enum struct index : std::int64_t
-		{
-			e1 = 1,
-			e2 = 2,
-			e3 = 3,
-		};
-		struct QUTER_INTERFACE Vector3D
-		{
-		public:
-			///
-			/// constants
-			///
-			static const double pi;
-			static const double e;
-			static const Vector3D e1;
-			static const Vector3D e2;
-			static const Vector3D e3;
-		private:
-			///
-			/// basis
-			///
-			double x1;
-			double x2;
-			double x3;
-		public:
-			explicit QUTER_FUNC_INSTANCE_CALL Vector3D() noexcept;
-			explicit QUTER_FUNC_INSTANCE_CALL Vector3D(double x1, double x2, double x3) noexcept;
-			QUTER_FUNC_INSTANCE_CALL Vector3D(const Vector3D& Value) noexcept;
-			///
-			/// operators
-			///
-			const Vector3D QUTER_FUNC_INSTANCE_CALL operator ()() const noexcept;
-			double& QUTER_FUNC_INSTANCE_CALL operator [](index i) &;
-			double& QUTER_FUNC_INSTANCE_CALL operator [](std::size_t i) & noexcept;
-			const double& QUTER_FUNC_INSTANCE_CALL operator [](index i) const&;
-			const double& QUTER_FUNC_INSTANCE_CALL operator [](std::size_t i) const& noexcept;
-			Vector3D& QUTER_FUNC_INSTANCE_CALL operator =(const Vector3D& Value) & noexcept;
-			Vector3D& QUTER_FUNC_INSTANCE_CALL operator +=(const Vector3D& Value) & noexcept;
-			Vector3D& QUTER_FUNC_INSTANCE_CALL operator +=(const std::initializer_list<Vector3D>& Value) & noexcept;
-			Vector3D& QUTER_FUNC_INSTANCE_CALL operator -=(const Vector3D& Value) & noexcept;
-			Vector3D& QUTER_FUNC_INSTANCE_CALL operator -=(const std::initializer_list<Vector3D>& Value) & noexcept;
-			Vector3D& QUTER_FUNC_INSTANCE_CALL operator *=(double Value) & noexcept;
-			Vector3D& QUTER_FUNC_INSTANCE_CALL operator *=(const std::initializer_list<double>& Value) & noexcept;
-			Vector3D& QUTER_FUNC_INSTANCE_CALL operator /=(double Value) & noexcept;
-			Vector3D& QUTER_FUNC_INSTANCE_CALL operator /=(const std::initializer_list<double>& Value) & noexcept;
-			///
-			/// fundamentals
-			///
-			static double QUTER_FUNC_CALL abs(const Vector3D& Value);
-			static Vector3D QUTER_FUNC_CALL sgn(const Vector3D& Value);
-			static double QUTER_FUNC_CALL dot(const Vector3D& Union, const Vector3D& Value) noexcept;
-			static Vector3D QUTER_FUNC_CALL cross(const Vector3D& Union, const Vector3D& Value) noexcept;
-			///
-			/// conventions
-			///
-			static std::wstring QUTER_FUNC_CALL GetString(const Vector3D& Value);
-			static Vector3D QUTER_FUNC_CALL GetInstance(const std::wstring& Value);
-		};
+		///
+		/// constants
+		///
+	public:
+		static const Vec3D Zero;
+		static const Vec3D e1;
+		static const Vec3D e2;
+		static const Vec3D e3;
+		///
+		/// basis
+		///
+	private:
+		double x1;
+		double x2;
+		double x3;
+	public:
+		explicit Ths Vec3D();
+		explicit Ths Vec3D(double e1, double e2, double e3);
 		///
 		/// operators
 		///
-		bool QUTER_INTERFACE QUTER_FUNC_CALL operator ==(const Vector3D& Union, const Vector3D& Value) noexcept;
-		bool QUTER_INTERFACE QUTER_FUNC_CALL operator !=(const Vector3D& Union, const Vector3D& Value) noexcept;
-		Vector3D QUTER_INTERFACE QUTER_FUNC_CALL operator +(const Vector3D& Value) noexcept;
-		Vector3D QUTER_INTERFACE QUTER_FUNC_CALL operator -(const Vector3D& Value) noexcept;
-		Vector3D QUTER_INTERFACE QUTER_FUNC_CALL operator +(const Vector3D& Union, const Vector3D& Value) noexcept;
-		Vector3D QUTER_INTERFACE QUTER_FUNC_CALL operator -(const Vector3D& Union, const Vector3D& Value) noexcept;
-		Vector3D QUTER_INTERFACE QUTER_FUNC_CALL operator *(double Union, const Vector3D& Value) noexcept;
-		Vector3D QUTER_INTERFACE QUTER_FUNC_CALL operator *(const Vector3D& Union, double Value) noexcept;
-		Vector3D QUTER_INTERFACE QUTER_FUNC_CALL operator /(const Vector3D& Union, double Value) noexcept;
-	}
-	namespace MainType
+	public:
+		Vec3D Ths operator ()() const;
+		double& Ths operator [](std::size_t i) &;
+		const double& Ths operator [](std::size_t i) const&;
+		Vec3D& Ths operator +=(const Vec3D& O) &;
+		Vec3D& Ths operator +=(const std::initializer_list<Vec3D>& O) &;
+		Vec3D& Ths operator -=(const Vec3D& O) &;
+		Vec3D& Ths operator -=(const std::initializer_list<Vec3D>& O) &;
+		Vec3D& Ths operator *=(double O) &;
+		Vec3D& Ths operator *=(const std::initializer_list<double>& O) &;
+		Vec3D& Ths operator /=(double O) &;
+		Vec3D& Ths operator /=(const std::initializer_list<double>& O) &;
+		///
+		/// multiples
+		///
+	public:
+		static double Gbl Dot(const Vec3D& U, const Vec3D& V);
+		static Vec3D Gbl Cross(const Vec3D& U, const Vec3D& V);
+		///
+		/// fundamentals
+		///
+	public:
+		static double Gbl Abs(const Vec3D& V);
+		static Vec3D Gbl Sgn(const Vec3D& V);
+		///
+		/// conventions
+		///
+	public:
+		static std::wstring Gbl Str(const Vec3D& V);
+		static Vec3D Gbl Val(const std::wstring& V);
+	};
+	///
+	/// operators
+	///
+	bool I Gbl operator ==(const Vec3D& U, const Vec3D& V);
+	bool I Gbl operator !=(const Vec3D& U, const Vec3D& V);
+	Vec3D I Gbl operator +(const Vec3D& V);
+	Vec3D I Gbl operator -(const Vec3D& V);
+	Vec3D I Gbl operator +(const Vec3D& U, const Vec3D& V);
+	Vec3D I Gbl operator -(const Vec3D& U, const Vec3D& V);
+	Vec3D I Gbl operator *(const Vec3D& U, double V);
+	Vec3D I Gbl operator *(double U, const Vec3D& V);
+	Vec3D I Gbl operator /(const Vec3D& U, double V);
+	struct I Quter
 	{
-		enum struct index : std::int64_t
-		{
-			s = 0,
-			i = 1,
-			j = 2,
-			k = 3,
-		};
-		struct QUTER_INTERFACE Quaternion
-		{
-		public:
-			///
-			/// constants
-			///
-			static const double pi;
-			static const double e;
-			static const Quaternion i;
-			static const Quaternion j;
-			static const Quaternion k;
-		private:
-			///
-			/// basis
-			///
-			double real;
-			BaseType::Vector3D imaginary;
-		public:
-			explicit QUTER_FUNC_INSTANCE_CALL Quaternion() noexcept;
-			explicit QUTER_FUNC_INSTANCE_CALL Quaternion(double s, const BaseType::Vector3D& v) noexcept;
-			explicit QUTER_FUNC_INSTANCE_CALL Quaternion(double s, double i, double j, double k) noexcept;
-			QUTER_FUNC_INSTANCE_CALL Quaternion(double Value) noexcept;
-			QUTER_FUNC_INSTANCE_CALL Quaternion(const BaseType::Vector3D& Value) noexcept;
-			QUTER_FUNC_INSTANCE_CALL Quaternion(const Quaternion& Value) noexcept;
-			static double QUTER_FUNC_CALL Scalar(const Quaternion& Value) noexcept;
-			static BaseType::Vector3D QUTER_FUNC_CALL Vector(const Quaternion& Value) noexcept;
-            ///
-			/// operators
-			///
-			const Quaternion QUTER_FUNC_INSTANCE_CALL operator ()() const noexcept;
-			double& QUTER_FUNC_INSTANCE_CALL operator [](index i) &;
-			double& QUTER_FUNC_INSTANCE_CALL operator [](std::size_t i) & noexcept;
-			const double& QUTER_FUNC_INSTANCE_CALL operator [](index i) const&;
-			const double& QUTER_FUNC_INSTANCE_CALL operator [](std::size_t i) const& noexcept;
-			Quaternion& QUTER_FUNC_INSTANCE_CALL operator ++() & noexcept;
-			const Quaternion QUTER_FUNC_INSTANCE_CALL operator ++(int) & noexcept;
-			Quaternion& QUTER_FUNC_INSTANCE_CALL operator --() & noexcept;
-			const Quaternion QUTER_FUNC_INSTANCE_CALL operator --(int) & noexcept;
-			Quaternion& QUTER_FUNC_INSTANCE_CALL operator =(const Quaternion& Value) & noexcept;
-			Quaternion& QUTER_FUNC_INSTANCE_CALL operator +=(const Quaternion& Value) & noexcept;
-			Quaternion& QUTER_FUNC_INSTANCE_CALL operator +=(const std::initializer_list<Quaternion>& Value) & noexcept;
-			Quaternion& QUTER_FUNC_INSTANCE_CALL operator -=(const Quaternion& Value) & noexcept;
-			Quaternion& QUTER_FUNC_INSTANCE_CALL operator -=(const std::initializer_list<Quaternion>& Value) & noexcept;
-			Quaternion& QUTER_FUNC_INSTANCE_CALL operator *=(const Quaternion& Value) & noexcept;
-			Quaternion& QUTER_FUNC_INSTANCE_CALL operator *=(const std::initializer_list<Quaternion>& Value) & noexcept;
-			Quaternion& QUTER_FUNC_INSTANCE_CALL operator /=(const Quaternion& Value) & noexcept;
-			Quaternion& QUTER_FUNC_INSTANCE_CALL operator /=(const std::initializer_list<Quaternion>& Value) & noexcept;
-			Quaternion& QUTER_FUNC_INSTANCE_CALL operator ^=(std::int64_t Exponent) & noexcept;
-			Quaternion& QUTER_FUNC_INSTANCE_CALL operator ^=(const std::initializer_list<std::int64_t>& Exponent) & noexcept;
-			///
-			/// fundamentals
-			///
-			static double QUTER_FUNC_CALL abs(const Quaternion& Value);
-			static double QUTER_FUNC_CALL arg(const Quaternion& Value);
-			static double QUTER_FUNC_CALL arg(const Quaternion& Value, std::int64_t Theta);
-			static Quaternion QUTER_FUNC_CALL conjg(const Quaternion& Value);
-			static Quaternion QUTER_FUNC_CALL sgn(const Quaternion& Value);
-			static Quaternion QUTER_FUNC_CALL inverse(const Quaternion& Value);
-			static Quaternion QUTER_FUNC_CALL exp(const Quaternion& Value);
-			static Quaternion QUTER_FUNC_CALL ln(const Quaternion& Value);
-			static Quaternion QUTER_FUNC_CALL ln(const Quaternion& Value, std::int64_t Theta);
-			///
-			/// multiples
-			///
-			static double QUTER_FUNC_CALL dot(const Quaternion& Union, const Quaternion& Value) noexcept;
-			static BaseType::Vector3D QUTER_FUNC_CALL outer(const Quaternion& Union, const Quaternion& Value) noexcept;
-			static Quaternion QUTER_FUNC_CALL even(const Quaternion& Union, const Quaternion& Value) noexcept;
-			static BaseType::Vector3D QUTER_FUNC_CALL cross(const Quaternion& Union, const Quaternion& Value) noexcept;
-			///
-			/// exponentials
-			///
-			static Quaternion QUTER_FUNC_CALL power(const Quaternion& Base, const Quaternion& Exponent);
-			static Quaternion QUTER_FUNC_CALL power(const Quaternion& Base, const Quaternion& Exponent, std::int64_t Theta, std::int64_t Phi, std::int64_t Tau);
-			static Quaternion QUTER_FUNC_CALL power(const Quaternion& Base, double Exponent);
-			static Quaternion QUTER_FUNC_CALL power(const Quaternion& Base, double Exponent, std::int64_t Theta);
-			static Quaternion QUTER_FUNC_CALL root(const Quaternion& Base, const Quaternion& Exponent);
-			static Quaternion QUTER_FUNC_CALL root(const Quaternion& Base, const Quaternion& Exponent, std::int64_t Theta, std::int64_t Phi, std::int64_t Tau);
-			static Quaternion QUTER_FUNC_CALL root(const Quaternion& Base, double Exponent);
-			static Quaternion QUTER_FUNC_CALL root(const Quaternion& Base, double Exponent, std::int64_t Theta);
-			static Quaternion QUTER_FUNC_CALL log(const Quaternion& Base, const Quaternion& Number);
-			static Quaternion QUTER_FUNC_CALL log(const Quaternion& Base, const Quaternion& Number, std::int64_t Theta, std::int64_t Phi, std::int64_t Tau, std::int64_t Omega);
-			///
-			/// trigonometrics
-			///
-			static Quaternion QUTER_FUNC_CALL sin(const Quaternion& Value);
-			static Quaternion QUTER_FUNC_CALL arcsin(const Quaternion& Value);
-			static Quaternion QUTER_FUNC_CALL arcsin(const Quaternion& Value, bool Sign, std::int64_t Period);
-			static Quaternion QUTER_FUNC_CALL sinh(const Quaternion& Value);
-			static Quaternion QUTER_FUNC_CALL arcsinh(const Quaternion& Value);
-			static Quaternion QUTER_FUNC_CALL arcsinh(const Quaternion& Value, bool Sign, std::int64_t Period);
-			static Quaternion QUTER_FUNC_CALL cos(const Quaternion& Value);
-			static Quaternion QUTER_FUNC_CALL arccos(const Quaternion& Value);
-			static Quaternion QUTER_FUNC_CALL arccos(const Quaternion& Value, bool Sign, std::int64_t Period);
-			static Quaternion QUTER_FUNC_CALL cosh(const Quaternion& Value);
-			static Quaternion QUTER_FUNC_CALL arccosh(const Quaternion& Value);
-			static Quaternion QUTER_FUNC_CALL arccosh(const Quaternion& Value, bool Sign, std::int64_t Period);
-			static Quaternion QUTER_FUNC_CALL tan(const Quaternion& Value);
-			static Quaternion QUTER_FUNC_CALL arctan(const Quaternion& Value);
-			static Quaternion QUTER_FUNC_CALL arctan(const Quaternion& Value, bool Sign, std::int64_t Period);
-			static Quaternion QUTER_FUNC_CALL tanh(const Quaternion& Value);
-			static Quaternion QUTER_FUNC_CALL arctanh(const Quaternion& Value);
-			static Quaternion QUTER_FUNC_CALL arctanh(const Quaternion& Value, bool Sign, std::int64_t Period);
-			static Quaternion QUTER_FUNC_CALL csc(const Quaternion& Value);
-			static Quaternion QUTER_FUNC_CALL arccsc(const Quaternion& Value);
-			static Quaternion QUTER_FUNC_CALL arccsc(const Quaternion& Value, bool Sign, std::int64_t Period);
-			static Quaternion QUTER_FUNC_CALL csch(const Quaternion& Value);
-			static Quaternion QUTER_FUNC_CALL arccsch(const Quaternion& Value);
-			static Quaternion QUTER_FUNC_CALL arccsch(const Quaternion& Value, bool Sign, std::int64_t Period);
-			static Quaternion QUTER_FUNC_CALL sec(const Quaternion& Value);
-			static Quaternion QUTER_FUNC_CALL arcsec(const Quaternion& Value);
-			static Quaternion QUTER_FUNC_CALL arcsec(const Quaternion& Value, bool Sign, std::int64_t Period);
-			static Quaternion QUTER_FUNC_CALL sech(const Quaternion& Value);
-			static Quaternion QUTER_FUNC_CALL arcsech(const Quaternion& Value);
-			static Quaternion QUTER_FUNC_CALL arcsech(const Quaternion& Value, bool Sign, std::int64_t Period);
-			static Quaternion QUTER_FUNC_CALL cot(const Quaternion& Value);
-			static Quaternion QUTER_FUNC_CALL arccot(const Quaternion& Value);
-			static Quaternion QUTER_FUNC_CALL arccot(const Quaternion& Value, bool Sign, std::int64_t Period);
-			static Quaternion QUTER_FUNC_CALL coth(const Quaternion& Value);
-			static Quaternion QUTER_FUNC_CALL arccoth(const Quaternion& Value);
-			static Quaternion QUTER_FUNC_CALL arccoth(const Quaternion& Value, bool Sign, std::int64_t Period);
-			///
-			/// conventions
-			///
-			static std::wstring QUTER_FUNC_CALL GetString(const Quaternion& Value);
-			static Quaternion QUTER_FUNC_CALL GetInstance(const std::wstring& Value);
-		};
+		///
+		/// constants
+		///
+	public:
+		static const Quter Zero;
+		static const Quter i;
+		static const Quter j;
+		static const Quter k;
+		///
+		/// basis
+		///
+	private:
+		double Re;
+		Vec3D Im;
+	public:
+		explicit Ths Quter();
+		explicit Ths Quter(double s, const Vec3D& v);
+		explicit Ths Quter(double s, double i, double j, double k);
+		Ths Quter(double V);
+		Ths Quter(const Vec3D& V);
+		static double Gbl Scalar(const Quter& V);
+		static Vec3D Gbl Vector(const Quter& V);
 		///
 		/// operators
 		///
-		bool QUTER_INTERFACE QUTER_FUNC_CALL operator ==(const Quaternion& Union, const Quaternion& Value) noexcept;
-		bool QUTER_INTERFACE QUTER_FUNC_CALL operator !=(const Quaternion& Union, const Quaternion& Value) noexcept;
-		Quaternion QUTER_INTERFACE QUTER_FUNC_CALL operator +(const Quaternion& Value) noexcept;
-		Quaternion QUTER_INTERFACE QUTER_FUNC_CALL operator -(const Quaternion& Value) noexcept;
-		Quaternion QUTER_INTERFACE QUTER_FUNC_CALL operator ~(const Quaternion& Value) noexcept;
-		Quaternion QUTER_INTERFACE QUTER_FUNC_CALL operator +(const Quaternion& Union, const Quaternion& Value) noexcept;
-		Quaternion QUTER_INTERFACE QUTER_FUNC_CALL operator -(const Quaternion& Union, const Quaternion& Value) noexcept;
-		Quaternion QUTER_INTERFACE QUTER_FUNC_CALL operator *(const Quaternion& Union, const Quaternion& Value) noexcept;
-		Quaternion QUTER_INTERFACE QUTER_FUNC_CALL operator /(const Quaternion& Union, const Quaternion& Value) noexcept;
-		Quaternion QUTER_INTERFACE QUTER_FUNC_CALL operator ^(const Quaternion& Base, std::int64_t Exponent) noexcept;
-	}
+	public:
+		Quter Ths operator ()() const;
+		double& Ths operator [](std::size_t i) &;
+		const double& Ths operator [](std::size_t i) const&;
+		Quter& Ths operator ++() &;
+		Quter Ths operator ++(int) &;
+		Quter& Ths operator --() &;
+		Quter Ths operator --(int) &;
+		Quter& Ths operator +=(const Quter& O) &;
+		Quter& Ths operator +=(const std::initializer_list<Quter>& O) &;
+		Quter& Ths operator -=(const Quter& O) &;
+		Quter& Ths operator -=(const std::initializer_list<Quter>& O) &;
+		Quter& Ths operator *=(const Quter& O) &;
+		Quter& Ths operator *=(const std::initializer_list<Quter>& O) &;
+		Quter& Ths operator /=(const Quter& O) &;
+		Quter& Ths operator /=(const std::initializer_list<Quter>& O) &;
+		Quter& Ths operator ^=(std::int64_t O) &;
+		Quter& Ths operator ^=(const std::initializer_list<std::int64_t>& O) &;
+		///
+		/// multiples
+		///
+	public:
+		static double Gbl Dot(const Quter& U, const Quter& V);
+		static Vec3D Gbl Outer(const Quter& U, const Quter& V);
+		static Quter Gbl Even(const Quter& U, const Quter& V);
+		static Vec3D Gbl Cross(const Quter& U, const Quter& V);
+		///
+		/// fundamentals
+		///
+	public:
+		static double Gbl Abs(const Quter& V);
+		static double Gbl Arg(const Quter& V, std::int64_t P);
+		static double Gbl Arg(const Quter& V);
+		static Quter Gbl Conjg(const Quter& V);
+		static Quter Gbl Sgn(const Quter& V);
+		static Quter Gbl Inverse(const Quter& V);
+		static Quter Gbl Exp(const Quter& V);
+		static Quter Gbl Ln(const Quter& V, std::int64_t P);
+		static Quter Gbl Ln(const Quter& V);
+		///
+		/// exponentials
+		///
+	public:
+		static Quter Gbl Power(const Quter& U, const Quter& V, std::int64_t z1, std::int64_t z2, std::int64_t z3);
+		static Quter Gbl Power(const Quter& U, const Quter& V);
+		static Quter Gbl Power(const Quter& U, double V, std::int64_t P);
+		static Quter Gbl Power(const Quter& U, double V);
+		static Quter Gbl Root(const Quter& U, const Quter& V, std::int64_t z1, std::int64_t z2, std::int64_t z3);
+		static Quter Gbl Root(const Quter& U, const Quter& V);
+		static Quter Gbl Root(const Quter& U, double V, std::int64_t P);
+		static Quter Gbl Root(const Quter& U, double V);
+		static Quter Gbl Log(const Quter& U, const Quter& V, std::int64_t z1, std::int64_t z2, std::int64_t z3, std::int64_t z4);
+		static Quter Gbl Log(const Quter& U, const Quter& V);
+		///
+		/// trigonometrics
+		///
+	public:
+		static Quter Gbl Sin(const Quter& V);
+		static Quter Gbl Cos(const Quter& V);
+		static Quter Gbl Tan(const Quter& V);
+		static Quter Gbl Csc(const Quter& V);
+		static Quter Gbl Sec(const Quter& V);
+		static Quter Gbl Cot(const Quter& V);
+		static Quter Gbl Sinh(const Quter& V);
+		static Quter Gbl Cosh(const Quter& V);
+		static Quter Gbl Tanh(const Quter& V);
+		static Quter Gbl Csch(const Quter& V);
+		static Quter Gbl Sech(const Quter& V);
+		static Quter Gbl Coth(const Quter& V);
+		static Quter Gbl Arcsin(const Quter& V, bool S, std::int64_t P);
+		static Quter Gbl Arcsin(const Quter& V);
+		static Quter Gbl Arccos(const Quter& V, bool S, std::int64_t P);
+		static Quter Gbl Arccos(const Quter& V);
+		static Quter Gbl Arctan(const Quter& V, bool S, std::int64_t P);
+		static Quter Gbl Arctan(const Quter& V);
+		static Quter Gbl Arccsc(const Quter& V, bool S, std::int64_t P);
+		static Quter Gbl Arccsc(const Quter& V);
+		static Quter Gbl Arcsec(const Quter& V, bool S, std::int64_t P);
+		static Quter Gbl Arcsec(const Quter& V);
+		static Quter Gbl Arccot(const Quter& V, bool S, std::int64_t P);
+		static Quter Gbl Arccot(const Quter& V);
+		static Quter Gbl Arcsinh(const Quter& V, bool S, std::int64_t P);
+		static Quter Gbl Arcsinh(const Quter& V);
+		static Quter Gbl Arccosh(const Quter& V, bool S, std::int64_t P);
+		static Quter Gbl Arccosh(const Quter& V);
+		static Quter Gbl Arctanh(const Quter& V, bool S, std::int64_t P);
+		static Quter Gbl Arctanh(const Quter& V);
+		static Quter Gbl Arccsch(const Quter& V, bool S, std::int64_t P);
+		static Quter Gbl Arccsch(const Quter& V);
+		static Quter Gbl Arcsech(const Quter& V, bool S, std::int64_t P);
+		static Quter Gbl Arcsech(const Quter& V);
+		static Quter Gbl Arccoth(const Quter& V, bool S, std::int64_t P);
+		static Quter Gbl Arccoth(const Quter& V);
+		///
+		/// conventions
+		///
+	public:
+		static std::wstring Gbl Str(const Quter& V);
+		static Quter Gbl Val(const std::wstring& V);
+	};
+	///
+	/// operators
+	///
+	bool I Gbl operator ==(const Quter& U, const Quter& V);
+	bool I Gbl operator !=(const Quter& U, const Quter& V);
+	Quter I Gbl operator +(const Quter& V);
+	Quter I Gbl operator -(const Quter& V);
+	Quter I Gbl operator ~(const Quter& V);
+	Quter I Gbl operator +(const Quter& U, const Quter& V);
+	Quter I Gbl operator -(const Quter& U, const Quter& V);
+	Quter I Gbl operator *(const Quter& U, const Quter& V);
+	Quter I Gbl operator /(const Quter& U, const Quter& V);
+	Quter I Gbl operator ^(const Quter& U, std::int64_t V);
 }
+#pragma pop_macro("Ths")
+#pragma pop_macro("Gbl")
+#pragma pop_macro("I")
 #pragma pack(pop)
 #endif
 #endif

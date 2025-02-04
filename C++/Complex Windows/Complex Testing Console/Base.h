@@ -96,22 +96,22 @@ inline std::int64_t stoi64_t(const std::wstring& str)
 	return wtoi64_t(str.c_str());
 };
 template <typename T>
-inline std::wstring to_wstring(T o) { return T::GetString(o); };
+inline std::wstring ToModStr(T o) { return T::Str(o); };
 template <>
-inline std::wstring to_wstring<double>(double o) { return DoubleToString(o); };
+inline std::wstring ToModStr<double>(double o) { return DoubleToString(o); };
 template <>
-inline std::wstring to_wstring<std::size_t>(std::size_t o) { return std::to_wstring(o); };
+inline std::wstring ToModStr<std::size_t>(std::size_t o) { return std::to_wstring(o); };
 template <>
-inline std::wstring to_wstring<std::int64_t>(std::int64_t o) { return std::to_wstring(o); };
+inline std::wstring ToModStr<std::int64_t>(std::int64_t o) { return std::to_wstring(o); };
 template <>
-inline std::wstring to_wstring<bool>(bool o) { return o ? L"true" : L"false"; };
-inline std::int64_t ParseAsInteger(const std::wstring& Value)
+inline std::wstring ToModStr<bool>(bool o) { return o ? L"true" : L"false"; };
+inline std::int64_t AsInt(const std::wstring& V)
 {
-	return stoi64_t(Replace(Value, L" ", L""));
+	return stoi64_t(Replace(V, L" ", L""));
 };
-inline double ParseAsReal(const std::wstring& Value)
+inline double AsReal(const std::wstring& V)
 {
-	std::wstring Replaced = Replace(Value, L" ", L"");
+	std::wstring Replaced = Replace(V, L" ", L"");
 	std::size_t Processed = 0;
 	double Result = 0;
 	try { Result = std::stod(Replaced, &Processed); }
@@ -154,105 +154,99 @@ namespace ComplexTestingConsole
 		static std::wstring Comment();
 		static void Startup(const std::wstring& Title);
 	};
-	template <std::size_t I, std::size_t S>
-	std::wstring get_angle_name(std::integral_constant<std::size_t, I>, const std::array<const wchar_t*, S>& Angle)
+	template <std::size_t I>
+	std::wstring GetName(std::integral_constant<std::size_t, I>)
 	{
-		return I < S ? std::get<I>(Angle) : L"Angle" + to_wstring(I);
+		return L"z" + ToModStr(I);
 	};
 	template <typename... Args>
-	std::wstring get_output_prepend_impl(const std::wstring& prepend, const std::wstring& midend, const std::wstring& append, std::int64_t arg)
+	std::wstring PowPrependImpl(const std::wstring& Beg, const std::wstring& Mid, const std::wstring& End, std::int64_t I)
 	{
-		return prepend + to_wstring(arg) + append;
+		return Beg + ToModStr(I) + End;
 	};
 	template <typename... Args>
-	std::wstring get_output_prepend_impl(const std::wstring& prepend, const std::wstring& midend, const std::wstring& append, std::int64_t arg, Args... args)
+	std::wstring PowPrependImpl(const std::wstring& Beg, const std::wstring& Mid, const std::wstring& End, std::int64_t I, Args... Is)
 	{
-		return get_output_prepend_impl(prepend + to_wstring(arg) + midend, midend, append, args...);
+		return PowPrependImpl(Beg + ToModStr(I) + Mid, Mid, End, Is...);
 	};
 	template <typename... Args>
-	std::wstring get_output_prepend(const std::wstring& RightValue, Args... Temp)
+	std::wstring PowPrepend(const std::wstring& R, Args... Tmp)
 	{
-		return get_output_prepend_impl(RightValue + L"(", L", ", L") = ", Temp...);
+		return PowPrependImpl(R + L"(", L", ", L") = ", Tmp...);
 	};
-	template <typename T, std::size_t I = 0, std::size_t A, std::size_t S>
-	void power_get_impl(std::array<T, A>& Data, const std::array<const wchar_t*, S>& Angle)
+	template <typename T, std::size_t I = 0, std::size_t A>
+	void PowGet(std::array<T, A>& Dat)
 	{
 		if constexpr (I < A)
 		{
 			const wchar_t* Assign = L" = ";
 			if constexpr (std::is_same_v<T, std::int64_t>)
 			{
-				std::get<I>(Data) = ParseAsInteger(Base::Input(get_angle_name(std::integral_constant<std::size_t, I>{}, Angle) + Assign));
+				std::get<I>(Dat) = AsInt(Base::Input(GetName(std::integral_constant<std::size_t, I>{}) + Assign));
 			}
 			else if constexpr (std::is_same_v<T, std::pair<std::int64_t, std::int64_t>>)
 			{
-				std::int64_t Min = ParseAsInteger(Base::Input(get_angle_name(std::integral_constant<std::size_t, I>{}, Angle) + L"Min" + Assign));
-				std::int64_t Max = ParseAsInteger(Base::Input(get_angle_name(std::integral_constant<std::size_t, I>{}, Angle) + L"Max" + Assign));
-				std::get<I>(Data) = std::make_pair<std::int64_t, std::int64_t>(std::move(Min), std::move(Max));
+				std::int64_t Min = AsInt(Base::Input(GetName(std::integral_constant<std::size_t, I>{}) + L"(min)" + Assign));
+				std::int64_t Max = AsInt(Base::Input(GetName(std::integral_constant<std::size_t, I>{}) + L"(max)" + Assign));
+				std::get<I>(Dat) = std::make_pair<std::int64_t, std::int64_t>(std::move(Min), std::move(Max));
 			}
 			if constexpr (I < A)
 			{
-				power_get_impl<T, I + 1, A, S>(Data, Angle);
+				PowGet<T, I + 1, A>(Dat);
 			}
 		}
 	};
-	template <typename T, std::size_t A>
-	void power_get(std::array<T, A>& Data)
+	template <typename F, typename N, std::size_t A, std::size_t... I>
+	void PowRstImpl(F S, const N& Union, const N& Value, const std::array<std::int64_t, A>& Dat, std::integer_sequence<std::size_t, I...>)
 	{
-		std::array<const wchar_t*, 4> Angle{ L"Theta", L"Phi", L"Tau", L"Omega" };
-		power_get_impl(Data, Angle);
+		Base::Output(ToModStr(std::invoke(S, Union, Value, std::get<I>(Dat)...)));
 	};
 	template <typename F, typename N, std::size_t A, std::size_t... I>
-	void power_result_impl(F Subroutine, const N& Union, const N& Value, const std::array<std::int64_t, A>& Data, std::integer_sequence<std::size_t, I...>)
-	{
-		Base::Output(to_wstring(std::invoke(Subroutine, Union, Value, std::get<I>(Data)...)));
-	};
-	template <typename F, typename N, std::size_t A, std::size_t... I>
-	void power_result_impl(F Subroutine, const std::wstring& RightValue, const N& Union, const N& Value, const std::array<std::int64_t, A>& Temp, std::integer_sequence<std::size_t, I...>)
+	void PowRstImpl(F S, const std::wstring& R, const N& Union, const N& Value, const std::array<std::int64_t, A>& Tmp, std::integer_sequence<std::size_t, I...>)
 	{
 		Base::Output(
-			get_output_prepend(RightValue, std::get<I>(Temp)...),
-			to_wstring(std::invoke(Subroutine, Union, Value, std::get<I>(Temp)...))
+			PowPrepend(R, std::get<I>(Tmp)...),
+			ToModStr(std::invoke(S, Union, Value, std::get<I>(Tmp)...))
 		);
 	};
 	template <typename F, typename N, std::size_t A, std::size_t I = 0>
-	void power_result_impl(F Subroutine, const std::wstring& RightValue, const N& Union, const N& Value, const std::array<std::pair<std::int64_t, std::int64_t>, A>& Data, std::array<std::int64_t, A>& Temp)
+	void PowRstImpl(F S, const std::wstring& R, const N& Union, const N& Value, const std::array<std::pair<std::int64_t, std::int64_t>, A>& Dat, std::array<std::int64_t, A>& Tmp)
 	{
 		if constexpr (I < A)
 		{
-			while (std::get<I>(Temp) <= std::get<I>(Data).second)
+			while (std::get<I>(Tmp) <= std::get<I>(Dat).second)
 			{
-				power_result_impl<F, N, A, I + 1>(Subroutine, RightValue, Union, Value, Data, Temp);
-				std::get<I>(Temp) = std::get<I>(Temp) + 1;
+				PowRstImpl<F, N, A, I + 1>(S, R, Union, Value, Dat, Tmp);
+				std::get<I>(Tmp) = std::get<I>(Tmp) + 1;
 			}
-			std::get<I>(Temp) = std::get<I>(Data).first;
+			std::get<I>(Tmp) = std::get<I>(Dat).first;
 		}
 		else if constexpr (I == A)
 		{
-			power_result_impl(Subroutine, RightValue, Union, Value, Temp, std::make_index_sequence<A>{});
+			PowRstImpl(S, R, Union, Value, Tmp, std::make_index_sequence<A>{});
 		}
 	};
 	template <std::size_t A, std::size_t I = 0>
-	void power_temp_init(const std::array<std::pair<std::int64_t, std::int64_t>, A>& Data, std::array<std::int64_t, A>& Temp)
+	void PowTmp(const std::array<std::pair<std::int64_t, std::int64_t>, A>& Dat, std::array<std::int64_t, A>& Tmp)
 	{
 		if constexpr (I < A)
 		{
-			std::get<I>(Temp) = std::get<I>(Data).first;
-			power_temp_init<A, I + 1>(Data, Temp);
+			std::get<I>(Tmp) = std::get<I>(Dat).first;
+			PowTmp<A, I + 1>(Dat, Tmp);
 		}
 	};
 	template <typename T, typename F, typename N, std::size_t A>
-	void power_result(F Subroutine, const std::wstring& RightValue, const N& Union, const N& Value, const std::array<T, A>& Data)
+	void PowRst(F S, const std::wstring& R, const N& Union, const N& Value, const std::array<T, A>& Dat)
 	{
 		if constexpr (std::is_same_v<T, std::int64_t>)
 		{
-			power_result_impl(Subroutine, Union, Value, Data, std::make_index_sequence<A>{});
+			PowRstImpl(S, Union, Value, Dat, std::make_index_sequence<A>{});
 		}
 		else if constexpr (std::is_same_v<T, std::pair<std::int64_t, std::int64_t>>)
 		{
-			std::array<std::int64_t, A> Temp{};
-			power_temp_init(Data, Temp);
-			power_result_impl(Subroutine, RightValue, Union, Value, Data, Temp);
+			std::array<std::int64_t, A> Tmp{};
+			PowTmp(Dat, Tmp);
+			PowRstImpl(S, R, Union, Value, Dat, Tmp);
 		}
 	};
 }

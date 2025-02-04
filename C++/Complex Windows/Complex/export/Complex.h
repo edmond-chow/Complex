@@ -18,262 +18,226 @@
 #ifndef CMPLX
 #define CMPLX
 #include <string>
-#include <stdexcept>
 #pragma pack(push)
-#pragma push_macro("CALL")
-#pragma push_macro("CMPLX_INTERFACE")
-#pragma push_macro("CMPLX_FUNC_CALL")
-#pragma push_macro("CMPLX_FUNC_INSTANCE_CALL")
-#if defined(X86) || defined(ARM)
-#pragma pack(4)
-#elif defined(X64) || defined(ARM64)
+#pragma push_macro("I")
+#pragma push_macro("Gbl")
+#pragma push_macro("Ths")
 #pragma pack(8)
-#endif
-#if defined(__GNUG__)
-#define CALL(c) __attribute__((c))
-#define CMPLX_INTERFACE __attribute__((dllimport))
-#if defined(DEBUG) || defined(X86) || defined(X64)
-#define CMPLX_FUNC_CALL CALL(__stdcall__)
-#elif defined(RELEASE) || defined(X86) || defined(X64)
-#define CMPLX_FUNC_CALL CALL(__fastcall__)
+#if defined(_MSVC_LANG)
+#define I __declspec(dllimport)
+#define Gbl __stdcall
+#define Ths __thiscall
 #else
-#define CMPLX_FUNC_CALL
+#define I
+#define Gbl
+#define Ths
 #endif
-#define CMPLX_FUNC_INSTANCE_CALL CALL(__thiscall__)
-#elif defined(_MSVC_LANG)
-#define CALL(c) c
-#define CMPLX_INTERFACE __declspec(dllimport)
-#if defined(DEBUG) || defined(X86) || defined(X64)
-#define CMPLX_FUNC_CALL CALL(__stdcall)
-#elif defined(RELEASE) || defined(X86) || defined(X64)
-#define CMPLX_FUNC_CALL CALL(__fastcall)
-#else
-#define CMPLX_FUNC_CALL
-#endif
-#define CMPLX_FUNC_INSTANCE_CALL CALL(__thiscall)
-#else
-#define CALL(c)
-#define CMPLX_INTERFACE
-#define CMPLX_FUNC_CALL
-#define CMPLX_FUNC_INSTANCE_CALL
-#endif
-namespace Cmplx
+namespace Num
 {
-	namespace BaseType
+	struct I Vec1D
 	{
-		enum struct index : std::int64_t
-		{
-			e1 = 1,
-		};
-		struct CMPLX_INTERFACE Vector1D
-		{
-		public:
-			///
-			/// constants
-			///
-			static const double pi;
-			static const double e;
-			static const Vector1D e1;
-		private:
-			///
-			/// basis
-			///
-			double x1;
-		public:
-			explicit CMPLX_FUNC_INSTANCE_CALL Vector1D() noexcept;
-			explicit CMPLX_FUNC_INSTANCE_CALL Vector1D(double x1) noexcept;
-			CMPLX_FUNC_INSTANCE_CALL Vector1D(const Vector1D& Value) noexcept;
-			///
-			/// operators
-			///
-			Vector1D CMPLX_FUNC_INSTANCE_CALL operator ()() const noexcept;
-			double& CMPLX_FUNC_INSTANCE_CALL operator [](index i) &;
-			double& CMPLX_FUNC_INSTANCE_CALL operator [](std::size_t i) & noexcept;
-			const double& CMPLX_FUNC_INSTANCE_CALL operator [](index i) const&;
-			const double& CMPLX_FUNC_INSTANCE_CALL operator [](std::size_t i) const& noexcept;
-			Vector1D& CMPLX_FUNC_INSTANCE_CALL operator =(const Vector1D& Value) & noexcept;
-			Vector1D& CMPLX_FUNC_INSTANCE_CALL operator +=(const Vector1D& Value) & noexcept;
-			Vector1D& CMPLX_FUNC_INSTANCE_CALL operator +=(const std::initializer_list<Vector1D>& Value) & noexcept;
-			Vector1D& CMPLX_FUNC_INSTANCE_CALL operator -=(const Vector1D& Value) & noexcept;
-			Vector1D& CMPLX_FUNC_INSTANCE_CALL operator -=(const std::initializer_list<Vector1D>& Value) & noexcept;
-			Vector1D& CMPLX_FUNC_INSTANCE_CALL operator *=(double Value) & noexcept;
-			Vector1D& CMPLX_FUNC_INSTANCE_CALL operator *=(const std::initializer_list<double>& Value) & noexcept;
-			Vector1D& CMPLX_FUNC_INSTANCE_CALL operator /=(double Value) & noexcept;
-			Vector1D& CMPLX_FUNC_INSTANCE_CALL operator /=(const std::initializer_list<double>& Value) & noexcept;
-			///
-			/// fundamentals
-			///
-			static double CMPLX_FUNC_CALL abs(const Vector1D& Value);
-			static Vector1D CMPLX_FUNC_CALL sgn(const Vector1D& Value);
-			static double CMPLX_FUNC_CALL dot(const Vector1D& Union, const Vector1D& Value) noexcept;
-			static Vector1D CMPLX_FUNC_CALL cross(const Vector1D& Union, const Vector1D& Value) noexcept;
-			///
-			/// conventions
-			///
-			static std::wstring CMPLX_FUNC_CALL GetString(const Vector1D& Value);
-			static Vector1D CMPLX_FUNC_CALL GetInstance(const std::wstring& Value);
-		};
+		///
+		/// constants
+		///
+	public:
+		static const Vec1D Zero;
+		static const Vec1D e1;
+		///
+		/// basis
+		///
+	private:
+		double x1;
+	public:
+		explicit Ths Vec1D();
+		explicit Ths Vec1D(double e1);
 		///
 		/// operators
 		///
-		bool CMPLX_INTERFACE CMPLX_FUNC_CALL operator ==(const Vector1D& Union, const Vector1D& Value) noexcept;
-		bool CMPLX_INTERFACE CMPLX_FUNC_CALL operator !=(const Vector1D& Union, const Vector1D& Value) noexcept;
-		Vector1D CMPLX_INTERFACE CMPLX_FUNC_CALL operator +(const Vector1D& Value) noexcept;
-		Vector1D CMPLX_INTERFACE CMPLX_FUNC_CALL operator -(const Vector1D& Value) noexcept;
-		Vector1D CMPLX_INTERFACE CMPLX_FUNC_CALL operator +(const Vector1D& Union, const Vector1D& Value) noexcept;
-		Vector1D CMPLX_INTERFACE CMPLX_FUNC_CALL operator -(const Vector1D& Union, const Vector1D& Value) noexcept;
-		Vector1D CMPLX_INTERFACE CMPLX_FUNC_CALL operator *(double Union, const Vector1D& Value) noexcept;
-		Vector1D CMPLX_INTERFACE CMPLX_FUNC_CALL operator *(const Vector1D& Union, double Value) noexcept;
-		Vector1D CMPLX_INTERFACE CMPLX_FUNC_CALL operator /(const Vector1D& Union, double Value) noexcept;
-	}
-	namespace MainType
+	public:
+		Vec1D Ths operator ()() const;
+		double& Ths operator [](std::size_t i) &;
+		const double& Ths operator [](std::size_t i) const&;
+		Vec1D& Ths operator +=(const Vec1D& O) &;
+		Vec1D& Ths operator +=(const std::initializer_list<Vec1D>& O) &;
+		Vec1D& Ths operator -=(const Vec1D& O) &;
+		Vec1D& Ths operator -=(const std::initializer_list<Vec1D>& O) &;
+		Vec1D& Ths operator *=(double O) &;
+		Vec1D& Ths operator *=(const std::initializer_list<double>& O) &;
+		Vec1D& Ths operator /=(double O) &;
+		Vec1D& Ths operator /=(const std::initializer_list<double>& O) &;
+		///
+		/// multiples
+		///
+	public:
+		static double Gbl Dot(const Vec1D& U, const Vec1D& V);
+		static Vec1D Gbl Cross(const Vec1D& U, const Vec1D& V);
+		///
+		/// fundamentals
+		///
+	public:
+		static double Gbl Abs(const Vec1D& V);
+		static Vec1D Gbl Sgn(const Vec1D& V);
+		///
+		/// conventions
+		///
+	public:
+		static std::wstring Gbl Str(const Vec1D& V);
+		static Vec1D Gbl Val(const std::wstring& V);
+	};
+	///
+	/// operators
+	///
+	bool I Gbl operator ==(const Vec1D& U, const Vec1D& V);
+	bool I Gbl operator !=(const Vec1D& U, const Vec1D& V);
+	Vec1D I Gbl operator +(const Vec1D& V);
+	Vec1D I Gbl operator -(const Vec1D& V);
+	Vec1D I Gbl operator +(const Vec1D& U, const Vec1D& V);
+	Vec1D I Gbl operator -(const Vec1D& U, const Vec1D& V);
+	Vec1D I Gbl operator *(const Vec1D& U, double V);
+	Vec1D I Gbl operator *(double U, const Vec1D& V);
+	Vec1D I Gbl operator /(const Vec1D& U, double V);
+	struct I Cmplx
 	{
-		enum struct index : std::int64_t
-		{
-			s = 0,
-			i = 1,
-		};
-		struct CMPLX_INTERFACE Complex
-		{
-		public:
-			///
-			/// constants
-			///
-			static const double pi;
-			static const double e;
-			static const Complex i;
-		private:
-			///
-			/// basis
-			///
-			double real;
-			BaseType::Vector1D imaginary;
-		public:
-			explicit CMPLX_FUNC_INSTANCE_CALL Complex() noexcept;
-			explicit CMPLX_FUNC_INSTANCE_CALL Complex(double s, const BaseType::Vector1D& v) noexcept;
-			explicit CMPLX_FUNC_INSTANCE_CALL Complex(double s, double i) noexcept;
-			CMPLX_FUNC_INSTANCE_CALL Complex(double Value) noexcept;
-			CMPLX_FUNC_INSTANCE_CALL Complex(const BaseType::Vector1D& Value) noexcept;
-			CMPLX_FUNC_INSTANCE_CALL Complex(const Complex& Value) noexcept;
-			static double CMPLX_FUNC_CALL Scalar(const Complex& Value) noexcept;
-			static BaseType::Vector1D CMPLX_FUNC_CALL Vector(const Complex& Value) noexcept;
-			static double CMPLX_FUNC_CALL Re(const Complex& Value) noexcept;
-			static double CMPLX_FUNC_CALL Im(const Complex& Value) noexcept;
-			///
-			/// operators
-			///
-			Complex CMPLX_FUNC_INSTANCE_CALL operator ()() const noexcept;
-			double& CMPLX_FUNC_INSTANCE_CALL operator [](index i) &;
-			double& CMPLX_FUNC_INSTANCE_CALL operator [](std::size_t i) & noexcept;
-			const double& CMPLX_FUNC_INSTANCE_CALL operator [](index i) const&;
-			const double& CMPLX_FUNC_INSTANCE_CALL operator [](std::size_t i) const& noexcept;
-			Complex& CMPLX_FUNC_INSTANCE_CALL operator ++() & noexcept;
-			Complex CMPLX_FUNC_INSTANCE_CALL operator ++(int) & noexcept;
-			Complex& CMPLX_FUNC_INSTANCE_CALL operator --() & noexcept;
-			Complex CMPLX_FUNC_INSTANCE_CALL operator --(int) & noexcept;
-			Complex& CMPLX_FUNC_INSTANCE_CALL operator =(const Complex& Value) & noexcept;
-			Complex& CMPLX_FUNC_INSTANCE_CALL operator +=(const Complex& Value) & noexcept;
-			Complex& CMPLX_FUNC_INSTANCE_CALL operator +=(const std::initializer_list<Complex>& Value) & noexcept;
-			Complex& CMPLX_FUNC_INSTANCE_CALL operator -=(const Complex& Value) & noexcept;
-			Complex& CMPLX_FUNC_INSTANCE_CALL operator -=(const std::initializer_list<Complex>& Value) & noexcept;
-			Complex& CMPLX_FUNC_INSTANCE_CALL operator *=(const Complex& Value) & noexcept;
-			Complex& CMPLX_FUNC_INSTANCE_CALL operator *=(const std::initializer_list<Complex>& Value) & noexcept;
-			Complex& CMPLX_FUNC_INSTANCE_CALL operator /=(const Complex& Value) & noexcept;
-			Complex& CMPLX_FUNC_INSTANCE_CALL operator /=(const std::initializer_list<Complex>& Value) & noexcept;
-			Complex& CMPLX_FUNC_INSTANCE_CALL operator ^=(std::int64_t Exponent) & noexcept;
-			Complex& CMPLX_FUNC_INSTANCE_CALL operator ^=(const std::initializer_list<std::int64_t>& Exponent) & noexcept;
-			///
-			/// fundamentals
-			///
-			static double CMPLX_FUNC_CALL abs(const Complex& Value);
-			static double CMPLX_FUNC_CALL arg(const Complex& Value);
-			static double CMPLX_FUNC_CALL arg(const Complex& Value, std::int64_t Theta);
-			static Complex CMPLX_FUNC_CALL conjg(const Complex& Value);
-			static Complex CMPLX_FUNC_CALL sgn(const Complex& Value);
-			static Complex CMPLX_FUNC_CALL inverse(const Complex& Value);
-			static Complex CMPLX_FUNC_CALL exp(const Complex& Value);
-			static Complex CMPLX_FUNC_CALL ln(const Complex& Value);
-			static Complex CMPLX_FUNC_CALL ln(const Complex& Value, std::int64_t Theta);
-			///
-			/// multiples
-			///
-			static double CMPLX_FUNC_CALL dot(const Complex& Union, const Complex& Value) noexcept;
-			static BaseType::Vector1D CMPLX_FUNC_CALL outer(const Complex& Union, const Complex& Value) noexcept;
-			static Complex CMPLX_FUNC_CALL even(const Complex& Union, const Complex& Value) noexcept;
-			static BaseType::Vector1D CMPLX_FUNC_CALL cross(const Complex& Union, const Complex& Value) noexcept;
-			///
-			/// exponentials
-			///
-			static Complex CMPLX_FUNC_CALL power(const Complex& Base, const Complex& Exponent);
-			static Complex CMPLX_FUNC_CALL power(const Complex& Base, const Complex& Exponent, std::int64_t Theta);
-			static Complex CMPLX_FUNC_CALL power(const Complex& Base, double Exponent);
-			static Complex CMPLX_FUNC_CALL power(const Complex& Base, double Exponent, std::int64_t Theta);
-			static Complex CMPLX_FUNC_CALL root(const Complex& Base, const Complex& Exponent);
-			static Complex CMPLX_FUNC_CALL root(const Complex& Base, const Complex& Exponent, std::int64_t Theta);
-			static Complex CMPLX_FUNC_CALL root(const Complex& Base, double Exponent);
-			static Complex CMPLX_FUNC_CALL root(const Complex& Base, double Exponent, std::int64_t Theta);
-			static Complex CMPLX_FUNC_CALL log(const Complex& Base, const Complex& Number);
-			static Complex CMPLX_FUNC_CALL log(const Complex& Base, const Complex& Number, std::int64_t Theta, std::int64_t Phi);
-			///
-			/// trigonometrics
-			///
-			static Complex CMPLX_FUNC_CALL sin(const Complex& Value);
-			static Complex CMPLX_FUNC_CALL arcsin(const Complex& Value);
-			static Complex CMPLX_FUNC_CALL arcsin(const Complex& Value, bool Sign, std::int64_t Period);
-			static Complex CMPLX_FUNC_CALL sinh(const Complex& Value);
-			static Complex CMPLX_FUNC_CALL arcsinh(const Complex& Value);
-			static Complex CMPLX_FUNC_CALL arcsinh(const Complex& Value, bool Sign, std::int64_t Period);
-			static Complex CMPLX_FUNC_CALL cos(const Complex& Value);
-			static Complex CMPLX_FUNC_CALL arccos(const Complex& Value);
-			static Complex CMPLX_FUNC_CALL arccos(const Complex& Value, bool Sign, std::int64_t Period);
-			static Complex CMPLX_FUNC_CALL cosh(const Complex& Value);
-			static Complex CMPLX_FUNC_CALL arccosh(const Complex& Value);
-			static Complex CMPLX_FUNC_CALL arccosh(const Complex& Value, bool Sign, std::int64_t Period);
-			static Complex CMPLX_FUNC_CALL tan(const Complex& Value);
-			static Complex CMPLX_FUNC_CALL arctan(const Complex& Value);
-			static Complex CMPLX_FUNC_CALL arctan(const Complex& Value, bool Sign, std::int64_t Period);
-			static Complex CMPLX_FUNC_CALL tanh(const Complex& Value);
-			static Complex CMPLX_FUNC_CALL arctanh(const Complex& Value);
-			static Complex CMPLX_FUNC_CALL arctanh(const Complex& Value, bool Sign, std::int64_t Period);
-			static Complex CMPLX_FUNC_CALL csc(const Complex& Value);
-			static Complex CMPLX_FUNC_CALL arccsc(const Complex& Value);
-			static Complex CMPLX_FUNC_CALL arccsc(const Complex& Value, bool Sign, std::int64_t Period);
-			static Complex CMPLX_FUNC_CALL csch(const Complex& Value);
-			static Complex CMPLX_FUNC_CALL arccsch(const Complex& Value);
-			static Complex CMPLX_FUNC_CALL arccsch(const Complex& Value, bool Sign, std::int64_t Period);
-			static Complex CMPLX_FUNC_CALL sec(const Complex& Value);
-			static Complex CMPLX_FUNC_CALL arcsec(const Complex& Value);
-			static Complex CMPLX_FUNC_CALL arcsec(const Complex& Value, bool Sign, std::int64_t Period);
-			static Complex CMPLX_FUNC_CALL sech(const Complex& Value);
-			static Complex CMPLX_FUNC_CALL arcsech(const Complex& Value);
-			static Complex CMPLX_FUNC_CALL arcsech(const Complex& Value, bool Sign, std::int64_t Period);
-			static Complex CMPLX_FUNC_CALL cot(const Complex& Value);
-			static Complex CMPLX_FUNC_CALL arccot(const Complex& Value);
-			static Complex CMPLX_FUNC_CALL arccot(const Complex& Value, bool Sign, std::int64_t Period);
-			static Complex CMPLX_FUNC_CALL coth(const Complex& Value);
-			static Complex CMPLX_FUNC_CALL arccoth(const Complex& Value);
-			static Complex CMPLX_FUNC_CALL arccoth(const Complex& Value, bool Sign, std::int64_t Period);
-			///
-			/// conventions
-			///
-			static std::wstring CMPLX_FUNC_CALL GetString(const Complex& Value);
-			static Complex CMPLX_FUNC_CALL GetInstance(const std::wstring& Value);
-		};
+		///
+		/// constants
+		///
+	public:
+		static const Cmplx Zero;
+		static const Cmplx i;
+		///
+		/// basis
+		///
+	private:
+		double Re;
+		Vec1D Im;
+	public:
+		explicit Ths Cmplx();
+		explicit Ths Cmplx(double s, const Vec1D& v);
+		explicit Ths Cmplx(double s, double i);
+		Ths Cmplx(double V);
+		Ths Cmplx(const Vec1D& V);
+		static double Gbl Scalar(const Cmplx& V);
+		static Vec1D Gbl Vector(const Cmplx& V);
 		///
 		/// operators
 		///
-		bool CMPLX_INTERFACE CMPLX_FUNC_CALL operator ==(const Complex& Union, const Complex& Value) noexcept;
-		bool CMPLX_INTERFACE CMPLX_FUNC_CALL operator !=(const Complex& Union, const Complex& Value) noexcept;
-		Complex CMPLX_INTERFACE CMPLX_FUNC_CALL operator +(const Complex& Value) noexcept;
-		Complex CMPLX_INTERFACE CMPLX_FUNC_CALL operator -(const Complex& Value) noexcept;
-		Complex CMPLX_INTERFACE CMPLX_FUNC_CALL operator ~(const Complex& Value) noexcept;
-		Complex CMPLX_INTERFACE CMPLX_FUNC_CALL operator +(const Complex& Union, const Complex& Value) noexcept;
-		Complex CMPLX_INTERFACE CMPLX_FUNC_CALL operator -(const Complex& Union, const Complex& Value) noexcept;
-		Complex CMPLX_INTERFACE CMPLX_FUNC_CALL operator *(const Complex& Union, const Complex& Value) noexcept;
-		Complex CMPLX_INTERFACE CMPLX_FUNC_CALL operator /(const Complex& Union, const Complex& Value) noexcept;
-		Complex CMPLX_INTERFACE CMPLX_FUNC_CALL operator ^(const Complex& Base, std::int64_t Exponent) noexcept;
-	}
+	public:
+		Cmplx Ths operator ()() const;
+		double& Ths operator [](std::size_t i) &;
+		const double& Ths operator [](std::size_t i) const&;
+		Cmplx& Ths operator ++() &;
+		Cmplx Ths operator ++(int) &;
+		Cmplx& Ths operator --() &;
+		Cmplx Ths operator --(int) &;
+		Cmplx& Ths operator +=(const Cmplx& O) &;
+		Cmplx& Ths operator +=(const std::initializer_list<Cmplx>& O) &;
+		Cmplx& Ths operator -=(const Cmplx& O) &;
+		Cmplx& Ths operator -=(const std::initializer_list<Cmplx>& O) &;
+		Cmplx& Ths operator *=(const Cmplx& O) &;
+		Cmplx& Ths operator *=(const std::initializer_list<Cmplx>& O) &;
+		Cmplx& Ths operator /=(const Cmplx& O) &;
+		Cmplx& Ths operator /=(const std::initializer_list<Cmplx>& O) &;
+		Cmplx& Ths operator ^=(std::int64_t O) &;
+		Cmplx& Ths operator ^=(const std::initializer_list<std::int64_t>& O) &;
+		///
+		/// multiples
+		///
+	public:
+		static double Gbl Dot(const Cmplx& U, const Cmplx& V);
+		static Vec1D Gbl Outer(const Cmplx& U, const Cmplx& V);
+		static Cmplx Gbl Even(const Cmplx& U, const Cmplx& V);
+		static Vec1D Gbl Cross(const Cmplx& U, const Cmplx& V);
+		///
+		/// fundamentals
+		///
+	public:
+		static double Gbl Abs(const Cmplx& V);
+		static double Gbl Arg(const Cmplx& V, std::int64_t P);
+		static double Gbl Arg(const Cmplx& V);
+		static Cmplx Gbl Conjg(const Cmplx& V);
+		static Cmplx Gbl Sgn(const Cmplx& V);
+		static Cmplx Gbl Inverse(const Cmplx& V);
+		static Cmplx Gbl Exp(const Cmplx& V);
+		static Cmplx Gbl Ln(const Cmplx& V, std::int64_t P);
+		static Cmplx Gbl Ln(const Cmplx& V);
+		///
+		/// exponentials
+		///
+	public:
+		static Cmplx Gbl Power(const Cmplx& U, const Cmplx& V, std::int64_t z1);
+		static Cmplx Gbl Power(const Cmplx& U, const Cmplx& V);
+		static Cmplx Gbl Power(const Cmplx& U, double V, std::int64_t P);
+		static Cmplx Gbl Power(const Cmplx& U, double V);
+		static Cmplx Gbl Root(const Cmplx& U, const Cmplx& V, std::int64_t z1);
+		static Cmplx Gbl Root(const Cmplx& U, const Cmplx& V);
+		static Cmplx Gbl Root(const Cmplx& U, double V, std::int64_t P);
+		static Cmplx Gbl Root(const Cmplx& U, double V);
+		static Cmplx Gbl Log(const Cmplx& U, const Cmplx& V, std::int64_t z1, std::int64_t z2);
+		static Cmplx Gbl Log(const Cmplx& U, const Cmplx& V);
+		///
+		/// trigonometrics
+		///
+	public:
+		static Cmplx Gbl Sin(const Cmplx& V);
+		static Cmplx Gbl Cos(const Cmplx& V);
+		static Cmplx Gbl Tan(const Cmplx& V);
+		static Cmplx Gbl Csc(const Cmplx& V);
+		static Cmplx Gbl Sec(const Cmplx& V);
+		static Cmplx Gbl Cot(const Cmplx& V);
+		static Cmplx Gbl Sinh(const Cmplx& V);
+		static Cmplx Gbl Cosh(const Cmplx& V);
+		static Cmplx Gbl Tanh(const Cmplx& V);
+		static Cmplx Gbl Csch(const Cmplx& V);
+		static Cmplx Gbl Sech(const Cmplx& V);
+		static Cmplx Gbl Coth(const Cmplx& V);
+		static Cmplx Gbl Arcsin(const Cmplx& V, bool S, std::int64_t P);
+		static Cmplx Gbl Arcsin(const Cmplx& V);
+		static Cmplx Gbl Arccos(const Cmplx& V, bool S, std::int64_t P);
+		static Cmplx Gbl Arccos(const Cmplx& V);
+		static Cmplx Gbl Arctan(const Cmplx& V, bool S, std::int64_t P);
+		static Cmplx Gbl Arctan(const Cmplx& V);
+		static Cmplx Gbl Arccsc(const Cmplx& V, bool S, std::int64_t P);
+		static Cmplx Gbl Arccsc(const Cmplx& V);
+		static Cmplx Gbl Arcsec(const Cmplx& V, bool S, std::int64_t P);
+		static Cmplx Gbl Arcsec(const Cmplx& V);
+		static Cmplx Gbl Arccot(const Cmplx& V, bool S, std::int64_t P);
+		static Cmplx Gbl Arccot(const Cmplx& V);
+		static Cmplx Gbl Arcsinh(const Cmplx& V, bool S, std::int64_t P);
+		static Cmplx Gbl Arcsinh(const Cmplx& V);
+		static Cmplx Gbl Arccosh(const Cmplx& V, bool S, std::int64_t P);
+		static Cmplx Gbl Arccosh(const Cmplx& V);
+		static Cmplx Gbl Arctanh(const Cmplx& V, bool S, std::int64_t P);
+		static Cmplx Gbl Arctanh(const Cmplx& V);
+		static Cmplx Gbl Arccsch(const Cmplx& V, bool S, std::int64_t P);
+		static Cmplx Gbl Arccsch(const Cmplx& V);
+		static Cmplx Gbl Arcsech(const Cmplx& V, bool S, std::int64_t P);
+		static Cmplx Gbl Arcsech(const Cmplx& V);
+		static Cmplx Gbl Arccoth(const Cmplx& V, bool S, std::int64_t P);
+		static Cmplx Gbl Arccoth(const Cmplx& V);
+		///
+		/// conventions
+		///
+	public:
+		static std::wstring Gbl Str(const Cmplx& V);
+		static Cmplx Gbl Val(const std::wstring& V);
+	};
+	///
+	/// operators
+	///
+	bool I Gbl operator ==(const Cmplx& U, const Cmplx& V);
+	bool I Gbl operator !=(const Cmplx& U, const Cmplx& V);
+	Cmplx I Gbl operator +(const Cmplx& V);
+	Cmplx I Gbl operator -(const Cmplx& V);
+	Cmplx I Gbl operator ~(const Cmplx& V);
+	Cmplx I Gbl operator +(const Cmplx& U, const Cmplx& V);
+	Cmplx I Gbl operator -(const Cmplx& U, const Cmplx& V);
+	Cmplx I Gbl operator *(const Cmplx& U, const Cmplx& V);
+	Cmplx I Gbl operator /(const Cmplx& U, const Cmplx& V);
+	Cmplx I Gbl operator ^(const Cmplx& U, std::int64_t V);
 }
+#pragma pop_macro("Ths")
+#pragma pop_macro("Gbl")
+#pragma pop_macro("I")
 #pragma pack(pop)
 #endif
 #endif

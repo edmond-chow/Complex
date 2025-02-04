@@ -14,17 +14,11 @@
  *   limitations under the License.
  */
 #pragma once
-#include <cmath>
 #include <cstdint>
-#include <limits>
-#include <numbers>
 #include <iomanip>
 #include <string>
 #include <regex>
 #include <sstream>
-#include <tuple>
-#include <array>
-#include <algorithm>
 #include <stdexcept>
 inline constexpr const wchar_t SignBefore[] = LR"((-|\+|^))";
 inline constexpr const wchar_t UnsignedReal[] = LR"((\d+)(\.\d+|)([Ee](-|\+|)(\d+)|))";
@@ -43,157 +37,76 @@ inline std::wstring GetPattern(const std::wstring& Term)
 };
 inline std::wstring DoubleToString(double Number)
 {
-	std::wstringstream Result;
-	Result << std::defaultfloat << std::setprecision(17) << Number;
-	return std::regex_replace(Result.str(), std::wregex(L"e-0(?=[1-9])"), L"e-");
+	std::wstringstream Rst;
+	Rst << std::defaultfloat << std::setprecision(17) << Number;
+	return std::regex_replace(Rst.str(), std::wregex(L"e-0(?=[1-9])"), L"e-");
 };
 inline std::wstring Replace(const std::wstring& Input, const std::wstring& Search, const std::wstring& Replacement)
 {
-	std::wstring Result = Input;
-	std::size_t Position = Result.find(Search);
-	while (Position != std::wstring::npos)
+	std::wstring Rst = Input;
+	std::size_t Pos = Rst.find(Search);
+	while (Pos != std::wstring::npos)
 	{
-		Result = Result.replace(Position, Search.size(), Replacement);
-		Position = Result.find(Search, Position + Replacement.size());
+		Rst = Rst.replace(Pos, Search.size(), Replacement);
+		Pos = Rst.find(Search, Pos + Replacement.size());
 	}
-	return Result;
+	return Rst;
 };
-template <std::size_t I = 0, std::size_t N> requires (I <= N)
-std::wstring ToString(std::wstringstream& Result, bool& First, const std::array<double, N>& Numbers, const std::array<std::wstring, N>& Terms)
+inline std::wstring ToString(const std::vector<double>& Num, const std::vector<std::wstring>& Trm)
 {
-	if constexpr (I == N)
+	std::wstringstream Rst;
+	bool Fst = true;
+	for (std::size_t i = 0; i < Num.size(); ++i)
 	{
-		if (First == true) { Result << L"0"; }
-		return Result.str();
+		if (Num[i] == 0) { continue; }
+		if (Num[i] > 0 && !Fst) { Rst << L"+"; }
+		else if (Num[i] == -1) { Rst << L"-"; }
+		if (Num[i] != 1 && Num[i] != -1) { Rst << DoubleToString(Num[i]); }
+		else if (Trm[i].empty()) { Rst << L"1"; }
+		if (!Trm[i].empty()) { Rst << Trm[i]; }
+		Fst = false;
 	}
-	else
-	{
-		if (std::get<I>(Numbers) != 0)
-		{
-			if (std::get<I>(Numbers) > 0 && First == false) { Result << L"+"; }
-			else if (std::get<I>(Numbers) == -1) { Result << L"-"; }
-			if (std::get<I>(Numbers) != 1 && std::get<I>(Numbers) != -1) { Result << DoubleToString(std::get<I>(Numbers)); }
-			else if (std::get<I>(Terms).empty()) { Result << L"1"; }
-			if (!std::get<I>(Terms).empty()) { Result << std::get<I>(Terms); }
-			First = false;
-		}
-		return ToString<I + 1, N>(Result, First, Numbers, Terms);
-	}
+	if (Fst) { Rst << L"0"; }
+	return Rst.str();
 };
-template <std::size_t N>
-std::wstring ToString(const std::array<double, N>& Numbers, const std::array<std::wstring, N>& Terms)
+template <typename N, typename... Ts>
+std::wstring ToString(N& Rst, bool Vec, Ts... As)
 {
-	std::wstringstream Result;
-	bool First = true;
-	return ToString(Result, First, Numbers, Terms);
+	std::vector<std::wstring> Trm{ As... };
+	std::vector<double> Num(Trm.size());
+	for (std::size_t i = 0, o = Vec ? 1 : 0; i < Trm.size(); ++i) { Num[i] = Rst[i + o]; }
+	return ToString(Num, Trm);
 };
-template <typename Args, std::size_t... I> requires (std::tuple_size_v<Args> == 2 * sizeof...(I))
-std::wstring ToString(Args&& args, std::integer_sequence<std::size_t, I...>)
+inline std::vector<double> ToNumbers(const std::wstring& Val, const std::vector<std::wstring>& Trm)
 {
-	std::array<double, sizeof...(I)> Numbers{ std::get<2 * I>(args)... };
-	std::array<std::wstring, sizeof...(I)> Terms{ std::get<2 * I + 1>(args)... };
-	return ToString(Numbers, Terms);
-};
-template <typename... Args>
-std::wstring ToString(Args&&... args) requires (sizeof...(Args) % 2 == 0)
-{
-	return ToString(std::forward_as_tuple(std::forward<Args>(args)...), std::make_index_sequence<sizeof...(Args) / 2>{});
-};
-template <std::size_t I = 0, std::size_t N> requires (I <= N)
-void ToNumbers(const std::wstring& Value, std::size_t& Vaild, const std::array<double*, N>& Numbers, const std::array<std::wstring, N>& Terms)
-{
-	if constexpr (I < N)
+	std::vector<double> Num(Trm.size());
+	std::size_t Cnt = Val.length();
+	if (Cnt == 0) { throw std::invalid_argument("The string is empty."); }
+	for (std::size_t i = 0; i < Num.size(); ++i)
 	{
 		double Data = 0;
-		std::wstring Rest = Value;
-		std::wsmatch Match;
+		std::wstring Rest = Val;
+		std::wsmatch Mat;
 		std::regex_constants::match_flag_type Flag = std::regex_constants::match_default;
-		while (std::regex_search(Rest, Match, std::wregex(GetPattern(std::get<I>(Terms))), Flag))
+		while (std::regex_search(Rest, Mat, std::wregex(GetPattern(Trm[i])), Flag))
 		{
-			std::wstring Captured = Match.str();
-			Vaild -= Captured.length() + std::get<I>(Terms).length();
-			if (Captured.empty() || Captured == L"+") { ++Data; }
-			else if (Captured == L"-") { --Data; }
-			else { Data += std::stod(Captured); }
-			Rest = Match.suffix().str();
+			std::wstring Cap = Mat.str();
+			Cnt -= Cap.length() + Trm[i].length();
+			if (Cap.empty() || Cap == L"+") { ++Data; }
+			else if (Cap == L"-") { --Data; }
+			else { Data += std::stod(Cap); }
+			Rest = Mat.suffix().str();
 			Flag |= std::regex_constants::match_not_bol;
 		}
-		*std::get<I>(Numbers) = Data;
-		ToNumbers<I + 1, N>(Value, Vaild, Numbers, Terms);
+		Num[i] = Data;
 	}
-	else
-	{
-		if (Vaild > 0) { throw std::invalid_argument("The string is invalid."); }
-	}
+	if (Cnt != 0) { throw std::invalid_argument("The string is invalid."); }
+	return Num;
 };
-template <std::size_t N>
-void ToNumbers(const std::wstring& Value, const std::array<double*, N>& Numbers, const std::array<std::wstring, N>& Terms)
+template <typename N, typename... Ts>
+void ToNumbers(const std::wstring& Val, N& Rst, bool Vec, Ts... As)
 {
-	std::size_t Vaild = Value.length();
-	if (Vaild == 0) { throw std::invalid_argument("The string is empty."); }
-	ToNumbers(Value, Vaild, Numbers, Terms);
-};
-template <typename Args, std::size_t... I> requires (std::tuple_size_v<Args> == 2 * sizeof...(I))
-void ToNumbers(const std::wstring& Value, Args&& args, std::integer_sequence<std::size_t, I...>)
-{
-	std::array<double*, sizeof...(I)> Numbers{ &std::get<2 * I>(args)... };
-	std::array<std::wstring, sizeof...(I)> Terms{ std::get<2 * I + 1>(args)... };
-	ToNumbers(Value, Numbers, Terms);
-};
-template <typename... Args> requires (sizeof...(Args) % 2 == 0)
-void ToNumbers(const std::wstring& Value, Args&&... args)
-{
-	ToNumbers(Value, std::forward_as_tuple(args...), std::make_index_sequence<sizeof...(Args) / 2>{});
-};
-template <typename T> requires (sizeof(T) % sizeof(double) == 0)
-inline constexpr std::size_t Period = sizeof(T) / sizeof(double);
-template <std::size_t Length, bool Shift> requires (Length > 0)
-void Adjust(std::size_t& Index) noexcept
-{
-	Index %= Length;
-	if constexpr (Shift)
-	{
-		if (Index == 0) { Index = Length; }
-	}
-};
-inline std::wstring ToString(std::size_t Size, const double* Numbers, const std::wstring* Terms)
-{
-	std::wstringstream Result;
-	bool First = true;
-	for (std::size_t i = 0; i < Size; ++i)
-	{
-		if (Numbers[i] == 0) { continue; }
-		if (Numbers[i] > 0 && First == false) { Result << L"+"; }
-		else if (Numbers[i] == -1) { Result << L"-"; }
-		if (Numbers[i] != 1 && Numbers[i] != -1) { Result << DoubleToString(Numbers[i]); }
-		else if (Terms[i].empty()) { Result << L"1"; }
-		if (!Terms[i].empty()) { Result << Terms[i]; }
-		First = false;
-	}
-	if (First == true) { Result << L"0"; }
-	return Result.str();
-};
-inline void ToNumbers(const std::wstring& Value, std::size_t Size, double* Numbers, const std::wstring* Terms)
-{
-	std::size_t Vaild = Value.length();
-	if (Vaild == 0) { throw std::invalid_argument("The string is empty."); }
-	for (std::size_t i = 0; i < Size; ++i)
-	{
-		double Data = 0;
-		std::wstring Rest = Value;
-		std::wsmatch Match;
-		std::regex_constants::match_flag_type Flag = std::regex_constants::match_default;
-		while (std::regex_search(Rest, Match, std::wregex(GetPattern(Terms[i])), Flag))
-		{
-			std::wstring Captured = Match.str();
-			Vaild -= Captured.length() + Terms[i].length();
-			if (Captured.empty() || Captured == L"+") { ++Data; }
-			else if (Captured == L"-") { --Data; }
-			else { Data += std::stod(Captured); }
-			Rest = Match.suffix().str();
-			Flag |= std::regex_constants::match_not_bol;
-		}
-		Numbers[i] = Data;
-	}
-	if (Vaild > 0) { throw std::invalid_argument("The string is invalid."); }
+	std::vector<std::wstring> Trm{ As... };
+	std::vector<double> Num = ToNumbers(Val, Trm);
+	for (std::size_t i = 0, o = Vec ? 1 : 0; i < Trm.size(); ++i) { Rst[i + o] = Num[i]; }
 };
