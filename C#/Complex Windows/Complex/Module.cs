@@ -59,6 +59,12 @@ internal static class Module
         if (Fst) { Rst.Append("0"); }
         return Rst.ToString();
     }
+    internal static string ToString<N>(ref N Rst, bool Vec, params string[] Trm) where N : INum
+    {
+        double[] Num = new double[Trm.Length];
+        for (int i = 0, o = Vec ? 1 : 0; i < Num.Length; ++i) { Num[i] = Rst[i + o]; }
+        return Num.ToString(Trm);
+    }
     internal static double[] ToNumbers(this string Val, params string[] Trm)
     {
         double[] Num = new double[Trm.Length];

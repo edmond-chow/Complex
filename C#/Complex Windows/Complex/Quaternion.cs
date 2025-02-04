@@ -14,6 +14,7 @@
  *   limitations under the License.
  */
 using System;
+using System.Security.Cryptography;
 using static Module;
 namespace Num
 {
@@ -40,8 +41,7 @@ namespace Num
         }
         public override string ToString()
         {
-            double[] Numbers = new double[] { x1, x2, x3 };
-            return Numbers.ToString("e1", "e2", "e3");
+            return Str(this);
         }
         public override bool Equals(object obj)
         {
@@ -165,7 +165,7 @@ namespace Num
         ///
         public static string Str(Vec3D V)
         {
-            return V.ToString();
+            return Module.ToString(ref V, true, "e1", "e2", "e3");
         }
         public static Vec3D Val(string V)
         {
@@ -213,8 +213,7 @@ namespace Num
         }
         public override string ToString()
         {
-            double[] Numbers = new double[] { Re, Im[1], Im[2], Im[3] };
-            return Numbers.ToString("", "i", "j", "k");
+            return Str(this);
         }
         public override bool Equals(object obj)
         {
@@ -667,7 +666,7 @@ namespace Num
         ///
         public static string Str(Quter V)
         {
-            return V.ToString();
+            return Module.ToString(ref V, false, "", "i", "j", "k");
         }
         public static Quter Val(string V)
         {

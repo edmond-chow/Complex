@@ -22,89 +22,80 @@ using static SedenBasis;
 using static Num.Seden;
 internal static class SedenBasis
 {
-    internal static void Mul<T>(string L, string R, Func<Seden, Seden, T> S)
+    internal static void Mul<T>(string L, string R, Func<Seden, Seden, T> F)
     {
         if (L == R)
         {
             Seden U = Val(Base.Input("U = "));
             Seden V = Val(Base.Input("V = "));
-            Base.Output(S.Invoke(U, V).ToModStr());
+            Base.Output(F.Invoke(U, V).ToModStr());
         }
     }
-    internal static void Op<T>(string L, string R, Func<Seden, Seden, T> S)
+    internal static void Op<T>(string L, string R, Func<Seden, Seden, T> F)
     {
         if (L == R)
         {
             Seden U = Val(Base.Input("U = "));
             Seden V = Val(Base.Input("V = "));
-            Base.Output(S.Invoke(U, V).ToModStr());
+            Base.Output(F.Invoke(U, V).ToModStr());
         }
     }
-    internal static void Op(string L, string R, Func<Seden, double, Seden> S)
-    {
-        if (L == R)
-        {
-            Seden U = Val(Base.Input("U = "));
-            double V = Base.Input("V = ").AsReal();
-            Base.Output(S.Invoke(U, V).ToModStr());
-        }
-    }
-    internal static void PowOp(string L, string R, Func<Seden, long, Seden> S)
+    internal static void PowOp(string L, string R, Func<Seden, long, Seden> F)
     {
         if (L == R)
         {
             Seden U = Val(Base.Input("U = "));
             long V = Base.Input("V = ").AsInt();
-            Base.Output(S.Invoke(U, V).ToModStr());
+            Base.Output(F.Invoke(U, V).ToModStr());
         }
     }
-    internal static void Pow(string L, string R, Func<Seden, Seden, long, long, long, Seden> S)
+    internal static void Pow(string L, string R, Func<Seden, Seden, long, long, long, Seden> F)
     {
-        Pow(L, R, Delegate.CreateDelegate(S.GetType(), S.GetMethodInfo()));
+        Pow(L, R, Delegate.CreateDelegate(F.GetType(), F.GetMethodInfo()));
     }
-    internal static void Pow(string L, string R, Func<Seden, Seden, long, long, long, long, Seden> S)
+    internal static void Pow(string L, string R, Func<Seden, Seden, long, long, long, long, Seden> F)
     {
-        Pow(L, R, Delegate.CreateDelegate(S.GetType(), S.GetMethodInfo()));
+        Pow(L, R, Delegate.CreateDelegate(F.GetType(), F.GetMethodInfo()));
     }
-    internal static void Pow(string L, string R, Delegate S)
+    internal static void Pow(string L, string R, Delegate F)
     {
         if (L == R)
         {
             Seden U = Val(Base.Input("U = "));
             Seden V = Val(Base.Input("V = "));
-            object[] Args = new object[S.GetMethodInfo().GetParameters().Length];
+            object[] Args = new object[F.GetMethodInfo().GetParameters().Length];
             Args[0] = U;
             Args[1] = V;
             PowGet(Args);
-            PowRst(S, Args);
+            PowRst(F, Args);
         }
         else if (L == R + "()")
         {
             Seden U = Val(Base.Input("U = "));
             Seden V = Val(Base.Input("V = "));
-            object[] Args = new object[S.GetMethodInfo().GetParameters().Length];
+            object[] Args = new object[F.GetMethodInfo().GetParameters().Length];
             long[] Upper = new long[Args.Length - 2];
             Args[0] = U;
             Args[1] = V;
             PowGet(Args, Upper);
-            PowRst(S, R, Args, Upper);
+            PowRst(F, R, Args, Upper);
         }
     }
-    internal static void Bas<T>(string L, string R, Func<Seden, T> S)
+    internal static void Bas<T>(string L, string R, Func<Seden, T> F)
     {
         if (L == R)
         {
             Seden V = Val(Base.Input("V = "));
-            Base.Output(S.Invoke(V).ToModStr());
+            Base.Output(F.Invoke(V).ToModStr());
         }
     }
-    internal static void BasP<T>(string L, string R, Func<Seden, long, T> S)
+    internal static void BasP<T>(string L, string R, Func<Seden, long, T> F)
     {
         if (L == R)
         {
             Seden V = Val(Base.Input("V = "));
             long P = Base.Input("P = ").AsInt();
-            Base.Output(S.Invoke(V, P).ToModStr());
+            Base.Output(F.Invoke(V, P).ToModStr());
         }
         else if (L == R + "()")
         {
@@ -113,29 +104,29 @@ internal static class SedenBasis
             long PMax = Base.Input("P(max) = ").AsInt();
             for (long P = PMin; P <= PMax; ++P)
             {
-                Base.Output(R + "(" + P.ToModStr() + ") = ", S.Invoke(V, P).ToModStr());
+                Base.Output(R + "(" + P.ToModStr() + ") = ", F.Invoke(V, P).ToModStr());
             }
         }
     }
-    internal static void Tri(string L, string R, Func<Seden, Seden> S)
+    internal static void Tri(string L, string R, Func<Seden, Seden> F)
     {
         if (L == R)
         {
             Seden V = Val(Base.Input("V = "));
-            Base.Output(S.Invoke(V).ToModStr());
+            Base.Output(F.Invoke(V).ToModStr());
         }
     }
-    internal static void Atri(string L, string R, Func<Seden, bool, long, Seden> S)
+    internal static void Atri(string L, string R, Func<Seden, bool, long, Seden> F)
     {
         if (L == R)
         {
             Seden V = Val(Base.Input("V = "));
-            bool Sign = false;
+            bool S = false;
             string Input = Base.Input("Sign : ").Replace(" ", "");
-            if (Input == "+") { Sign = true; }
+            if (Input == "+") { S = true; }
             else if (Input != "-") { throw new ArgumentException("A string interpretation of the sign cannot be converted as a bool value."); }
             long P = Base.Input("P = ").AsInt();
-            Base.Output(S.Invoke(V, Sign, P).ToModStr());
+            Base.Output(F.Invoke(V, S, P).ToModStr());
         }
         else if (L == R + "()")
         {
@@ -144,11 +135,11 @@ internal static class SedenBasis
             long PMax = Base.Input("P(max) = ").AsInt();
             for (long P = PMin; P <= PMax; ++P)
             {
-                Base.Output(R + "(+, " + P.ToModStr() + ") = ", S.Invoke(V, true, P).ToModStr());
+                Base.Output(R + "(+, " + P.ToModStr() + ") = ", F.Invoke(V, true, P).ToModStr());
             }
             for (long P = PMin; P <= PMax; ++P)
             {
-                Base.Output(R + "(-, " + P.ToModStr() + ") = ", S.Invoke(V, false, P).ToModStr());
+                Base.Output(R + "(-, " + P.ToModStr() + ") = ", F.Invoke(V, false, P).ToModStr());
             }
         }
     }
@@ -172,7 +163,7 @@ internal static class SedenConsole
                 Op(L, "+", (Seden U, Seden V) => { return U + V; });
                 Op(L, "-", (Seden U, Seden V) => { return U - V; });
                 Op(L, "*", (Seden U, Seden V) => { return U * V; });
-                Op(L, "/", (Seden U, double V) => { return U / V; });
+                Op(L, "/", (Seden U, Seden V) => { return U / V; });
                 /****/
                 PowOp(L, "^", (Seden U, long V) => { return U ^ V; });
                 Pow(L, "power", Power);

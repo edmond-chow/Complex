@@ -22,82 +22,82 @@ using static Num.Octon;
 using static OctonBasis;
 internal static class OctonBasis
 {
-    internal static void Mul<T>(string L, string R, Func<Octon, Octon, T> S)
+    internal static void Mul<T>(string L, string R, Func<Octon, Octon, T> F)
     {
         if (L == R)
         {
             Octon U = Val(Base.Input("U = "));
             Octon V = Val(Base.Input("V = "));
-            object Result = S.Invoke(U, V);
-            if (Result is Vec7D Ve) { Result = new Octon(0, Ve); }
-            Base.Output(Result.ToModStr());
+            object Rst = F.Invoke(U, V);
+            if (Rst is Vec7D Ve) { Rst = new Octon(0, Ve); }
+            Base.Output(Rst.ToModStr());
         }
     }
-    internal static void Op<T>(string L, string R, Func<Octon, Octon, T> S)
+    internal static void Op<T>(string L, string R, Func<Octon, Octon, T> F)
     {
         if (L == R)
         {
             Octon U = Val(Base.Input("U = "));
             Octon V = Val(Base.Input("V = "));
-            Base.Output(S.Invoke(U, V).ToModStr());
+            Base.Output(F.Invoke(U, V).ToModStr());
         }
     }
-    internal static void PowOp(string L, string R, Func<Octon, long, Octon> S)
+    internal static void PowOp(string L, string R, Func<Octon, long, Octon> F)
     {
         if (L == R)
         {
             Octon U = Val(Base.Input("U = "));
             long V = Base.Input("V = ").AsInt();
-            Base.Output(S.Invoke(U, V).ToModStr());
+            Base.Output(F.Invoke(U, V).ToModStr());
         }
     }
-    internal static void Pow(string L, string R, Func<Octon, Octon, long, long, long, Octon> S)
+    internal static void Pow(string L, string R, Func<Octon, Octon, long, long, long, Octon> F)
     {
-        Pow(L, R, Delegate.CreateDelegate(S.GetType(), S.GetMethodInfo()));
+        Pow(L, R, Delegate.CreateDelegate(F.GetType(), F.GetMethodInfo()));
     }
-    internal static void Pow(string L, string R, Func<Octon, Octon, long, long, long, long, Octon> S)
+    internal static void Pow(string L, string R, Func<Octon, Octon, long, long, long, long, Octon> F)
     {
-        Pow(L, R, Delegate.CreateDelegate(S.GetType(), S.GetMethodInfo()));
+        Pow(L, R, Delegate.CreateDelegate(F.GetType(), F.GetMethodInfo()));
     }
-    internal static void Pow(string L, string R, Delegate S)
+    internal static void Pow(string L, string R, Delegate F)
     {
         if (L == R)
         {
             Octon U = Val(Base.Input("U = "));
             Octon V = Val(Base.Input("V = "));
-            object[] Args = new object[S.GetMethodInfo().GetParameters().Length];
+            object[] Args = new object[F.GetMethodInfo().GetParameters().Length];
             Args[0] = U;
             Args[1] = V;
             PowGet(Args);
-            PowRst(S, Args);
+            PowRst(F, Args);
         }
         else if (L == R + "()")
         {
             Octon U = Val(Base.Input("U = "));
             Octon V = Val(Base.Input("V = "));
-            object[] Args = new object[S.GetMethodInfo().GetParameters().Length];
+            object[] Args = new object[F.GetMethodInfo().GetParameters().Length];
             long[] Upper = new long[Args.Length - 2];
             Args[0] = U;
             Args[1] = V;
             PowGet(Args, Upper);
-            PowRst(S, R, Args, Upper);
+            PowRst(F, R, Args, Upper);
         }
     }
-    internal static void Bas<T>(string L, string R, Func<Octon, T> S)
+    internal static void Bas<T>(string L, string R, Func<Octon, T> F)
     {
         if (L == R)
         {
             Octon V = Val(Base.Input("V = "));
-            Base.Output(S.Invoke(V).ToModStr());
+            Base.Output(F.Invoke(V).ToModStr());
         }
     }
-    internal static void BasP<T>(string L, string R, Func<Octon, long, T> S)
+    internal static void BasP<T>(string L, string R, Func<Octon, long, T> F)
     {
         if (L == R)
         {
             Octon V = Val(Base.Input("V = "));
             long P = Base.Input("P = ").AsInt();
-            Base.Output(S.Invoke(V, P).ToModStr());
+            Base.Output(F.Invoke(V, P).ToModStr());
         }
         else if (L == R + "()")
         {
@@ -106,29 +106,29 @@ internal static class OctonBasis
             long PMax = Base.Input("P(max) = ").AsInt();
             for (long P = PMin; P <= PMax; ++P)
             {
-                Base.Output(R + "(" + P.ToModStr() + ") = ", S.Invoke(V, P).ToModStr());
+                Base.Output(R + "(" + P.ToModStr() + ") = ", F.Invoke(V, P).ToModStr());
             }
         }
     }
-    internal static void Tri(string L, string R, Func<Octon, Octon> S)
+    internal static void Tri(string L, string R, Func<Octon, Octon> F)
     {
         if (L == R)
         {
             Octon V = Val(Base.Input("V = "));
-            Base.Output(S.Invoke(V).ToModStr());
+            Base.Output(F.Invoke(V).ToModStr());
         }
     }
-    internal static void Atri(string L, string R, Func<Octon, bool, long, Octon> S)
+    internal static void Atri(string L, string R, Func<Octon, bool, long, Octon> F)
     {
         if (L == R)
         {
             Octon V = Val(Base.Input("V = "));
-            bool Sign = false;
+            bool S = false;
             string Input = Base.Input("Sign : ").Replace(" ", "");
-            if (Input == "+") { Sign = true; }
+            if (Input == "+") { S = true; }
             else if (Input != "-") { throw new ArgumentException("A string interpretation of the sign cannot be converted as a bool value."); }
             long P = Base.Input("P = ").AsInt();
-            Base.Output(S.Invoke(V, Sign, P).ToModStr());
+            Base.Output(F.Invoke(V, S, P).ToModStr());
         }
         else if (L == R + "()")
         {
@@ -137,11 +137,11 @@ internal static class OctonBasis
             long PMax = Base.Input("P(max) = ").AsInt();
             for (long P = PMin; P <= PMax; ++P)
             {
-                Base.Output(R + "(+, " + P.ToModStr() + ") = ", S.Invoke(V, true, P).ToModStr());
+                Base.Output(R + "(+, " + P.ToModStr() + ") = ", F.Invoke(V, true, P).ToModStr());
             }
             for (long P = PMin; P <= PMax; ++P)
             {
-                Base.Output(R + "(-, " + P.ToModStr() + ") = ", S.Invoke(V, false, P).ToModStr());
+                Base.Output(R + "(-, " + P.ToModStr() + ") = ", F.Invoke(V, false, P).ToModStr());
             }
         }
     }

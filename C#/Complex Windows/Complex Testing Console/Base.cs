@@ -172,6 +172,19 @@ namespace ComplexTestingConsole
         {
             return "z" + i.ToString();
         }
+        private static string PowBeg(string R, object[] Args)
+        {
+            StringBuilder Rst = new StringBuilder();
+            Rst.Append(R).Append("(");
+            bool Fst = true;
+            for (int i = 2; i < Args.Length; ++i, Fst = false)
+            {
+                if (!Fst) { Rst.Append(", "); }
+                Rst.Append(Args[i].ToString());
+            }
+            Rst.Append(") = ");
+            return Rst.ToString();
+        }
         internal static void PowGet(object[] Args)
         {
             for (int i = 2; i < Args.Length; ++i)
@@ -197,41 +210,28 @@ namespace ComplexTestingConsole
                 }
             }
         }
+        private static void PowRstLoop(Delegate S, string R, object[] Args, long[] Upper, int Dim)
+        {
+            if (Dim == Upper.Length)
+            {
+                Base.Output(PowBeg(R, Args), S.DynamicInvoke(Args).ToString());
+                return;
+            }
+            object Lower = Args[Dim + 2];
+            while ((long)Args[Dim + 2] <= Upper[Dim])
+            {
+                PowRstLoop(S, R, Args, Upper, Dim + 1);
+                Args[Dim + 2] = (long)Args[Dim + 2] + 1;
+            }
+            Args[Dim + 2] = Lower;
+        }
         internal static void PowRst(Delegate S, object[] Args)
         {
             Base.Output(S.DynamicInvoke(Args).ToString());
         }
         internal static void PowRst(Delegate S, string R, object[] Args, long[] Upper)
         {
-            PowRstImpl(S, R, Args, Upper, 0);
-        }
-        private static void PowRstImpl(Delegate S, string R, object[] Args, long[] Upper, int Dim)
-        {
-            if (Dim == Upper.Length)
-            {
-                Base.Output(PowPrepend(R, Args), S.DynamicInvoke(Args).ToString());
-                return;
-            }
-            object Lower = Args[Dim + 2];
-            while ((long)Args[Dim + 2] <= Upper[Dim])
-            {
-                PowRstImpl(S, R, Args, Upper, Dim + 1);
-                Args[Dim + 2] = (long)Args[Dim + 2] + 1;
-            }
-            Args[Dim + 2] = Lower;
-        }
-        private static string PowPrepend(string R, object[] Args)
-        {
-            StringBuilder Rst = new StringBuilder();
-            Rst.Append(R).Append("(");
-            bool Fst = true;
-            for (int i = 2; i < Args.Length; ++i, Fst = false)
-            {
-                if (!Fst) { Rst.Append(", "); }
-                Rst.Append(Args[i].ToString());
-            }
-            Rst.Append(") = ");
-            return Rst.ToString();
+            PowRstLoop(S, R, Args, Upper, 0);
         }
         private static string Str(this double Num)
         {

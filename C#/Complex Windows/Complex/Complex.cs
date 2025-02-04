@@ -34,8 +34,7 @@ namespace Num
         }
         public override string ToString()
         {
-            double[] Numbers = new double[] { x1 };
-            return Numbers.ToString("e1");
+            return Str(this);
         }
         public override bool Equals(object obj)
         {
@@ -155,7 +154,7 @@ namespace Num
         ///
         public static string Str(Vec1D V)
         {
-            return V.ToString();
+            return Module.ToString(ref V, true, "e1");
         }
         public static Vec1D Val(string V)
         {
@@ -201,8 +200,7 @@ namespace Num
         }
         public override string ToString()
         {
-            double[] Numbers = new double[] { Re, Im[1] };
-            return Numbers.ToString("", "i");
+            return Str(this);
         }
         public override bool Equals(object obj)
         {
@@ -655,7 +653,7 @@ namespace Num
         ///
         public static string Str(Cmplx V)
         {
-            return V.ToString();
+            return Module.ToString(ref V, false, "", "i");
         }
         public static Cmplx Val(string V)
         {

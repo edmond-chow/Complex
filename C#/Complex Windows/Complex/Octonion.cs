@@ -14,6 +14,7 @@
  *   limitations under the License.
  */
 using System;
+using System.Security.Cryptography;
 using static Module;
 namespace Num
 {
@@ -52,8 +53,7 @@ namespace Num
         }
         public override string ToString()
         {
-            double[] Numbers = new double[] { x1, x2, x3, x4, x5, x6, x7 };
-            return Numbers.ToString("e1", "e2", "e3", "e4", "e5", "e6", "e7");
+            return Str(this);
         }
         public override bool Equals(object obj)
         {
@@ -185,7 +185,7 @@ namespace Num
         ///
         public static string Str(Vec7D V)
         {
-            return V.ToString();
+            return Module.ToString(ref V, true, "e1", "e2", "e3", "e4", "e5", "e6", "e7");
         }
         public static Vec7D Val(string V)
         {
@@ -237,8 +237,7 @@ namespace Num
         }
         public override string ToString()
         {
-            double[] Numbers = new double[] { Re, Im[1], Im[2], Im[3], Im[4], Im[5], Im[6], Im[7] };
-            return Numbers.ToString("", "i", "j", "k", "l", "il", "jl", "kl");
+            return Str(this);
         }
         public override bool Equals(object obj)
         {
@@ -691,7 +690,7 @@ namespace Num
         ///
         public static string Str(Octon V)
         {
-            return V.ToString();
+            return Module.ToString(ref V, false, "", "i", "j", "k", "l", "il", "jl", "kl");
         }
         public static Octon Val(string V)
         {
