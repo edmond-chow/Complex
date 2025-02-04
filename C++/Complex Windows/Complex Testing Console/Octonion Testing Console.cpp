@@ -20,14 +20,18 @@ using namespace ComplexTestingConsole;
 using namespace Num;
 namespace OctonBasis
 {
-	template <typename F = Octon(Gbl*)(const Octon&, const Octon&)>
-	void Mul(const std::wstring& L, const wchar_t* R, F S)
+	template <typename T>
+	void Mul(const std::wstring& L, const wchar_t* R, T(Gbl* S)(const Octon&, const Octon&))
 	{
 		if (L == R)
 		{
 			Octon U = Octon::Val(Base::Input(L"U = "));
 			Octon V = Octon::Val(Base::Input(L"V = "));
-			Base::Output(ToModStr<Octon>(std::invoke(S, U, V)));
+			T Rst = std::invoke(S, U, V);
+			std::wstring Str;
+			if constexpr (std::is_same_v<T, Vec7D>) { Str = ToModStr(Octon{ 0, Rst }); }
+			else { Str = ToModStr(Rst); }
+			Base::Output(Str);
 		}
 	};
 	template <typename T>
@@ -40,8 +44,7 @@ namespace OctonBasis
 			Base::Output(ToModStr(std::invoke(S, U, V)));
 		}
 	};
-	template <typename F>
-	void Pow(const std::wstring& L, const wchar_t* R, F S)
+	inline void Pow(const std::wstring& L, const wchar_t* R, Octon(Gbl* S)(const Octon&, std::int64_t))
 	{
 		if (L == R)
 		{
@@ -57,21 +60,21 @@ namespace OctonBasis
 		{
 			Octon U = Octon::Val(Base::Input(L"U = "));
 			Octon V = Octon::Val(Base::Input(L"V = "));
-			std::array<std::int64_t, 1 + sizeof...(As)> Data{};
-			PowGet(Data);
-			PowRst(S, R, U, V, Data);
+			std::array<std::int64_t, 1 + sizeof...(As)> Dat{};
+			PowGet(Dat);
+			PowRst(S, U, V, Dat);
 		}
 		else if (L == R + L"()")
 		{
 			Octon U = Octon::Val(Base::Input(L"U = "));
 			Octon V = Octon::Val(Base::Input(L"V = "));
-			std::array<std::pair<std::int64_t, std::int64_t>, 1 + sizeof...(As)> Data{};
-			PowGet(Data);
-			PowRst(S, R, U, V, Data);
+			std::array<std::pair<std::int64_t, std::int64_t>, 1 + sizeof...(As)> Dat{};
+			PowGet(Dat);
+			PowRst(S, R, U, V, Dat);
 		}
 	};
-	template <typename F>
-	void Bas(const std::wstring& L, const wchar_t* R, F S)
+	template <typename T>
+	void Bas(const std::wstring& L, const wchar_t* R, T(Gbl* S)(const Octon&))
 	{
 		if (L == R)
 		{
@@ -99,8 +102,7 @@ namespace OctonBasis
 			}
 		}
 	};
-	template <typename F = Octon(Gbl*)(const Octon&)>
-	inline void Tri(const std::wstring& L, const wchar_t* R, F S)
+	inline void Tri(const std::wstring& L, const wchar_t* R, Octon(Gbl* S)(const Octon&))
 	{
 		if (L == R)
 		{
@@ -108,8 +110,7 @@ namespace OctonBasis
 			Base::Output(ToModStr(std::invoke(S, V)));
 		}
 	};
-	template <typename F = Octon(Gbl*)(const Octon&, bool, std::int64_t)>
-	inline void Atri(const std::wstring& L, std::wstring&& R, F S)
+	inline void Atri(const std::wstring& L, std::wstring&& R, Octon(Gbl* S)(const Octon&, bool, std::int64_t))
 	{
 		if (L == R)
 		{

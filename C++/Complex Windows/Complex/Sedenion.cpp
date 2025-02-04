@@ -600,7 +600,8 @@ namespace Num
 			std::wsmatch Mat;
 			while (std::regex_search(Rest, Mat, std::wregex(LR"(e(\d+)(?=-|\+|$))")))
 			{
-				Dim = std::max(Dim, stos_t(Mat.str(1)));
+				std::size_t NewDim = stos_t(Mat.str(1));
+				if (NewDim > Dim) { Dim = NewDim; }
 				Rest = Mat.suffix().str();
 			}
 			Dim = Near(Dim);
@@ -630,44 +631,44 @@ namespace Num
 	///
 	/// operators
 	///
-	bool I Gbl operator ==(const Seden& U, const Seden& V)
+	inline bool I Gbl operator ==(const Seden& U, const Seden& V)
 	{
 		return U.Num() == V.Num();
 	};
-	bool I Gbl operator !=(const Seden& U, const Seden& V)
+	inline bool I Gbl operator !=(const Seden& U, const Seden& V)
 	{
 		return !(U == V);
 	};
-	Seden I Gbl operator +(const Seden& V)
+	inline Seden I Gbl operator +(const Seden& V)
 	{
 		return V;
 	};
-	Seden I Gbl operator -(const Seden& V)
+	inline Seden I Gbl operator -(const Seden& V)
 	{
 		return Seden::Val(-V.Num());
 	};
-	Seden I Gbl operator ~(const Seden& V)
+	inline Seden I Gbl operator ~(const Seden& V)
 	{
 		return Seden::Val(~V.Num());
 	};
-	Seden I Gbl operator +(const Seden& U, const Seden& V)
+	inline Seden I Gbl operator +(const Seden& U, const Seden& V)
 	{
 		return Seden::Val(U.Num() + V.Num());
 	};
-	Seden I Gbl operator -(const Seden& U, const Seden& V)
+	inline Seden I Gbl operator -(const Seden& U, const Seden& V)
 	{
 		return Seden::Val(U.Num() - V.Num());
 	};
-	Seden I Gbl operator *(const Seden& U, const Seden& V)
+	inline Seden I Gbl operator *(const Seden& U, const Seden& V)
 	{
 		return Seden::Val(U.Num() * V.Num());
 	};
-	Seden I Gbl operator /(const Seden& U, const Seden& V)
+	inline Seden I Gbl operator /(const Seden& U, const Seden& V)
 	{
 		if (Seden::Vector(V) == Seden::Zero) { return Seden::Val(U.Num() / Seden::Scalar(V)); }
 		return U * Seden::Inverse(V);
 	};
-	Seden I Gbl operator ^(const Seden& U, std::int64_t V)
+	inline Seden I Gbl operator ^(const Seden& U, std::int64_t V)
 	{
 		return Seden::Power(U, static_cast<double>(V));
 	};

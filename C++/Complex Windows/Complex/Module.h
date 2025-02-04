@@ -35,7 +35,7 @@ inline std::wstring GetPattern(const std::wstring& Term)
 {
 	return FollowedBy(SignBefore + AddGroup(UnsignedReal, !Term.empty()), Term + SignAfter);
 };
-inline std::wstring DoubleToString(double Number)
+inline std::wstring Str(double Number)
 {
 	std::wstringstream Rst;
 	Rst << std::defaultfloat << std::setprecision(17) << Number;
@@ -61,7 +61,7 @@ inline std::wstring ToString(const std::vector<double>& Num, const std::vector<s
 		if (Num[i] == 0) { continue; }
 		if (Num[i] > 0 && !Fst) { Rst << L"+"; }
 		else if (Num[i] == -1) { Rst << L"-"; }
-		if (Num[i] != 1 && Num[i] != -1) { Rst << DoubleToString(Num[i]); }
+		if (Num[i] != 1 && Num[i] != -1) { Rst << Str(Num[i]); }
 		else if (Trm[i].empty()) { Rst << L"1"; }
 		if (!Trm[i].empty()) { Rst << Trm[i]; }
 		Fst = false;

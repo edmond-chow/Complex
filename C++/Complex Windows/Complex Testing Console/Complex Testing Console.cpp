@@ -20,14 +20,18 @@ using namespace ComplexTestingConsole;
 using namespace Num;
 namespace CmplxBasis
 {
-	template <typename F = Cmplx(Gbl*)(const Cmplx&, const Cmplx&)>
-	void Mul(const std::wstring& L, const wchar_t* R, F S)
+	template <typename T>
+	void Mul(const std::wstring& L, const wchar_t* R, T(Gbl* S)(const Cmplx&, const Cmplx&))
 	{
 		if (L == R)
 		{
 			Cmplx U = Cmplx::Val(Base::Input(L"U = "));
 			Cmplx V = Cmplx::Val(Base::Input(L"V = "));
-			Base::Output(ToModStr<Cmplx>(std::invoke(S, U, V)));
+			T Rst = std::invoke(S, U, V);
+			std::wstring Str;
+			if constexpr (std::is_same_v<T, Vec1D>) { Str = ToModStr(Cmplx{ 0, Rst }); }
+			else { Str = ToModStr(Rst); }
+			Base::Output(Str);
 		}
 	};
 	template <typename T>
@@ -40,8 +44,7 @@ namespace CmplxBasis
 			Base::Output(ToModStr(std::invoke(S, U, V)));
 		}
 	};
-	template <typename F>
-	void Pow(const std::wstring& L, const wchar_t* R, F S)
+	inline void Pow(const std::wstring& L, const wchar_t* R, Cmplx(Gbl* S)(const Cmplx&, std::int64_t))
 	{
 		if (L == R)
 		{
@@ -57,21 +60,21 @@ namespace CmplxBasis
 		{
 			Cmplx U = Cmplx::Val(Base::Input(L"U = "));
 			Cmplx V = Cmplx::Val(Base::Input(L"V = "));
-			std::array<std::int64_t, 1 + sizeof...(As)> Data{};
-			PowGet(Data);
-			PowRst(S, R, U, V, Data);
+			std::array<std::int64_t, 1 + sizeof...(As)> Dat{};
+			PowGet(Dat);
+			PowRst(S, U, V, Dat);
 		}
 		else if (L == R + L"()")
 		{
 			Cmplx U = Cmplx::Val(Base::Input(L"U = "));
 			Cmplx V = Cmplx::Val(Base::Input(L"V = "));
-			std::array<std::pair<std::int64_t, std::int64_t>, 1 + sizeof...(As)> Data{};
-			PowGet(Data);
-			PowRst(S, R, U, V, Data);
+			std::array<std::pair<std::int64_t, std::int64_t>, 1 + sizeof...(As)> Dat{};
+			PowGet(Dat);
+			PowRst(S, R, U, V, Dat);
 		}
 	};
-	template <typename F>
-	void Bas(const std::wstring& L, const wchar_t* R, F S)
+	template <typename T>
+	void Bas(const std::wstring& L, const wchar_t* R, T(Gbl* S)(const Cmplx&))
 	{
 		if (L == R)
 		{
@@ -99,8 +102,7 @@ namespace CmplxBasis
 			}
 		}
 	};
-	template <typename F = Cmplx(Gbl*)(const Cmplx&)>
-	inline void Tri(const std::wstring& L, const wchar_t* R, F S)
+	inline void Tri(const std::wstring& L, const wchar_t* R, Cmplx(Gbl* S)(const Cmplx&))
 	{
 		if (L == R)
 		{
@@ -108,8 +110,7 @@ namespace CmplxBasis
 			Base::Output(ToModStr(std::invoke(S, V)));
 		}
 	};
-	template <typename F = Cmplx(Gbl*)(const Cmplx&, bool, std::int64_t)>
-	inline void Atri(const std::wstring& L, std::wstring&& R, F S)
+	inline void Atri(const std::wstring& L, std::wstring&& R, Cmplx(Gbl* S)(const Cmplx&, bool, std::int64_t))
 	{
 		if (L == R)
 		{

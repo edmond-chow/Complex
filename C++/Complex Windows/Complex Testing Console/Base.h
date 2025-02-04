@@ -74,7 +74,7 @@ inline std::int64_t wtoi64_t(const wchar_t* str)
 	}
 	return output;
 };
-inline std::wstring DoubleToString(double Number)
+inline std::wstring Str(double Number)
 {
 	std::wstringstream Result;
 	Result << std::defaultfloat << std::setprecision(17) << Number;
@@ -98,7 +98,7 @@ inline std::int64_t stoi64_t(const std::wstring& str)
 template <typename T>
 inline std::wstring ToModStr(T o) { return T::Str(o); };
 template <>
-inline std::wstring ToModStr<double>(double o) { return DoubleToString(o); };
+inline std::wstring ToModStr<double>(double o) { return Str(o); };
 template <>
 inline std::wstring ToModStr<std::size_t>(std::size_t o) { return std::to_wstring(o); };
 template <>
@@ -155,98 +155,94 @@ namespace ComplexTestingConsole
 		static void Startup(const std::wstring& Title);
 	};
 	template <std::size_t I>
-	std::wstring GetName(std::integral_constant<std::size_t, I>)
+	std::wstring GetName()
 	{
 		return L"z" + ToModStr(I);
 	};
 	template <typename... Args>
-	std::wstring PowPrependImpl(const std::wstring& Beg, const std::wstring& Mid, const std::wstring& End, std::int64_t I)
+	std::wstring PowBegHit(const std::wstring& Beg, const std::wstring& Mid, const std::wstring& End, std::int64_t I)
 	{
 		return Beg + ToModStr(I) + End;
 	};
 	template <typename... Args>
-	std::wstring PowPrependImpl(const std::wstring& Beg, const std::wstring& Mid, const std::wstring& End, std::int64_t I, Args... Is)
+	std::wstring PowBegHit(const std::wstring& Beg, const std::wstring& Mid, const std::wstring& End, std::int64_t I, Args... Is)
 	{
-		return PowPrependImpl(Beg + ToModStr(I) + Mid, Mid, End, Is...);
+		return PowBegHit(Beg + ToModStr(I) + Mid, Mid, End, Is...);
 	};
 	template <typename... Args>
-	std::wstring PowPrepend(const std::wstring& R, Args... Tmp)
+	std::wstring PowBeg(const std::wstring& R, Args... Tmp)
 	{
-		return PowPrependImpl(R + L"(", L", ", L") = ", Tmp...);
+		return PowBegHit(R + L"(", L", ", L") = ", Tmp...);
 	};
-	template <typename T, std::size_t I = 0, std::size_t A>
-	void PowGet(std::array<T, A>& Dat)
+	inline static const wchar_t* Assign = L" = ";
+	template <std::size_t A, std::size_t I = 0>
+	void PowGet(std::array<std::int64_t, A>& Dat)
 	{
 		if constexpr (I < A)
 		{
-			const wchar_t* Assign = L" = ";
-			if constexpr (std::is_same_v<T, std::int64_t>)
-			{
-				std::get<I>(Dat) = AsInt(Base::Input(GetName(std::integral_constant<std::size_t, I>{}) + Assign));
-			}
-			else if constexpr (std::is_same_v<T, std::pair<std::int64_t, std::int64_t>>)
-			{
-				std::int64_t Min = AsInt(Base::Input(GetName(std::integral_constant<std::size_t, I>{}) + L"(min)" + Assign));
-				std::int64_t Max = AsInt(Base::Input(GetName(std::integral_constant<std::size_t, I>{}) + L"(max)" + Assign));
-				std::get<I>(Dat) = std::make_pair<std::int64_t, std::int64_t>(std::move(Min), std::move(Max));
-			}
-			if constexpr (I < A)
-			{
-				PowGet<T, I + 1, A>(Dat);
-			}
+			std::get<I>(Dat) = AsInt(Base::Input(GetName<I>() + Assign));
+			PowGet<A, I + 1>(Dat);
+		}
+	};
+	template <std::size_t A, std::size_t I = 0>
+	void PowGet(std::array<std::pair<std::int64_t, std::int64_t>, A>& Dat)
+	{
+		if constexpr (I < A)
+		{
+			std::int64_t Min = AsInt(Base::Input(GetName<I>() + L"(min)" + Assign));
+			std::int64_t Max = AsInt(Base::Input(GetName<I>() + L"(max)" + Assign));
+			std::pair<std::int64_t, std::int64_t> Par{ Min, Max };
+			if (Min > Max) { std::swap(Par.first, Par.second); }
+			std::get<I>(Dat) = Par;
+			PowGet<A, I + 1>(Dat);
 		}
 	};
 	template <typename F, typename N, std::size_t A, std::size_t... I>
-	void PowRstImpl(F S, const N& Union, const N& Value, const std::array<std::int64_t, A>& Dat, std::integer_sequence<std::size_t, I...>)
+	void PowRstPut(F S, const N& U, const N& V, const std::array<std::int64_t, A>& Dat, std::integer_sequence<std::size_t, I...>)
 	{
-		Base::Output(ToModStr(std::invoke(S, Union, Value, std::get<I>(Dat)...)));
+		Base::Output(ToModStr(std::invoke(S, U, V, std::get<I>(Dat)...)));
 	};
 	template <typename F, typename N, std::size_t A, std::size_t... I>
-	void PowRstImpl(F S, const std::wstring& R, const N& Union, const N& Value, const std::array<std::int64_t, A>& Tmp, std::integer_sequence<std::size_t, I...>)
+	void PowRstPut(F S, const std::wstring& R, const N& U, const N& V, const std::array<std::int64_t, A>& Tmp, std::integer_sequence<std::size_t, I...>)
 	{
-		Base::Output(
-			PowPrepend(R, std::get<I>(Tmp)...),
-			ToModStr(std::invoke(S, Union, Value, std::get<I>(Tmp)...))
-		);
+		Base::Output(PowBeg(R, std::get<I>(Tmp)...), ToModStr(std::invoke(S, U, V, std::get<I>(Tmp)...)));
 	};
 	template <typename F, typename N, std::size_t A, std::size_t I = 0>
-	void PowRstImpl(F S, const std::wstring& R, const N& Union, const N& Value, const std::array<std::pair<std::int64_t, std::int64_t>, A>& Dat, std::array<std::int64_t, A>& Tmp)
+	void PowRstLoop(F S, const std::wstring& R, const N& U, const N& V, const std::array<std::pair<std::int64_t, std::int64_t>, A>& Dat, std::array<std::int64_t, A>& Tmp)
 	{
 		if constexpr (I < A)
 		{
 			while (std::get<I>(Tmp) <= std::get<I>(Dat).second)
 			{
-				PowRstImpl<F, N, A, I + 1>(S, R, Union, Value, Dat, Tmp);
-				std::get<I>(Tmp) = std::get<I>(Tmp) + 1;
+				PowRstLoop<F, N, A, I + 1>(S, R, U, V, Dat, Tmp);
+				++std::get<I>(Tmp);
 			}
 			std::get<I>(Tmp) = std::get<I>(Dat).first;
 		}
 		else if constexpr (I == A)
 		{
-			PowRstImpl(S, R, Union, Value, Tmp, std::make_index_sequence<A>{});
+			PowRstPut(S, R, U, V, Tmp, std::make_index_sequence<A>{});
 		}
 	};
 	template <std::size_t A, std::size_t I = 0>
-	void PowTmp(const std::array<std::pair<std::int64_t, std::int64_t>, A>& Dat, std::array<std::int64_t, A>& Tmp)
+	void PowTmpInit(const std::array<std::pair<std::int64_t, std::int64_t>, A>& Dat, std::array<std::int64_t, A>& Tmp)
 	{
 		if constexpr (I < A)
 		{
 			std::get<I>(Tmp) = std::get<I>(Dat).first;
-			PowTmp<A, I + 1>(Dat, Tmp);
+			PowTmpInit<A, I + 1>(Dat, Tmp);
 		}
 	};
-	template <typename T, typename F, typename N, std::size_t A>
-	void PowRst(F S, const std::wstring& R, const N& Union, const N& Value, const std::array<T, A>& Dat)
+	template <typename F, typename N, std::size_t A>
+	void PowRst(F S, const N& U, const N& V, const std::array<std::int64_t, A>& Dat)
 	{
-		if constexpr (std::is_same_v<T, std::int64_t>)
-		{
-			PowRstImpl(S, Union, Value, Dat, std::make_index_sequence<A>{});
-		}
-		else if constexpr (std::is_same_v<T, std::pair<std::int64_t, std::int64_t>>)
-		{
-			std::array<std::int64_t, A> Tmp{};
-			PowTmp(Dat, Tmp);
-			PowRstImpl(S, R, Union, Value, Dat, Tmp);
-		}
+		PowRstPut(S, U, V, Dat, std::make_index_sequence<A>{});
+	};
+	template <typename F, typename N, std::size_t A>
+	void PowRst(F S, const std::wstring& R, const N& U, const N& V, const std::array<std::pair<std::int64_t, std::int64_t>, A>& Dat)
+	{
+		std::array<std::int64_t, A> Tmp{};
+		PowTmpInit(Dat, Tmp);
+		PowRstLoop(S, R, U, V, Dat, Tmp);
 	};
 }
