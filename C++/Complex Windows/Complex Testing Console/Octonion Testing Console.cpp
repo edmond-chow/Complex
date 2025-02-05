@@ -30,8 +30,8 @@ namespace OctonBasis
 	{
 		if (L == R)
 		{
-			Octon U = Octon::Val(Base::Input(L"U = "));
-			Octon V = Octon::Val(Base::Input(L"V = "));
+			Octon U = Val<Octon>(Base::Input(L"U = "));
+			Octon V = Val<Octon>(Base::Input(L"V = "));
 			T Rst = std::invoke(F, U, V);
 			std::wstring Str;
 			if constexpr (std::is_same_v<T, Vec7D>) { Str = ToModStr(Octon{ 0, Rst }); }
@@ -44,8 +44,8 @@ namespace OctonBasis
 	{
 		if (L == R)
 		{
-			Octon U = Octon::Val(Base::Input(L"U = "));
-			Octon V = Octon::Val(Base::Input(L"V = "));
+			Octon U = Val<Octon>(Base::Input(L"U = "));
+			Octon V = Val<Octon>(Base::Input(L"V = "));
 			Base::Output(ToModStr(std::invoke(F, U, V)));
 		}
 	};
@@ -53,7 +53,7 @@ namespace OctonBasis
 	{
 		if (L == R)
 		{
-			Octon U = Octon::Val(Base::Input(L"U = "));
+			Octon U = Val<Octon>(Base::Input(L"U = "));
 			std::int64_t V = AsInt(Base::Input(L"V = "));
 			Base::Output(ToModStr(std::invoke(F, U, V)));
 		}
@@ -63,16 +63,16 @@ namespace OctonBasis
 	{
 		if (L == R)
 		{
-			Octon U = Octon::Val(Base::Input(L"U = "));
-			Octon V = Octon::Val(Base::Input(L"V = "));
+			Octon U = Val<Octon>(Base::Input(L"U = "));
+			Octon V = Val<Octon>(Base::Input(L"V = "));
 			std::array<std::int64_t, 1 + sizeof...(As)> Dat{};
 			PowGet(Dat);
 			PowRst(F, U, V, Dat);
 		}
 		else if (L == R + L"()")
 		{
-			Octon U = Octon::Val(Base::Input(L"U = "));
-			Octon V = Octon::Val(Base::Input(L"V = "));
+			Octon U = Val<Octon>(Base::Input(L"U = "));
+			Octon V = Val<Octon>(Base::Input(L"V = "));
 			std::array<std::pair<std::int64_t, std::int64_t>, 1 + sizeof...(As)> Dat{};
 			PowGet(Dat);
 			PowRst(F, R, U, V, Dat);
@@ -83,7 +83,7 @@ namespace OctonBasis
 	{
 		if (L == R)
 		{
-			Octon V = Octon::Val(Base::Input(L"V = "));
+			Octon V = Val<Octon>(Base::Input(L"V = "));
 			Base::Output(ToModStr(std::invoke(F, V)));
 		}
 	};
@@ -92,13 +92,13 @@ namespace OctonBasis
 	{
 		if (L == R)
 		{
-			Octon V = Octon::Val(Base::Input(L"V = "));
+			Octon V = Val<Octon>(Base::Input(L"V = "));
 			std::int64_t P = AsInt(Base::Input(L"P = "));
 			Base::Output(ToModStr(std::invoke(F, V, P)));
 		}
 		else if (L == R + L"()")
 		{
-			Octon V = Octon::Val(Base::Input(L"V = "));
+			Octon V = Val<Octon>(Base::Input(L"V = "));
 			std::int64_t PMin = AsInt(Base::Input(L"P(min) = "));
 			std::int64_t PMax = AsInt(Base::Input(L"P(max) = "));
 			for (std::int64_t P = PMin; P <= PMax; ++P)
@@ -111,7 +111,7 @@ namespace OctonBasis
 	{
 		if (L == R)
 		{
-			Octon V = Octon::Val(Base::Input(L"V = "));
+			Octon V = Val<Octon>(Base::Input(L"V = "));
 			Base::Output(ToModStr(std::invoke(F, V)));
 		}
 	};
@@ -119,7 +119,7 @@ namespace OctonBasis
 	{
 		if (L == R)
 		{
-			Octon V = Octon::Val(Base::Input(L"V = "));
+			Octon V = Val<Octon>(Base::Input(L"V = "));
 			bool S = false;
 			std::wstring Input = std::regex_replace(Base::Input(L"Sign : "), std::wregex(L" "), L"");
 			if (Input == L"+") { S = true; }
@@ -129,7 +129,7 @@ namespace OctonBasis
 		}
 		else if (L == R + L"()")
 		{
-			Octon V = Octon::Val(Base::Input(L"V = "));
+			Octon V = Val<Octon>(Base::Input(L"V = "));
 			std::int64_t PMin = AsInt(Base::Input(L"P(min) = "));
 			std::int64_t PMax = AsInt(Base::Input(L"P(max) = "));
 			for (std::int64_t P = PMin; P <= PMax; ++P)

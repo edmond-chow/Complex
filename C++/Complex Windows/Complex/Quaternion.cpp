@@ -31,58 +31,6 @@
 #endif
 namespace Num
 {
-	class I String
-	{
-	private:
-		wchar_t* Pointer;
-	public:
-		Ths String()
-			: Pointer{ nullptr }
-		{};
-		String(const std::wstring& Content)
-			: Pointer{ nullptr }
-		{
-			New(Content.c_str(), Content.size() + 1);
-		};
-		String(const String& Self) = delete;
-		Ths String(String&& Self) noexcept
-			: Pointer{ nullptr }
-		{
-			Pointer = Self.Pointer;
-			Self.Pointer = nullptr;
-		};
-		String& operator =(const String& O) & = delete;
-		String& Ths operator =(String&& O) & noexcept
-		{
-			delete[] Pointer;
-			Pointer = O.Pointer;
-			O.Pointer = nullptr;
-			return *this;
-		};
-		Ths ~String() noexcept
-		{
-			delete[] Pointer;
-			Pointer = nullptr;
-		};
-		Ths operator const wchar_t*() &
-		{
-			return Pointer;
-		};
-		operator std::wstring() const
-		{
-			return Dat();
-		};
-	private:
-		void Ths New(const wchar_t* Pt, std::size_t Sz) &
-		{
-			Pointer = new wchar_t[Sz] {};
-			std::copy(Pt, Pt + Sz, Pointer);
-		};
-		const wchar_t* Ths Dat() const&
-		{
-			return Pointer;
-		};
-	};
 	struct I Vec3D
 	{
 		///
@@ -218,11 +166,12 @@ namespace Num
 	public:
 		static String Gbl Str(const Vec3D& V)
 		{
-			return ToString(V, true, L"e1", L"e2", L"e3");
+			std::wstring Rst = ToString(V, true, L"e1", L"e2", L"e3");
+			return String{ Rst.data() };
 		};
 		static Vec3D Gbl Val(const String& V)
 		{
-			std::wstring Str = Replace(V, L" ", L"");
+			std::wstring Str = Replace(V.Ptr(), L" ", L"");
 			Vec3D Rst{};
 			ToNumbers(Str, Rst, true, L"e1", L"e2", L"e3");
 			return Rst;
@@ -778,11 +727,12 @@ namespace Num
 	public:
 		static String Gbl Str(const Quter& V)
 		{
-			return ToString(V, false, L"", L"i", L"j", L"k");
+			std::wstring Rst = ToString(V, false, L"", L"i", L"j", L"k");
+			return String{ Rst.data() };
 		};
 		static Quter Gbl Val(const String& V)
 		{
-			std::wstring Str = Replace(V, L" ", L"");
+			std::wstring Str = Replace(V.Ptr(), L" ", L"");
 			Quter Rst{};
 			ToNumbers(Str, Rst, false, L"", L"i", L"j", L"k");
 			return Rst;

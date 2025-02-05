@@ -30,8 +30,8 @@ namespace SedenBasis
 	{
 		if (L == R)
 		{
-			Seden U = Seden::Val(Base::Input(L"U = "));
-			Seden V = Seden::Val(Base::Input(L"V = "));
+			Seden U = Val<Seden>(Base::Input(L"U = "));
+			Seden V = Val<Seden>(Base::Input(L"V = "));
 			Base::Output(ToModStr(std::invoke(F, U, V)));
 		}
 	};
@@ -40,8 +40,8 @@ namespace SedenBasis
 	{
 		if (L == R)
 		{
-			Seden U = Seden::Val(Base::Input(L"U = "));
-			Seden V = Seden::Val(Base::Input(L"V = "));
+			Seden U = Val<Seden>(Base::Input(L"U = "));
+			Seden V = Val<Seden>(Base::Input(L"V = "));
 			Base::Output(ToModStr(std::invoke(F, U, V)));
 		}
 	};
@@ -49,7 +49,7 @@ namespace SedenBasis
 	{
 		if (L == R)
 		{
-			Seden U = Seden::Val(Base::Input(L"U = "));
+			Seden U = Val<Seden>(Base::Input(L"U = "));
 			std::int64_t V = AsInt(Base::Input(L"V = "));
 			Base::Output(ToModStr(std::invoke(F, U, V)));
 		}
@@ -59,16 +59,16 @@ namespace SedenBasis
 	{
 		if (L == R)
 		{
-			Seden U = Seden::Val(Base::Input(L"U = "));
-			Seden V = Seden::Val(Base::Input(L"V = "));
+			Seden U = Val<Seden>(Base::Input(L"U = "));
+			Seden V = Val<Seden>(Base::Input(L"V = "));
 			std::array<std::int64_t, 1 + sizeof...(As)> Dat{};
 			PowGet(Dat);
 			PowRst(F, U, V, Dat);
 		}
 		else if (L == R + L"()")
 		{
-			Seden U = Seden::Val(Base::Input(L"U = "));
-			Seden V = Seden::Val(Base::Input(L"V = "));
+			Seden U = Val<Seden>(Base::Input(L"U = "));
+			Seden V = Val<Seden>(Base::Input(L"V = "));
 			std::array<std::pair<std::int64_t, std::int64_t>, 1 + sizeof...(As)> Dat{};
 			PowGet(Dat);
 			PowRst(F, R, U, V, Dat);
@@ -79,7 +79,7 @@ namespace SedenBasis
 	{
 		if (L == R)
 		{
-			Seden V = Seden::Val(Base::Input(L"V = "));
+			Seden V = Val<Seden>(Base::Input(L"V = "));
 			Base::Output(ToModStr(std::invoke(F, V)));
 		}
 	};
@@ -88,13 +88,13 @@ namespace SedenBasis
 	{
 		if (L == R)
 		{
-			Seden V = Seden::Val(Base::Input(L"V = "));
+			Seden V = Val<Seden>(Base::Input(L"V = "));
 			std::int64_t P = AsInt(Base::Input(L"P = "));
 			Base::Output(ToModStr(std::invoke(F, V, P)));
 		}
 		else if (L == R + L"()")
 		{
-			Seden V = Seden::Val(Base::Input(L"V = "));
+			Seden V = Val<Seden>(Base::Input(L"V = "));
 			std::int64_t PMin = AsInt(Base::Input(L"P(min) = "));
 			std::int64_t PMax = AsInt(Base::Input(L"P(max) = "));
 			for (std::int64_t P = PMin; P <= PMax; ++P)
@@ -107,7 +107,7 @@ namespace SedenBasis
 	{
 		if (L == R)
 		{
-			Seden V = Seden::Val(Base::Input(L"V = "));
+			Seden V = Val<Seden>(Base::Input(L"V = "));
 			Base::Output(ToModStr(std::invoke(F, V)));
 		}
 	};
@@ -115,7 +115,7 @@ namespace SedenBasis
 	{
 		if (L == R)
 		{
-			Seden V = Seden::Val(Base::Input(L"V = "));
+			Seden V = Val<Seden>(Base::Input(L"V = "));
 			bool S = false;
 			std::wstring Input = std::regex_replace(Base::Input(L"Sign : "), std::wregex(L" "), L"");
 			if (Input == L"+") { S = true; }
@@ -125,7 +125,7 @@ namespace SedenBasis
 		}
 		else if (L == R + L"()")
 		{
-			Seden V = Seden::Val(Base::Input(L"V = "));
+			Seden V = Val<Seden>(Base::Input(L"V = "));
 			std::int64_t PMin = AsInt(Base::Input(L"P(min) = "));
 			std::int64_t PMax = AsInt(Base::Input(L"P(max) = "));
 			for (std::int64_t P = PMin; P <= PMax; ++P)

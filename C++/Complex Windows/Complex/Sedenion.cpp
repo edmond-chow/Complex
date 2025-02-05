@@ -80,58 +80,6 @@ inline std::size_t stos_t(const std::wstring& str)
 };
 namespace Num
 {
-	class I String
-	{
-	private:
-		wchar_t* Pointer;
-	public:
-		Ths String()
-			: Pointer{ nullptr }
-		{};
-		String(const std::wstring& Content)
-			: Pointer{ nullptr }
-		{
-			New(Content.c_str(), Content.size() + 1);
-		};
-		String(const String& Self) = delete;
-		Ths String(String&& Self) noexcept
-			: Pointer{ nullptr }
-		{
-			Pointer = Self.Pointer;
-			Self.Pointer = nullptr;
-		};
-		String& operator =(const String& O) & = delete;
-		String& Ths operator =(String&& O) & noexcept
-		{
-			delete[] Pointer;
-			Pointer = O.Pointer;
-			O.Pointer = nullptr;
-			return *this;
-		};
-		Ths ~String() noexcept
-		{
-			delete[] Pointer;
-			Pointer = nullptr;
-		};
-		Ths operator const wchar_t*() &
-		{
-			return Pointer;
-		};
-		operator std::wstring() const
-		{
-			return Dat();
-		};
-	private:
-		void Ths New(const wchar_t* Pt, std::size_t Sz) &
-		{
-			Pointer = new wchar_t[Sz] {};
-			std::copy(Pt, Pt + Sz, Pointer);
-		};
-		const wchar_t* Ths Dat() const&
-		{
-			return Pointer;
-		};
-	};
 	class I Seden
 	{
 		///
@@ -692,11 +640,12 @@ namespace Num
 				Num[i] = V.Data[i];
 				Trm[i] += std::to_wstring(i);
 			}
-			return ToString(Num, Trm);
+			std::wstring Rst = ToString(Num, Trm);
+			return String{ Rst.data() };
 		};
 		static Seden Gbl Val(const String& V)
 		{
-			std::wstring Str = Replace(V, L" ", L"");
+			std::wstring Str = Replace(V.Ptr(), L" ", L"");
 			if (Str == L"0") { return Seden::Zero; };
 			std::size_t Dim = 0;
 			std::wstring Rest = Str;

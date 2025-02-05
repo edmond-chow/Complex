@@ -111,3 +111,57 @@ void ToNumbers(const std::wstring& Val, N& Rst, bool Vec, Ts... As)
 	std::vector<double> Num = ToNumbers(Val, Trm);
 	for (std::size_t i = 0, o = Vec ? 1 : 0; i < Trm.size(); ++i) { Rst[i + o] = Num[i]; }
 };
+#pragma push_macro("I")
+#pragma push_macro("Ths")
+#if defined(_MSVC_LANG)
+#define I __declspec(dllexport)
+#define Ths __thiscall
+#else
+#define I
+#define Ths
+#endif
+namespace Num
+{
+	class I String
+	{
+	private:
+		wchar_t* Pointer;
+	public:
+		Ths String()
+			: Pointer{ nullptr }
+		{};
+		Ths String(const wchar_t* Pt)
+			: Pointer{ nullptr }
+		{
+			std::size_t Sz{ wcslen(Pt) + 1 };
+			Pointer = new wchar_t[Sz] {};
+			std::copy(Pt, Pt + Sz, Pointer);
+		};
+		String(const String& Self) = delete;
+		Ths String(String&& Self) noexcept
+			: Pointer{ nullptr }
+		{
+			Pointer = Self.Pointer;
+			Self.Pointer = nullptr;
+		};
+		String& operator =(const String& O) & = delete;
+		String& Ths operator =(String&& O) & noexcept
+		{
+			delete[] Pointer;
+			Pointer = O.Pointer;
+			O.Pointer = nullptr;
+			return *this;
+		};
+		Ths ~String() noexcept
+		{
+			delete[] Pointer;
+			Pointer = nullptr;
+		};
+		const wchar_t* Ths Ptr() const&
+		{
+			return Pointer;
+		};
+	};
+}
+#pragma pop_macro("Ths")
+#pragma pop_macro("I")

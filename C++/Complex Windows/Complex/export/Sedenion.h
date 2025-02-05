@@ -18,6 +18,7 @@
 #ifndef SEDEN
 #define SEDEN
 #include <string>
+#include <NumString.h>
 #pragma pack(push)
 #pragma push_macro("I")
 #pragma push_macro("Gbl")
@@ -34,34 +35,6 @@
 #endif
 namespace Num
 {
-#ifndef NUM_STRING
-#define NUM_STRING
-	class I String
-	{
-	private:
-		wchar_t* Pointer;
-	public:
-		Ths String();
-		String(const std::wstring& Content)
-			: Pointer{ nullptr }
-		{
-			New(Content.c_str(), Content.size() + 1);
-		};
-		String(const String& Self) = delete;
-		Ths String(String&& Self) noexcept;
-		String& operator =(const String& O) & = delete;
-		String& Ths operator =(String&& O) & noexcept;
-		Ths ~String() noexcept;
-		Ths operator const wchar_t*() &;
-		operator std::wstring() const
-		{
-			return Dat();
-		};
-	private:
-		void Ths New(const wchar_t* Pt, std::size_t Sz) &;
-		const wchar_t* Ths Dat() const&;
-	};
-#endif
 	class I Seden
 	{
 	public:

@@ -22,6 +22,7 @@
 #include <array>
 #include <stdexcept>
 #include <functional>
+#include <NumString.h>
 inline std::int64_t wtoi64_t(const wchar_t* str)
 {
 	if (str[0] == L'\0') { throw std::invalid_argument("The string cannot be converted as an integer."); }
@@ -97,27 +98,30 @@ inline std::int64_t stoi64_t(const std::wstring& str)
 	return wtoi64_t(str.c_str());
 };
 template <typename T>
-std::wstring ToModStr(T Obj)
+T Val(const std::wstring& Str)
 {
-	return T::Str(Obj);
+	Num::String V{ Str.data() };
+	return T::Val(V);
 };
-template <>
-inline std::wstring ToModStr<double>(double Obj)
+template <typename T>
+std::wstring ToModStr(const T& Obj)
+{
+	Num::String Rst{ T::Str(Obj) };
+	return Rst.Ptr();
+};
+inline std::wstring ToModStr(double Obj)
 {
 	return Str(Obj);
 };
-template <>
-inline std::wstring ToModStr<std::size_t>(std::size_t Obj)
+inline std::wstring ToModStr(std::size_t Obj)
 {
 	return std::to_wstring(Obj);
 };
-template <>
-inline std::wstring ToModStr<std::int64_t>(std::int64_t Obj)
+inline std::wstring ToModStr(std::int64_t Obj)
 {
 	return std::to_wstring(Obj);
 };
-template <>
-inline std::wstring ToModStr<bool>(bool Obj)
+inline std::wstring ToModStr(bool Obj)
 {
 	return Obj ? L"true" : L"false";
 };

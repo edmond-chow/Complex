@@ -50,6 +50,9 @@
     <ClInclude Include="export\Sedenion.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="export\NumString.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="res.rc">

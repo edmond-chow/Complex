@@ -167,6 +167,7 @@
   <ItemGroup>
     <ClInclude Include="Cayley Dickson Algebra.h" />
     <ClInclude Include="export\Complex.h" />
+    <ClInclude Include="export\NumString.h" />
     <ClInclude Include="export\Octonion.h" />
     <ClInclude Include="export\Quaternion.h" />
     <ClInclude Include="export\Sedenion.h" />
