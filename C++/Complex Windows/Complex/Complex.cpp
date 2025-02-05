@@ -31,6 +31,58 @@
 #endif
 namespace Num
 {
+	class I String
+	{
+	private:
+		wchar_t* Pointer;
+	public:
+		Ths String()
+			: Pointer{ nullptr }
+		{};
+		String(const std::wstring& Content)
+			: Pointer{ nullptr }
+		{
+			New(Content.c_str(), Content.size());
+		};
+		String(const String& Self) = delete;
+		Ths String(String&& Self) noexcept
+			: Pointer{ nullptr }
+		{
+			Pointer = Self.Pointer;
+			Self.Pointer = nullptr;
+		};
+		String& operator =(const String& O) & = delete;
+		String& Ths operator =(String&& O) & noexcept
+		{
+			delete[] Pointer;
+			Pointer = O.Pointer;
+			O.Pointer = nullptr;
+			return *this;
+		};
+		Ths ~String() noexcept
+		{
+			delete[] Pointer;
+			Pointer = nullptr;
+		};
+		Ths operator const wchar_t*() &
+		{
+			return Pointer;
+		};
+		operator std::wstring() const
+		{
+			return Dat();
+		};
+	private:
+		void Ths New(const wchar_t* Pt, std::size_t Sz) &
+		{
+			Pointer = new wchar_t[Sz] {};
+			std::copy(Pt, Pt + Sz, Pointer);
+		};
+		const wchar_t* Ths Dat() const&
+		{
+			return Pointer;
+		};
+	};
 	struct I Vec1D
 	{
 		///
@@ -66,7 +118,7 @@ namespace Num
 			case 1:
 				return this->x1;
 			default:
-				throw std::out_of_range("The index is out of range.");
+				throw std::out_of_range{ "The index is out of range." };
 			}
 		};
 		const double& Ths operator [](std::size_t i) const&
@@ -76,7 +128,7 @@ namespace Num
 			case 1:
 				return this->x1;
 			default:
-				throw std::out_of_range("The index is out of range.");
+				throw std::out_of_range{ "The index is out of range." };
 			}
 		};
 		friend bool I Gbl operator ==(const Vec1D& U, const Vec1D& V);
@@ -152,11 +204,11 @@ namespace Num
 		/// conventions
 		///
 	public:
-		static std::wstring Gbl Str(const Vec1D& V)
+		static String Gbl Str(const Vec1D& V)
 		{
 			return ToString(V, true, L"e1");
 		};
-		static Vec1D Gbl Val(const std::wstring& V)
+		static Vec1D Gbl Val(const String& V)
 		{
 			std::wstring Str = Replace(V, L" ", L"");
 			Vec1D Rst{};
@@ -708,11 +760,11 @@ namespace Num
 		/// conventions
 		///
 	public:
-		static std::wstring Gbl Str(const Cmplx& V)
+		static String Gbl Str(const Cmplx& V)
 		{
 			return ToString(V, false, L"", L"i");
 		};
-		static Cmplx Gbl Val(const std::wstring& V)
+		static Cmplx Gbl Val(const String& V)
 		{
 			std::wstring Str = Replace(V, L" ", L"");
 			Cmplx Rst{};

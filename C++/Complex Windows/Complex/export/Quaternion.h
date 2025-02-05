@@ -34,6 +34,34 @@
 #endif
 namespace Num
 {
+#ifndef NUM_STRING
+#define NUM_STRING
+	class I String
+	{
+	private:
+		wchar_t* Pointer;
+	public:
+		Ths String();
+		String(const std::wstring& Content)
+			: Pointer{ nullptr }
+		{
+			New(Content.c_str(), Content.size());
+		};
+		String(const String& Self) = delete;
+		Ths String(String&& Self) noexcept;
+		String& operator =(const String& O) & = delete;
+		String& Ths operator =(String&& O) & noexcept;
+		Ths ~String() noexcept;
+		Ths operator const wchar_t*() &;
+		operator std::wstring() const
+		{
+			return Dat();
+		};
+	private:
+		void Ths New(const wchar_t* Pt, std::size_t Sz) &;
+		const wchar_t* Ths Dat() const&;
+	};
+#endif
 	struct I Vec3D
 	{
 		///
@@ -85,8 +113,8 @@ namespace Num
 		/// conventions
 		///
 	public:
-		static std::wstring Gbl Str(const Vec3D& V);
-		static Vec3D Gbl Val(const std::wstring& V);
+		static String Gbl Str(const Vec3D& V);
+		static Vec3D Gbl Val(const String& V);
 	};
 	///
 	/// operators
@@ -224,8 +252,8 @@ namespace Num
 		/// conventions
 		///
 	public:
-		static std::wstring Gbl Str(const Quter& V);
-		static Quter Gbl Val(const std::wstring& V);
+		static String Gbl Str(const Quter& V);
+		static Quter Gbl Val(const String& V);
 	};
 	///
 	/// operators

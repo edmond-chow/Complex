@@ -74,49 +74,64 @@ inline std::int64_t wtoi64_t(const wchar_t* str)
 	}
 	return output;
 };
-inline std::wstring Str(double Number)
+inline std::wstring Str(double Num)
 {
-	std::wstringstream Result;
-	Result << std::defaultfloat << std::setprecision(17) << Number;
-	return std::regex_replace(Result.str(), std::wregex(L"e-0(?=[1-9])"), L"e-");
+	std::wstringstream Rst;
+	Rst << std::defaultfloat << std::setprecision(17) << Num;
+	return std::regex_replace(Rst.str(), std::wregex(L"e-0(?=[1-9])"), L"e-");
 };
 inline std::wstring Replace(const std::wstring& Input, const std::wstring& Search, const std::wstring& Replacement)
 {
-	std::wstring Result = Input;
-	std::size_t Position = Result.find(Search);
+	std::wstring Rst = Input;
+	std::size_t Position = Rst.find(Search);
 	while (Position != std::wstring::npos)
 	{
-		Result = Result.replace(Position, Search.size(), Replacement);
-		Position = Result.find(Search, Position + Replacement.size());
+		Rst = Rst.replace(Position, Search.size(), Replacement);
+		Position = Rst.find(Search, Position + Replacement.size());
 	}
-	return Result;
+	return Rst;
 };
 inline std::int64_t stoi64_t(const std::wstring& str)
 {
 	return wtoi64_t(str.c_str());
 };
 template <typename T>
-inline std::wstring ToModStr(T o) { return T::Str(o); };
-template <>
-inline std::wstring ToModStr<double>(double o) { return Str(o); };
-template <>
-inline std::wstring ToModStr<std::size_t>(std::size_t o) { return std::to_wstring(o); };
-template <>
-inline std::wstring ToModStr<std::int64_t>(std::int64_t o) { return std::to_wstring(o); };
-template <>
-inline std::wstring ToModStr<bool>(bool o) { return o ? L"true" : L"false"; };
-inline std::int64_t AsInt(const std::wstring& V)
+std::wstring ToModStr(T Obj)
 {
-	return stoi64_t(Replace(V, L" ", L""));
+	return T::Str(Obj);
 };
-inline double AsReal(const std::wstring& V)
+template <>
+inline std::wstring ToModStr<double>(double Obj)
 {
-	std::wstring Replaced = Replace(V, L" ", L"");
+	return Str(Obj);
+};
+template <>
+inline std::wstring ToModStr<std::size_t>(std::size_t Obj)
+{
+	return std::to_wstring(Obj);
+};
+template <>
+inline std::wstring ToModStr<std::int64_t>(std::int64_t Obj)
+{
+	return std::to_wstring(Obj);
+};
+template <>
+inline std::wstring ToModStr<bool>(bool Obj)
+{
+	return Obj ? L"true" : L"false";
+};
+inline std::int64_t AsInt(const std::wstring& Val)
+{
+	return stoi64_t(Replace(Val, L" ", L""));
+};
+inline double AsReal(const std::wstring& Val)
+{
+	std::wstring Replaced = Replace(Val, L" ", L"");
 	std::size_t Processed = 0;
-	double Result = 0;
-	try { Result = std::stod(Replaced, &Processed); }
+	double Rst = 0;
+	try { Rst = std::stod(Replaced, &Processed); }
 	catch (...) { Processed = std::wstring::npos; }
-	if (Processed == Replaced.size()) { return Result; }
+	if (Processed == Replaced.size()) { return Rst; }
 	throw std::invalid_argument("The string cannot be converted as a real.");
 };
 namespace ComplexTestingConsole

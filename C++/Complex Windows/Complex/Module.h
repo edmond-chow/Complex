@@ -35,10 +35,10 @@ inline std::wstring GetPattern(const std::wstring& Term)
 {
 	return FollowedBy(SignBefore + AddGroup(UnsignedReal, !Term.empty()), Term + SignAfter);
 };
-inline std::wstring Str(double Number)
+inline std::wstring Str(double Num)
 {
 	std::wstringstream Rst;
-	Rst << std::defaultfloat << std::setprecision(17) << Number;
+	Rst << std::defaultfloat << std::setprecision(17) << Num;
 	return std::regex_replace(Rst.str(), std::wregex(L"e-0(?=[1-9])"), L"e-");
 };
 inline std::wstring Replace(const std::wstring& Input, const std::wstring& Search, const std::wstring& Replacement)
@@ -54,6 +54,7 @@ inline std::wstring Replace(const std::wstring& Input, const std::wstring& Searc
 };
 inline std::wstring ToString(const std::vector<double>& Num, const std::vector<std::wstring>& Trm)
 {
+	if (Num.size() != Trm.size()) { throw std::runtime_error{ "The branch should unreachable." }; }
 	std::wstringstream Rst;
 	bool Fst = true;
 	for (std::size_t i = 0; i < Num.size(); ++i)
@@ -81,7 +82,7 @@ inline std::vector<double> ToNumbers(const std::wstring& Val, const std::vector<
 {
 	std::vector<double> Num(Trm.size());
 	std::size_t Cnt = Val.length();
-	if (Cnt == 0) { throw std::invalid_argument("The string is empty."); }
+	if (Cnt == 0) { throw std::invalid_argument{ "The string is empty." }; }
 	for (std::size_t i = 0; i < Num.size(); ++i)
 	{
 		double Data = 0;
@@ -100,7 +101,7 @@ inline std::vector<double> ToNumbers(const std::wstring& Val, const std::vector<
 		}
 		Num[i] = Data;
 	}
-	if (Cnt != 0) { throw std::invalid_argument("The string is invalid."); }
+	if (Cnt != 0) { throw std::invalid_argument{ "The string is invalid." }; }
 	return Num;
 };
 template <typename N, typename... Ts>
