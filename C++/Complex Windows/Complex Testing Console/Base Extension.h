@@ -19,6 +19,7 @@
 /*   Extension   */
 /*               */
 /* ============= */
+#include <cstdint>
 #include <string>
 namespace CmplxConExt
 {

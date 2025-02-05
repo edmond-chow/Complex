@@ -21,6 +21,7 @@
 #include <conio.h>
 #include <Windows.h>
 #include <memory>
+#include <cstdint>
 #include <string>
 #include <iostream>
 #include "Base.h"
