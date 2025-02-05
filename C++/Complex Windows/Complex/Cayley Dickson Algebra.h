@@ -25,38 +25,38 @@ struct Number
 private:
 	std::vector<double> Data;
 public:
-	constexpr Number(std::size_t Size)
+	Number(std::size_t Size)
 		: Data(Size, 0)
 	{};
-	constexpr Number(const std::initializer_list<double>& Numbers)
+	Number(const std::initializer_list<double>& Numbers)
 		: Data{ Numbers }
 	{};
-	constexpr Number(const std::vector<double>& Numbers)
+	Number(const std::vector<double>& Numbers)
 		: Data{ Numbers }
 	{};
-	constexpr Number(const Number& N)
+	Number(const Number& N)
 		: Data{ N.Data }
 	{};
-	constexpr Number(Number&& N) noexcept
+	Number(Number&& N) noexcept
 		: Data{ std::move(N.Data) }
 	{};
-	constexpr const std::vector<double>& operator ()() const&
+	const std::vector<double>& operator ()() const&
 	{
 		return Data;
 	};
-	constexpr double& operator [](std::size_t i) &
+	double& operator [](std::size_t i) &
 	{
 		return Data[i];
 	};
-	constexpr const double& operator [](std::size_t i) const&
+	const double& operator [](std::size_t i) const&
 	{
 		return Data[i];
 	};
-	constexpr std::size_t Size() const&
+	std::size_t Size() const&
 	{
 		return Data.size();
 	};
-	constexpr std::size_t Near() const&
+	std::size_t Near() const&
 	{
 		std::size_t OriSize = Data.size();
 		if (OriSize == 0) { return 0; }
@@ -70,7 +70,7 @@ public:
 		Rst <<= Shift;
 		return Rst;
 	};
-	constexpr Number Retrieve(std::size_t Begin, std::size_t End) const&
+	Number Retrieve(std::size_t Begin, std::size_t End) const&
 	{
 		std::size_t OriSize = Data.size();
 		if (Begin >= End || End > OriSize) { return Number{}; }
@@ -82,17 +82,17 @@ public:
 		}
 		return Rst;
 	};
-	constexpr Number L() const&
+	Number L() const&
 	{
 		std::size_t OriSize = Data.size();
 		return Retrieve(0, OriSize >> 1);
 	};
-	constexpr Number R() const&
+	Number R() const&
 	{
 		std::size_t OriSize = Data.size();
 		return Retrieve(OriSize >> 1, OriSize);
 	};
-	constexpr Number Extend(std::size_t Size) const&
+	Number Extend(std::size_t Size) const&
 	{
 		std::size_t OriSize = Data.size();
 		if (Size < OriSize) { Size = OriSize; }
@@ -100,7 +100,7 @@ public:
 		for (std::size_t i = 0; i < OriSize; ++i) { Rst.Data[i] = Data[i]; }
 		return Rst;
 	};
-	constexpr Number InPlaceExtend(std::size_t Size) &
+	Number InPlaceExtend(std::size_t Size) &
 	{
 		std::size_t OriSize = Data.size();
 		while (Size < OriSize)
@@ -110,7 +110,7 @@ public:
 		}
 		return *this;
 	};
-	static constexpr Number Merge(const Number& U, const Number& V)
+	static Number Merge(const Number& U, const Number& V)
 	{
 		std::size_t UOriSize = U.Data.size();
 		std::size_t VOriSize = V.Data.size();
@@ -125,7 +125,7 @@ public:
 	/// operators
 	///
 public:
-	friend static constexpr bool operator ==(const Number& U, const Number& V)
+	friend bool operator ==(const Number& U, const Number& V)
 	{
 		std::size_t UOriSize = U.Data.size();
 		std::size_t VOriSize = V.Data.size();
@@ -140,11 +140,11 @@ public:
 		}
 		return true;
 	};
-	friend static constexpr bool operator !=(const Number& U, const Number& V)
+	friend bool operator !=(const Number& U, const Number& V)
 	{
 		return !(U == V);
 	};
-	friend static constexpr Number operator +(const Number& U, const Number& V)
+	friend Number operator +(const Number& U, const Number& V)
 	{
 		std::size_t UOriSize = U.Data.size();
 		std::size_t VOriSize = V.Data.size();
@@ -153,37 +153,37 @@ public:
 		for (std::size_t i = 0; i < UOriSize; ++i) { Rst.Data[i] += U.Data[i]; }
 		return Rst;
 	};
-	constexpr Number& operator +=(const Number& O) &
+	Number& operator +=(const Number& O) &
 	{
 		std::size_t OOriSize = O.Data.size();
 		InPlaceExtend(OOriSize);
 		for (std::size_t i = 0; i < OOriSize; ++i) { Data[i] += O.Data[i]; }
 		return *this;
 	};
-	friend static constexpr Number operator -(const Number& V)
+	friend Number operator -(const Number& V)
 	{
 		Number Rst = V;
 		for (std::size_t i = 0; i < Rst.Data.size(); ++i) { Rst.Data[i] = -Rst.Data[i]; }
 		return Rst;
 	};
-	friend static constexpr Number operator -(const Number& U, const Number& V)
+	friend Number operator -(const Number& U, const Number& V)
 	{
 		return U + (-V);
 	};
-	constexpr Number& operator -=(const Number& O) &
+	Number& operator -=(const Number& O) &
 	{
 		std::size_t OOriSize = O.Data.size();
 		InPlaceExtend(OOriSize);
 		for (std::size_t i = 0; i < OOriSize; ++i) { Data[i] -= O.Data[i]; }
 		return *this;
 	};
-	friend static constexpr Number operator ~(const Number& V)
+	friend Number operator ~(const Number& V)
 	{
 		Number Rst = V;
 		for (std::size_t i = 1; i < Rst.Data.size(); ++i) { Rst.Data[i] = -Rst.Data[i]; }
 		return Rst;
 	};
-	friend static constexpr Number operator *(const Number& U, const Number& V)
+	friend Number operator *(const Number& U, const Number& V)
 	{
 		std::size_t UNear = U.Near();
 		std::size_t VNear = V.Near();
@@ -201,28 +201,28 @@ public:
 		Number R = VR * UL + UR * ~VL;
 		return Merge(L, R);
 	};
-	friend static constexpr Number operator *(Number U, double V)
+	friend Number operator *(Number U, double V)
 	{
 		Number Rst = U;
 		std::size_t UOriSize = U.Data.size();
 		for (std::size_t i = 0; i < UOriSize; ++i) { Rst.Data[i] *= V; }
 		return Rst;
 	};
-	friend static constexpr Number operator *(double U, const Number& V)
+	friend Number operator *(double U, const Number& V)
 	{
 		return V * U;
 	};
-	constexpr Number& operator *=(double O) &
+	Number& operator *=(double O) &
 	{
 		std::size_t OriSize = Data.size();
 		for (std::size_t i = 0; i < OriSize; ++i) { Data[i] *= O; }
 		return *this;
 	};
-	friend static constexpr Number operator /(Number U, double V)
+	friend Number operator /(Number U, double V)
 	{
 		return U * (1 / V);
 	};
-	constexpr Number& operator /=(double O) &
+	Number& operator /=(double O) &
 	{
 		for (std::size_t i = 0; i < Data.size(); ++i) { Data[i] /= O; }
 		return *this;
@@ -231,7 +231,7 @@ public:
 	/// multiples
 	///
 public:
-	constexpr static double Dot(const Number& U, const Number& V)
+	static double Dot(const Number& U, const Number& V)
 	{
 		std::size_t UOriSize = U.Data.size();
 		std::size_t VOriSize = V.Data.size();
@@ -243,7 +243,7 @@ public:
 		}
 		return Rst;
 	};
-	constexpr static Number Cross(const Number& U, const Number& V)
+	static Number Cross(const Number& U, const Number& V)
 	{
 		std::size_t UNear = U.Near();
 		std::size_t VNear = V.Near();
@@ -260,7 +260,7 @@ public:
 		Rst[0] = 0;
 		return Rst;
 	};
-	constexpr static Number Outer(const Number& U, const Number& V)
+	static Number Outer(const Number& U, const Number& V)
 	{
 		std::size_t UNear = U.Near();
 		std::size_t VNear = V.Near();
@@ -281,7 +281,7 @@ public:
 		Rst += Y;
 		return Rst;
 	};
-	constexpr static Number Even(const Number& U, const Number& V)
+	static Number Even(const Number& U, const Number& V)
 	{
 		std::size_t UNear = U.Near();
 		std::size_t VNear = V.Near();

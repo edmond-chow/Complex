@@ -15,7 +15,12 @@
  */
 #include "Base.h"
 #include "Quaternion.h"
+#pragma push_macro("Gbl")
+#if defined(_MSVC_LANG)
 #define Gbl __stdcall
+#else
+#define Gbl
+#endif
 using namespace ComplexTestingConsole;
 using namespace Num;
 namespace QuterBasis
@@ -211,3 +216,4 @@ namespace QuterBasis
 		}
 	};
 }
+#pragma pop_macro("Gbl")

@@ -121,7 +121,10 @@ namespace ComplexTestingConsole
 		std::wcout << std::endl;
 		return L"";
 	};
-	std::wstring Base::Exception() { return Exception(std::exception()); };
+	std::wstring Base::Exception()
+	{
+		return Exception(std::exception{});
+	};
 	std::wstring Base::Selection(const std::wstring& Content)
 	{
 		SetForegroundColor(ConsoleColor::DarkCyan);
@@ -130,7 +133,10 @@ namespace ComplexTestingConsole
 		std::wcout << Content << std::endl;
 		return Content;
 	};
-	std::wstring Base::Selection() { return Selection(L""); };
+	std::wstring Base::Selection()
+	{
+		return Selection(L"");
+	};
 	std::wstring Base::Input(const std::wstring& Content)
 	{
 		SetForegroundColor(ConsoleColor::Yellow);
@@ -142,7 +148,10 @@ namespace ComplexTestingConsole
 		std::getline(std::wcin, output);
 		return output;
 	};
-	std::wstring Base::Input() { return Input(L""); };
+	std::wstring Base::Input()
+	{
+		return Input(L"");
+	};
 	std::wstring Base::Output(const std::wstring& Preceding, const std::wstring& Content)
 	{
 		SetForegroundColor(ConsoleColor::Magenta);
@@ -153,8 +162,14 @@ namespace ComplexTestingConsole
 		std::wcout << Content << std::endl;
 		return Content;
 	};
-	std::wstring Base::Output(const std::wstring& Content) { return Output(L"", Content); };
-	std::wstring Base::Output() { return Output(L""); };
+	std::wstring Base::Output(const std::wstring& Content)
+	{
+		return Output(L"", Content);
+	};
+	std::wstring Base::Output()
+	{
+		return Output(L"");
+	};
 	std::wstring Base::Comment(const std::wstring& Preceding, const std::wstring& Content)
 	{
 		SetForegroundColor(ConsoleColor::White);
@@ -165,8 +180,14 @@ namespace ComplexTestingConsole
 		std::wcout << Content << std::endl;
 		return Content;
 	};
-	std::wstring Base::Comment(const std::wstring& Content) { return Comment(L"", Content); };
-	std::wstring Base::Comment() { return Comment(L""); };
+	std::wstring Base::Comment(const std::wstring& Content)
+	{
+		return Comment(L"", Content);
+	};
+	std::wstring Base::Comment()
+	{
+		return Comment(L"");
+	};
 	void Base::Startup(const std::wstring& Title)
 	{
 		Clear();

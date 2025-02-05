@@ -15,7 +15,12 @@
  */
 #include "Base.h"
 #include "Complex.h"
+#pragma push_macro("Gbl")
+#if defined(_MSVC_LANG)
 #define Gbl __stdcall
+#else
+#define Gbl
+#endif
 using namespace ComplexTestingConsole;
 using namespace Num;
 namespace CmplxBasis
@@ -211,3 +216,4 @@ namespace CmplxBasis
 		}
 	};
 }
+#pragma pop_macro("Gbl")

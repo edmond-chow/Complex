@@ -15,7 +15,12 @@
  */
 #include "Base.h"
 #include "Sedenion.h"
+#pragma push_macro("Gbl")
+#if defined(_MSVC_LANG)
 #define Gbl __stdcall
+#else
+#define Gbl
+#endif
 using namespace ComplexTestingConsole;
 using namespace Num;
 namespace SedenBasis
@@ -207,3 +212,4 @@ namespace SedenBasis
 		}
 	};
 }
+#pragma pop_macro("Gbl")

@@ -490,7 +490,7 @@ namespace Num
 		};
 		static double Gbl Arg(const Octon& V, std::int64_t P)
 		{
-			return Ev::Arccos(Scalar(V) / Abs(V)) + 2 * Ev::PI * P;
+			return Ev::Arccos(Scalar(V) / Abs(V)) + 2 * Ev::PI * static_cast<double>(P);
 		};
 		static double Gbl Arg(const Octon& V)
 		{
@@ -523,8 +523,8 @@ namespace Num
 			Vec7D Im = Vector(V);
 			if (Im == Vec7D::Zero)
 			{
-				if (Re >= 0) { return Ev::Ln(Re) + 2 * P * Ev::PI * i; }
-				else { return Ev::Ln(-Re) + (2 * P + 1) * Ev::PI * i; }
+				if (Re >= 0) { return Ev::Ln(Re) + 2 * static_cast<double>(P) * Ev::PI * i; }
+				else { return Ev::Ln(-Re) + (2 * static_cast<double>(P) + 1) * Ev::PI * i; }
 			}
 			Octon Or = Sgn(Im);
 			return Ev::Ln(Abs(V)) + Or * Arg(V, P);
@@ -553,12 +553,12 @@ namespace Num
 			{
 				if (Re >= 0)
 				{
-					double Ai = 2 * P * Ev::PI * V;
+					double Ai = 2 * static_cast<double>(P) * Ev::PI * V;
 					return Ev::Power(Re, V) * (Ev::Cos(Ai) + i * Ev::Sin(Ai));
 				}
 				else
 				{
-					double Ai = (2 * P + 1) * Ev::PI * V;
+					double Ai = (2 * static_cast<double>(P) + 1) * Ev::PI * V;
 					return Ev::Power(-Re, V) * (Ev::Cos(Ai) + i * Ev::Sin(Ai));
 				}
 			}
@@ -715,9 +715,9 @@ namespace Num
 			if (!S) { return Ev::PI + Arctan(V, true, P); }
 			double Re = Scalar(V);
 			Vec7D Im = Vector(V);
-			if (Im == Vec7D::Zero) { return 2 * Ev::PI * P + i * (Ln(1 - i * Re) - Ln(1 + i * Re)) / 2; }
+			if (Im == Vec7D::Zero) { return 2 * Ev::PI * static_cast<double>(P) + i * (Ln(1 - i * Re) - Ln(1 + i * Re)) / 2; }
 			Octon Or = Sgn(Im);
-			return 2 * Ev::PI * P + Or * (Ln(1 - Or * V) - Ln(1 + Or * V)) / 2;
+			return 2 * Ev::PI * static_cast<double>(P) + Or * (Ln(1 - Or * V) - Ln(1 + Or * V)) / 2;
 		};
 		static Octon Gbl Arctan(const Octon& V)
 		{
@@ -774,7 +774,7 @@ namespace Num
 			Vec7D Im = Vector(V);
 			Octon Or = Sgn(Im);
 			if (!S) { return Ev::PI * Or + Arctan(V, true, P); }
-			return 2 * Ev::PI * P * Or + (Ln(1 + V) - Ln(1 - V)) / 2;
+			return 2 * Ev::PI * static_cast<double>(P) * Or + (Ln(1 + V) - Ln(1 - V)) / 2;
 		};
 		static Octon Gbl Arctanh(const Octon& V)
 		{

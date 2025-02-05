@@ -21,6 +21,7 @@
 #include <sstream>
 #include <array>
 #include <stdexcept>
+#include <functional>
 inline std::int64_t wtoi64_t(const wchar_t* str)
 {
 	if (str[0] == L'\0') { throw std::invalid_argument("The string cannot be converted as an integer."); }
