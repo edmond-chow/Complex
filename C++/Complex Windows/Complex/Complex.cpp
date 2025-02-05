@@ -42,7 +42,7 @@ namespace Num
 		String(const std::wstring& Content)
 			: Pointer{ nullptr }
 		{
-			New(Content.c_str(), Content.size());
+			New(Content.c_str(), Content.size() + 1);
 		};
 		String(const String& Self) = delete;
 		Ths String(String&& Self) noexcept
