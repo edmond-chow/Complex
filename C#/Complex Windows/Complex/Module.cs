@@ -43,7 +43,7 @@ internal static class Module
     }
     internal static string ToString(this double[] Num, params string[] Trm)
     {
-        if (Num.Length != Trm.Length) { throw new NotImplementedException("The branch should ensure not instantiated at compile time."); }
+        if (Num.Length != Trm.Length) { throw new NotImplementedException("The branch should unreachable."); }
         StringBuilder Rst = new StringBuilder();
         bool Fst = true;
         for (int i = 0; i < Num.Length; ++i)

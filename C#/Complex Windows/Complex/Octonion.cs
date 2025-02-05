@@ -14,7 +14,6 @@
  *   limitations under the License.
  */
 using System;
-using System.Security.Cryptography;
 using static Module;
 namespace Num
 {
@@ -88,7 +87,7 @@ namespace Num
                     case 5: return x5;
                     case 6: return x6;
                     case 7: return x7;
-                    default: return 0;
+                    default: throw new IndexOutOfRangeException("The index is out of range.");
                 }
             }
             set
@@ -102,7 +101,7 @@ namespace Num
                     case 5: x5 = value; break;
                     case 6: x6 = value; break;
                     case 7: x7 = value; break;
-                    default: break;
+                    default: throw new IndexOutOfRangeException("The index is out of range.");
                 }
             }
         }
@@ -191,8 +190,7 @@ namespace Num
         {
             string Str = V.Replace(" ", "");
             Vec7D Rst = Zero;
-            try { Str.ToNumbers(ref Rst, true, "e1", "e2", "e3", "e4", "e5", "e6", "e7"); }
-            catch (Exception Ex) { throw new ArgumentException("The string cannot be converted as a number.", Ex); }
+            Str.ToNumbers(ref Rst, true, "e1", "e2", "e3", "e4", "e5", "e6", "e7");
             return Rst;
         }
         ///
@@ -696,8 +694,7 @@ namespace Num
         {
             string Str = V.Replace(" ", "");
             Octon Rst = Zero;
-            try { Str.ToNumbers(ref Rst, false, "", "i", "j", "k", "l", "il", "jl", "kl"); }
-            catch (Exception Ex) { throw new ArgumentException("The string cannot be converted as a number.", Ex); }
+            Str.ToNumbers(ref Rst, false, "", "i", "j", "k", "l", "il", "jl", "kl");
             return Rst;
         }
         ///

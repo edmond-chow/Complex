@@ -63,7 +63,7 @@ namespace Num
                 switch (i)
                 {
                     case 1: return x1;
-                    default: return 0;
+                    default: throw new IndexOutOfRangeException("The index is out of range.");
                 }
             }
             set
@@ -71,7 +71,7 @@ namespace Num
                 switch (i)
                 {
                     case 1: x1 = value; break;
-                    default: break;
+                    default: throw new IndexOutOfRangeException("The index is out of range.");
                 }
             }
         }
@@ -160,8 +160,7 @@ namespace Num
         {
             string Str = V.Replace(" ", "");
             Vec1D Rst = Zero;
-            try { Str.ToNumbers(ref Rst, true, "e1"); }
-            catch (Exception Ex) { throw new ArgumentException("The string cannot be converted as a number.", Ex); }
+            Str.ToNumbers(ref Rst, true, "e1");
             return Rst;
         }
         ///
@@ -659,8 +658,7 @@ namespace Num
         {
             string Str = V.Replace(" ", "");
             Cmplx Rst = Zero;
-            try { Str.ToNumbers(ref Rst, false, "", "i"); }
-            catch (Exception Ex) { throw new ArgumentException("The string cannot be converted as a number.", Ex); }
+            Str.ToNumbers(ref Rst, false, "", "i");
             return Rst;
         }
         ///
