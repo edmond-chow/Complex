@@ -80,7 +80,7 @@ inline std::size_t stos_t(const std::wstring& str)
 };
 namespace Num
 {
-	class Seden
+	class I Seden
 	{
 		///
 		/// helpers
@@ -109,34 +109,65 @@ namespace Num
 		///
 	private:
 		static constexpr const std::size_t BasicSize = 16;
-		std::vector<double> Data;
+		double* Data;
+		std::size_t Size;
 	public:
-		I explicit Ths Seden()
-			: Data(BasicSize, 0)
-		{};
-		I explicit Ths Seden(const std::initializer_list<double>& N)
-			: Data{ N }
+		explicit Ths Seden()
+			: Data{ nullptr }, Size{ 0 }
 		{
-			while (Data.size() < BasicSize) { Data.push_back(0); }
+			Size = BasicSize;
+			Data = new double[Size] {};
 		};
-		I Ths Seden(double V)
-			: Data{ V }
+		explicit Ths Seden(const std::initializer_list<double>& N)
+			: Data{ nullptr }, Size{ 0 }
 		{
-			while (Data.size() < BasicSize) { Data.push_back(0); }
+			Size = N.size();
+			if (Size < BasicSize) { Size = BasicSize; }
+			Data = new double[Size] {};
+			std::copy(N.begin(), N.end(), Data);
+		};
+		Ths Seden(double V)
+			: Data{ nullptr }, Size{ 0 }
+		{
+			Size = BasicSize;
+			Data = new double[Size] { V };
 		};
 	private:
 		explicit Seden(const std::vector<double>& N)
-			: Data{ N }
-		{};
+			: Data{ nullptr }, Size{ 0 }
+		{
+			Size = N.size();
+			if (Size < BasicSize) { Size = BasicSize; }
+			Data = new double[Size] {};
+			std::copy(N.begin(), N.end(), Data);
+		};
 	public:
-		I Ths Seden(const Seden& Self) = default;
-		I Ths Seden(Seden&& Self) = default;
-		I Ths ~Seden() noexcept = default;
-		static double I Gbl Scalar(const Seden& V)
+		Ths Seden(const Seden& Self)
+			: Data{ nullptr }, Size{ 0 }
+		{
+			Size = Self.Size;
+			Data = new double[Size] {};
+			std::copy(Self.Data, Self.Data + Self.Size, Data);
+		};
+		Ths Seden(Seden&& Self) noexcept
+			: Data{ nullptr }, Size{ 0 }
+		{
+			Data = Self.Data;
+			Size = Self.Size;
+			Self.Data = nullptr;
+			Self.Size = 0;
+		};
+		Ths ~Seden() noexcept
+		{
+			delete[] Data;
+			Data = nullptr;
+			Size = 0;
+		};
+		static double Gbl Scalar(const Seden& V)
 		{
 			return V[0];
 		};
-		static Seden I Gbl Vector(const Seden& V)
+		static Seden Gbl Vector(const Seden& V)
 		{
 			Seden Rst = V;
 			Rst[0] = 0;
@@ -146,42 +177,55 @@ namespace Num
 		/// operators
 		///
 	public:
-		I Seden Ths operator ()() const
+		Seden Ths operator ()() const
 		{
 			return *this;
 		};
-		I double& Ths operator [](std::size_t i) &
+		double& Ths operator [](std::size_t i) &
 		{
 			return Data[i];
 		};
-		I const double& Ths operator [](std::size_t i) const&
+		const double& Ths operator [](std::size_t i) const&
 		{
 			return Data[i];
 		};
-		I Seden& Ths operator =(const Seden& O) = default;
-		I Seden& Ths operator =(Seden&& O) = default;
+		Seden& Ths operator =(const Seden& O) &
+		{
+			Size = O.Size;
+			Data = new double[Size] {};
+			std::copy(O.Data, O.Data + O.Size, Data);
+			return *this;
+		};
+		Seden& Ths operator =(Seden&& O) & noexcept
+		{
+			Data = O.Data;
+			Size = O.Size;
+			O.Data = nullptr;
+			O.Size = 0;
+			return *this;
+		};
 		friend bool I Gbl operator ==(const Seden& U, const Seden& V);
 		friend bool I Gbl operator !=(const Seden& U, const Seden& V);
 		friend Seden I Gbl operator +(const Seden& V);
 		friend Seden I Gbl operator -(const Seden& V);
 		friend Seden I Gbl operator ~(const Seden& V);
-		I Seden& Ths operator ++() &
+		Seden& Ths operator ++() &
 		{
 			++(*this)[0];
 			return *this;
 		};
-		I Seden Ths operator ++(int) &
+		Seden Ths operator ++(int) &
 		{
 			Seden Rst = *this;
 			++(*this)[0];
 			return Rst;
 		};
-		I Seden& Ths operator --() &
+		Seden& Ths operator --() &
 		{
 			--(*this)[0];
 			return *this;
 		};
-		I Seden Ths operator --(int) &
+		Seden Ths operator --(int) &
 		{
 			Seden Rst = *this;
 			--(*this)[0];
@@ -192,47 +236,47 @@ namespace Num
 		friend Seden I Gbl operator *(const Seden& U, const Seden& V);
 		friend Seden I Gbl operator /(const Seden& U, const Seden& V);
 		friend Seden I Gbl operator ^(const Seden& U, std::int64_t V);
-		I Seden& Ths operator +=(const Seden& O) &
+		Seden& Ths operator +=(const Seden& O) &
 		{
 			return *this = *this + O;
 		};
-		I Seden& Ths operator +=(const std::initializer_list<Seden>& O) &
+		Seden& Ths operator +=(const std::initializer_list<Seden>& O) &
 		{
 			for (std::initializer_list<Seden>::const_iterator ite = O.begin(); ite != O.end(); ++ite) { *this += *ite; }
 			return *this;
 		};
-		I Seden& Ths operator -=(const Seden& O) &
+		Seden& Ths operator -=(const Seden& O) &
 		{
 			return *this = *this - O;
 		};
-		I Seden& Ths operator -=(const std::initializer_list<Seden>& O) &
+		Seden& Ths operator -=(const std::initializer_list<Seden>& O) &
 		{
 			for (std::initializer_list<Seden>::const_iterator ite = O.begin(); ite != O.end(); ++ite) { *this -= *ite; }
 			return *this;
 		};
-		I Seden& Ths operator *=(const Seden& O) &
+		Seden& Ths operator *=(const Seden& O) &
 		{
 			return *this = *this * O;
 		};
-		I Seden& Ths operator *=(const std::initializer_list<Seden>& O) &
+		Seden& Ths operator *=(const std::initializer_list<Seden>& O) &
 		{
 			for (std::initializer_list<Seden>::const_iterator ite = O.begin(); ite != O.end(); ++ite) { *this *= *ite; }
 			return *this;
 		};
-		I Seden& Ths operator /=(const Seden& O) &
+		Seden& Ths operator /=(const Seden& O) &
 		{
 			return *this = *this / O;
 		};
-		I Seden& Ths operator /=(const std::initializer_list<Seden>& O) &
+		Seden& Ths operator /=(const std::initializer_list<Seden>& O) &
 		{
 			for (std::initializer_list<Seden>::const_iterator ite = O.begin(); ite != O.end(); ++ite) { *this /= *ite; }
 			return *this;
 		};
-		I Seden& Ths operator ^=(std::int64_t O) &
+		Seden& Ths operator ^=(std::int64_t O) &
 		{
 			return *this = *this ^ O;
 		};
-		I Seden& Ths operator ^=(const std::initializer_list<std::int64_t>& O) &
+		Seden& Ths operator ^=(const std::initializer_list<std::int64_t>& O) &
 		{
 			for (std::initializer_list<std::int64_t>::const_iterator ite = O.begin(); ite != O.end(); ++ite) { *this ^= *ite; }
 			return *this;
@@ -241,19 +285,19 @@ namespace Num
 		/// multiples
 		///
 	public:
-		static double I Gbl Dot(const Seden& U, const Seden& V)
+		static double Gbl Dot(const Seden& U, const Seden& V)
 		{
 			return Number::Dot(U.Num(), V.Num());
 		};
-		static Seden I Gbl Outer(const Seden& U, const Seden& V)
+		static Seden Gbl Outer(const Seden& U, const Seden& V)
 		{
 			return Seden::Val(Number::Outer(U.Num(), V.Num()));
 		};
-		static Seden I Gbl Even(const Seden& U, const Seden& V)
+		static Seden Gbl Even(const Seden& U, const Seden& V)
 		{
 			return Val(Number::Even(U.Num(), V.Num()));
 		};
-		static Seden I Gbl Cross(const Seden& U, const Seden& V)
+		static Seden Gbl Cross(const Seden& U, const Seden& V)
 		{
 			return Seden::Val(Number::Cross(U.Num(), V.Num()));
 		};
@@ -261,31 +305,31 @@ namespace Num
 		/// fundamentals
 		///
 	public:
-		static double I Gbl Abs(const Seden& V)
+		static double Gbl Abs(const Seden& V)
 		{
 			return Ev::Sqrt(Dot(V, V));
 		};
-		static double I Gbl Arg(const Seden& V, std::int64_t P)
+		static double Gbl Arg(const Seden& V, std::int64_t P)
 		{
 			return Ev::Arccos(Scalar(V) / Abs(V)) + 2 * Ev::PI * P;
 		};
-		static double I Gbl Arg(const Seden& V)
+		static double Gbl Arg(const Seden& V)
 		{
 			return Arg(V, 0);
 		};
-		static Seden I Gbl Conjg(const Seden& V)
+		static Seden Gbl Conjg(const Seden& V)
 		{
 			return ~V;
 		};
-		static Seden I Gbl Sgn(const Seden& V)
+		static Seden Gbl Sgn(const Seden& V)
 		{
 			return V / Abs(V);
 		};
-		static Seden I Gbl Inverse(const Seden& V)
+		static Seden Gbl Inverse(const Seden& V)
 		{
 			return Conjg(V) / Dot(V, V);
 		};
-		static Seden I Gbl Exp(const Seden& V)
+		static Seden Gbl Exp(const Seden& V)
 		{
 			double Re = Scalar(V);
 			Seden Im = Vector(V);
@@ -294,7 +338,7 @@ namespace Num
 			Seden Or = Sgn(Im);
 			return Ev::Exp(Re) * (Ev::Cos(Sz) + Or * Ev::Sin(Sz));
 		};
-		static Seden I Gbl Ln(const Seden& V, std::int64_t P)
+		static Seden Gbl Ln(const Seden& V, std::int64_t P)
 		{
 			double Re = Scalar(V);
 			Seden Im = Vector(V);
@@ -306,7 +350,7 @@ namespace Num
 			Seden Or = Sgn(Im);
 			return Ev::Ln(Abs(V)) + Or * Arg(V, P);
 		};
-		static Seden I Gbl Ln(const Seden& V)
+		static Seden Gbl Ln(const Seden& V)
 		{
 			return Ln(V, 0);
 		};
@@ -314,15 +358,15 @@ namespace Num
 		/// exponentials
 		///
 	public:
-		static Seden I Gbl Power(const Seden& U, const Seden& V, std::int64_t z1, std::int64_t z2, std::int64_t z3)
+		static Seden Gbl Power(const Seden& U, const Seden& V, std::int64_t z1, std::int64_t z2, std::int64_t z3)
 		{
 			return Exp(Exp(Ln(V, z3) + Ln(Ln(U, z1), z2)));
 		};
-		static Seden I Gbl Power(const Seden& U, const Seden& V)
+		static Seden Gbl Power(const Seden& U, const Seden& V)
 		{
 			return Power(U, V, 0, 0, 0);
 		};
-		static Seden I Gbl Power(const Seden& U, double V, std::int64_t P)
+		static Seden Gbl Power(const Seden& U, double V, std::int64_t P)
 		{
 			double Re = Scalar(V);
 			Seden Im = Vector(V);
@@ -343,31 +387,31 @@ namespace Num
 			double A = Arg(U, P) * V;
 			return Ev::Power(Abs(U), V) * (Ev::Cos(A) + Or * Ev::Sin(A));
 		};
-		static Seden I Gbl Power(const Seden& U, double V)
+		static Seden Gbl Power(const Seden& U, double V)
 		{
 			return Power(U, V, 0);
 		};
-		static Seden I Gbl Root(const Seden& U, const Seden& V, std::int64_t z1, std::int64_t z2, std::int64_t z3)
+		static Seden Gbl Root(const Seden& U, const Seden& V, std::int64_t z1, std::int64_t z2, std::int64_t z3)
 		{
 			return Power(U, Inverse(V), z1, z2, z3);
 		};
-		static Seden I Gbl Root(const Seden& U, const Seden& V)
+		static Seden Gbl Root(const Seden& U, const Seden& V)
 		{
 			return Root(U, V, 0, 0, 0);
 		};
-		static Seden I Gbl Root(const Seden& U, double V, std::int64_t P)
+		static Seden Gbl Root(const Seden& U, double V, std::int64_t P)
 		{
 			return Power(U, 1 / V, P);
 		};
-		static Seden I Gbl Root(const Seden& U, double V)
+		static Seden Gbl Root(const Seden& U, double V)
 		{
 			return Root(U, V, 0);
 		};
-		static Seden I Gbl Log(const Seden& U, const Seden& V, std::int64_t z1, std::int64_t z2, std::int64_t z3, std::int64_t z4)
+		static Seden Gbl Log(const Seden& U, const Seden& V, std::int64_t z1, std::int64_t z2, std::int64_t z3, std::int64_t z4)
 		{
 			return Exp(Ln(Ln(V, z1), z3) - Ln(Ln(U, z2), z4));
 		};
-		static Seden I Gbl Log(const Seden& U, const Seden& V)
+		static Seden Gbl Log(const Seden& U, const Seden& V)
 		{
 			return Log(U, V, 0, 0, 0, 0);
 		};
@@ -375,7 +419,7 @@ namespace Num
 		/// trigonometrics
 		///
 	public:
-		static Seden I Gbl Sin(const Seden& V)
+		static Seden Gbl Sin(const Seden& V)
 		{
 			double Re = Scalar(V);
 			Seden Im = Vector(V);
@@ -384,7 +428,7 @@ namespace Num
 			Seden Or = Sgn(Im);
 			return Ev::Sin(Re) * Ev::Cosh(Sz) + Ev::Cos(Re) * Ev::Sinh(Sz) * Or;
 		};
-		static Seden I Gbl Cos(const Seden& V)
+		static Seden Gbl Cos(const Seden& V)
 		{
 			double Re = Scalar(V);
 			Seden Im = Vector(V);
@@ -393,7 +437,7 @@ namespace Num
 			Seden Or = Sgn(Im);
 			return Ev::Cos(Re) * Ev::Cosh(Sz) - Ev::Sin(Re) * Ev::Sinh(Sz) * Or;
 		};
-		static Seden I Gbl Tan(const Seden& V)
+		static Seden Gbl Tan(const Seden& V)
 		{
 			double Re = Scalar(V);
 			Seden Im = Vector(V);
@@ -406,19 +450,19 @@ namespace Num
 			double Th2 = Th * Th;
 			return (T * (1 - Th2) + Th * (1 + T2) * Or) / (1 + T2 * Th2);
 		};
-		static Seden I Gbl Csc(const Seden& V)
+		static Seden Gbl Csc(const Seden& V)
 		{
 			return Inverse(Sin(V));
 		};
-		static Seden I Gbl Sec(const Seden& V)
+		static Seden Gbl Sec(const Seden& V)
 		{
 			return Inverse(Cos(V));
 		};
-		static Seden I Gbl Cot(const Seden& V)
+		static Seden Gbl Cot(const Seden& V)
 		{
 			return Inverse(Tan(V));
 		};
-		static Seden I Gbl Sinh(const Seden& V)
+		static Seden Gbl Sinh(const Seden& V)
 		{
 			double Re = Scalar(V);
 			Seden Im = Vector(V);
@@ -427,7 +471,7 @@ namespace Num
 			Seden Or = Sgn(Im);
 			return Ev::Sinh(Re) * Ev::Cos(Sz) + Ev::Cosh(Re) * Ev::Sin(Sz) * Or;
 		};
-		static Seden I Gbl Cosh(const Seden& V)
+		static Seden Gbl Cosh(const Seden& V)
 		{
 			double Re = Scalar(V);
 			Seden Im = Vector(V);
@@ -436,7 +480,7 @@ namespace Num
 			Seden Or = Sgn(Im);
 			return Ev::Cosh(Re) * Ev::Cos(Sz) + Ev::Sinh(Re) * Ev::Sin(Sz) * Or;
 		};
-		static Seden I Gbl Tanh(const Seden& V)
+		static Seden Gbl Tanh(const Seden& V)
 		{
 			double Re = Scalar(V);
 			Seden Im = Vector(V);
@@ -449,19 +493,19 @@ namespace Num
 			double T2 = T * T;
 			return (Th * (1 - T2) + T * (1 + Th2) * Or) / (1 + Th2 * T2);
 		};
-		static Seden I Gbl Csch(const Seden& V)
+		static Seden Gbl Csch(const Seden& V)
 		{
 			return Inverse(Sinh(V));
 		};
-		static Seden I Gbl Sech(const Seden& V)
+		static Seden Gbl Sech(const Seden& V)
 		{
 			return Inverse(Cosh(V));
 		};
-		static Seden I Gbl Coth(const Seden& V)
+		static Seden Gbl Coth(const Seden& V)
 		{
 			return Inverse(Tanh(V));
 		};
-		static Seden I Gbl Arcsin(const Seden& V, bool S, std::int64_t P)
+		static Seden Gbl Arcsin(const Seden& V, bool S, std::int64_t P)
 		{
 			if (!S) { return Ev::PI - Arcsin(V, true, P); }
 			double Re = Scalar(V);
@@ -470,11 +514,11 @@ namespace Num
 			Seden Or = Sgn(Im);
 			return -Or * Ln(Or * V + Root(1 - V * V, 2), P);
 		};
-		static Seden I Gbl Arcsin(const Seden& V)
+		static Seden Gbl Arcsin(const Seden& V)
 		{
 			return Arcsin(V, true, 0);
 		};
-		static Seden I Gbl Arccos(const Seden& V, bool S, std::int64_t P)
+		static Seden Gbl Arccos(const Seden& V, bool S, std::int64_t P)
 		{
 			if (!S) { return 2 * Ev::PI - Arccos(V, true, P); }
 			double Re = Scalar(V);
@@ -483,11 +527,11 @@ namespace Num
 			Seden Or = Sgn(Im);
 			return -Or * Ln(V + Root(V * V - 1, 2), P);
 		};
-		static Seden I Gbl Arccos(const Seden& V)
+		static Seden Gbl Arccos(const Seden& V)
 		{
 			return Arccos(V, true, 0);
 		};
-		static Seden I Gbl Arctan(const Seden& V, bool S, std::int64_t P)
+		static Seden Gbl Arctan(const Seden& V, bool S, std::int64_t P)
 		{
 			if (!S) { return Ev::PI + Arctan(V, true, P); }
 			double Re = Scalar(V);
@@ -496,102 +540,107 @@ namespace Num
 			Seden Or = Sgn(Im);
 			return 2 * Ev::PI * P + Or * (Ln(1 - Or * V) - Ln(1 + Or * V)) / 2;
 		};
-		static Seden I Gbl Arctan(const Seden& V)
+		static Seden Gbl Arctan(const Seden& V)
 		{
 			return Arctan(V, true, 0);
 		};
-		static Seden I Gbl Arccsc(const Seden& V, bool S, std::int64_t P)
+		static Seden Gbl Arccsc(const Seden& V, bool S, std::int64_t P)
 		{
 			return Arcsin(Inverse(V), S, P);
 		};
-		static Seden I Gbl Arccsc(const Seden& V)
+		static Seden Gbl Arccsc(const Seden& V)
 		{
 			return Arccsc(V, true, 0);
 		};
-		static Seden I Gbl Arcsec(const Seden& V, bool S, std::int64_t P)
+		static Seden Gbl Arcsec(const Seden& V, bool S, std::int64_t P)
 		{
 			return Arccos(Inverse(V), S, P);
 		};
-		static Seden I Gbl Arcsec(const Seden& V)
+		static Seden Gbl Arcsec(const Seden& V)
 		{
 			return Arcsec(V, true, 0);
 		};
-		static Seden I Gbl Arccot(const Seden& V, bool S, std::int64_t P)
+		static Seden Gbl Arccot(const Seden& V, bool S, std::int64_t P)
 		{
 			return Arctan(Inverse(V), S, P);
 		};
-		static Seden I Gbl Arccot(const Seden& V)
+		static Seden Gbl Arccot(const Seden& V)
 		{
 			return Arccot(V, true, 0);
 		};
-		static Seden I Gbl Arcsinh(const Seden& V, bool S, std::int64_t P)
+		static Seden Gbl Arcsinh(const Seden& V, bool S, std::int64_t P)
 		{
 			Seden Im = Vector(V);
 			Seden Or = Sgn(Im);
 			if (!S) { return Ev::PI * Or - Arcsinh(V, true, P); }
 			return Ln(V + Root(V * V + 1, 2), P);
 		};
-		static Seden I Gbl Arcsinh(const Seden& V)
+		static Seden Gbl Arcsinh(const Seden& V)
 		{
 			return Arcsinh(V, true, 0);
 		};
-		static Seden I Gbl Arccosh(const Seden& V, bool S, std::int64_t P)
+		static Seden Gbl Arccosh(const Seden& V, bool S, std::int64_t P)
 		{
 			Seden Im = Vector(V);
 			Seden Or = Sgn(Im);
 			if (!S) { return 2 * Ev::PI * Or - Arccosh(V, true, P); }
 			return Ln(V + Root(V * V - 1, 2), P);
 		};
-		static Seden I Gbl Arccosh(const Seden& V)
+		static Seden Gbl Arccosh(const Seden& V)
 		{
 			return Arccosh(V, true, 0);
 		};
-		static Seden I Gbl Arctanh(const Seden& V, bool S, std::int64_t P)
+		static Seden Gbl Arctanh(const Seden& V, bool S, std::int64_t P)
 		{
 			Seden Im = Vector(V);
 			Seden Or = Sgn(Im);
 			if (!S) { return Ev::PI * Or + Arctan(V, true, P); }
 			return 2 * Ev::PI * P * Or + (Ln(1 + V) - Ln(1 - V)) / 2;
 		};
-		static Seden I Gbl Arctanh(const Seden& V)
+		static Seden Gbl Arctanh(const Seden& V)
 		{
 			return Arctanh(V, true, 0);
 		};
-		static Seden I Gbl Arccsch(const Seden& V, bool S, std::int64_t P)
+		static Seden Gbl Arccsch(const Seden& V, bool S, std::int64_t P)
 		{
 			return Arcsinh(Inverse(V), S, P);
 		};
-		static Seden I Gbl Arccsch(const Seden& V)
+		static Seden Gbl Arccsch(const Seden& V)
 		{
 			return Arccsch(V, true, 0);
 		};
-		static Seden I Gbl Arcsech(const Seden& V, bool S, std::int64_t P)
+		static Seden Gbl Arcsech(const Seden& V, bool S, std::int64_t P)
 		{
 			return Arccosh(Inverse(V), S, P);
 		};
-		static Seden I Gbl Arcsech(const Seden& V)
+		static Seden Gbl Arcsech(const Seden& V)
 		{
 			return Arcsech(V, true, 0);
 		};
-		static Seden I Gbl Arccoth(const Seden& V, bool S, std::int64_t P)
+		static Seden Gbl Arccoth(const Seden& V, bool S, std::int64_t P)
 		{
 			return Arctanh(Inverse(V), S, P);
 		};
-		static Seden I Gbl Arccoth(const Seden& V)
+		static Seden Gbl Arccoth(const Seden& V)
 		{
 			return Arccoth(V, true, 0);
 		};
 		///
 		/// conventions
 		///
-		static std::wstring I Gbl Str(const Seden& V)
+		static std::wstring Gbl Str(const Seden& V)
 		{
-			std::size_t Dim = V.Data.size();
+			std::size_t Dim = V.Size;
+			std::vector<double> Num(Dim);
 			std::vector<std::wstring> Trm(Dim, L"e");
-			for (std::size_t i = 0; i < Dim; ++i) { Trm[i] += std::to_wstring(i); }
-			return ToString(V.Data, Trm);
+			for (std::size_t i = 0; i < Dim; ++i)
+			{
+				Num[i] = V.Data[i];
+				Trm[i] += std::to_wstring(i);
+			}
+			return ToString(Num, Trm);
 		};
-		static Seden I Gbl Val(const std::wstring& V)
+		static Seden Gbl Val(const std::wstring& V)
 		{
 			std::wstring Str = Replace(V, L" ", L"");
 			if (Str == L"0") { return Seden::Zero; };
@@ -615,7 +664,10 @@ namespace Num
 	private:
 		Number Num() const&
 		{
-			return Number(Data);
+			std::size_t Dim = Size;
+			std::vector<double> Num(Dim);
+			for (std::size_t i = 0; i < Dim; ++i) { Num[i] = Data[i]; }
+			return Number(Num);
 		};
 		static Seden Val(const Number& N)
 		{

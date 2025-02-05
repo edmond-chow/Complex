@@ -34,7 +34,7 @@
 #endif
 namespace Num
 {
-	class Seden
+	class I Seden
 	{
 	public:
 		///
@@ -46,120 +46,121 @@ namespace Num
 		/// basis
 		///
 	private:
-		std::vector<double> Data;
+		double* Data;
+		std::size_t Size;
 	public:
-		I explicit Ths Seden();
-		I explicit Ths Seden(const std::initializer_list<double>& N);
-		I Ths Seden(double V);
-		I Ths Seden(const Seden& Self);
-		I Ths Seden(Seden&& Self);
-		I Ths ~Seden() noexcept;
-		static double I Gbl Scalar(const Seden& V);
-		static Seden I Gbl Vector(const Seden& V);
+		explicit Ths Seden();
+		explicit Ths Seden(const std::initializer_list<double>& N);
+		Ths Seden(double V);
+		Ths Seden(const Seden& Self);
+		Ths Seden(Seden&& Self) noexcept;
+		Ths ~Seden() noexcept;
+		static double Gbl Scalar(const Seden& V);
+		static Seden Gbl Vector(const Seden& V);
 		///
 		/// operators
 		///
 	public:
-		I Seden Ths operator ()() const;
-		I double& Ths operator [](std::size_t i) &;
-		I const double& Ths operator [](std::size_t i) const&;
-		I Seden& Ths operator =(const Seden& O) = default;
-		I Seden& Ths operator =(Seden&& O) = default;
-		I Seden& Ths operator ++() &;
-		I Seden Ths operator ++(int) &;
-		I Seden& Ths operator --() &;
-		I Seden Ths operator --(int) &;
-		I Seden& Ths operator +=(const Seden& O) &;
-		I Seden& Ths operator +=(const std::initializer_list<Seden>& O) &;
-		I Seden& Ths operator -=(const Seden& O) &;
-		I Seden& Ths operator -=(const std::initializer_list<Seden>& O) &;
-		I Seden& Ths operator *=(const Seden& O) &;
-		I Seden& Ths operator *=(const std::initializer_list<Seden>& O) &;
-		I Seden& Ths operator /=(const Seden& O) &;
-		I Seden& Ths operator /=(const std::initializer_list<Seden>& O) &;
-		I Seden& Ths operator ^=(std::int64_t O) &;
-		I Seden& Ths operator ^=(const std::initializer_list<std::int64_t>& O) &;
+		Seden Ths operator ()() const;
+		double& Ths operator [](std::size_t i) &;
+		const double& Ths operator [](std::size_t i) const&;
+		Seden& Ths operator =(const Seden& O) &;
+		Seden& Ths operator =(Seden&& O) & noexcept;
+		Seden& Ths operator ++() &;
+		Seden Ths operator ++(int) &;
+		Seden& Ths operator --() &;
+		Seden Ths operator --(int) &;
+		Seden& Ths operator +=(const Seden& O) &;
+		Seden& Ths operator +=(const std::initializer_list<Seden>& O) &;
+		Seden& Ths operator -=(const Seden& O) &;
+		Seden& Ths operator -=(const std::initializer_list<Seden>& O) &;
+		Seden& Ths operator *=(const Seden& O) &;
+		Seden& Ths operator *=(const std::initializer_list<Seden>& O) &;
+		Seden& Ths operator /=(const Seden& O) &;
+		Seden& Ths operator /=(const std::initializer_list<Seden>& O) &;
+		Seden& Ths operator ^=(std::int64_t O) &;
+		Seden& Ths operator ^=(const std::initializer_list<std::int64_t>& O) &;
 		///
 		/// multiples
 		///
 	public:
-		static double I Gbl Dot(const Seden& U, const Seden& V);
-		static Seden I Gbl Outer(const Seden& U, const Seden& V);
-		static Seden I Gbl Even(const Seden& U, const Seden& V);
-		static Seden I Gbl Cross(const Seden& U, const Seden& V);
+		static double Gbl Dot(const Seden& U, const Seden& V);
+		static Seden Gbl Outer(const Seden& U, const Seden& V);
+		static Seden Gbl Even(const Seden& U, const Seden& V);
+		static Seden Gbl Cross(const Seden& U, const Seden& V);
 		///
 		/// fundamentals
 		///
 	public:
-		static double I Gbl Abs(const Seden& V);
-		static double I Gbl Arg(const Seden& V, std::int64_t P);
-		static double I Gbl Arg(const Seden& V);
-		static Seden I Gbl Conjg(const Seden& V);
-		static Seden I Gbl Sgn(const Seden& V);
-		static Seden I Gbl Inverse(const Seden& V);
-		static Seden I Gbl Exp(const Seden& V);
-		static Seden I Gbl Ln(const Seden& V, std::int64_t P);
-		static Seden I Gbl Ln(const Seden& V);
+		static double Gbl Abs(const Seden& V);
+		static double Gbl Arg(const Seden& V, std::int64_t P);
+		static double Gbl Arg(const Seden& V);
+		static Seden Gbl Conjg(const Seden& V);
+		static Seden Gbl Sgn(const Seden& V);
+		static Seden Gbl Inverse(const Seden& V);
+		static Seden Gbl Exp(const Seden& V);
+		static Seden Gbl Ln(const Seden& V, std::int64_t P);
+		static Seden Gbl Ln(const Seden& V);
 		///
 		/// exponentials
 		///
 	public:
-		static Seden I Gbl Power(const Seden& U, const Seden& V, std::int64_t z1, std::int64_t z2, std::int64_t z3);
-		static Seden I Gbl Power(const Seden& U, const Seden& V);
-		static Seden I Gbl Power(const Seden& U, double V, std::int64_t P);
-		static Seden I Gbl Power(const Seden& U, double V);
-		static Seden I Gbl Root(const Seden& U, const Seden& V, std::int64_t z1, std::int64_t z2, std::int64_t z3);
-		static Seden I Gbl Root(const Seden& U, const Seden& V);
-		static Seden I Gbl Root(const Seden& U, double V, std::int64_t P);
-		static Seden I Gbl Root(const Seden& U, double V);
-		static Seden I Gbl Log(const Seden& U, const Seden& V, std::int64_t z1, std::int64_t z2, std::int64_t z3, std::int64_t z4);
-		static Seden I Gbl Log(const Seden& U, const Seden& V);
+		static Seden Gbl Power(const Seden& U, const Seden& V, std::int64_t z1, std::int64_t z2, std::int64_t z3);
+		static Seden Gbl Power(const Seden& U, const Seden& V);
+		static Seden Gbl Power(const Seden& U, double V, std::int64_t P);
+		static Seden Gbl Power(const Seden& U, double V);
+		static Seden Gbl Root(const Seden& U, const Seden& V, std::int64_t z1, std::int64_t z2, std::int64_t z3);
+		static Seden Gbl Root(const Seden& U, const Seden& V);
+		static Seden Gbl Root(const Seden& U, double V, std::int64_t P);
+		static Seden Gbl Root(const Seden& U, double V);
+		static Seden Gbl Log(const Seden& U, const Seden& V, std::int64_t z1, std::int64_t z2, std::int64_t z3, std::int64_t z4);
+		static Seden Gbl Log(const Seden& U, const Seden& V);
 		///
 		/// trigonometrics
 		///
 	public:
-		static Seden I Gbl Sin(const Seden& V);
-		static Seden I Gbl Cos(const Seden& V);
-		static Seden I Gbl Tan(const Seden& V);
-		static Seden I Gbl Csc(const Seden& V);
-		static Seden I Gbl Sec(const Seden& V);
-		static Seden I Gbl Cot(const Seden& V);
-		static Seden I Gbl Sinh(const Seden& V);
-		static Seden I Gbl Cosh(const Seden& V);
-		static Seden I Gbl Tanh(const Seden& V);
-		static Seden I Gbl Csch(const Seden& V);
-		static Seden I Gbl Sech(const Seden& V);
-		static Seden I Gbl Coth(const Seden& V);
-		static Seden I Gbl Arcsin(const Seden& V, bool S, std::int64_t P);
-		static Seden I Gbl Arcsin(const Seden& V);
-		static Seden I Gbl Arccos(const Seden& V, bool S, std::int64_t P);
-		static Seden I Gbl Arccos(const Seden& V);
-		static Seden I Gbl Arctan(const Seden& V, bool S, std::int64_t P);
-		static Seden I Gbl Arctan(const Seden& V);
-		static Seden I Gbl Arccsc(const Seden& V, bool S, std::int64_t P);
-		static Seden I Gbl Arccsc(const Seden& V);
-		static Seden I Gbl Arcsec(const Seden& V, bool S, std::int64_t P);
-		static Seden I Gbl Arcsec(const Seden& V);
-		static Seden I Gbl Arccot(const Seden& V, bool S, std::int64_t P);
-		static Seden I Gbl Arccot(const Seden& V);
-		static Seden I Gbl Arcsinh(const Seden& V, bool S, std::int64_t P);
-		static Seden I Gbl Arcsinh(const Seden& V);
-		static Seden I Gbl Arccosh(const Seden& V, bool S, std::int64_t P);
-		static Seden I Gbl Arccosh(const Seden& V);
-		static Seden I Gbl Arctanh(const Seden& V, bool S, std::int64_t P);
-		static Seden I Gbl Arctanh(const Seden& V);
-		static Seden I Gbl Arccsch(const Seden& V, bool S, std::int64_t P);
-		static Seden I Gbl Arccsch(const Seden& V);
-		static Seden I Gbl Arcsech(const Seden& V, bool S, std::int64_t P);
-		static Seden I Gbl Arcsech(const Seden& V);
-		static Seden I Gbl Arccoth(const Seden& V, bool S, std::int64_t P);
-		static Seden I Gbl Arccoth(const Seden& V);
+		static Seden Gbl Sin(const Seden& V);
+		static Seden Gbl Cos(const Seden& V);
+		static Seden Gbl Tan(const Seden& V);
+		static Seden Gbl Csc(const Seden& V);
+		static Seden Gbl Sec(const Seden& V);
+		static Seden Gbl Cot(const Seden& V);
+		static Seden Gbl Sinh(const Seden& V);
+		static Seden Gbl Cosh(const Seden& V);
+		static Seden Gbl Tanh(const Seden& V);
+		static Seden Gbl Csch(const Seden& V);
+		static Seden Gbl Sech(const Seden& V);
+		static Seden Gbl Coth(const Seden& V);
+		static Seden Gbl Arcsin(const Seden& V, bool S, std::int64_t P);
+		static Seden Gbl Arcsin(const Seden& V);
+		static Seden Gbl Arccos(const Seden& V, bool S, std::int64_t P);
+		static Seden Gbl Arccos(const Seden& V);
+		static Seden Gbl Arctan(const Seden& V, bool S, std::int64_t P);
+		static Seden Gbl Arctan(const Seden& V);
+		static Seden Gbl Arccsc(const Seden& V, bool S, std::int64_t P);
+		static Seden Gbl Arccsc(const Seden& V);
+		static Seden Gbl Arcsec(const Seden& V, bool S, std::int64_t P);
+		static Seden Gbl Arcsec(const Seden& V);
+		static Seden Gbl Arccot(const Seden& V, bool S, std::int64_t P);
+		static Seden Gbl Arccot(const Seden& V);
+		static Seden Gbl Arcsinh(const Seden& V, bool S, std::int64_t P);
+		static Seden Gbl Arcsinh(const Seden& V);
+		static Seden Gbl Arccosh(const Seden& V, bool S, std::int64_t P);
+		static Seden Gbl Arccosh(const Seden& V);
+		static Seden Gbl Arctanh(const Seden& V, bool S, std::int64_t P);
+		static Seden Gbl Arctanh(const Seden& V);
+		static Seden Gbl Arccsch(const Seden& V, bool S, std::int64_t P);
+		static Seden Gbl Arccsch(const Seden& V);
+		static Seden Gbl Arcsech(const Seden& V, bool S, std::int64_t P);
+		static Seden Gbl Arcsech(const Seden& V);
+		static Seden Gbl Arccoth(const Seden& V, bool S, std::int64_t P);
+		static Seden Gbl Arccoth(const Seden& V);
 		///
 		/// conventions
 		///
 	public:
-		static std::wstring I Gbl Str(const Seden& V);
-		static Seden I Gbl Val(const std::wstring& V);
+		static std::wstring Gbl Str(const Seden& V);
+		static Seden Gbl Val(const std::wstring& V);
 	};
 	/* class Seden */
 	///
