@@ -198,16 +198,8 @@ namespace ComplexTestingConsole
             {
                 long Min = Base.Input(GetName(i - 2) + "(min)" + Assign).Int();
                 long Max = Base.Input(GetName(i - 2) + "(max)" + Assign).Int();
-                if (Min <= Max)
-                {
-                    Args[i] = Min;
-                    Upper[i - 2] = Max;
-                }
-                else
-                {
-                    Args[i] = Max;
-                    Upper[i - 2] = Min;
-                }
+                Args[i] = Min;
+                Upper[i - 2] = Max;
             }
         }
         private static void PowRstLoop(Delegate S, string R, object[] Args, long[] Upper, int Dim)
