@@ -45,7 +45,7 @@ internal static class SedenBasis
         if (L == R)
         {
             Seden U = Val(Base.Input("U = "));
-            long V = Base.Input("V = ").AsInt();
+            long V = Base.Input("V = ").Int();
             Base.Output(F.Invoke(U, V).ToModStr());
         }
     }
@@ -94,14 +94,14 @@ internal static class SedenBasis
         if (L == R)
         {
             Seden V = Val(Base.Input("V = "));
-            long P = Base.Input("P = ").AsInt();
+            long P = Base.Input("P = ").Int();
             Base.Output(F.Invoke(V, P).ToModStr());
         }
         else if (L == R + "()")
         {
             Seden V = Val(Base.Input("V = "));
-            long PMin = Base.Input("P(min) = ").AsInt();
-            long PMax = Base.Input("P(max) = ").AsInt();
+            long PMin = Base.Input("P(min) = ").Int();
+            long PMax = Base.Input("P(max) = ").Int();
             for (long P = PMin; P <= PMax; ++P)
             {
                 Base.Output(R + "(" + P.ToModStr() + ") = ", F.Invoke(V, P).ToModStr());
@@ -122,17 +122,17 @@ internal static class SedenBasis
         {
             Seden V = Val(Base.Input("V = "));
             bool S = false;
-            string Input = Base.Input("Sign : ").Replace(" ", "");
-            if (Input == "+") { S = true; }
-            else if (Input != "-") { throw new ArgumentException("A string interpretation of the sign cannot be converted as a bool value."); }
-            long P = Base.Input("P = ").AsInt();
+            string Ipt = Base.Input("Sign : ").Replace(" ", "");
+            if (Ipt == "+") { S = true; }
+            else if (Ipt != "-") { throw new ArgumentException("A string interpretation of the sign cannot be converted as a bool value."); }
+            long P = Base.Input("P = ").Int();
             Base.Output(F.Invoke(V, S, P).ToModStr());
         }
         else if (L == R + "()")
         {
             Seden V = Val(Base.Input("V = "));
-            long PMin = Base.Input("P(min) = ").AsInt();
-            long PMax = Base.Input("P(max) = ").AsInt();
+            long PMin = Base.Input("P(min) = ").Int();
+            long PMax = Base.Input("P(max) = ").Int();
             for (long P = PMin; P <= PMax; ++P)
             {
                 Base.Output(R + "(+, " + P.ToModStr() + ") = ", F.Invoke(V, true, P).ToModStr());

@@ -189,15 +189,15 @@ namespace ComplexTestingConsole
         {
             for (int i = 2; i < Args.Length; ++i)
             {
-                Args[i] = Base.Input(GetName(i) + Assign).AsInt();
+                Args[i] = Base.Input(GetName(i) + Assign).Int();
             }
         }
         internal static void PowGet(object[] Args, long[] Upper)
         {
             for (int i = 2; i < Args.Length; ++i)
             {
-                long Min = Base.Input(GetName(i - 2) + "(min)" + Assign).AsInt();
-                long Max = Base.Input(GetName(i - 2) + "(max)" + Assign).AsInt();
+                long Min = Base.Input(GetName(i - 2) + "(min)" + Assign).Int();
+                long Max = Base.Input(GetName(i - 2) + "(max)" + Assign).Int();
                 if (Min <= Max)
                 {
                     Args[i] = Min;
@@ -244,13 +244,9 @@ namespace ComplexTestingConsole
             else if (Obj is bool B) { return B ? "true" : "false"; }
             return Obj.ToString();
         }
-        internal static long AsInt(this string Val)
+        internal static long Int(this string Val)
         {
             return long.Parse(Val.Replace(" ", ""));
-        }
-        internal static double AsReal(this string Val)
-        {
-            return double.Parse(Val.Replace(" ", ""));
         }
     }
 }
