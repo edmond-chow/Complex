@@ -23,37 +23,37 @@ namespace ComplexTestingConsole
         ///
         /// Base
         ///
-        private static readonly string[] Alternative = new string[] { "Exit", "Complex Testing Console", "Quaternion Testing Console", "Octonion Testing Console", "Sedenion Extended Module" };
-        private static readonly Action[] Subroutine = new Action[] { null, CmplxConsole.Load, QuterConsole.Load, OctonConsole.Load, SedenConsole.Load };
-        private const long HiddenLength = 1;
-        private const long DefaultIndex = 3;
-        private static long Index = DefaultIndex;
-        private static string AddSquares(this string Option)
+        private static readonly string[] Name = new string[] { "Exit", "Complex Testing Console", "Quaternion Testing Console", "Octonion Testing Console", "Sedenion Extended Module" };
+        private static readonly Action[] Func = new Action[] { null, CmplxConsole.Load, QuterConsole.Load, OctonConsole.Load, SedenConsole.Load };
+        private const long HidLen = 1;
+        private const long DefIdx = 3;
+        private static long Idx = DefIdx;
+        private static string AddSquares(this string Opt)
         {
-            return "[" + Option + "]";
+            return "[" + Opt + "]";
         }
         public static string GetTitle()
         {
-            return Index > DefaultIndex ? "Extended Module (Sedenion, Pathion, Chingon, Routon, Voudon, ...)" : Alternative[Index];
+            return Idx > DefIdx ? "Extended Module (Sedenion, Pathion, Chingon, Routon, Voudon, ...)" : Name[Idx];
         }
         public static string GetStartupLine()
         {
-            string Result = " >> ";
-            bool First = true;
-            for (long i = HiddenLength; i < Alternative.Length; ++i, First = false)
+            string Rst = " >> ";
+            bool Fst = true;
+            for (long i = HidLen; i < Name.Length; ++i, Fst = false)
             {
-                if (First == false) { Result += "   "; }
-                Result += Alternative[i].AddSquares();
+                if (Fst == false) { Rst += "   "; }
+                Rst += Name[i].AddSquares();
             }
-            return Result;
+            return Rst;
         }
-        public static bool IsSwitchTo(string Option)
+        public static bool IsSwitchTo(string Opt)
         {
-            for (long i = 0; i < Alternative.Length; ++i)
+            for (long i = 0; i < Name.Length; ++i)
             {
-                if (Option == Alternative[i].AddSquares())
+                if (Opt == Name[i].AddSquares())
                 {
-                    Index = i;
+                    Idx = i;
                     return true;
                 }
             }
@@ -64,28 +64,28 @@ namespace ComplexTestingConsole
         ///
         internal static void Main()
         {
-            while (Subroutine[Index] != null)
+            while (Func[Idx] != null)
             {
-                Subroutine[Index].Invoke();
+                Func[Idx].Invoke();
             }
-            Index = DefaultIndex;
+            Idx = DefIdx;
             Console.Clear();
         }
         ///
         /// Console Line Materials
         ///
-        internal static string Exception(Exception Exception)
+        internal static string Exception(Exception Exc)
         {
             Console.WriteLine();
-            while (Exception != null)
+            while (Exc != null)
             {
                 Console.ForegroundColor = ConsoleColor.DarkCyan;
-                Console.Write("   [" + Exception.GetType().FullName + "] ");
+                Console.Write("   [" + Exc.GetType().FullName + "] ");
                 Console.ForegroundColor = ConsoleColor.Cyan;
-                Console.WriteLine(Exception.Message);
+                Console.WriteLine(Exc.Message);
                 Console.ForegroundColor = ConsoleColor.Gray;
-                Console.WriteLine(Regex.Replace(Exception.StackTrace, "^", "   ", RegexOptions.Multiline));
-                Exception = Exception.InnerException;
+                Console.WriteLine(Regex.Replace(Exc.StackTrace, "^", "   ", RegexOptions.Multiline));
+                Exc = Exc.InnerException;
             }
             Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine("   Press any key to continue . . . ");
@@ -97,24 +97,24 @@ namespace ComplexTestingConsole
         {
             return Exception(new Exception());
         }
-        internal static string Selection(string Content)
+        internal static string Selection(string Con)
         {
             Console.ForegroundColor = ConsoleColor.DarkCyan;
             Console.Write(" %   ");
             Console.ForegroundColor = ConsoleColor.Blue;
-            Console.WriteLine(Content);
-            return Content;
+            Console.WriteLine(Con);
+            return Con;
         }
         internal static string Selection()
         {
             return Selection("");
         }
-        internal static string Input(string Content)
+        internal static string Input(string Con)
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.Write(" >   ");
             Console.ForegroundColor = ConsoleColor.DarkGreen;
-            Console.Write(Content);
+            Console.Write(Con);
             Console.ForegroundColor = ConsoleColor.Green;
             return Console.ReadLine();
         }
@@ -122,46 +122,46 @@ namespace ComplexTestingConsole
         {
             return Input("");
         }
-        internal static string Output(string Preceding, string Content)
+        internal static string Output(string Pre, string Con)
         {
             Console.ForegroundColor = ConsoleColor.Magenta;
             Console.Write(" #   ");
             Console.ForegroundColor = ConsoleColor.DarkRed;
-            Console.Write(Preceding);
+            Console.Write(Pre);
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine(Content);
-            return Content;
+            Console.WriteLine(Con);
+            return Con;
         }
-        internal static string Output(string Content)
+        internal static string Output(string Con)
         {
-            return Output("", Content);
+            return Output("", Con);
         }
         internal static string Output()
         {
             return Output("");
         }
-        internal static string Comment(string Preceding, string Content)
+        internal static string Comment(string Pre, string Con)
         {
             Console.ForegroundColor = ConsoleColor.White;
             Console.Write(" /   ");
             Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.Write(Preceding);
+            Console.Write(Pre);
             Console.ForegroundColor = ConsoleColor.Gray;
-            Console.WriteLine(Content);
-            return Content;
+            Console.WriteLine(Con);
+            return Con;
         }
-        internal static string Comment(string Content)
+        internal static string Comment(string Con)
         {
-            return Comment("", Content);
+            return Comment("", Con);
         }
         internal static string Comment()
         {
             return Comment("");
         }
-        internal static void Startup(string Title)
+        internal static void Startup(string Tit)
         {
             Console.Clear();
-            Console.Title = Title;
+            Console.Title = Tit;
             Console.WriteLine();
         }
     }
