@@ -155,7 +155,6 @@ namespace ComplexTestingConsole
 			std::int64_t Min = Int(Base::Input(GetName<I>() + L"(min)" + Assign));
 			std::int64_t Max = Int(Base::Input(GetName<I>() + L"(max)" + Assign));
 			std::pair<std::int64_t, std::int64_t> Par{ Min, Max };
-			if (Min > Max) { std::swap(Par.first, Par.second); }
 			std::get<I>(Dat) = Par;
 			PowGet<A, I + 1>(Dat);
 		}
