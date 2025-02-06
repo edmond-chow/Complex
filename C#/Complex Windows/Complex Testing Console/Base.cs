@@ -158,10 +158,10 @@ namespace ComplexTestingConsole
         {
             return Comment("");
         }
-        internal static void Startup(string Tit)
+        internal static void Startup(string Tle)
         {
             Console.Clear();
-            Console.Title = Tit;
+            Console.Title = Tle;
             Console.WriteLine();
         }
     }
