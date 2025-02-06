@@ -95,7 +95,7 @@ namespace ComplexTestingConsole
 	public:
 		static std::wstring GetTitle();
 		static std::wstring GetStartupLine();
-		static bool IsSwitchTo(const std::wstring& Option);
+		static bool IsSwitchTo(const std::wstring& Opt);
 		///
 		/// Main Thread
 		///
@@ -103,19 +103,19 @@ namespace ComplexTestingConsole
 		///
 		/// Console Line Materials
 		///
-		static std::wstring Exception(const std::exception& Exception);
+		static std::wstring Exception(const std::exception& Exc);
 		static std::wstring Exception();
-		static std::wstring Selection(const std::wstring& Content);
+		static std::wstring Selection(const std::wstring& Con);
 		static std::wstring Selection();
-		static std::wstring Input(const std::wstring& Content);
+		static std::wstring Input(const std::wstring& Con);
 		static std::wstring Input();
-		static std::wstring Output(const std::wstring& Preceding, const std::wstring& Content);
-		static std::wstring Output(const std::wstring& Content);
+		static std::wstring Output(const std::wstring& Pre, const std::wstring& Con);
+		static std::wstring Output(const std::wstring& Con);
 		static std::wstring Output();
-		static std::wstring Comment(const std::wstring& Preceding, const std::wstring& Content);
-		static std::wstring Comment(const std::wstring& Content);
+		static std::wstring Comment(const std::wstring& Pre, const std::wstring& Con);
+		static std::wstring Comment(const std::wstring& Con);
 		static std::wstring Comment();
-		static void Startup(const std::wstring& Title);
+		static void Startup(const std::wstring& Tle);
 	};
 	template <std::size_t I>
 	std::wstring GetName()

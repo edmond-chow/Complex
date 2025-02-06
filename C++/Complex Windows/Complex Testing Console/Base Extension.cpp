@@ -48,38 +48,47 @@ namespace CmplxConExt
 	};
 	ConsoleColor GetForegroundColor()
 	{
-		CONSOLE_SCREEN_BUFFER_INFO csbiInfo;
-		GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbiInfo);
-		return static_cast<ConsoleColor>(csbiInfo.wAttributes % 16);
+		CONSOLE_SCREEN_BUFFER_INFO CsbiInfo;
+		GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &CsbiInfo);
+		return static_cast<ConsoleColor>(CsbiInfo.wAttributes % 16);
 	};
 	ConsoleColor GetBackgroundColor()
 	{
-		CONSOLE_SCREEN_BUFFER_INFO csbiInfo;
-		GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbiInfo);
-		return static_cast<ConsoleColor>((csbiInfo.wAttributes - (csbiInfo.wAttributes % 16)) / 16);
+		CONSOLE_SCREEN_BUFFER_INFO CsbiInfo;
+		GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &CsbiInfo);
+		return static_cast<ConsoleColor>((CsbiInfo.wAttributes - (CsbiInfo.wAttributes % 16)) / 16);
 	};
 	std::wstring GetTitle()
 	{
-		static constexpr const std::size_t stack_capacity = 64;
+		static constexpr const std::size_t StackCapacity = 64;
 		{
-			wchar_t stack_result[stack_capacity];
-			GetConsoleTitleW(stack_result, static_cast<DWORD>(stack_capacity));
-			if (wcslen(stack_result) + 1 < stack_capacity) { return stack_result; }
+			wchar_t StackResult[StackCapacity];
+			GetConsoleTitleW(StackResult, static_cast<DWORD>(StackCapacity));
+			if (wcslen(StackResult) + 1 < StackCapacity) { return StackResult; }
 		}
-		for (std::size_t heap_capacity = 256; true; heap_capacity += 128)
+		for (std::size_t HeapCapacity = 256; true; HeapCapacity += 128)
 		{
-			std::unique_ptr<wchar_t[]> heap_result = std::make_unique<wchar_t[]>(heap_capacity);
-			GetConsoleTitleW(heap_result.get(), static_cast<DWORD>(heap_capacity));
-			if (wcslen(heap_result.get()) + 1 < heap_capacity) { return heap_result.get(); }
+			std::unique_ptr<wchar_t[]> HeapResult = std::make_unique<wchar_t[]>(HeapCapacity);
+			GetConsoleTitleW(HeapResult.get(), static_cast<DWORD>(HeapCapacity));
+			if (wcslen(HeapResult.get()) + 1 < HeapCapacity) { return HeapResult.get(); }
 		}
 	};
-	void SetForegroundColor(ConsoleColor Color) { SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), static_cast<WORD>(Color) + static_cast<WORD>(GetBackgroundColor()) * 16); };
-	void SetBackgroundColor(ConsoleColor Color) { SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), static_cast<WORD>(GetForegroundColor()) + static_cast<WORD>(Color) * 16); };
-	void SetTitle(const std::wstring& Text) { SetConsoleTitleW(Text.c_str()); };
+	void SetForegroundColor(ConsoleColor Col)
+	{
+		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), static_cast<WORD>(Col) + static_cast<WORD>(GetBackgroundColor()) * 16);
+	};
+	void SetBackgroundColor(ConsoleColor Col)
+	{
+		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), static_cast<WORD>(GetForegroundColor()) + static_cast<WORD>(Col) * 16);
+	};
+	void SetTitle(const std::wstring& Tle)
+	{
+		SetConsoleTitleW(Tle.data());
+	};
 	void PressAnyKey()
 	{
 		std::fflush(stdout);
-		wint_t result = _getwch();
+		wint_t Result = _getwch();
 	};
 	void Clear()
 	{

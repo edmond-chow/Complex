@@ -45,9 +45,9 @@ namespace CmplxConExt
 	ConsoleColor GetForegroundColor();
 	ConsoleColor GetBackgroundColor();
 	std::wstring GetTitle();
-	void SetForegroundColor(ConsoleColor Color);
-	void SetBackgroundColor(ConsoleColor Color);
-	void SetTitle(const std::wstring& Text);
+	void SetForegroundColor(ConsoleColor Col);
+	void SetBackgroundColor(ConsoleColor Col);
+	void SetTitle(const std::wstring& Tle);
 	void PressAnyKey();
 	void Clear();
 }

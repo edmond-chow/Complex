@@ -32,16 +32,19 @@ namespace ComplexTestingConsole
 		///
 		/// Base
 		///
-		static constexpr const wchar_t* const Alternative[] { L"Exit", L"Complex Testing Console", L"Quaternion Testing Console", L"Octonion Testing Console", L"Sedenion Extended Module" };
-		static constexpr void(*const Subroutine[])() { nullptr, CmplxBasis::CmplxConsole::Load, QuterBasis::QuterConsole::Load, OctonBasis::OctonConsole::Load, SedenBasis::SedenConsole::Load };
-		static constexpr const std::size_t HiddenLength = 1;
-		static constexpr const std::size_t DefaultIndex = 3;
-		static std::size_t Index;
-		static std::wstring AddSquares(const std::wstring& Option) { return L"[" + Option + L"]"; };
+		static constexpr const wchar_t* const Name[] { L"Exit", L"Complex Testing Console", L"Quaternion Testing Console", L"Octonion Testing Console", L"Sedenion Extended Module" };
+		static constexpr void(*const Func[])() { nullptr, CmplxBasis::CmplxConsole::Load, QuterBasis::QuterConsole::Load, OctonBasis::OctonConsole::Load, SedenBasis::SedenConsole::Load };
+		static constexpr const std::size_t HidLen = 1;
+		static constexpr const std::size_t DefIdx = 3;
+		static std::size_t Idx;
+		static std::wstring AddSquares(const std::wstring& Opt)
+		{
+			return L"[" + Opt + L"]";
+		};
 	public:
 		static std::wstring GetTitle();
 		static std::wstring GetStartupLine();
-		static bool IsSwitchTo(const std::wstring& Option);
+		static bool IsSwitchTo(const std::wstring& Opt);
 		///
 		/// Main Thread
 		///
@@ -49,46 +52,46 @@ namespace ComplexTestingConsole
 		///
 		/// Console Line Materials
 		///
-		static std::wstring Exception(const std::exception& Exception);
+		static std::wstring Exception(const std::exception& Exc);
 		static std::wstring Exception();
-		static std::wstring Selection(const std::wstring& Content);
+		static std::wstring Selection(const std::wstring& Con);
 		static std::wstring Selection();
-		static std::wstring Input(const std::wstring& Content);
+		static std::wstring Input(const std::wstring& Con);
 		static std::wstring Input();
-		static std::wstring Output(const std::wstring& Preceding, const std::wstring& Content);
-		static std::wstring Output(const std::wstring& Content);
+		static std::wstring Output(const std::wstring& Pre, const std::wstring& Con);
+		static std::wstring Output(const std::wstring& Con);
 		static std::wstring Output();
-		static std::wstring Comment(const std::wstring& Preceding, const std::wstring& Content);
-		static std::wstring Comment(const std::wstring& Content);
+		static std::wstring Comment(const std::wstring& Pre, const std::wstring& Con);
+		static std::wstring Comment(const std::wstring& Con);
 		static std::wstring Comment();
-		static void Startup(const std::wstring& Title);
+		static void Startup(const std::wstring& Tle);
 	};
 	///
 	/// Base
 	///
-	std::size_t Base::Index = DefaultIndex;
+	std::size_t Base::Idx = DefIdx;
 	std::wstring Base::GetTitle()
 	{
-		return Index > DefaultIndex ? L"Extended Module (Sedenion, Pathion, Chingon, Routon, Voudon, ...)" : Alternative[Index];
+		return Idx > DefIdx ? L"Extended Module (Sedenion, Pathion, Chingon, Routon, Voudon, ...)" : Name[Idx];
 	};
 	std::wstring Base::GetStartupLine()
 	{
-		std::wstring Result = L" >> ";
-		bool First = true;
-		for (std::size_t i = HiddenLength; i < std::extent_v<decltype(Alternative)>; ++i, First = false)
+		std::wstring Rst = L" >> ";
+		bool Fst = true;
+		for (std::size_t i = HidLen; i < std::extent_v<decltype(Name)>; ++i, Fst = false)
 		{
-			if (First == false) { Result += L"   "; }
-			Result += AddSquares(Alternative[i]);
+			if (Fst == false) { Rst += L"   "; }
+			Rst += AddSquares(Name[i]);
 		}
-		return Result;
+		return Rst;
 	};
-	bool Base::IsSwitchTo(const std::wstring& Option)
+	bool Base::IsSwitchTo(const std::wstring& Opt)
 	{
-		for (std::size_t i = 0; i < std::extent_v<decltype(Alternative)>; ++i)
+		for (std::size_t i = 0; i < std::extent_v<decltype(Name)>; ++i)
 		{
-			if (Option == AddSquares(Alternative[i]))
+			if (Opt == AddSquares(Name[i]))
 			{
-				Index = i;
+				Idx = i;
 				return true;
 			}
 		}
@@ -99,22 +102,22 @@ namespace ComplexTestingConsole
 	///
 	void Base::Main()
 	{
-		while (Subroutine[Index] != nullptr)
+		while (Func[Idx] != nullptr)
 		{
-			Subroutine[Index]();
+			Func[Idx]();
 		}
-		Index = DefaultIndex;
+		Idx = DefIdx;
 		Clear();
 	};
 	///
 	/// Console Line Materials
 	///
-	std::wstring Base::Exception(const std::exception& Exception)
+	std::wstring Base::Exception(const std::exception& Exc)
 	{
 		SetForegroundColor(ConsoleColor::DarkCyan);
-		std::wcout << std::endl << L"   [" << typeid(Exception).name() << L"] ";
+		std::wcout << std::endl << L"   [" << typeid(Exc).name() << L"] ";
 		SetForegroundColor(ConsoleColor::Cyan);
-		std::wcout << Exception.what() << std::endl;
+		std::wcout << Exc.what() << std::endl;
 		SetForegroundColor(ConsoleColor::White);
 		std::wcout << L"   Press any key to continue . . .   " << std::endl;
 		PressAnyKey();
@@ -125,24 +128,24 @@ namespace ComplexTestingConsole
 	{
 		return Exception(std::exception{});
 	};
-	std::wstring Base::Selection(const std::wstring& Content)
+	std::wstring Base::Selection(const std::wstring& Con)
 	{
 		SetForegroundColor(ConsoleColor::DarkCyan);
 		std::wcout << L" %   ";
 		SetForegroundColor(ConsoleColor::Blue);
-		std::wcout << Content << std::endl;
-		return Content;
+		std::wcout << Con << std::endl;
+		return Con;
 	};
 	std::wstring Base::Selection()
 	{
 		return Selection(L"");
 	};
-	std::wstring Base::Input(const std::wstring& Content)
+	std::wstring Base::Input(const std::wstring& Con)
 	{
 		SetForegroundColor(ConsoleColor::Yellow);
 		std::wcout << L" >   ";
 		SetForegroundColor(ConsoleColor::DarkGreen);
-		std::wcout << Content;
+		std::wcout << Con;
 		SetForegroundColor(ConsoleColor::Green);
 		std::wstring output;
 		std::getline(std::wcin, output);
@@ -152,46 +155,46 @@ namespace ComplexTestingConsole
 	{
 		return Input(L"");
 	};
-	std::wstring Base::Output(const std::wstring& Preceding, const std::wstring& Content)
+	std::wstring Base::Output(const std::wstring& Pre, const std::wstring& Con)
 	{
 		SetForegroundColor(ConsoleColor::Magenta);
 		std::wcout << L" #   ";
 		SetForegroundColor(ConsoleColor::DarkRed);
-		std::wcout << Preceding;
+		std::wcout << Pre;
 		SetForegroundColor(ConsoleColor::Red);
-		std::wcout << Content << std::endl;
-		return Content;
+		std::wcout << Con << std::endl;
+		return Con;
 	};
-	std::wstring Base::Output(const std::wstring& Content)
+	std::wstring Base::Output(const std::wstring& Con)
 	{
-		return Output(L"", Content);
+		return Output(L"", Con);
 	};
 	std::wstring Base::Output()
 	{
 		return Output(L"");
 	};
-	std::wstring Base::Comment(const std::wstring& Preceding, const std::wstring& Content)
+	std::wstring Base::Comment(const std::wstring& Pre, const std::wstring& Con)
 	{
 		SetForegroundColor(ConsoleColor::White);
 		std::wcout << L" /   ";
 		SetForegroundColor(ConsoleColor::Cyan);
-		std::wcout << Preceding;
+		std::wcout << Pre;
 		SetForegroundColor(ConsoleColor::Gray);
-		std::wcout << Content << std::endl;
-		return Content;
+		std::wcout << Con << std::endl;
+		return Con;
 	};
-	std::wstring Base::Comment(const std::wstring& Content)
+	std::wstring Base::Comment(const std::wstring& Con)
 	{
-		return Comment(L"", Content);
+		return Comment(L"", Con);
 	};
 	std::wstring Base::Comment()
 	{
 		return Comment(L"");
 	};
-	void Base::Startup(const std::wstring& Title)
+	void Base::Startup(const std::wstring& Tle)
 	{
 		Clear();
-		SetTitle(Title);
+		SetTitle(Tle);
 		std::wcout << std::endl;
 	};
 }
