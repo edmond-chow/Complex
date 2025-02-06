@@ -88,7 +88,7 @@ namespace OctonBasis
 		}
 	};
 	template <typename T>
-	void Bas(const std::wstring& L, std::wstring&& R, T(Gbl* F)(const Octon&, std::int64_t))
+	void BasP(const std::wstring& L, std::wstring&& R, T(Gbl* F)(const Octon&, std::int64_t))
 	{
 		if (L == R)
 		{
@@ -180,12 +180,12 @@ namespace OctonBasis
 				Mul(L, L"cross", Octon::Cross);
 				/****/
 				Bas(L, L"abs", Octon::Abs);
-				Bas(L, L"arg", Octon::Arg);
+				BasP(L, L"arg", Octon::Arg);
 				Bas(L, L"conjg", Octon::Conjg);
 				Bas(L, L"sgn", Octon::Sgn);
 				Bas(L, L"inverse", Octon::Inverse);
 				Bas(L, L"exp", Octon::Exp);
-				Bas(L, L"ln", Octon::Ln);
+				BasP(L, L"ln", Octon::Ln);
 				/****/
 				Tri(L, L"sin", Octon::Sin);
 				Tri(L, L"cos", Octon::Cos);

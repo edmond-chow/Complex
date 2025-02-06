@@ -84,7 +84,7 @@ namespace SedenBasis
 		}
 	};
 	template <typename T>
-	void Bas(const std::wstring& L, std::wstring&& R, T(Gbl* F)(const Seden&, std::int64_t))
+	void BasP(const std::wstring& L, std::wstring&& R, T(Gbl* F)(const Seden&, std::int64_t))
 	{
 		if (L == R)
 		{
@@ -176,12 +176,12 @@ namespace SedenBasis
 				Mul(L, L"cross", Seden::Cross);
 				/****/
 				Bas(L, L"abs", Seden::Abs);
-				Bas(L, L"arg", Seden::Arg);
+				BasP(L, L"arg", Seden::Arg);
 				Bas(L, L"conjg", Seden::Conjg);
 				Bas(L, L"sgn", Seden::Sgn);
 				Bas(L, L"inverse", Seden::Inverse);
 				Bas(L, L"exp", Seden::Exp);
-				Bas(L, L"ln", Seden::Ln);
+				BasP(L, L"ln", Seden::Ln);
 				/****/
 				Tri(L, L"sin", Seden::Sin);
 				Tri(L, L"cos", Seden::Cos);

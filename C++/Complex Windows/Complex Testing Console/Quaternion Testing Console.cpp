@@ -88,7 +88,7 @@ namespace QuterBasis
 		}
 	};
 	template <typename T>
-	void Bas(const std::wstring& L, std::wstring&& R, T(Gbl* F)(const Quter&, std::int64_t))
+	void BasP(const std::wstring& L, std::wstring&& R, T(Gbl* F)(const Quter&, std::int64_t))
 	{
 		if (L == R)
 		{
@@ -180,12 +180,12 @@ namespace QuterBasis
 				Mul(L, L"cross", Quter::Cross);
 				/****/
 				Bas(L, L"abs", Quter::Abs);
-				Bas(L, L"arg", Quter::Arg);
+				BasP(L, L"arg", Quter::Arg);
 				Bas(L, L"conjg", Quter::Conjg);
 				Bas(L, L"sgn", Quter::Sgn);
 				Bas(L, L"inverse", Quter::Inverse);
 				Bas(L, L"exp", Quter::Exp);
-				Bas(L, L"ln", Quter::Ln);
+				BasP(L, L"ln", Quter::Ln);
 				/****/
 				Tri(L, L"sin", Quter::Sin);
 				Tri(L, L"cos", Quter::Cos);

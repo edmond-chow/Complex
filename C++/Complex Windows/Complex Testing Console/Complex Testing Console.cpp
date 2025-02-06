@@ -88,7 +88,7 @@ namespace CmplxBasis
 		}
 	};
 	template <typename T>
-	void Bas(const std::wstring& L, std::wstring&& R, T(Gbl* F)(const Cmplx&, std::int64_t))
+	void BasP(const std::wstring& L, std::wstring&& R, T(Gbl* F)(const Cmplx&, std::int64_t))
 	{
 		if (L == R)
 		{
@@ -180,12 +180,12 @@ namespace CmplxBasis
 				Mul(L, L"cross", Cmplx::Cross);
 				/****/
 				Bas(L, L"abs", Cmplx::Abs);
-				Bas(L, L"arg", Cmplx::Arg);
+				BasP(L, L"arg", Cmplx::Arg);
 				Bas(L, L"conjg", Cmplx::Conjg);
 				Bas(L, L"sgn", Cmplx::Sgn);
 				Bas(L, L"inverse", Cmplx::Inverse);
 				Bas(L, L"exp", Cmplx::Exp);
-				Bas(L, L"ln", Cmplx::Ln);
+				BasP(L, L"ln", Cmplx::Ln);
 				/****/
 				Tri(L, L"sin", Cmplx::Sin);
 				Tri(L, L"cos", Cmplx::Cos);
