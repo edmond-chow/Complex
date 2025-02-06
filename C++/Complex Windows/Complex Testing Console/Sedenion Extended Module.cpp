@@ -50,7 +50,7 @@ namespace SedenBasis
 		if (L == R)
 		{
 			Seden U = Val<Seden>(Base::Input(L"U = "));
-			std::int64_t V = AsInt(Base::Input(L"V = "));
+			std::int64_t V = Int(Base::Input(L"V = "));
 			Base::Output(ToModStr(std::invoke(F, U, V)));
 		}
 	};
@@ -89,14 +89,14 @@ namespace SedenBasis
 		if (L == R)
 		{
 			Seden V = Val<Seden>(Base::Input(L"V = "));
-			std::int64_t P = AsInt(Base::Input(L"P = "));
+			std::int64_t P = Int(Base::Input(L"P = "));
 			Base::Output(ToModStr(std::invoke(F, V, P)));
 		}
 		else if (L == R + L"()")
 		{
 			Seden V = Val<Seden>(Base::Input(L"V = "));
-			std::int64_t PMin = AsInt(Base::Input(L"P(min) = "));
-			std::int64_t PMax = AsInt(Base::Input(L"P(max) = "));
+			std::int64_t PMin = Int(Base::Input(L"P(min) = "));
+			std::int64_t PMax = Int(Base::Input(L"P(max) = "));
 			for (std::int64_t P = PMin; P <= PMax; ++P)
 			{
 				Base::Output(R + L"(" + ToModStr(P) + L") = ", ToModStr(std::invoke(F, V, P)));
@@ -117,17 +117,17 @@ namespace SedenBasis
 		{
 			Seden V = Val<Seden>(Base::Input(L"V = "));
 			bool S = false;
-			std::wstring Input = std::regex_replace(Base::Input(L"Sign : "), std::wregex(L" "), L"");
-			if (Input == L"+") { S = true; }
-			else if (Input != L"-") { throw std::invalid_argument("A String interpretation of the sign cannot be converted as a bool value."); }
-			std::int64_t P = AsInt(Base::Input(L"P = "));
+			std::wstring Ipt = std::regex_replace(Base::Input(L"Sign : "), std::wregex(L" "), L"");
+			if (Ipt == L"+") { S = true; }
+			else if (Ipt != L"-") { throw std::invalid_argument{ "A String interpretation of the sign cannot be converted as a bool value." }; }
+			std::int64_t P = Int(Base::Input(L"P = "));
 			Base::Output(ToModStr(std::invoke(F, V, S, P)));
 		}
 		else if (L == R + L"()")
 		{
 			Seden V = Val<Seden>(Base::Input(L"V = "));
-			std::int64_t PMin = AsInt(Base::Input(L"P(min) = "));
-			std::int64_t PMax = AsInt(Base::Input(L"P(max) = "));
+			std::int64_t PMin = Int(Base::Input(L"P(min) = "));
+			std::int64_t PMax = Int(Base::Input(L"P(max) = "));
 			for (std::int64_t P = PMin; P <= PMax; ++P)
 			{
 				Base::Output(R + L"(+, " + ToModStr(P) + L") = ", ToModStr(std::invoke(F, V, true, P)));

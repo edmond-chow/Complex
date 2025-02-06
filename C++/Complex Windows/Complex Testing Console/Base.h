@@ -78,7 +78,7 @@ inline std::wstring ToModStr(bool Obj)
 {
 	return Obj ? L"true" : L"false";
 };
-inline std::int64_t AsInt(const std::wstring& Val)
+inline std::int64_t Int(const std::wstring& Val)
 {
 	return stoi64_t(Replace(Val, L" ", L""));
 };
@@ -143,7 +143,7 @@ namespace ComplexTestingConsole
 	{
 		if constexpr (I < A)
 		{
-			std::get<I>(Dat) = AsInt(Base::Input(GetName<I>() + Assign));
+			std::get<I>(Dat) = Int(Base::Input(GetName<I>() + Assign));
 			PowGet<A, I + 1>(Dat);
 		}
 	};
@@ -152,8 +152,8 @@ namespace ComplexTestingConsole
 	{
 		if constexpr (I < A)
 		{
-			std::int64_t Min = AsInt(Base::Input(GetName<I>() + L"(min)" + Assign));
-			std::int64_t Max = AsInt(Base::Input(GetName<I>() + L"(max)" + Assign));
+			std::int64_t Min = Int(Base::Input(GetName<I>() + L"(min)" + Assign));
+			std::int64_t Max = Int(Base::Input(GetName<I>() + L"(max)" + Assign));
 			std::pair<std::int64_t, std::int64_t> Par{ Min, Max };
 			if (Min > Max) { std::swap(Par.first, Par.second); }
 			std::get<I>(Dat) = Par;
