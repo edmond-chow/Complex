@@ -20,20 +20,40 @@
 #include <regex>
 #include <sstream>
 #include <stdexcept>
+inline std::size_t stos_t(const std::wstring& Str)
+{
+	std::size_t Idx{ 0 };
+	unsigned long long Rst{ std::stoull(Str, &Idx) };
+	if (Idx < Str.size() || Str[0] == L' ')
+	{
+		throw std::invalid_argument{ "The string cannot be converted as a size type." };
+	}
+	return static_cast<std::size_t>(Rst);
+};
+inline double stod_t(const std::wstring& Str)
+{
+	std::size_t Idx{ 0 };
+	double Rst{ std::stod(Str, &Idx) };
+	if (Idx < Str.size() || Str[0] == L' ')
+	{
+		throw std::invalid_argument{ "The string cannot be converted as a double type." };
+	}
+	return Rst;
+};
 inline constexpr const wchar_t SignBefore[] = LR"((-|\+|^))";
 inline constexpr const wchar_t UnsignedReal[] = LR"((\d+)(\.\d+|)([Ee](-|\+|)(\d+)|))";
 inline constexpr const wchar_t SignAfter[] = LR"((-|\+|$))";
-inline std::wstring AddGroup(const std::wstring& Pattern, bool Optional)
+inline std::wstring AddGroup(const std::wstring& Pat, bool Opt)
 {
-	return L"(" + Pattern + (Optional ? L"|" : L"") + L")";
+	return L"(" + Pat + (Opt ? L"|" : L"") + L")";
 };
-inline std::wstring FollowedBy(const std::wstring& Pattern, const std::wstring& Text)
+inline std::wstring FollowedBy(const std::wstring& Pat, const std::wstring& Text)
 {
-	return Pattern + L"(?=" + Text + L")";
+	return Pat + L"(?=" + Text + L")";
 };
-inline std::wstring GetPattern(const std::wstring& Term)
+inline std::wstring GetPattern(const std::wstring& Trm)
 {
-	return FollowedBy(SignBefore + AddGroup(UnsignedReal, !Term.empty()), Term + SignAfter);
+	return FollowedBy(SignBefore + AddGroup(UnsignedReal, !Trm.empty()), Trm + SignAfter);
 };
 inline std::wstring Str(double Num)
 {
@@ -95,7 +115,7 @@ inline std::vector<double> ToNumbers(const std::wstring& Val, const std::vector<
 			Cnt -= Cap.length() + Trm[i].length();
 			if (Cap.empty() || Cap == L"+") { ++Data; }
 			else if (Cap == L"-") { --Data; }
-			else { Data += std::stod(Cap); }
+			else { Data += stod_t(Cap); }
 			Rest = Mat.suffix().str();
 			Flag |= std::regex_constants::match_not_bol;
 		}
@@ -111,8 +131,14 @@ void ToNumbers(const std::wstring& Val, N& Rst, bool Vec, Ts... As)
 	std::vector<double> Num = ToNumbers(Val, Trm);
 	for (std::size_t i = 0, o = Vec ? 1 : 0; i < Trm.size(); ++i) { Rst[i + o] = Num[i]; }
 };
+#pragma pack(push)
 #pragma push_macro("I")
 #pragma push_macro("Ths")
+#if defined(X86) || defined(ARM)
+#pragma pack(4)
+#elif defined(X64) || defined(ARM64)
+#pragma pack(8)
+#endif
 #if defined(_MSVC_LANG)
 #define I __declspec(dllexport)
 #define Ths __thiscall
@@ -133,9 +159,12 @@ namespace Num
 		Ths String(const wchar_t* Pt)
 			: Pointer{ nullptr }
 		{
-			std::size_t Sz{ wcslen(Pt) + 1 };
-			Pointer = new wchar_t[Sz] {};
-			std::copy(Pt, Pt + Sz, Pointer);
+			if (Pt != nullptr)
+			{
+				std::size_t Sz{ std::wcslen(Pt) + 1 };
+				Pointer = new wchar_t[Sz] {};
+				std::copy(Pt, Pt + Sz, Pointer);
+			}
 		};
 		String(const String& Self) = delete;
 		Ths String(String&& Self) noexcept
@@ -159,9 +188,10 @@ namespace Num
 		};
 		const wchar_t* Ths Ptr() const&
 		{
-			return Pointer;
+			return Pointer != nullptr ? Pointer : L"";
 		};
 	};
 }
 #pragma pop_macro("Ths")
 #pragma pop_macro("I")
+#pragma pack(pop)

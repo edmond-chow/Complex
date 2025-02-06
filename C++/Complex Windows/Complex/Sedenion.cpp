@@ -29,55 +29,6 @@
 #define Gbl
 #define Ths
 #endif
-inline std::size_t wtos_t(const wchar_t* str)
-{
-	static const std::wstring limit = std::to_wstring(std::numeric_limits<std::size_t>::max());
-	if (str[0] == L'\0' || str[0] == L'-') { throw std::invalid_argument("The string cannot be converted as an integer."); }
-	const wchar_t* number = str;
-	if (str[0] == L'+')
-	{
-		if (str[1] == L'\0') { throw std::invalid_argument("The string cannot be converted as an integer."); }
-		++number;
-	}
-	std::size_t number_size = std::wcslen(str);
-	const wchar_t* number_end = number;
-	while (*number_end != L'\0')
-	{
-		if (static_cast<std::uint16_t>(*number_end) < 48 || static_cast<std::uint16_t>(*number_end) > 57) { throw std::invalid_argument("The string cannot be converted as an integer."); }
-		++number_end;
-	}
-	const wchar_t* wchars = limit.c_str();
-	std::size_t wchars_size = limit.size();
-	wchar_t* digitsCheck = new wchar_t[wchars_size] { L'\0' };
-	if (number_size > wchars_size)
-	{
-		throw std::out_of_range("An integer is exceeded the limit.");
-	}
-	std::size_t accumulate = 1;
-	std::size_t output = 0;
-	for (std::size_t i = 0; i < number_size; ++i)
-	{
-		wchar_t wchar = number[number_size - i - 1];
-		digitsCheck[number_size - i - 1] = wchar;
-		std::uint16_t digit = static_cast<std::uint16_t>(wchar) - 48;
-		output += digit * accumulate;
-		accumulate = accumulate * 10;
-	}
-	if (number_size == wchars_size)
-	{
-		for (std::size_t i = 0; i < wchars_size; ++i)
-		{
-			if (digitsCheck[i] < wchars[i]) { break; }
-			else if (digitsCheck[i] > wchars[i]) { throw std::out_of_range("An integer is exceeded the limit."); }
-		}
-	}
-	delete[] digitsCheck;
-	return output;
-};
-inline std::size_t stos_t(const std::wstring& str)
-{
-	return wtos_t(str.c_str());
-};
 namespace Num
 {
 	class I Seden

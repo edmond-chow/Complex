@@ -23,79 +23,32 @@
 #include <stdexcept>
 #include <functional>
 #include <NumString.h>
-inline std::int64_t wtoi64_t(const wchar_t* str)
-{
-	if (str[0] == L'\0') { throw std::invalid_argument("The string cannot be converted as an integer."); }
-	const wchar_t* number = str;
-	if (str[0] == L'-' || str[0] == L'+')
-	{
-		if (str[1] == L'\0') { throw std::invalid_argument("The string cannot be converted as an integer."); }
-		++number;
-	}
-	std::size_t number_size = 0;
-	const wchar_t* number_end = number;
-	while (*number_end != L'\0')
-	{
-		if (static_cast<std::uint16_t>(*number_end) < 48 || static_cast<std::uint16_t>(*number_end) > 57) { throw std::invalid_argument("The string cannot be converted as an integer."); }
-		++number_end;
-		++number_size;
-	}
-	const wchar_t wcharsPlus[] = L"9223372036854775807";
-	const wchar_t wcharsMinus[] = L"9223372036854775808";
-	wchar_t digitsCheck[20]{ L'\0' };
-	if (number_size > 20)
-	{
-		throw std::out_of_range("An integer is exceeded the limit.");
-	}
-	std::int64_t accumulate = 1;
-	std::int64_t output = 0;
-	for (std::size_t i = 0; i < number_size; ++i)
-	{
-		wchar_t wchar = number[number_size - i - 1];
-		digitsCheck[number_size - i - 1] = wchar;
-		std::uint16_t digit = static_cast<std::uint16_t>(wchar) - 48;
-		if (str[0] == L'-') { output -= digit * accumulate; }
-		else { output += digit * accumulate; }
-		accumulate = accumulate * 10;
-	}
-	if (number_size == 20)
-	{
-		for (std::size_t i = 0; i < 20; ++i)
-		{
-			if (str[0] == L'-')
-			{
-				if (digitsCheck[i] < wcharsMinus[i]) { break; }
-				else if (digitsCheck[i] > wcharsMinus[i]) { throw std::out_of_range("An integer is exceeded the limit."); }
-			}
-			else
-			{
-				if (digitsCheck[i] < wcharsPlus[i]) { break; }
-				else if (digitsCheck[i] > wcharsPlus[i]) { throw std::out_of_range("An integer is exceeded the limit."); }
-			}
-		}
-	}
-	return output;
-};
 inline std::wstring Str(double Num)
 {
 	std::wstringstream Rst;
 	Rst << std::defaultfloat << std::setprecision(17) << Num;
 	return std::regex_replace(Rst.str(), std::wregex(L"e-0(?=[1-9])"), L"e-");
 };
-inline std::wstring Replace(const std::wstring& Input, const std::wstring& Search, const std::wstring& Replacement)
+inline std::wstring Replace(const std::wstring& Ipt, const std::wstring& Sch, const std::wstring& Rpt)
 {
-	std::wstring Rst = Input;
-	std::size_t Position = Rst.find(Search);
-	while (Position != std::wstring::npos)
+	std::wstring Rst = Ipt;
+	std::size_t Pos = Rst.find(Sch);
+	while (Pos != std::wstring::npos)
 	{
-		Rst = Rst.replace(Position, Search.size(), Replacement);
-		Position = Rst.find(Search, Position + Replacement.size());
+		Rst = Rst.replace(Pos, Sch.size(), Rpt);
+		Pos = Rst.find(Sch, Pos + Rpt.size());
 	}
 	return Rst;
 };
-inline std::int64_t stoi64_t(const std::wstring& str)
+inline std::int64_t stoi64_t(const std::wstring& Str)
 {
-	return wtoi64_t(str.c_str());
+	std::size_t Idx{ 0 };
+	long long Rst{ std::stoll(Str, &Idx) };
+	if (Idx < Str.size() || Str[0] == L' ')
+	{
+		throw std::invalid_argument{ "The string cannot be converted as a integer type." };
+	}
+	return static_cast<std::int64_t>(Rst);
 };
 template <typename T>
 T Val(const std::wstring& Str)
@@ -128,16 +81,6 @@ inline std::wstring ToModStr(bool Obj)
 inline std::int64_t AsInt(const std::wstring& Val)
 {
 	return stoi64_t(Replace(Val, L" ", L""));
-};
-inline double AsReal(const std::wstring& Val)
-{
-	std::wstring Replaced = Replace(Val, L" ", L"");
-	std::size_t Processed = 0;
-	double Rst = 0;
-	try { Rst = std::stod(Replaced, &Processed); }
-	catch (...) { Processed = std::wstring::npos; }
-	if (Processed == Replaced.size()) { return Rst; }
-	throw std::invalid_argument("The string cannot be converted as a real.");
 };
 namespace ComplexTestingConsole
 {

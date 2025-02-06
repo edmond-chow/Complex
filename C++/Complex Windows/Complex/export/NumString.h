@@ -17,8 +17,14 @@
 #pragma once
 #ifndef NUM_STRING
 #define NUM_STRING
+#pragma pack(push)
 #pragma push_macro("I")
 #pragma push_macro("Ths")
+#if defined(X86) || defined(ARM)
+#pragma pack(4)
+#elif defined(X64) || defined(ARM64)
+#pragma pack(8)
+#endif
 #if defined(_MSVC_LANG)
 #define I __declspec(dllimport)
 #define Ths __thiscall
@@ -45,5 +51,6 @@ namespace Num
 }
 #pragma pop_macro("Ths")
 #pragma pop_macro("I")
+#pragma pack(pop)
 #endif
 #endif
