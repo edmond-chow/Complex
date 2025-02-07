@@ -15,269 +15,250 @@
  */
 #if (__cplusplus >= 201103L) || (defined(_MSVC_LANG) && (_MSVC_LANG >= 201103L) && (_MSC_VER >= 1800))
 #pragma once
-#ifndef OCTON
-#define OCTON
+#ifndef QUTER
+#define QUTER
+#include <cstddef>
+#include <cstdint>
 #include <string>
-#include <stdexcept>
+#include <NumString.h>
 #pragma pack(push)
-#pragma push_macro("CALL")
-#pragma push_macro("OCTON_INTERFACE")
-#pragma push_macro("OCTON_FUNC_CALL")
-#pragma push_macro("OCTON_FUNC_INSTANCE_CALL")
-#if defined(X86) || defined(ARM)
-#pragma pack(4)
-#elif defined(X64) || defined(ARM64)
+#pragma push_macro("I")
+#pragma push_macro("Gbl")
+#pragma push_macro("Ths")
 #pragma pack(8)
+#if defined(_MSVC_LANG)
+#define I __declspec(dllimport)
+#define Gbl __stdcall
+#define Ths __thiscall
+#else
+#define I
+#define Gbl
+#define Ths
 #endif
-#define CALL(c)
-#define OCTON_INTERFACE
-#define OCTON_FUNC_CALL
-#define OCTON_FUNC_INSTANCE_CALL
-namespace Octon
+namespace Num
 {
-	namespace BaseType
+	struct I Vec7D
 	{
-		enum struct index : std::int64_t
-		{
-			e1 = 1,
-			e2 = 2,
-			e3 = 3,
-			e4 = 4,
-			e5 = 5,
-			e6 = 6,
-			e7 = 7,
-		};
-		struct OCTON_INTERFACE Vector7D
-		{
-		public:
-			///
-			/// constants
-			///
-			static const double pi;
-			static const double e;
-			static const Vector7D e1;
-			static const Vector7D e2;
-			static const Vector7D e3;
-			static const Vector7D e4;
-			static const Vector7D e5;
-			static const Vector7D e6;
-			static const Vector7D e7;
-		private:
-			///
-			/// basis
-			///
-			double x1;
-			double x2;
-			double x3;
-			double x4;
-			double x5;
-			double x6;
-			double x7;
-		public:
-			explicit OCTON_FUNC_INSTANCE_CALL Vector7D() noexcept;
-			explicit OCTON_FUNC_INSTANCE_CALL Vector7D(double x1, double x2, double x3, double x4, double x5, double x6, double x7) noexcept;
-			OCTON_FUNC_INSTANCE_CALL Vector7D(const Vector7D& Value) noexcept;
-			///
-			/// operators
-			///
-			Vector7D OCTON_FUNC_INSTANCE_CALL operator ()() const noexcept;
-			double& OCTON_FUNC_INSTANCE_CALL operator [](index i) &;
-			double& OCTON_FUNC_INSTANCE_CALL operator [](std::size_t i) & noexcept;
-			const double& OCTON_FUNC_INSTANCE_CALL operator [](index i) const&;
-			const double& OCTON_FUNC_INSTANCE_CALL operator [](std::size_t i) const& noexcept;
-			Vector7D& OCTON_FUNC_INSTANCE_CALL operator =(const Vector7D& Value) & noexcept;
-			Vector7D& OCTON_FUNC_INSTANCE_CALL operator +=(const Vector7D& Value) & noexcept;
-			Vector7D& OCTON_FUNC_INSTANCE_CALL operator +=(const std::initializer_list<Vector7D>& Value) & noexcept;
-			Vector7D& OCTON_FUNC_INSTANCE_CALL operator -=(const Vector7D& Value) & noexcept;
-			Vector7D& OCTON_FUNC_INSTANCE_CALL operator -=(const std::initializer_list<Vector7D>& Value) & noexcept;
-			Vector7D& OCTON_FUNC_INSTANCE_CALL operator *=(double Value) & noexcept;
-			Vector7D& OCTON_FUNC_INSTANCE_CALL operator *=(const std::initializer_list<double>& Value) & noexcept;
-			Vector7D& OCTON_FUNC_INSTANCE_CALL operator /=(double Value) & noexcept;
-			Vector7D& OCTON_FUNC_INSTANCE_CALL operator /=(const std::initializer_list<double>& Value) & noexcept;
-			///
-			/// fundamentals
-			///
-			static double OCTON_FUNC_CALL abs(const Vector7D& Value);
-			static Vector7D OCTON_FUNC_CALL sgn(const Vector7D& Value);
-			static double OCTON_FUNC_CALL dot(const Vector7D& Union, const Vector7D& Value) noexcept;
-			static Vector7D OCTON_FUNC_CALL cross(const Vector7D& Union, const Vector7D& Value) noexcept;
-			///
-			/// conventions
-			///
-			static std::wstring OCTON_FUNC_CALL GetString(const Vector7D& Value);
-			static Vector7D OCTON_FUNC_CALL GetInstance(const std::wstring& Value);
-		};
+		///
+		/// constants
+		///
+	public:
+		static const Vec7D Zero;
+		static const Vec7D e1;
+		static const Vec7D e2;
+		static const Vec7D e3;
+		static const Vec7D e4;
+		static const Vec7D e5;
+		static const Vec7D e6;
+		static const Vec7D e7;
+		///
+		/// basis
+		///
+	private:
+		double x1;
+		double x2;
+		double x3;
+		double x4;
+		double x5;
+		double x6;
+		double x7;
+	public:
+		explicit Ths Vec7D();
+		explicit Ths Vec7D(double e1, double e2, double e3, double e4, double e5, double e6, double e7);
 		///
 		/// operators
 		///
-		bool OCTON_INTERFACE OCTON_FUNC_CALL operator ==(const Vector7D& Union, const Vector7D& Value) noexcept;
-		bool OCTON_INTERFACE OCTON_FUNC_CALL operator !=(const Vector7D& Union, const Vector7D& Value) noexcept;
-		Vector7D OCTON_INTERFACE OCTON_FUNC_CALL operator +(const Vector7D& Value) noexcept;
-		Vector7D OCTON_INTERFACE OCTON_FUNC_CALL operator -(const Vector7D& Value) noexcept;
-		Vector7D OCTON_INTERFACE OCTON_FUNC_CALL operator +(const Vector7D& Union, const Vector7D& Value) noexcept;
-		Vector7D OCTON_INTERFACE OCTON_FUNC_CALL operator -(const Vector7D& Union, const Vector7D& Value) noexcept;
-		Vector7D OCTON_INTERFACE OCTON_FUNC_CALL operator *(double Union, const Vector7D& Value) noexcept;
-		Vector7D OCTON_INTERFACE OCTON_FUNC_CALL operator *(const Vector7D& Union, double Value) noexcept;
-		Vector7D OCTON_INTERFACE OCTON_FUNC_CALL operator /(const Vector7D& Union, double Value) noexcept;
-	}
-	namespace MainType
+	public:
+		Vec7D Ths operator ()() const;
+		double& Ths operator [](std::size_t i) &;
+		const double& Ths operator [](std::size_t i) const&;
+		Vec7D& Ths operator +=(const Vec7D& O) &;
+		Vec7D& Ths operator +=(const std::initializer_list<Vec7D>& O) &;
+		Vec7D& Ths operator -=(const Vec7D& O) &;
+		Vec7D& Ths operator -=(const std::initializer_list<Vec7D>& O) &;
+		Vec7D& Ths operator *=(double O) &;
+		Vec7D& Ths operator *=(const std::initializer_list<double>& O) &;
+		Vec7D& Ths operator /=(double O) &;
+		Vec7D& Ths operator /=(const std::initializer_list<double>& O) &;
+		///
+		/// multiples
+		///
+	public:
+		static double Gbl Dot(const Vec7D& U, const Vec7D& V);
+		static Vec7D Gbl Cross(const Vec7D& U, const Vec7D& V);
+		///
+		/// fundamentals
+		///
+	public:
+		static double Gbl Abs(const Vec7D& V);
+		static Vec7D Gbl Sgn(const Vec7D& V);
+		///
+		/// conventions
+		///
+	public:
+		static String Gbl Str(const Vec7D& V);
+		static Vec7D Gbl Val(const String& V);
+	};
+	///
+	/// operators
+	///
+	bool I Gbl operator ==(const Vec7D& U, const Vec7D& V);
+	bool I Gbl operator !=(const Vec7D& U, const Vec7D& V);
+	Vec7D I Gbl operator +(const Vec7D& V);
+	Vec7D I Gbl operator -(const Vec7D& V);
+	Vec7D I Gbl operator +(const Vec7D& U, const Vec7D& V);
+	Vec7D I Gbl operator -(const Vec7D& U, const Vec7D& V);
+	Vec7D I Gbl operator *(const Vec7D& U, double V);
+	Vec7D I Gbl operator *(double U, const Vec7D& V);
+	Vec7D I Gbl operator /(const Vec7D& U, double V);
+	struct I Octon
 	{
-		enum struct index : std::int64_t
-		{
-			s = 0,
-			i = 1,
-			j = 2,
-			k = 3,
-			l = 4,
-			il = 5,
-			jl = 6,
-			kl = 7,
-		};
-		struct OCTON_INTERFACE Octonion
-		{
-		public:
-			///
-			/// constants
-			///
-			static const double pi;
-			static const double e;
-			static const Octonion i;
-			static const Octonion j;
-			static const Octonion k;
-			static const Octonion l;
-			static const Octonion il;
-			static const Octonion jl;
-			static const Octonion kl;
-		private:
-			///
-			/// basis
-			///
-			double real;
-			BaseType::Vector7D imaginary;
-		public:
-			explicit OCTON_FUNC_INSTANCE_CALL Octonion() noexcept;
-			explicit OCTON_FUNC_INSTANCE_CALL Octonion(double s, const BaseType::Vector7D& v) noexcept;
-			explicit OCTON_FUNC_INSTANCE_CALL Octonion(double s, double i, double j, double k, double l, double il, double jl, double kl) noexcept;
-			OCTON_FUNC_INSTANCE_CALL Octonion(double Value) noexcept;
-			OCTON_FUNC_INSTANCE_CALL Octonion(const BaseType::Vector7D& Value) noexcept;
-			OCTON_FUNC_INSTANCE_CALL Octonion(const Octonion& Value) noexcept;
-			static double OCTON_FUNC_CALL Scalar(const Octonion& Value) noexcept;
-			static BaseType::Vector7D OCTON_FUNC_CALL Vector(const Octonion& Value) noexcept;
-			///
-			/// operators
-			///
-			Octonion OCTON_FUNC_INSTANCE_CALL operator ()() const noexcept;
-			double& OCTON_FUNC_INSTANCE_CALL operator [](index i) &;
-			double& OCTON_FUNC_INSTANCE_CALL operator [](std::size_t i) & noexcept;
-			const double& OCTON_FUNC_INSTANCE_CALL operator [](index i) const&;
-			const double& OCTON_FUNC_INSTANCE_CALL operator [](std::size_t i) const& noexcept;
-			Octonion& OCTON_FUNC_INSTANCE_CALL operator ++() & noexcept;
-			Octonion OCTON_FUNC_INSTANCE_CALL operator ++(int) & noexcept;
-			Octonion& OCTON_FUNC_INSTANCE_CALL operator --() & noexcept;
-			Octonion OCTON_FUNC_INSTANCE_CALL operator --(int) & noexcept;
-			Octonion& OCTON_FUNC_INSTANCE_CALL operator =(const Octonion& Value) & noexcept;
-			Octonion& OCTON_FUNC_INSTANCE_CALL operator +=(const Octonion& Value) & noexcept;
-			Octonion& OCTON_FUNC_INSTANCE_CALL operator +=(const std::initializer_list<Octonion>& Value) & noexcept;
-			Octonion& OCTON_FUNC_INSTANCE_CALL operator -=(const Octonion& Value) & noexcept;
-			Octonion& OCTON_FUNC_INSTANCE_CALL operator -=(const std::initializer_list<Octonion>& Value) & noexcept;
-			Octonion& OCTON_FUNC_INSTANCE_CALL operator *=(const Octonion& Value) & noexcept;
-			Octonion& OCTON_FUNC_INSTANCE_CALL operator *=(const std::initializer_list<Octonion>& Value) & noexcept;
-			Octonion& OCTON_FUNC_INSTANCE_CALL operator /= (const Octonion& Value) & noexcept;
-			Octonion& OCTON_FUNC_INSTANCE_CALL operator /=(const std::initializer_list<Octonion>& Value) & noexcept;
-			Octonion& OCTON_FUNC_INSTANCE_CALL operator ^=(std::int64_t Exponent) & noexcept;
-			Octonion& OCTON_FUNC_INSTANCE_CALL operator ^=(const std::initializer_list<std::int64_t>& Exponent) & noexcept;
-			///
-			/// fundamentals
-			///
-			static double OCTON_FUNC_CALL abs(const Octonion& Value);
-			static double OCTON_FUNC_CALL arg(const Octonion& Value);
-			static double OCTON_FUNC_CALL arg(const Octonion& Value, std::int64_t Theta);
-			static Octonion OCTON_FUNC_CALL conjg(const Octonion& Value);
-			static Octonion OCTON_FUNC_CALL sgn(const Octonion& Value);
-			static Octonion OCTON_FUNC_CALL inverse(const Octonion& Value);
-			static Octonion OCTON_FUNC_CALL exp(const Octonion& Value);
-			static Octonion OCTON_FUNC_CALL ln(const Octonion& Value);
-			static Octonion OCTON_FUNC_CALL ln(const Octonion& Value, std::int64_t Theta);
-			///
-			/// multiples
-			///
-			static double OCTON_FUNC_CALL dot(const Octonion& Union, const Octonion& Value) noexcept;
-			static BaseType::Vector7D OCTON_FUNC_CALL outer(const Octonion& Union, const Octonion& Value) noexcept;
-			static Octonion OCTON_FUNC_CALL even(const Octonion& Union, const Octonion& Value) noexcept;
-			static BaseType::Vector7D OCTON_FUNC_CALL cross(const Octonion& Union, const Octonion& Value) noexcept;
-			///
-			/// exponentials
-			///
-			static Octonion OCTON_FUNC_CALL power(const Octonion& Base, const Octonion& Exponent);
-			static Octonion OCTON_FUNC_CALL power(const Octonion& Base, const Octonion& Exponent, std::int64_t Theta, std::int64_t Phi, std::int64_t Tau);
-			static Octonion OCTON_FUNC_CALL power(const Octonion& Base, double Exponent);
-			static Octonion OCTON_FUNC_CALL power(const Octonion& Base, double Exponent, std::int64_t Theta);
-			static Octonion OCTON_FUNC_CALL root(const Octonion& Base, const Octonion& Exponent);
-			static Octonion OCTON_FUNC_CALL root(const Octonion& Base, const Octonion& Exponent, std::int64_t Theta, std::int64_t Phi, std::int64_t Tau);
-			static Octonion OCTON_FUNC_CALL root(const Octonion& Base, double Exponent);
-			static Octonion OCTON_FUNC_CALL root(const Octonion& Base, double Exponent, std::int64_t Theta);
-			static Octonion OCTON_FUNC_CALL log(const Octonion& Base, const Octonion& Number);
-			static Octonion OCTON_FUNC_CALL log(const Octonion& Base, const Octonion& Number, std::int64_t Theta, std::int64_t Phi, std::int64_t Tau, std::int64_t Omega);
-			///
-			/// trigonometrics
-			///
-			static Octonion OCTON_FUNC_CALL sin(const Octonion& Value);
-			static Octonion OCTON_FUNC_CALL arcsin(const Octonion& Value);
-			static Octonion OCTON_FUNC_CALL arcsin(const Octonion& Value, bool Sign, std::int64_t Period);
-			static Octonion OCTON_FUNC_CALL sinh(const Octonion& Value);
-			static Octonion OCTON_FUNC_CALL arcsinh(const Octonion& Value);
-			static Octonion OCTON_FUNC_CALL arcsinh(const Octonion& Value, bool Sign, std::int64_t Period);
-			static Octonion OCTON_FUNC_CALL cos(const Octonion& Value);
-			static Octonion OCTON_FUNC_CALL arccos(const Octonion& Value);
-			static Octonion OCTON_FUNC_CALL arccos(const Octonion& Value, bool Sign, std::int64_t Period);
-			static Octonion OCTON_FUNC_CALL cosh(const Octonion& Value);
-			static Octonion OCTON_FUNC_CALL arccosh(const Octonion& Value);
-			static Octonion OCTON_FUNC_CALL arccosh(const Octonion& Value, bool Sign, std::int64_t Period);
-			static Octonion OCTON_FUNC_CALL tan(const Octonion& Value);
-			static Octonion OCTON_FUNC_CALL arctan(const Octonion& Value);
-			static Octonion OCTON_FUNC_CALL arctan(const Octonion& Value, bool Sign, std::int64_t Period);
-			static Octonion OCTON_FUNC_CALL tanh(const Octonion& Value);
-			static Octonion OCTON_FUNC_CALL arctanh(const Octonion& Value);
-			static Octonion OCTON_FUNC_CALL arctanh(const Octonion& Value, bool Sign, std::int64_t Period);
-			static Octonion OCTON_FUNC_CALL csc(const Octonion& Value);
-			static Octonion OCTON_FUNC_CALL arccsc(const Octonion& Value);
-			static Octonion OCTON_FUNC_CALL arccsc(const Octonion& Value, bool Sign, std::int64_t Period);
-			static Octonion OCTON_FUNC_CALL csch(const Octonion& Value);
-			static Octonion OCTON_FUNC_CALL arccsch(const Octonion& Value);
-			static Octonion OCTON_FUNC_CALL arccsch(const Octonion& Value, bool Sign, std::int64_t Period);
-			static Octonion OCTON_FUNC_CALL sec(const Octonion& Value);
-			static Octonion OCTON_FUNC_CALL arcsec(const Octonion& Value);
-			static Octonion OCTON_FUNC_CALL arcsec(const Octonion& Value, bool Sign, std::int64_t Period);
-			static Octonion OCTON_FUNC_CALL sech(const Octonion& Value);
-			static Octonion OCTON_FUNC_CALL arcsech(const Octonion& Value);
-			static Octonion OCTON_FUNC_CALL arcsech(const Octonion& Value, bool Sign, std::int64_t Period);
-			static Octonion OCTON_FUNC_CALL cot(const Octonion& Value);
-			static Octonion OCTON_FUNC_CALL arccot(const Octonion& Value);
-			static Octonion OCTON_FUNC_CALL arccot(const Octonion& Value, bool Sign, std::int64_t Period);
-			static Octonion OCTON_FUNC_CALL coth(const Octonion& Value);
-			static Octonion OCTON_FUNC_CALL arccoth(const Octonion& Value);
-			static Octonion OCTON_FUNC_CALL arccoth(const Octonion& Value, bool Sign, std::int64_t Period);
-			///
-			/// conventions
-			///
-			static std::wstring OCTON_FUNC_CALL GetString(const Octonion& Value);
-			static Octonion OCTON_FUNC_CALL GetInstance(const std::wstring& Value);
-		};
+		///
+		/// constants
+		///
+	public:
+		static const Octon Zero;
+		static const Octon i;
+		static const Octon j;
+		static const Octon k;
+		static const Octon l;
+		static const Octon il;
+		static const Octon jl;
+		static const Octon kl;
+		///
+		/// basis
+		///
+	private:
+		double Re;
+		Vec7D Im;
+	public:
+		explicit Ths Octon();
+		explicit Ths Octon(double s, const Vec7D& v);
+		explicit Ths Octon(double s, double i, double j, double k, double l, double il, double jl, double kl);
+		Ths Octon(double V);
+		Ths Octon(const Vec7D& V);
+		static double Gbl Scalar(const Octon& V);
+		static Vec7D Gbl Vector(const Octon& V);
 		///
 		/// operators
 		///
-		bool OCTON_INTERFACE OCTON_FUNC_CALL operator ==(const Octonion& Union, const Octonion& Value) noexcept;
-		bool OCTON_INTERFACE OCTON_FUNC_CALL operator !=(const Octonion& Union, const Octonion& Value) noexcept;
-		Octonion OCTON_INTERFACE OCTON_FUNC_CALL operator +(const Octonion& Value) noexcept;
-		Octonion OCTON_INTERFACE OCTON_FUNC_CALL operator -(const Octonion& Value) noexcept;
-		Octonion OCTON_INTERFACE OCTON_FUNC_CALL operator ~(const Octonion& Value) noexcept;
-		Octonion OCTON_INTERFACE OCTON_FUNC_CALL operator +(const Octonion& Union, const Octonion& Value) noexcept;
-		Octonion OCTON_INTERFACE OCTON_FUNC_CALL operator -(const Octonion& Union, const Octonion& Value) noexcept;
-		Octonion OCTON_INTERFACE OCTON_FUNC_CALL operator *(const Octonion& Union, const Octonion& Value) noexcept;
-		Octonion OCTON_INTERFACE OCTON_FUNC_CALL operator /(const Octonion& Union, const Octonion& Value) noexcept;
-		Octonion OCTON_INTERFACE OCTON_FUNC_CALL operator ^(const Octonion& Base, std::int64_t Exponent) noexcept;
-	}
+	public:
+		Octon Ths operator ()() const;
+		double& Ths operator [](std::size_t i) &;
+		const double& Ths operator [](std::size_t i) const&;
+		Octon& Ths operator ++() &;
+		Octon Ths operator ++(int) &;
+		Octon& Ths operator --() &;
+		Octon Ths operator --(int) &;
+		Octon& Ths operator +=(const Octon& O) &;
+		Octon& Ths operator +=(const std::initializer_list<Octon>& O) &;
+		Octon& Ths operator -=(const Octon& O) &;
+		Octon& Ths operator -=(const std::initializer_list<Octon>& O) &;
+		Octon& Ths operator *=(const Octon& O) &;
+		Octon& Ths operator *=(const std::initializer_list<Octon>& O) &;
+		Octon& Ths operator /=(const Octon& O) &;
+		Octon& Ths operator /=(const std::initializer_list<Octon>& O) &;
+		Octon& Ths operator ^=(std::int64_t O) &;
+		Octon& Ths operator ^=(const std::initializer_list<std::int64_t>& O) &;
+		///
+		/// multiples
+		///
+	public:
+		static double Gbl Dot(const Octon& U, const Octon& V);
+		static Vec7D Gbl Outer(const Octon& U, const Octon& V);
+		static Octon Gbl Even(const Octon& U, const Octon& V);
+		static Vec7D Gbl Cross(const Octon& U, const Octon& V);
+		///
+		/// fundamentals
+		///
+	public:
+		static double Gbl Abs(const Octon& V);
+		static double Gbl Arg(const Octon& V, std::int64_t P);
+		static double Gbl Arg(const Octon& V);
+		static Octon Gbl Conjg(const Octon& V);
+		static Octon Gbl Sgn(const Octon& V);
+		static Octon Gbl Inverse(const Octon& V);
+		static Octon Gbl Exp(const Octon& V);
+		static Octon Gbl Ln(const Octon& V, std::int64_t P);
+		static Octon Gbl Ln(const Octon& V);
+		///
+		/// exponentials
+		///
+	public:
+		static Octon Gbl Power(const Octon& U, const Octon& V, std::int64_t z1, std::int64_t z2, std::int64_t z3);
+		static Octon Gbl Power(const Octon& U, const Octon& V);
+		static Octon Gbl Power(const Octon& U, double V, std::int64_t P);
+		static Octon Gbl Power(const Octon& U, double V);
+		static Octon Gbl Root(const Octon& U, const Octon& V, std::int64_t z1, std::int64_t z2, std::int64_t z3);
+		static Octon Gbl Root(const Octon& U, const Octon& V);
+		static Octon Gbl Root(const Octon& U, double V, std::int64_t P);
+		static Octon Gbl Root(const Octon& U, double V);
+		static Octon Gbl Log(const Octon& U, const Octon& V, std::int64_t z1, std::int64_t z2, std::int64_t z3, std::int64_t z4);
+		static Octon Gbl Log(const Octon& U, const Octon& V);
+		///
+		/// trigonometrics
+		///
+	public:
+		static Octon Gbl Sin(const Octon& V);
+		static Octon Gbl Cos(const Octon& V);
+		static Octon Gbl Tan(const Octon& V);
+		static Octon Gbl Csc(const Octon& V);
+		static Octon Gbl Sec(const Octon& V);
+		static Octon Gbl Cot(const Octon& V);
+		static Octon Gbl Sinh(const Octon& V);
+		static Octon Gbl Cosh(const Octon& V);
+		static Octon Gbl Tanh(const Octon& V);
+		static Octon Gbl Csch(const Octon& V);
+		static Octon Gbl Sech(const Octon& V);
+		static Octon Gbl Coth(const Octon& V);
+		static Octon Gbl Arcsin(const Octon& V, bool S, std::int64_t P);
+		static Octon Gbl Arcsin(const Octon& V);
+		static Octon Gbl Arccos(const Octon& V, bool S, std::int64_t P);
+		static Octon Gbl Arccos(const Octon& V);
+		static Octon Gbl Arctan(const Octon& V, bool S, std::int64_t P);
+		static Octon Gbl Arctan(const Octon& V);
+		static Octon Gbl Arccsc(const Octon& V, bool S, std::int64_t P);
+		static Octon Gbl Arccsc(const Octon& V);
+		static Octon Gbl Arcsec(const Octon& V, bool S, std::int64_t P);
+		static Octon Gbl Arcsec(const Octon& V);
+		static Octon Gbl Arccot(const Octon& V, bool S, std::int64_t P);
+		static Octon Gbl Arccot(const Octon& V);
+		static Octon Gbl Arcsinh(const Octon& V, bool S, std::int64_t P);
+		static Octon Gbl Arcsinh(const Octon& V);
+		static Octon Gbl Arccosh(const Octon& V, bool S, std::int64_t P);
+		static Octon Gbl Arccosh(const Octon& V);
+		static Octon Gbl Arctanh(const Octon& V, bool S, std::int64_t P);
+		static Octon Gbl Arctanh(const Octon& V);
+		static Octon Gbl Arccsch(const Octon& V, bool S, std::int64_t P);
+		static Octon Gbl Arccsch(const Octon& V);
+		static Octon Gbl Arcsech(const Octon& V, bool S, std::int64_t P);
+		static Octon Gbl Arcsech(const Octon& V);
+		static Octon Gbl Arccoth(const Octon& V, bool S, std::int64_t P);
+		static Octon Gbl Arccoth(const Octon& V);
+		///
+		/// conventions
+		///
+	public:
+		static String Gbl Str(const Octon& V);
+		static Octon Gbl Val(const String& V);
+	};
+	///
+	/// operators
+	///
+	bool I Gbl operator ==(const Octon& U, const Octon& V);
+	bool I Gbl operator !=(const Octon& U, const Octon& V);
+	Octon I Gbl operator +(const Octon& V);
+	Octon I Gbl operator -(const Octon& V);
+	Octon I Gbl operator ~(const Octon& V);
+	Octon I Gbl operator +(const Octon& U, const Octon& V);
+	Octon I Gbl operator -(const Octon& U, const Octon& V);
+	Octon I Gbl operator *(const Octon& U, const Octon& V);
+	Octon I Gbl operator /(const Octon& U, const Octon& V);
+	Octon I Gbl operator ^(const Octon& U, std::int64_t V);
 }
+#pragma pop_macro("Ths")
+#pragma pop_macro("Gbl")
+#pragma pop_macro("I")
 #pragma pack(pop)
 #endif
 #endif

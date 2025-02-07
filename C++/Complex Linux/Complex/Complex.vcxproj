@@ -37,6 +37,7 @@
   <ItemGroup>
     <ClInclude Include="Cayley Dickson Algebra.h" />
     <ClInclude Include="export\Complex.h" />
+    <ClInclude Include="export\NumString.h" />
     <ClInclude Include="export\Octonion.h" />
     <ClInclude Include="export\Quaternion.h" />
     <ClInclude Include="export\Sedenion.h" />
@@ -44,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Complex.cpp" />
+    <ClCompile Include="NumString.cpp" />
     <ClCompile Include="Octonion.cpp" />
     <ClCompile Include="Quaternion.cpp" />
     <ClCompile Include="Sedenion.cpp" />
@@ -145,7 +147,6 @@
     <Link>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <LibraryDependencies>%(LibraryDependencies)</LibraryDependencies>
-      <AdditionalOptions>-fPIC %(AdditionalOptions)</AdditionalOptions>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -158,7 +159,6 @@
     <Link>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <LibraryDependencies>%(LibraryDependencies)</LibraryDependencies>
-      <AdditionalOptions>-fPIC %(AdditionalOptions)</AdditionalOptions>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -171,7 +171,6 @@
     <Link>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <LibraryDependencies>%(LibraryDependencies)</LibraryDependencies>
-      <AdditionalOptions>-fPIC %(AdditionalOptions)</AdditionalOptions>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -184,7 +183,6 @@
     <Link>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <LibraryDependencies>%(LibraryDependencies)</LibraryDependencies>
-      <AdditionalOptions>-fPIC %(AdditionalOptions)</AdditionalOptions>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -197,7 +195,6 @@
     <Link>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <LibraryDependencies>%(LibraryDependencies)</LibraryDependencies>
-      <AdditionalOptions>-fPIC %(AdditionalOptions)</AdditionalOptions>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -210,7 +207,6 @@
     <Link>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <LibraryDependencies>%(LibraryDependencies)</LibraryDependencies>
-      <AdditionalOptions>-fPIC %(AdditionalOptions)</AdditionalOptions>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -223,7 +219,6 @@
     <Link>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <LibraryDependencies>%(LibraryDependencies)</LibraryDependencies>
-      <AdditionalOptions>-fPIC %(AdditionalOptions)</AdditionalOptions>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -236,7 +231,6 @@
     <Link>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <LibraryDependencies>%(LibraryDependencies)</LibraryDependencies>
-      <AdditionalOptions>-fPIC %(AdditionalOptions)</AdditionalOptions>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>

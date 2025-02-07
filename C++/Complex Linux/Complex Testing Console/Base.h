@@ -14,6 +14,7 @@
  *   limitations under the License.
  */
 #pragma once
+#include <cstddef>
 #include <cstdint>
 #include <iomanip>
 #include <string>
@@ -21,103 +22,66 @@
 #include <sstream>
 #include <array>
 #include <stdexcept>
-inline std::int64_t wtoi64_t(const wchar_t* str)
+#include <functional>
+#include <NumString.h>
+inline std::wstring Str(double Num)
 {
-	if (str[0] == L'\0') { throw std::invalid_argument("The string cannot be converted as an integer."); }
-	const wchar_t* number = str;
-	if (str[0] == L'-' || str[0] == L'+')
-	{
-		if (str[1] == L'\0') { throw std::invalid_argument("The string cannot be converted as an integer."); }
-		++number;
-	}
-	std::size_t number_size = 0;
-	const wchar_t* number_end = number;
-	while (*number_end != L'\0')
-	{
-		if (static_cast<std::uint16_t>(*number_end) < 48 || static_cast<std::uint16_t>(*number_end) > 57) { throw std::invalid_argument("The string cannot be converted as an integer."); }
-		++number_end;
-		++number_size;
-	}
-	const wchar_t wcharsPlus[] = L"9223372036854775807";
-	const wchar_t wcharsMinus[] = L"9223372036854775808";
-	wchar_t digitsCheck[20]{ L'\0' };
-	if (number_size > 20)
-	{
-		throw std::out_of_range("An integer is exceeded the limit.");
-	}
-	std::int64_t accumulate = 1;
-	std::int64_t output = 0;
-	for (std::size_t i = 0; i < number_size; ++i)
-	{
-		wchar_t wchar = number[number_size - i - 1];
-		digitsCheck[number_size - i - 1] = wchar;
-		std::uint16_t digit = static_cast<std::uint16_t>(wchar) - 48;
-		if (str[0] == L'-') { output -= digit * accumulate; }
-		else { output += digit * accumulate; }
-		accumulate = accumulate * 10;
-	}
-	if (number_size == 20)
-	{
-		for (std::size_t i = 0; i < 20; ++i)
-		{
-			if (str[0] == L'-')
-			{
-				if (digitsCheck[i] < wcharsMinus[i]) { break; }
-				else if (digitsCheck[i] > wcharsMinus[i]) { throw std::out_of_range("An integer is exceeded the limit."); }
-			}
-			else
-			{
-				if (digitsCheck[i] < wcharsPlus[i]) { break; }
-				else if (digitsCheck[i] > wcharsPlus[i]) { throw std::out_of_range("An integer is exceeded the limit."); }
-			}
-		}
-	}
-	return output;
+	std::wstringstream Rst;
+	Rst << std::defaultfloat << std::setprecision(17) << Num;
+	return std::regex_replace(Rst.str(), std::wregex(L"e-0(?=[1-9])"), L"e-");
 };
-inline std::wstring DoubleToString(double Number)
+inline std::wstring Replace(const std::wstring& Ipt, const std::wstring& Sch, const std::wstring& Rpt)
 {
-	std::wstringstream Result;
-	Result << std::defaultfloat << std::setprecision(17) << Number;
-	return std::regex_replace(Result.str(), std::wregex(L"e-0(?=[1-9])"), L"e-");
-};
-inline std::wstring Replace(const std::wstring& Input, const std::wstring& Search, const std::wstring& Replacement)
-{
-	std::wstring Result = Input;
-	std::size_t Position = Result.find(Search);
-	while (Position != std::wstring::npos)
+	std::wstring Rst = Ipt;
+	std::size_t Pos = Rst.find(Sch);
+	while (Pos != std::wstring::npos)
 	{
-		Result = Result.replace(Position, Search.size(), Replacement);
-		Position = Result.find(Search, Position + Replacement.size());
+		Rst = Rst.replace(Pos, Sch.size(), Rpt);
+		Pos = Rst.find(Sch, Pos + Rpt.size());
 	}
-	return Result;
+	return Rst;
 };
-inline std::int64_t stoi64_t(const std::wstring& str)
+inline std::int64_t stoi64_t(const std::wstring& Str)
 {
-	return wtoi64_t(str.c_str());
+	std::size_t Idx{ 0 };
+	long long Rst{ std::stoll(Str, &Idx) };
+	if (Idx < Str.size() || Str[0] == L' ')
+	{
+		throw std::invalid_argument{ "The string cannot be converted as a integer type." };
+	}
+	return static_cast<std::int64_t>(Rst);
 };
 template <typename T>
-inline std::wstring to_wstring(T o) { return T::GetString(o); };
-template <>
-inline std::wstring to_wstring<double>(double o) { return DoubleToString(o); };
-template <>
-inline std::wstring to_wstring<std::size_t>(std::size_t o) { return std::to_wstring(o); };
-template <>
-inline std::wstring to_wstring<std::int64_t>(std::int64_t o) { return std::to_wstring(o); };
-template <>
-inline std::wstring to_wstring<bool>(bool o) { return o ? L"true" : L"false"; };
-inline std::int64_t PraseAsInteger(const std::wstring& Value)
+T Val(const std::wstring& Str)
 {
-	return stoi64_t(Replace(Value, L" ", L""));
+	Num::String V{ Str.data() };
+	return T::Val(V);
 };
-inline double PraseAsReal(const std::wstring& Value)
+template <typename T>
+std::wstring ToModStr(const T& Obj)
 {
-	std::wstring Replaced = Replace(Value, L" ", L"");
-	std::size_t Processed = 0;
-	double Result = 0;
-	try { Result = std::stod(Replaced, &Processed); }
-	catch (...) { Processed = std::wstring::npos; }
-	if (Processed == Replaced.size()) { return Result; }
-	throw std::invalid_argument("The string cannot be converted as a real.");
+	Num::String Rst{ T::Str(Obj) };
+	return Rst.Ptr();
+};
+inline std::wstring ToModStr(double Obj)
+{
+	return Str(Obj);
+};
+inline std::wstring ToModStr(std::size_t Obj)
+{
+	return std::to_wstring(Obj);
+};
+inline std::wstring ToModStr(std::int64_t Obj)
+{
+	return std::to_wstring(Obj);
+};
+inline std::wstring ToModStr(bool Obj)
+{
+	return Obj ? L"true" : L"false";
+};
+inline std::int64_t Int(const std::wstring& Val)
+{
+	return stoi64_t(Replace(Val, L" ", L""));
 };
 namespace ComplexTestingConsole
 {
@@ -132,7 +96,7 @@ namespace ComplexTestingConsole
 	public:
 		static std::wstring GetTitle();
 		static std::wstring GetStartupLine();
-		static bool IsSwitchTo(const std::wstring& Option);
+		static bool IsSwitchTo(const std::wstring& Opt);
 		///
 		/// Main Thread
 		///
@@ -140,119 +104,108 @@ namespace ComplexTestingConsole
 		///
 		/// Console Line Materials
 		///
-		static std::wstring Exception(const std::exception& Exception);
+		static std::wstring Exception(const std::exception& Exc);
 		static std::wstring Exception();
-		static std::wstring Selection(const std::wstring& Content);
+		static std::wstring Selection(const std::wstring& Con);
 		static std::wstring Selection();
-		static std::wstring Input(const std::wstring& Content);
+		static std::wstring Input(const std::wstring& Con);
 		static std::wstring Input();
-		static std::wstring Output(const std::wstring& Preceding, const std::wstring& Content);
-		static std::wstring Output(const std::wstring& Content);
+		static std::wstring Output(const std::wstring& Pre, const std::wstring& Con);
+		static std::wstring Output(const std::wstring& Con);
 		static std::wstring Output();
-		static std::wstring Comment(const std::wstring& Preceding, const std::wstring& Content);
-		static std::wstring Comment(const std::wstring& Content);
+		static std::wstring Comment(const std::wstring& Pre, const std::wstring& Con);
+		static std::wstring Comment(const std::wstring& Con);
 		static std::wstring Comment();
-		static void Startup(const std::wstring& Title);
+		static void Startup(const std::wstring& Tle);
 	};
-	template <std::size_t I, std::size_t S>
-	std::wstring get_angle_name(std::integral_constant<std::size_t, I>, const std::array<const wchar_t*, S>& Angle)
+	template <std::size_t I>
+	std::wstring GetName()
 	{
-		return I < S ? std::get<I>(Angle) : L"Angle" + to_wstring(I);
+		return L"z" + ToModStr(I);
 	};
 	template <typename... Args>
-	std::wstring get_output_prepend_impl(const std::wstring& prepend, const std::wstring& midend, const std::wstring& append, std::int64_t arg)
+	std::wstring PowBegHit(const std::wstring& Beg, const std::wstring& Mid, const std::wstring& End, std::int64_t I)
 	{
-		return prepend + to_wstring(arg) + append;
+		return Beg + ToModStr(I) + End;
 	};
 	template <typename... Args>
-	std::wstring get_output_prepend_impl(const std::wstring& prepend, const std::wstring& midend, const std::wstring& append, std::int64_t arg, Args... args)
+	std::wstring PowBegHit(const std::wstring& Beg, const std::wstring& Mid, const std::wstring& End, std::int64_t I, Args... Is)
 	{
-		return get_output_prepend_impl(prepend + to_wstring(arg) + midend, midend, append, args...);
+		return PowBegHit(Beg + ToModStr(I) + Mid, Mid, End, Is...);
 	};
 	template <typename... Args>
-	std::wstring get_output_prepend(const std::wstring& RightValue, Args... Temp)
+	std::wstring PowBeg(const std::wstring& R, Args... Tmp)
 	{
-		return get_output_prepend_impl(RightValue + L"(", L", ", L") = ", Temp...);
+		return PowBegHit(R + L"(", L", ", L") = ", Tmp...);
 	};
-	template <typename T, std::size_t I = 0, std::size_t A, std::size_t S>
-	void power_get_impl(std::array<T, A>& Data, const std::array<const wchar_t*, S>& Angle)
+	inline static const wchar_t* Assign = L" = ";
+	template <std::size_t A, std::size_t I = 0>
+	void PowGet(std::array<std::int64_t, A>& Dat)
 	{
 		if constexpr (I < A)
 		{
-			const wchar_t* Assign = L" = ";
-			if constexpr (std::is_same_v<T, std::int64_t>)
-			{
-				std::get<I>(Data) = PraseAsInteger(Base::Input(get_angle_name(std::integral_constant<std::size_t, I>{}, Angle) + Assign));
-			}
-			else if constexpr (std::is_same_v<T, std::pair<std::int64_t, std::int64_t>>)
-			{
-				std::int64_t Min = PraseAsInteger(Base::Input(get_angle_name(std::integral_constant<std::size_t, I>{}, Angle) + L"Min" + Assign));
-				std::int64_t Max = PraseAsInteger(Base::Input(get_angle_name(std::integral_constant<std::size_t, I>{}, Angle) + L"Max" + Assign));
-				std::get<I>(Data) = std::make_pair<std::int64_t, std::int64_t>(std::move(Min), std::move(Max));
-			}
-			if constexpr (I < A)
-			{
-				power_get_impl<T, I + 1, A, S>(Data, Angle);
-			}
-		}
-	};
-	template <typename T, std::size_t A>
-	void power_get(std::array<T, A>& Data)
-	{
-		std::array<const wchar_t*, 4> Angle{ L"Theta", L"Phi", L"Tau", L"Omega" };
-		power_get_impl(Data, Angle);
-	};
-	template <typename F, typename N, std::size_t A, std::size_t... I>
-	void power_result_impl(F Subroutine, const N& Union, const N& Value, const std::array<std::int64_t, A>& Data, std::integer_sequence<std::size_t, I...>)
-	{
-		Base::Output(to_wstring(std::invoke(Subroutine, Union, Value, std::get<I>(Data)...)));
-	};
-	template <typename F, typename N, std::size_t A, std::size_t... I>
-	void power_result_impl(F Subroutine, const std::wstring& RightValue, const N& Union, const N& Value, const std::array<std::int64_t, A>& Temp, std::integer_sequence<std::size_t, I...>)
-	{
-		Base::Output(
-			get_output_prepend(RightValue, std::get<I>(Temp)...),
-			to_wstring(std::invoke(Subroutine, Union, Value, std::get<I>(Temp)...))
-		);
-	};
-	template <typename F, typename N, std::size_t A, std::size_t I = 0>
-	void power_result_impl(F Subroutine, const std::wstring& RightValue, const N& Union, const N& Value, const std::array<std::pair<std::int64_t, std::int64_t>, A>& Data, std::array<std::int64_t, A>& Temp)
-	{
-		if constexpr (I < A)
-		{
-			while (std::get<I>(Temp) <= std::get<I>(Data).second)
-			{
-				power_result_impl<F, N, A, I + 1>(Subroutine, RightValue, Union, Value, Data, Temp);
-				std::get<I>(Temp) = std::get<I>(Temp) + 1;
-			}
-			std::get<I>(Temp) = std::get<I>(Data).first;
-		}
-		else if constexpr (I == A)
-		{
-			power_result_impl(Subroutine, RightValue, Union, Value, Temp, std::make_index_sequence<A>{});
+			std::get<I>(Dat) = Int(Base::Input(GetName<I>() + Assign));
+			PowGet<A, I + 1>(Dat);
 		}
 	};
 	template <std::size_t A, std::size_t I = 0>
-	void power_temp_init(const std::array<std::pair<std::int64_t, std::int64_t>, A>& Data, std::array<std::int64_t, A>& Temp)
+	void PowGet(std::array<std::pair<std::int64_t, std::int64_t>, A>& Dat)
 	{
 		if constexpr (I < A)
 		{
-			std::get<I>(Temp) = std::get<I>(Data).first;
-			power_temp_init<A, I + 1>(Data, Temp);
+			std::int64_t Min = Int(Base::Input(GetName<I>() + L"(min)" + Assign));
+			std::int64_t Max = Int(Base::Input(GetName<I>() + L"(max)" + Assign));
+			std::pair<std::int64_t, std::int64_t> Par{ Min, Max };
+			std::get<I>(Dat) = Par;
+			PowGet<A, I + 1>(Dat);
 		}
 	};
-	template <typename T, typename F, typename N, std::size_t A>
-	void power_result(F Subroutine, const std::wstring& RightValue, const N& Union, const N& Value, const std::array<T, A>& Data)
+	template <typename F, typename N, std::size_t A, std::size_t... I>
+	void PowRstPut(F S, const N& U, const N& V, const std::array<std::int64_t, A>& Dat, std::integer_sequence<std::size_t, I...>)
 	{
-		if constexpr (std::is_same_v<T, std::int64_t>)
+		Base::Output(ToModStr(std::invoke(S, U, V, std::get<I>(Dat)...)));
+	};
+	template <typename F, typename N, std::size_t A, std::size_t... I>
+	void PowRstPut(F S, const std::wstring& R, const N& U, const N& V, const std::array<std::int64_t, A>& Tmp, std::integer_sequence<std::size_t, I...>)
+	{
+		Base::Output(PowBeg(R, std::get<I>(Tmp)...), ToModStr(std::invoke(S, U, V, std::get<I>(Tmp)...)));
+	};
+	template <typename F, typename N, std::size_t A, std::size_t I = 0>
+	void PowRstLoop(F S, const std::wstring& R, const N& U, const N& V, const std::array<std::pair<std::int64_t, std::int64_t>, A>& Dat, std::array<std::int64_t, A>& Tmp)
+	{
+		if constexpr (I < A)
 		{
-			power_result_impl(Subroutine, Union, Value, Data, std::make_index_sequence<A>{});
+			while (std::get<I>(Tmp) <= std::get<I>(Dat).second)
+			{
+				PowRstLoop<F, N, A, I + 1>(S, R, U, V, Dat, Tmp);
+				++std::get<I>(Tmp);
+			}
+			std::get<I>(Tmp) = std::get<I>(Dat).first;
 		}
-		else if constexpr (std::is_same_v<T, std::pair<std::int64_t, std::int64_t>>)
+		else if constexpr (I == A)
 		{
-			std::array<std::int64_t, A> Temp{};
-			power_temp_init(Data, Temp);
-			power_result_impl(Subroutine, RightValue, Union, Value, Data, Temp);
+			PowRstPut(S, R, U, V, Tmp, std::make_index_sequence<A>{});
 		}
+	};
+	template <std::size_t A, std::size_t I = 0>
+	void PowTmpInit(const std::array<std::pair<std::int64_t, std::int64_t>, A>& Dat, std::array<std::int64_t, A>& Tmp)
+	{
+		if constexpr (I < A)
+		{
+			std::get<I>(Tmp) = std::get<I>(Dat).first;
+			PowTmpInit<A, I + 1>(Dat, Tmp);
+		}
+	};
+	template <typename F, typename N, std::size_t A>
+	void PowRst(F S, const N& U, const N& V, const std::array<std::int64_t, A>& Dat)
+	{
+		PowRstPut(S, U, V, Dat, std::make_index_sequence<A>{});
+	};
+	template <typename F, typename N, std::size_t A>
+	void PowRst(F S, const std::wstring& R, const N& U, const N& V, const std::array<std::pair<std::int64_t, std::int64_t>, A>& Dat)
+	{
+		std::array<std::int64_t, A> Tmp{};
+		PowTmpInit(Dat, Tmp);
+		PowRstLoop(S, R, U, V, Dat, Tmp);
 	};
 }

@@ -20,6 +20,7 @@
 /* ============= */
 #include <unistd.h>
 #include <termios.h>
+#include <cstdint>
 #include <string>
 #include <iostream>
 #include "Base.h"
@@ -28,19 +29,19 @@ namespace CmplxConExt
 	static char getch()
 	{
 		if (std::fflush(stdout) != 0) { return EOF; }
-		char result{};
-		termios captured{};
-		tcgetattr(0, &captured);
-		termios current = captured;
-		current.c_lflag &= ~ICANON;
-		current.c_lflag &= ~ECHO;
-		current.c_cc[VTIME] = 0;
-		current.c_cc[VMIN] = 1;
-		tcsetattr(0, TCSANOW, &current);
-		ssize_t count = read(0, &result, 1);
-		if (count == 0 || count == -1) { result = EOF; }
-		tcsetattr(0, TCSANOW, &captured);
-		return result;
+		char Result{};
+		termios Captured{};
+		tcgetattr(0, &Captured);
+		termios Current = Captured;
+		Current.c_lflag &= ~ICANON;
+		Current.c_lflag &= ~ECHO;
+		Current.c_cc[VTIME] = 0;
+		Current.c_cc[VMIN] = 1;
+		tcsetattr(0, TCSANOW, &Current);
+		ssize_t Count = read(0, &Result, 1);
+		if (Count == 0 || Count == -1) { Result = EOF; }
+		tcsetattr(0, TCSANOW, &Captured);
+		return Result;
 	};
 	enum class ConsoleColor : std::uint8_t
 	{
@@ -65,12 +66,21 @@ namespace CmplxConExt
 	static thread_local ConsoleColor ForegroundColor{ ConsoleColor::Gray };
 	static thread_local ConsoleColor BackgroundColor{ ConsoleColor::Default };
 	static thread_local std::wstring Title{ L"" };
-	ConsoleColor GetForegroundColor() { return ForegroundColor; };
-	ConsoleColor GetBackgroundColor() { return BackgroundColor; };
-	std::wstring GetTitle() { return Title; };
-	void SetForegroundColor(ConsoleColor Color)
+	ConsoleColor GetForegroundColor()
 	{
-		switch (Color)
+		return ForegroundColor;
+	};
+	ConsoleColor GetBackgroundColor()
+	{
+		return BackgroundColor;
+	};
+	std::wstring GetTitle()
+	{
+		return Title;
+	};
+	void SetForegroundColor(ConsoleColor Col)
+	{
+		switch (Col)
 		{
 		case ConsoleColor::Black:
 			std::wcout << L"\033[30m";
@@ -124,11 +134,11 @@ namespace CmplxConExt
 			std::wcout << L"\033[39m";
 			return;
 		}
-		ForegroundColor = Color;
+		ForegroundColor = Col;
 	};
-	void SetBackgroundColor(ConsoleColor Color)
+	void SetBackgroundColor(ConsoleColor Col)
 	{
-		switch (Color)
+		switch (Col)
 		{
 		case ConsoleColor::Black:
 			std::wcout << L"\033[40m";
@@ -182,15 +192,18 @@ namespace CmplxConExt
 			std::wcout << L"\033[49m";
 			return;
 		}
-		BackgroundColor = Color;
+		BackgroundColor = Col;
 	};
-	void SetTitle(const std::wstring& Text)
+	void SetTitle(const std::wstring& Tle)
 	{
-		std::wcout << L"\033]0;" << Text << L"\007";
-		Title = Text;
+		std::wcout << L"\033]0;" << Tle << L"\007";
+		Title = Tle;
 	};
 	void PressAnyKey() { getch(); };
-	void Clear() { [[maybe_unused]]int result = std::system("clear"); };
+	void Clear()
+	{
+		[[maybe_unused]]int Result = std::system("clear");
+	};
 }
 int main()
 {
