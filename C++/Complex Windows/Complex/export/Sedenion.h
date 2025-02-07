@@ -17,6 +17,8 @@
 #pragma once
 #ifndef SEDEN
 #define SEDEN
+#include <cstddef>
+#include <cstdint>
 #include <string>
 #include <NumString.h>
 #pragma pack(push)

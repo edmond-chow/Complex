@@ -27,6 +27,9 @@
     <ClCompile Include="Sedenion.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="NumString.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="export\Complex.h">

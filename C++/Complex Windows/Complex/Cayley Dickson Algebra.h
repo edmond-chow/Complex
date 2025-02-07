@@ -14,8 +14,8 @@
  *   limitations under the License.
  */
 #pragma once
+#include <cstddef>
 #include <cmath>
-#include <cstdint>
 #include <numbers>
 struct Number
 {

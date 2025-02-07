@@ -17,6 +17,8 @@
 #pragma once
 #ifndef CMPLX
 #define CMPLX
+#include <cstddef>
+#include <cstdint>
 #include <string>
 #include <NumString.h>
 #pragma pack(push)

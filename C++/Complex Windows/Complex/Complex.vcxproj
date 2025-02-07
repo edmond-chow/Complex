@@ -160,6 +160,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Complex.cpp" />
+    <ClCompile Include="NumString.cpp" />
     <ClCompile Include="Octonion.cpp" />
     <ClCompile Include="Quaternion.cpp" />
     <ClCompile Include="Sedenion.cpp" />

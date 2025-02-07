@@ -17,6 +17,8 @@
 #pragma once
 #ifndef QUTER
 #define QUTER
+#include <cstddef>
+#include <cstdint>
 #include <string>
 #include <NumString.h>
 #pragma pack(push)
