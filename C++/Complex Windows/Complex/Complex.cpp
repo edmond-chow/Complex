@@ -147,39 +147,39 @@ namespace Num
 			throw std::out_of_range{ "The index is out of range." };
 		}
 	};
-	inline bool I Gbl operator ==(const Vec1D& U, const Vec1D& V)
+	bool I Gbl operator ==(const Vec1D& U, const Vec1D& V)
 	{
 		return U.Num() == V.Num();
 	};
-	inline bool I Gbl operator !=(const Vec1D& U, const Vec1D& V)
+	bool I Gbl operator !=(const Vec1D& U, const Vec1D& V)
 	{
 		return !(U == V);
 	};
-	inline Vec1D I Gbl operator +(const Vec1D& V)
+	Vec1D I Gbl operator +(const Vec1D& V)
 	{
 		return V;
 	};
-	inline Vec1D I Gbl operator -(const Vec1D& V)
+	Vec1D I Gbl operator -(const Vec1D& V)
 	{
 		return Vec1D::Val(-V.Num());
 	};
-	inline Vec1D I Gbl operator +(const Vec1D& U, const Vec1D& V)
+	Vec1D I Gbl operator +(const Vec1D& U, const Vec1D& V)
 	{
 		return Vec1D::Val(U.Num() + V.Num());
 	};
-	inline Vec1D I Gbl operator -(const Vec1D& U, const Vec1D& V)
+	Vec1D I Gbl operator -(const Vec1D& U, const Vec1D& V)
 	{
 		return Vec1D::Val(U.Num() - V.Num());
 	};
-	inline Vec1D I Gbl operator *(const Vec1D& U, double V)
+	Vec1D I Gbl operator *(const Vec1D& U, double V)
 	{
 		return Vec1D::Val(U.Num() * V);
 	};
-	inline Vec1D I Gbl operator *(double U, const Vec1D& V)
+	Vec1D I Gbl operator *(double U, const Vec1D& V)
 	{
 		return Vec1D::Val(U * V.Num());
 	};
-	inline Vec1D I Gbl operator /(const Vec1D& U, double V)
+	Vec1D I Gbl operator /(const Vec1D& U, double V)
 	{
 		return Vec1D::Val(U.Num() / V);
 	};
@@ -458,23 +458,23 @@ namespace Num
 		default: return Im[i];
 		}
 	};
-	inline bool I Gbl operator ==(const Cmplx& U, const Cmplx& V)
+	bool I Gbl operator ==(const Cmplx& U, const Cmplx& V)
 	{
 		return U.Num() == V.Num();
 	};
-	inline bool I Gbl operator !=(const Cmplx& U, const Cmplx& V)
+	bool I Gbl operator !=(const Cmplx& U, const Cmplx& V)
 	{
 		return !(U == V);
 	};
-	inline Cmplx I Gbl operator +(const Cmplx& V)
+	Cmplx I Gbl operator +(const Cmplx& V)
 	{
 		return V;
 	};
-	inline Cmplx I Gbl operator -(const Cmplx& V)
+	Cmplx I Gbl operator -(const Cmplx& V)
 	{
 		return Cmplx::Val(-V.Num());
 	};
-	inline Cmplx I Gbl operator ~(const Cmplx& V)
+	Cmplx I Gbl operator ~(const Cmplx& V)
 	{
 		return Cmplx::Val(~V.Num());
 	};
@@ -500,24 +500,24 @@ namespace Num
 		--(*this)[0];
 		return Rst;
 	};
-	inline Cmplx I Gbl operator +(const Cmplx& U, const Cmplx& V)
+	Cmplx I Gbl operator +(const Cmplx& U, const Cmplx& V)
 	{
 		return Cmplx::Val(U.Num() + V.Num());
 	};
-	inline Cmplx I Gbl operator -(const Cmplx& U, const Cmplx& V)
+	Cmplx I Gbl operator -(const Cmplx& U, const Cmplx& V)
 	{
 		return Cmplx::Val(U.Num() - V.Num());
 	};
-	inline Cmplx I Gbl operator *(const Cmplx& U, const Cmplx& V)
+	Cmplx I Gbl operator *(const Cmplx& U, const Cmplx& V)
 	{
 		return Cmplx::Val(U.Num() * V.Num());
 	};
-	inline Cmplx I Gbl operator /(const Cmplx& U, const Cmplx& V)
+	Cmplx I Gbl operator /(const Cmplx& U, const Cmplx& V)
 	{
 		if (Cmplx::Vector(V) == Cmplx::Zero) { return Cmplx::Val(U.Num() / Cmplx::Scalar(V)); }
 		return U * Cmplx::Inverse(V);
 	};
-	inline Cmplx I Gbl operator ^(const Cmplx& U, std::int64_t V)
+	Cmplx I Gbl operator ^(const Cmplx& U, std::int64_t V)
 	{
 		return Cmplx::Power(U, static_cast<double>(V));
 	};

@@ -161,39 +161,39 @@ namespace Num
 			throw std::out_of_range{ "The index is out of range." };
 		}
 	};
-	inline bool I Gbl operator ==(const Vec3D& U, const Vec3D& V)
+	bool I Gbl operator ==(const Vec3D& U, const Vec3D& V)
 	{
 		return U.Num() == V.Num();
 	};
-	inline bool I Gbl operator !=(const Vec3D& U, const Vec3D& V)
+	bool I Gbl operator !=(const Vec3D& U, const Vec3D& V)
 	{
 		return !(U == V);
 	};
-	inline Vec3D I Gbl operator +(const Vec3D& V)
+	Vec3D I Gbl operator +(const Vec3D& V)
 	{
 		return V;
 	};
-	inline Vec3D I Gbl operator -(const Vec3D& V)
+	Vec3D I Gbl operator -(const Vec3D& V)
 	{
 		return Vec3D::Val(-V.Num());
 	};
-	inline Vec3D I Gbl operator +(const Vec3D& U, const Vec3D& V)
+	Vec3D I Gbl operator +(const Vec3D& U, const Vec3D& V)
 	{
 		return Vec3D::Val(U.Num() + V.Num());
 	};
-	inline Vec3D I Gbl operator -(const Vec3D& U, const Vec3D& V)
+	Vec3D I Gbl operator -(const Vec3D& U, const Vec3D& V)
 	{
 		return Vec3D::Val(U.Num() - V.Num());
 	};
-	inline Vec3D I Gbl operator *(const Vec3D& U, double V)
+	Vec3D I Gbl operator *(const Vec3D& U, double V)
 	{
 		return Vec3D::Val(U.Num() * V);
 	};
-	inline Vec3D I Gbl operator *(double U, const Vec3D& V)
+	Vec3D I Gbl operator *(double U, const Vec3D& V)
 	{
 		return Vec3D::Val(U * V.Num());
 	};
-	inline Vec3D I Gbl operator /(const Vec3D& U, double V)
+	Vec3D I Gbl operator /(const Vec3D& U, double V)
 	{
 		return Vec3D::Val(U.Num() / V);
 	};
@@ -476,23 +476,23 @@ namespace Num
 		default: return Im[i];
 		}
 	};
-	inline bool I Gbl operator ==(const Quter& U, const Quter& V)
+	bool I Gbl operator ==(const Quter& U, const Quter& V)
 	{
 		return U.Num() == V.Num();
 	};
-	inline bool I Gbl operator !=(const Quter& U, const Quter& V)
+	bool I Gbl operator !=(const Quter& U, const Quter& V)
 	{
 		return !(U == V);
 	};
-	inline Quter I Gbl operator +(const Quter& V)
+	Quter I Gbl operator +(const Quter& V)
 	{
 		return V;
 	};
-	inline Quter I Gbl operator -(const Quter& V)
+	Quter I Gbl operator -(const Quter& V)
 	{
 		return Quter::Val(-V.Num());
 	};
-	inline Quter I Gbl operator ~(const Quter& V)
+	Quter I Gbl operator ~(const Quter& V)
 	{
 		return Quter::Val(~V.Num());
 	};
@@ -518,24 +518,24 @@ namespace Num
 		--(*this)[0];
 		return Rst;
 	};
-	inline Quter I Gbl operator +(const Quter& U, const Quter& V)
+	Quter I Gbl operator +(const Quter& U, const Quter& V)
 	{
 		return Quter::Val(U.Num() + V.Num());
 	};
-	inline Quter I Gbl operator -(const Quter& U, const Quter& V)
+	Quter I Gbl operator -(const Quter& U, const Quter& V)
 	{
 		return Quter::Val(U.Num() - V.Num());
 	};
-	inline Quter I Gbl operator *(const Quter& U, const Quter& V)
+	Quter I Gbl operator *(const Quter& U, const Quter& V)
 	{
 		return Quter::Val(U.Num() * V.Num());
 	};
-	inline Quter I Gbl operator /(const Quter& U, const Quter& V)
+	Quter I Gbl operator /(const Quter& U, const Quter& V)
 	{
 		if (Quter::Vector(V) == Quter::Zero) { return Quter::Val(U.Num() / Quter::Scalar(V)); }
 		return U * Quter::Inverse(V);
 	};
-	inline Quter I Gbl operator ^(const Quter& U, std::int64_t V)
+	Quter I Gbl operator ^(const Quter& U, std::int64_t V)
 	{
 		return Quter::Power(U, static_cast<double>(V));
 	};

@@ -306,23 +306,23 @@ namespace Num
 		O.Size = 0;
 		return *this;
 	};
-	inline bool I Gbl operator ==(const Seden& U, const Seden& V)
+	bool I Gbl operator ==(const Seden& U, const Seden& V)
 	{
 		return U.Num() == V.Num();
 	};
-	inline bool I Gbl operator !=(const Seden& U, const Seden& V)
+	bool I Gbl operator !=(const Seden& U, const Seden& V)
 	{
 		return !(U == V);
 	};
-	inline Seden I Gbl operator +(const Seden& V)
+	Seden I Gbl operator +(const Seden& V)
 	{
 		return V;
 	};
-	inline Seden I Gbl operator -(const Seden& V)
+	Seden I Gbl operator -(const Seden& V)
 	{
 		return Seden::Val(-V.Num());
 	};
-	inline Seden I Gbl operator ~(const Seden& V)
+	Seden I Gbl operator ~(const Seden& V)
 	{
 		return Seden::Val(~V.Num());
 	};
@@ -348,24 +348,24 @@ namespace Num
 		--(*this)[0];
 		return Rst;
 	};
-	inline Seden I Gbl operator +(const Seden& U, const Seden& V)
+	Seden I Gbl operator +(const Seden& U, const Seden& V)
 	{
 		return Seden::Val(U.Num() + V.Num());
 	};
-	inline Seden I Gbl operator -(const Seden& U, const Seden& V)
+	Seden I Gbl operator -(const Seden& U, const Seden& V)
 	{
 		return Seden::Val(U.Num() - V.Num());
 	};
-	inline Seden I Gbl operator *(const Seden& U, const Seden& V)
+	Seden I Gbl operator *(const Seden& U, const Seden& V)
 	{
 		return Seden::Val(U.Num() * V.Num());
 	};
-	inline Seden I Gbl operator /(const Seden& U, const Seden& V)
+	Seden I Gbl operator /(const Seden& U, const Seden& V)
 	{
 		if (Seden::Vector(V) == Seden::Zero) { return Seden::Val(U.Num() / Seden::Scalar(V)); }
 		return U * Seden::Inverse(V);
 	};
-	inline Seden I Gbl operator ^(const Seden& U, std::int64_t V)
+	Seden I Gbl operator ^(const Seden& U, std::int64_t V)
 	{
 		return Seden::Power(U, static_cast<double>(V));
 	};

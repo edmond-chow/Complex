@@ -189,39 +189,39 @@ namespace Num
 			throw std::out_of_range{ "The index is out of range." };
 		}
 	};
-	inline bool I Gbl operator ==(const Vec7D& U, const Vec7D& V)
+	bool I Gbl operator ==(const Vec7D& U, const Vec7D& V)
 	{
 		return U.Num() == V.Num();
 	};
-	inline bool I Gbl operator !=(const Vec7D& U, const Vec7D& V)
+	bool I Gbl operator !=(const Vec7D& U, const Vec7D& V)
 	{
 		return !(U == V);
 	};
-	inline Vec7D I Gbl operator +(const Vec7D& V)
+	Vec7D I Gbl operator +(const Vec7D& V)
 	{
 		return V;
 	};
-	inline Vec7D I Gbl operator -(const Vec7D& V)
+	Vec7D I Gbl operator -(const Vec7D& V)
 	{
 		return Vec7D::Val(-V.Num());
 	};
-	inline Vec7D I Gbl operator +(const Vec7D& U, const Vec7D& V)
+	Vec7D I Gbl operator +(const Vec7D& U, const Vec7D& V)
 	{
 		return Vec7D::Val(U.Num() + V.Num());
 	};
-	inline Vec7D I Gbl operator -(const Vec7D& U, const Vec7D& V)
+	Vec7D I Gbl operator -(const Vec7D& U, const Vec7D& V)
 	{
 		return Vec7D::Val(U.Num() - V.Num());
 	};
-	inline Vec7D I Gbl operator *(const Vec7D& U, double V)
+	Vec7D I Gbl operator *(const Vec7D& U, double V)
 	{
 		return Vec7D::Val(U.Num() * V);
 	};
-	inline Vec7D I Gbl operator *(double U, const Vec7D& V)
+	Vec7D I Gbl operator *(double U, const Vec7D& V)
 	{
 		return Vec7D::Val(U * V.Num());
 	};
-	inline Vec7D I Gbl operator /(const Vec7D& U, double V)
+	Vec7D I Gbl operator /(const Vec7D& U, double V)
 	{
 		return Vec7D::Val(U.Num() / V);
 	};
@@ -512,23 +512,23 @@ namespace Num
 		default: return Im[i];
 		}
 	};
-	inline bool I Gbl operator ==(const Octon& U, const Octon& V)
+	bool I Gbl operator ==(const Octon& U, const Octon& V)
 	{
 		return U.Num() == V.Num();
 	};
-	inline bool I Gbl operator !=(const Octon& U, const Octon& V)
+	bool I Gbl operator !=(const Octon& U, const Octon& V)
 	{
 		return !(U == V);
 	};
-	inline Octon I Gbl operator +(const Octon& V)
+	Octon I Gbl operator +(const Octon& V)
 	{
 		return V;
 	};
-	inline Octon I Gbl operator -(const Octon& V)
+	Octon I Gbl operator -(const Octon& V)
 	{
 		return Octon::Val(-V.Num());
 	};
-	inline Octon I Gbl operator ~(const Octon& V)
+	Octon I Gbl operator ~(const Octon& V)
 	{
 		return Octon::Val(~V.Num());
 	};
@@ -554,24 +554,24 @@ namespace Num
 		--(*this)[0];
 		return Rst;
 	};
-	inline Octon I Gbl operator +(const Octon& U, const Octon& V)
+	Octon I Gbl operator +(const Octon& U, const Octon& V)
 	{
 		return Octon::Val(U.Num() + V.Num());
 	};
-	inline Octon I Gbl operator -(const Octon& U, const Octon& V)
+	Octon I Gbl operator -(const Octon& U, const Octon& V)
 	{
 		return Octon::Val(U.Num() - V.Num());
 	};
-	inline Octon I Gbl operator *(const Octon& U, const Octon& V)
+	Octon I Gbl operator *(const Octon& U, const Octon& V)
 	{
 		return Octon::Val(U.Num() * V.Num());
 	};
-	inline Octon I Gbl operator /(const Octon& U, const Octon& V)
+	Octon I Gbl operator /(const Octon& U, const Octon& V)
 	{
 		if (Octon::Vector(V) == Octon::Zero) { return Octon::Val(U.Num() / Octon::Scalar(V)); }
 		return U * Octon::Inverse(V);
 	};
-	inline Octon I Gbl operator ^(const Octon& U, std::int64_t V)
+	Octon I Gbl operator ^(const Octon& U, std::int64_t V)
 	{
 		return Octon::Power(U, static_cast<double>(V));
 	};

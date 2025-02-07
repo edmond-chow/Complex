@@ -38,43 +38,49 @@ namespace Num
 	private:
 		wchar_t* Pointer;
 	public:
-		Ths String()
-			: Pointer{ nullptr }
-		{};
-		Ths String(const wchar_t* Pt)
-			: Pointer{ nullptr }
-		{
-			if (Pt != nullptr)
-			{
-				std::size_t Sz{ std::wcslen(Pt) + 1 };
-				Pointer = new wchar_t[Sz] {};
-				std::copy_n(Pt, Sz, Pointer);
-			}
-		};
+		Ths String();
+		Ths String(const wchar_t* Pt);
 		String(const String& Self) = delete;
-		Ths String(String&& Self) noexcept
-			: Pointer{ nullptr }
-		{
-			Pointer = Self.Pointer;
-			Self.Pointer = nullptr;
-		};
+		Ths String(String&& Self) noexcept;
 		String& operator =(const String& O) & = delete;
-		String& Ths operator =(String&& O) & noexcept
+		String& Ths operator =(String&& O) & noexcept;
+		Ths ~String() noexcept;
+		const wchar_t* Ths Ptr() const&;
+	};
+	Ths String::String()
+		: Pointer{ nullptr }
+	{};
+	Ths String::String(const wchar_t* Pt)
+		: Pointer{ nullptr }
+	{
+		if (Pt != nullptr)
 		{
-			delete[] Pointer;
-			Pointer = O.Pointer;
-			O.Pointer = nullptr;
-			return *this;
-		};
-		Ths ~String() noexcept
-		{
-			delete[] Pointer;
-			Pointer = nullptr;
-		};
-		const wchar_t* Ths Ptr() const&
-		{
-			return Pointer != nullptr ? Pointer : L"";
-		};
+			std::size_t Sz{ std::wcslen(Pt) + 1 };
+			Pointer = new wchar_t[Sz] {};
+			std::copy_n(Pt, Sz, Pointer);
+		}
+	};
+	Ths String::String(String&& Self) noexcept
+		: Pointer{ nullptr }
+	{
+		Pointer = Self.Pointer;
+		Self.Pointer = nullptr;
+	};
+	String& Ths String::operator =(String&& O) & noexcept
+	{
+		delete[] Pointer;
+		Pointer = O.Pointer;
+		O.Pointer = nullptr;
+		return *this;
+	};
+	Ths String::~String() noexcept
+	{
+		delete[] Pointer;
+		Pointer = nullptr;
+	};
+	const wchar_t* Ths String::Ptr() const&
+	{
+		return Pointer != nullptr ? Pointer : L"";
 	};
 }
 #pragma pop_macro("Ths")
