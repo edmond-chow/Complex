@@ -20,6 +20,12 @@
 #include <regex>
 #include <sstream>
 #include <stdexcept>
+inline std::wstring Str(double Num)
+{
+	std::wstringstream Rst;
+	Rst << std::defaultfloat << std::setprecision(17) << Num;
+	return std::regex_replace(Rst.str(), std::wregex(L"e-0(?=[1-9])"), L"e-");
+};
 inline std::size_t stos_t(const std::wstring& Str)
 {
 	std::size_t Idx{ 0 };
@@ -55,20 +61,14 @@ inline std::wstring GetPattern(const std::wstring& Trm)
 {
 	return FollowedBy(SignBefore + AddGroup(UnsignedReal, !Trm.empty()), Trm + SignAfter);
 };
-inline std::wstring Str(double Num)
+inline std::wstring Replace(const std::wstring& Ipt, const std::wstring& Sch, const std::wstring& Rpt)
 {
-	std::wstringstream Rst;
-	Rst << std::defaultfloat << std::setprecision(17) << Num;
-	return std::regex_replace(Rst.str(), std::wregex(L"e-0(?=[1-9])"), L"e-");
-};
-inline std::wstring Replace(const std::wstring& Input, const std::wstring& Search, const std::wstring& Replacement)
-{
-	std::wstring Rst = Input;
-	std::size_t Pos = Rst.find(Search);
+	std::wstring Rst = Ipt;
+	std::size_t Pos = Rst.find(Sch);
 	while (Pos != std::wstring::npos)
 	{
-		Rst = Rst.replace(Pos, Search.size(), Replacement);
-		Pos = Rst.find(Search, Pos + Replacement.size());
+		Rst = Rst.replace(Pos, Sch.size(), Rpt);
+		Pos = Rst.find(Sch, Pos + Rpt.size());
 	}
 	return Rst;
 };
