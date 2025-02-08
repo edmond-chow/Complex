@@ -148,9 +148,9 @@ namespace ComplexTestingConsole
 		SetForegroundColor(ConsoleColor::DarkGreen);
 		std::wcout << Con;
 		SetForegroundColor(ConsoleColor::Green);
-		std::wstring output;
-		std::getline(std::wcin, output);
-		return output;
+		std::wstring Rst;
+		std::getline(std::wcin, Rst);
+		return Rst;
 	};
 	std::wstring Base::Input()
 	{
