@@ -30,6 +30,16 @@ inline std::wstring Str(double Num)
 	Rst << std::defaultfloat << std::setprecision(17) << Num;
 	return std::regex_replace(Rst.str(), std::wregex(L"e-0(?=[1-9])"), L"e-");
 };
+inline std::int64_t stoi64_t(const std::wstring& Str)
+{
+	std::size_t Idx{ 0 };
+	long long Rst{ std::stoll(Str, &Idx) };
+	if (Idx < Str.size() || Str[0] == L' ')
+	{
+		throw std::invalid_argument{ "The string cannot be converted as a integer type." };
+	}
+	return static_cast<std::int64_t>(Rst);
+};
 inline std::wstring Replace(const std::wstring& Ipt, const std::wstring& Sch, const std::wstring& Rpt)
 {
 	std::wstring Rst = Ipt;
@@ -40,16 +50,6 @@ inline std::wstring Replace(const std::wstring& Ipt, const std::wstring& Sch, co
 		Pos = Rst.find(Sch, Pos + Rpt.size());
 	}
 	return Rst;
-};
-inline std::int64_t stoi64_t(const std::wstring& Str)
-{
-	std::size_t Idx{ 0 };
-	long long Rst{ std::stoll(Str, &Idx) };
-	if (Idx < Str.size() || Str[0] == L' ')
-	{
-		throw std::invalid_argument{ "The string cannot be converted as a integer type." };
-	}
-	return static_cast<std::int64_t>(Rst);
 };
 template <typename T>
 T Val(const std::wstring& Str)
