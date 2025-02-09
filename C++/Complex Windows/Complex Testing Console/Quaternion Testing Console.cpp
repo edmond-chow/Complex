@@ -153,12 +153,12 @@ namespace QuterBasis
 	void QuterConsole::Load() noexcept
 	{
 		Base::Startup(Base::GetTitle());
-		Base::Selection(L"=   +   -   *   /   ^   power()   root()   log()");
-		Base::Selection(L"abs   arg()   conjg   sgn   inverse   exp   ln()   dot   outer   even   cross");
-		Base::Selection(L"sin   cos   tan   csc   sec   cot   arcsin()   arccos()   arctan()   arccsc()   arcsec()   arccot()");
-		Base::Selection(L"sinh   cosh   tanh   csch   sech   coth   arcsinh()   arccosh()   arctanh()   arccsch()   arcsech()   arccoth()");
+		Base::Selection(L"=   +   -   *   /   ^   Power()   Root()   Log()");
+		Base::Selection(L"Abs   Arg()   Conjg   Sgn   Inverse   Exp   Ln()   Dot   Outer   Even   Cross");
+		Base::Selection(L"Sin   Cos   Tan   Csc   Sec   Cot   Arcsin()   Arccos()   Arctan()   Arccsc()   Arcsec()   Arccot()");
+		Base::Selection(L"Sinh   Cosh   Tanh   Csch   Sech   Coth   Arcsinh()   Arccosh()   Arctanh()   Arccsch()   Arcsech()   Arccoth()");
 		Base::Selection(Base::GetStartupLine());
-		for (std::wstring L; !Base::IsSwitchTo(L); L = Base::Input())
+		for (std::wstring L; !Base::IsSwitchTo(L); L = Trim(Base::Input()))
 		{
 			if (L.empty()) { continue; }
 			try
@@ -170,47 +170,47 @@ namespace QuterBasis
 				Op(L, L"/", operator /);
 				/****/
 				Pow(L, L"^", operator ^);
-				Pow(L, L"power", Quter::Power);
-				Pow(L, L"root", Quter::Root);
-				Pow(L, L"log", Quter::Log);
+				Pow(L, L"Power", Quter::Power);
+				Pow(L, L"Root", Quter::Root);
+				Pow(L, L"Log", Quter::Log);
 				/****/
-				Mul(L, L"dot", Quter::Dot);
-				Mul(L, L"outer", Quter::Outer);
-				Mul(L, L"even", Quter::Even);
-				Mul(L, L"cross", Quter::Cross);
+				Mul(L, L"Dot", Quter::Dot);
+				Mul(L, L"Outer", Quter::Outer);
+				Mul(L, L"Even", Quter::Even);
+				Mul(L, L"Cross", Quter::Cross);
 				/****/
-				Bas(L, L"abs", Quter::Abs);
-				BasP(L, L"arg", Quter::Arg);
-				Bas(L, L"conjg", Quter::Conjg);
-				Bas(L, L"sgn", Quter::Sgn);
-				Bas(L, L"inverse", Quter::Inverse);
-				Bas(L, L"exp", Quter::Exp);
-				BasP(L, L"ln", Quter::Ln);
+				Bas(L, L"Abs", Quter::Abs);
+				BasP(L, L"Arg", Quter::Arg);
+				Bas(L, L"Conjg", Quter::Conjg);
+				Bas(L, L"Sgn", Quter::Sgn);
+				Bas(L, L"Inverse", Quter::Inverse);
+				Bas(L, L"Exp", Quter::Exp);
+				BasP(L, L"Ln", Quter::Ln);
 				/****/
-				Tri(L, L"sin", Quter::Sin);
-				Tri(L, L"cos", Quter::Cos);
-				Tri(L, L"tan", Quter::Tan);
-				Tri(L, L"csc", Quter::Csc);
-				Tri(L, L"sec", Quter::Sec);
-				Tri(L, L"cot", Quter::Cot);
-				Tri(L, L"sinh", Quter::Sinh);
-				Tri(L, L"cosh", Quter::Cosh);
-				Tri(L, L"tanh", Quter::Tanh);
-				Tri(L, L"csch", Quter::Csch);
-				Tri(L, L"sech", Quter::Sech);
-				Tri(L, L"coth", Quter::Coth);
-				Atri(L, L"arcsin", Quter::Arcsin);
-				Atri(L, L"arccos", Quter::Arccos);
-				Atri(L, L"arctan", Quter::Arctan);
-				Atri(L, L"arccsc", Quter::Arccsc);
-				Atri(L, L"arcsec", Quter::Arcsec);
-				Atri(L, L"arccot", Quter::Arccot);
-				Atri(L, L"arcsinh", Quter::Arcsinh);
-				Atri(L, L"arccosh", Quter::Arccosh);
-				Atri(L, L"arctanh", Quter::Arctanh);
-				Atri(L, L"arccsch", Quter::Arccsch);
-				Atri(L, L"arcsech", Quter::Arcsech);
-				Atri(L, L"arccoth", Quter::Arccoth);
+				Tri(L, L"Sin", Quter::Sin);
+				Tri(L, L"Cos", Quter::Cos);
+				Tri(L, L"Tan", Quter::Tan);
+				Tri(L, L"Csc", Quter::Csc);
+				Tri(L, L"Sec", Quter::Sec);
+				Tri(L, L"Cot", Quter::Cot);
+				Tri(L, L"Sinh", Quter::Sinh);
+				Tri(L, L"Cosh", Quter::Cosh);
+				Tri(L, L"Tanh", Quter::Tanh);
+				Tri(L, L"Csch", Quter::Csch);
+				Tri(L, L"Sech", Quter::Sech);
+				Tri(L, L"Coth", Quter::Coth);
+				Atri(L, L"Arcsin", Quter::Arcsin);
+				Atri(L, L"Arccos", Quter::Arccos);
+				Atri(L, L"Arctan", Quter::Arctan);
+				Atri(L, L"Arccsc", Quter::Arccsc);
+				Atri(L, L"Arcsec", Quter::Arcsec);
+				Atri(L, L"Arccot", Quter::Arccot);
+				Atri(L, L"Arcsinh", Quter::Arcsinh);
+				Atri(L, L"Arccosh", Quter::Arccosh);
+				Atri(L, L"Arctanh", Quter::Arctanh);
+				Atri(L, L"Arccsch", Quter::Arccsch);
+				Atri(L, L"Arcsech", Quter::Arcsech);
+				Atri(L, L"Arccoth", Quter::Arccoth);
 			}
 			catch (const std::exception& Ex) { Base::Exception(Ex); }
 		}

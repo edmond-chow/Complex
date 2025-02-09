@@ -130,11 +130,11 @@ namespace SedenBasis
 			std::int64_t PMax = Int(Base::Input(L"P(max) = "));
 			for (std::int64_t P = PMin; P <= PMax; ++P)
 			{
-				Base::Output(R + L"(+, " + ToModStr(P) + L") = ", ToModStr(std::invoke(F, V, true, P)));
+				Base::Output(R + L"(+, L" + ToModStr(P) + L") = ", ToModStr(std::invoke(F, V, true, P)));
 			}
 			for (std::int64_t P = PMin; P <= PMax; ++P)
 			{
-				Base::Output(R + L"(-, " + ToModStr(P) + L") = ", ToModStr(std::invoke(F, V, false, P)));
+				Base::Output(R + L"(-, L" + ToModStr(P) + L") = ", ToModStr(std::invoke(F, V, false, P)));
 			}
 		}
 	};
@@ -149,12 +149,12 @@ namespace SedenBasis
 	void SedenConsole::Load() noexcept
 	{
 		Base::Startup(Base::GetTitle());
-		Base::Selection(L"=   +   -   *   /   ^   power()   root()   log()");
-		Base::Selection(L"abs   arg()   conjg   sgn   inverse   exp   ln()   dot   outer   even   cross");
-		Base::Selection(L"sin   cos   tan   csc   sec   cot   arcsin()   arccos()   arctan()   arccsc()   arcsec()   arccot()");
-		Base::Selection(L"sinh   cosh   tanh   csch   sech   coth   arcsinh()   arccosh()   arctanh()   arccsch()   arcsech()   arccoth()");
+		Base::Selection(L"=   +   -   *   /   ^   Power()   Root()   Log()");
+		Base::Selection(L"Abs   Arg()   Conjg   Sgn   Inverse   Exp   Ln()   Dot   Outer   Even   Cross");
+		Base::Selection(L"Sin   Cos   Tan   Csc   Sec   Cot   Arcsin()   Arccos()   Arctan()   Arccsc()   Arcsec()   Arccot()");
+		Base::Selection(L"Sinh   Cosh   Tanh   Csch   Sech   Coth   Arcsinh()   Arccosh()   Arctanh()   Arccsch()   Arcsech()   Arccoth()");
 		Base::Selection(Base::GetStartupLine());
-		for (std::wstring L; !Base::IsSwitchTo(L); L = Base::Input())
+		for (std::wstring L; !Base::IsSwitchTo(L); L = Trim(Base::Input()))
 		{
 			if (L.empty()) { continue; }
 			try
@@ -166,47 +166,47 @@ namespace SedenBasis
 				Op(L, L"/", operator /);
 				/****/
 				Pow(L, L"^", operator ^);
-				Pow(L, L"power", Seden::Power);
-				Pow(L, L"root", Seden::Root);
-				Pow(L, L"log", Seden::Log);
+				Pow(L, L"Power", Seden::Power);
+				Pow(L, L"Root", Seden::Root);
+				Pow(L, L"Log", Seden::Log);
 				/****/
-				Mul(L, L"dot", Seden::Dot);
-				Mul(L, L"outer", Seden::Outer);
-				Mul(L, L"even", Seden::Even);
-				Mul(L, L"cross", Seden::Cross);
+				Mul(L, L"Dot", Seden::Dot);
+				Mul(L, L"Outer", Seden::Outer);
+				Mul(L, L"Even", Seden::Even);
+				Mul(L, L"Cross", Seden::Cross);
 				/****/
-				Bas(L, L"abs", Seden::Abs);
-				BasP(L, L"arg", Seden::Arg);
-				Bas(L, L"conjg", Seden::Conjg);
-				Bas(L, L"sgn", Seden::Sgn);
-				Bas(L, L"inverse", Seden::Inverse);
-				Bas(L, L"exp", Seden::Exp);
-				BasP(L, L"ln", Seden::Ln);
+				Bas(L, L"Abs", Seden::Abs);
+				BasP(L, L"Arg", Seden::Arg);
+				Bas(L, L"Conjg", Seden::Conjg);
+				Bas(L, L"Sgn", Seden::Sgn);
+				Bas(L, L"Inverse", Seden::Inverse);
+				Bas(L, L"Exp", Seden::Exp);
+				BasP(L, L"Ln", Seden::Ln);
 				/****/
-				Tri(L, L"sin", Seden::Sin);
-				Tri(L, L"cos", Seden::Cos);
-				Tri(L, L"tan", Seden::Tan);
-				Tri(L, L"csc", Seden::Csc);
-				Tri(L, L"sec", Seden::Sec);
-				Tri(L, L"cot", Seden::Cot);
-				Tri(L, L"sinh", Seden::Sinh);
-				Tri(L, L"cosh", Seden::Cosh);
-				Tri(L, L"tanh", Seden::Tanh);
-				Tri(L, L"csch", Seden::Csch);
-				Tri(L, L"sech", Seden::Sech);
-				Tri(L, L"coth", Seden::Coth);
-				Atri(L, L"arcsin", Seden::Arcsin);
-				Atri(L, L"arccos", Seden::Arccos);
-				Atri(L, L"arctan", Seden::Arctan);
-				Atri(L, L"arccsc", Seden::Arccsc);
-				Atri(L, L"arcsec", Seden::Arcsec);
-				Atri(L, L"arccot", Seden::Arccot);
-				Atri(L, L"arcsinh", Seden::Arcsinh);
-				Atri(L, L"arccosh", Seden::Arccosh);
-				Atri(L, L"arctanh", Seden::Arctanh);
-				Atri(L, L"arccsch", Seden::Arccsch);
-				Atri(L, L"arcsech", Seden::Arcsech);
-				Atri(L, L"arccoth", Seden::Arccoth);
+				Tri(L, L"Sin", Seden::Sin);
+				Tri(L, L"Cos", Seden::Cos);
+				Tri(L, L"Tan", Seden::Tan);
+				Tri(L, L"Csc", Seden::Csc);
+				Tri(L, L"Sec", Seden::Sec);
+				Tri(L, L"Cot", Seden::Cot);
+				Tri(L, L"Sinh", Seden::Sinh);
+				Tri(L, L"Cosh", Seden::Cosh);
+				Tri(L, L"Tanh", Seden::Tanh);
+				Tri(L, L"Csch", Seden::Csch);
+				Tri(L, L"Sech", Seden::Sech);
+				Tri(L, L"Coth", Seden::Coth);
+				Atri(L, L"Arcsin", Seden::Arcsin);
+				Atri(L, L"Arccos", Seden::Arccos);
+				Atri(L, L"Arctan", Seden::Arctan);
+				Atri(L, L"Arccsc", Seden::Arccsc);
+				Atri(L, L"Arcsec", Seden::Arcsec);
+				Atri(L, L"Arccot", Seden::Arccot);
+				Atri(L, L"Arcsinh", Seden::Arcsinh);
+				Atri(L, L"Arccosh", Seden::Arccosh);
+				Atri(L, L"Arctanh", Seden::Arctanh);
+				Atri(L, L"Arccsch", Seden::Arccsch);
+				Atri(L, L"Arcsech", Seden::Arcsech);
+				Atri(L, L"Arccoth", Seden::Arccoth);
 			}
 			catch (const std::exception& Ex) { Base::Exception(Ex); }
 		}

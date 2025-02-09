@@ -153,12 +153,12 @@ namespace OctonBasis
 	void OctonConsole::Load() noexcept
 	{
 		Base::Startup(Base::GetTitle());
-		Base::Selection(L"=   +   -   *   /   ^   power()   root()   log()");
-		Base::Selection(L"abs   arg()   conjg   sgn   inverse   exp   ln()   dot   outer   even   cross");
-		Base::Selection(L"sin   cos   tan   csc   sec   cot   arcsin()   arccos()   arctan()   arccsc()   arcsec()   arccot()");
-		Base::Selection(L"sinh   cosh   tanh   csch   sech   coth   arcsinh()   arccosh()   arctanh()   arccsch()   arcsech()   arccoth()");
+		Base::Selection(L"=   +   -   *   /   ^   Power()   Root()   Log()");
+		Base::Selection(L"Abs   Arg()   Conjg   Sgn   Inverse   Exp   Ln()   Dot   Outer   Even   Cross");
+		Base::Selection(L"Sin   Cos   Tan   Csc   Sec   Cot   Arcsin()   Arccos()   Arctan()   Arccsc()   Arcsec()   Arccot()");
+		Base::Selection(L"Sinh   Cosh   Tanh   Csch   Sech   Coth   Arcsinh()   Arccosh()   Arctanh()   Arccsch()   Arcsech()   Arccoth()");
 		Base::Selection(Base::GetStartupLine());
-		for (std::wstring L; !Base::IsSwitchTo(L); L = Base::Input())
+		for (std::wstring L; !Base::IsSwitchTo(L); L = Trim(Base::Input()))
 		{
 			if (L.empty()) { continue; }
 			try
@@ -170,47 +170,47 @@ namespace OctonBasis
 				Op(L, L"/", operator /);
 				/****/
 				Pow(L, L"^", operator ^);
-				Pow(L, L"power", Octon::Power);
-				Pow(L, L"root", Octon::Root);
-				Pow(L, L"log", Octon::Log);
+				Pow(L, L"Power", Octon::Power);
+				Pow(L, L"Root", Octon::Root);
+				Pow(L, L"Log", Octon::Log);
 				/****/
-				Mul(L, L"dot", Octon::Dot);
-				Mul(L, L"outer", Octon::Outer);
-				Mul(L, L"even", Octon::Even);
-				Mul(L, L"cross", Octon::Cross);
+				Mul(L, L"Dot", Octon::Dot);
+				Mul(L, L"Outer", Octon::Outer);
+				Mul(L, L"Even", Octon::Even);
+				Mul(L, L"Cross", Octon::Cross);
 				/****/
-				Bas(L, L"abs", Octon::Abs);
-				BasP(L, L"arg", Octon::Arg);
-				Bas(L, L"conjg", Octon::Conjg);
-				Bas(L, L"sgn", Octon::Sgn);
-				Bas(L, L"inverse", Octon::Inverse);
-				Bas(L, L"exp", Octon::Exp);
-				BasP(L, L"ln", Octon::Ln);
+				Bas(L, L"Abs", Octon::Abs);
+				BasP(L, L"Arg", Octon::Arg);
+				Bas(L, L"Conjg", Octon::Conjg);
+				Bas(L, L"Sgn", Octon::Sgn);
+				Bas(L, L"Inverse", Octon::Inverse);
+				Bas(L, L"Exp", Octon::Exp);
+				BasP(L, L"Ln", Octon::Ln);
 				/****/
-				Tri(L, L"sin", Octon::Sin);
-				Tri(L, L"cos", Octon::Cos);
-				Tri(L, L"tan", Octon::Tan);
-				Tri(L, L"csc", Octon::Csc);
-				Tri(L, L"sec", Octon::Sec);
-				Tri(L, L"cot", Octon::Cot);
-				Tri(L, L"sinh", Octon::Sinh);
-				Tri(L, L"cosh", Octon::Cosh);
-				Tri(L, L"tanh", Octon::Tanh);
-				Tri(L, L"csch", Octon::Csch);
-				Tri(L, L"sech", Octon::Sech);
-				Tri(L, L"coth", Octon::Coth);
-				Atri(L, L"arcsin", Octon::Arcsin);
-				Atri(L, L"arccos", Octon::Arccos);
-				Atri(L, L"arctan", Octon::Arctan);
-				Atri(L, L"arccsc", Octon::Arccsc);
-				Atri(L, L"arcsec", Octon::Arcsec);
-				Atri(L, L"arccot", Octon::Arccot);
-				Atri(L, L"arcsinh", Octon::Arcsinh);
-				Atri(L, L"arccosh", Octon::Arccosh);
-				Atri(L, L"arctanh", Octon::Arctanh);
-				Atri(L, L"arccsch", Octon::Arccsch);
-				Atri(L, L"arcsech", Octon::Arcsech);
-				Atri(L, L"arccoth", Octon::Arccoth);
+				Tri(L, L"Sin", Octon::Sin);
+				Tri(L, L"Cos", Octon::Cos);
+				Tri(L, L"Tan", Octon::Tan);
+				Tri(L, L"Csc", Octon::Csc);
+				Tri(L, L"Sec", Octon::Sec);
+				Tri(L, L"Cot", Octon::Cot);
+				Tri(L, L"Sinh", Octon::Sinh);
+				Tri(L, L"Cosh", Octon::Cosh);
+				Tri(L, L"Tanh", Octon::Tanh);
+				Tri(L, L"Csch", Octon::Csch);
+				Tri(L, L"Sech", Octon::Sech);
+				Tri(L, L"Coth", Octon::Coth);
+				Atri(L, L"Arcsin", Octon::Arcsin);
+				Atri(L, L"Arccos", Octon::Arccos);
+				Atri(L, L"Arctan", Octon::Arctan);
+				Atri(L, L"Arccsc", Octon::Arccsc);
+				Atri(L, L"Arcsec", Octon::Arcsec);
+				Atri(L, L"Arccot", Octon::Arccot);
+				Atri(L, L"Arcsinh", Octon::Arcsinh);
+				Atri(L, L"Arccosh", Octon::Arccosh);
+				Atri(L, L"Arctanh", Octon::Arctanh);
+				Atri(L, L"Arccsch", Octon::Arccsch);
+				Atri(L, L"Arcsech", Octon::Arcsech);
+				Atri(L, L"Arccoth", Octon::Arccoth);
 			}
 			catch (const std::exception& Ex) { Base::Exception(Ex); }
 		}
