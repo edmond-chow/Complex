@@ -153,12 +153,12 @@ namespace CmplxBasis
 	void CmplxConsole::Load() noexcept
 	{
 		Base::Startup(Base::GetTitle());
-		Base::Selection(L"=   +   -   *   /   ^   power()   root()   log()");
-		Base::Selection(L"abs   arg()   conjg   sgn   inverse   exp   ln()   dot   outer   even   cross");
-		Base::Selection(L"sin   cos   tan   csc   sec   cot   arcsin()   arccos()   arctan()   arccsc()   arcsec()   arccot()");
-		Base::Selection(L"sinh   cosh   tanh   csch   sech   coth   arcsinh()   arccosh()   arctanh()   arccsch()   arcsech()   arccoth()");
+		Base::Selection(L"=   +   -   *   /   ^   Power()   Root()   Log()");
+		Base::Selection(L"Abs   Arg()   Conjg   Sgn   Inverse   Exp   Ln()   Dot   Outer   Even   Cross");
+		Base::Selection(L"Sin   Cos   Tan   Csc   Sec   Cot   Arcsin()   Arccos()   Arctan()   Arccsc()   Arcsec()   Arccot()");
+		Base::Selection(L"Sinh   Cosh   Tanh   Csch   Sech   Coth   Arcsinh()   Arccosh()   Arctanh()   Arccsch()   Arcsech()   Arccoth()");
 		Base::Selection(Base::GetStartupLine());
-		for (std::wstring L; !Base::IsSwitchTo(L); L = Base::Input())
+		for (std::wstring L; !Base::IsSwitchTo(L); L = Trim(Base::Input()))
 		{
 			if (L.empty()) { continue; }
 			try
@@ -170,47 +170,47 @@ namespace CmplxBasis
 				Op(L, L"/", operator /);
 				/****/
 				Pow(L, L"^", operator ^);
-				Pow(L, L"power", Cmplx::Power);
-				Pow(L, L"root", Cmplx::Root);
-				Pow(L, L"log", Cmplx::Log);
+				Pow(L, L"Power", Cmplx::Power);
+				Pow(L, L"Root", Cmplx::Root);
+				Pow(L, L"Log", Cmplx::Log);
 				/****/
-				Mul(L, L"dot", Cmplx::Dot);
-				Mul(L, L"outer", Cmplx::Outer);
-				Mul(L, L"even", Cmplx::Even);
-				Mul(L, L"cross", Cmplx::Cross);
+				Mul(L, L"Dot", Cmplx::Dot);
+				Mul(L, L"Outer", Cmplx::Outer);
+				Mul(L, L"Even", Cmplx::Even);
+				Mul(L, L"Cross", Cmplx::Cross);
 				/****/
-				Bas(L, L"abs", Cmplx::Abs);
-				BasP(L, L"arg", Cmplx::Arg);
-				Bas(L, L"conjg", Cmplx::Conjg);
-				Bas(L, L"sgn", Cmplx::Sgn);
-				Bas(L, L"inverse", Cmplx::Inverse);
-				Bas(L, L"exp", Cmplx::Exp);
-				BasP(L, L"ln", Cmplx::Ln);
+				Bas(L, L"Abs", Cmplx::Abs);
+				BasP(L, L"Arg", Cmplx::Arg);
+				Bas(L, L"Conjg", Cmplx::Conjg);
+				Bas(L, L"Sgn", Cmplx::Sgn);
+				Bas(L, L"Inverse", Cmplx::Inverse);
+				Bas(L, L"Exp", Cmplx::Exp);
+				BasP(L, L"Ln", Cmplx::Ln);
 				/****/
-				Tri(L, L"sin", Cmplx::Sin);
-				Tri(L, L"cos", Cmplx::Cos);
-				Tri(L, L"tan", Cmplx::Tan);
-				Tri(L, L"csc", Cmplx::Csc);
-				Tri(L, L"sec", Cmplx::Sec);
-				Tri(L, L"cot", Cmplx::Cot);
-				Tri(L, L"sinh", Cmplx::Sinh);
-				Tri(L, L"cosh", Cmplx::Cosh);
-				Tri(L, L"tanh", Cmplx::Tanh);
-				Tri(L, L"csch", Cmplx::Csch);
-				Tri(L, L"sech", Cmplx::Sech);
-				Tri(L, L"coth", Cmplx::Coth);
-				Atri(L, L"arcsin", Cmplx::Arcsin);
-				Atri(L, L"arccos", Cmplx::Arccos);
-				Atri(L, L"arctan", Cmplx::Arctan);
-				Atri(L, L"arccsc", Cmplx::Arccsc);
-				Atri(L, L"arcsec", Cmplx::Arcsec);
-				Atri(L, L"arccot", Cmplx::Arccot);
-				Atri(L, L"arcsinh", Cmplx::Arcsinh);
-				Atri(L, L"arccosh", Cmplx::Arccosh);
-				Atri(L, L"arctanh", Cmplx::Arctanh);
-				Atri(L, L"arccsch", Cmplx::Arccsch);
-				Atri(L, L"arcsech", Cmplx::Arcsech);
-				Atri(L, L"arccoth", Cmplx::Arccoth);
+				Tri(L, L"Sin", Cmplx::Sin);
+				Tri(L, L"Cos", Cmplx::Cos);
+				Tri(L, L"Tan", Cmplx::Tan);
+				Tri(L, L"Csc", Cmplx::Csc);
+				Tri(L, L"Sec", Cmplx::Sec);
+				Tri(L, L"Cot", Cmplx::Cot);
+				Tri(L, L"Sinh", Cmplx::Sinh);
+				Tri(L, L"Cosh", Cmplx::Cosh);
+				Tri(L, L"Tanh", Cmplx::Tanh);
+				Tri(L, L"Csch", Cmplx::Csch);
+				Tri(L, L"Sech", Cmplx::Sech);
+				Tri(L, L"Coth", Cmplx::Coth);
+				Atri(L, L"Arcsin", Cmplx::Arcsin);
+				Atri(L, L"Arccos", Cmplx::Arccos);
+				Atri(L, L"Arctan", Cmplx::Arctan);
+				Atri(L, L"Arccsc", Cmplx::Arccsc);
+				Atri(L, L"Arcsec", Cmplx::Arcsec);
+				Atri(L, L"Arccot", Cmplx::Arccot);
+				Atri(L, L"Arcsinh", Cmplx::Arcsinh);
+				Atri(L, L"Arccosh", Cmplx::Arccosh);
+				Atri(L, L"Arctanh", Cmplx::Arctanh);
+				Atri(L, L"Arccsch", Cmplx::Arccsch);
+				Atri(L, L"Arcsech", Cmplx::Arcsech);
+				Atri(L, L"Arccoth", Cmplx::Arccoth);
 			}
 			catch (const std::exception& Ex) { Base::Exception(Ex); }
 		}
