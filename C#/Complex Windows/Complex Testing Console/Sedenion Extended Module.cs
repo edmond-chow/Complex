@@ -149,12 +149,12 @@ internal static class SedenConsole
     internal static void Load()
     {
         Base.Startup(Base.GetTitle());
-        Base.Selection("=   +   -   *   /   ^   power()   root()   log()");
-        Base.Selection("abs   arg()   conjg   sgn   inverse   exp   ln()   dot   outer   even   cross");
-        Base.Selection("sin   cos   tan   csc   sec   cot   arcsin()   arccos()   arctan()   arccsc()   arcsec()   arccot()");
-        Base.Selection("sinh   cosh   tanh   csch   sech   coth   arcsinh()   arccosh()   arctanh()   arccsch()   arcsech()   arccoth()");
+        Base.Selection("=   +   -   *   /   ^   Power()   Root()   Log()");
+        Base.Selection("Abs   Arg()   Conjg   Sgn   Inverse   Exp   Ln()   Dot   Outer   Even   Cross");
+        Base.Selection("Sin   Cos   Tan   Csc   Sec   Cot   Arcsin()   Arccos()   Arctan()   Arccsc()   Arcsec()   Arccot()");
+        Base.Selection("Sinh   Cosh   Tanh   Csch   Sech   Coth   Arcsinh()   Arccosh()   Arctanh()   Arccsch()   Arcsech()   Arccoth()");
         Base.Selection(Base.GetStartupLine());
-        for (string L = ""; !Base.IsSwitchTo(L); L = Base.Input())
+        for (string L = ""; !Base.IsSwitchTo(L); L = Base.Input().Trim())
         {
             if (L == "") { continue; }
             try
@@ -166,47 +166,47 @@ internal static class SedenConsole
                 Op(L, "/", (Seden U, Seden V) => { return U / V; });
                 /****/
                 PowOp(L, "^", (Seden U, long V) => { return U ^ V; });
-                Pow(L, "power", Power);
-                Pow(L, "root", Root);
-                Pow(L, "log", Log);
+                Pow(L, "Power", Power);
+                Pow(L, "Root", Root);
+                Pow(L, "Log", Log);
                 /****/
-                Mul(L, "dot", Dot);
-                Mul(L, "outer", Outer);
-                Mul(L, "even", Even);
-                Mul(L, "cross", Cross);
+                Mul(L, "Dot", Dot);
+                Mul(L, "Outer", Outer);
+                Mul(L, "Even", Even);
+                Mul(L, "Cross", Cross);
                 /****/
-                Bas(L, "abs", Abs);
-                BasP(L, "arg", Arg);
-                Bas(L, "conjg", Conjg);
-                Bas(L, "sgn", Sgn);
-                Bas(L, "inverse", Inverse);
-                Bas(L, "exp", Exp);
-                BasP(L, "ln", Ln);
+                Bas(L, "Abs", Abs);
+                BasP(L, "Arg", Arg);
+                Bas(L, "Conjg", Conjg);
+                Bas(L, "Sgn", Sgn);
+                Bas(L, "Inverse", Inverse);
+                Bas(L, "Exp", Exp);
+                BasP(L, "Ln", Ln);
                 /****/
-                Tri(L, "sin", Sin);
-                Tri(L, "cos", Cos);
-                Tri(L, "tan", Tan);
-                Tri(L, "csc", Csc);
-                Tri(L, "sec", Sec);
-                Tri(L, "cot", Cot);
-                Tri(L, "sinh", Sinh);
-                Tri(L, "cosh", Cosh);
-                Tri(L, "tanh", Tanh);
-                Tri(L, "csch", Csch);
-                Tri(L, "sech", Sech);
-                Tri(L, "coth", Coth);
-                Atri(L, "arcsin", Arcsin);
-                Atri(L, "arccos", Arccos);
-                Atri(L, "arctan", Arctan);
-                Atri(L, "arccsc", Arccsc);
-                Atri(L, "arcsec", Arcsec);
-                Atri(L, "arccot", Arccot);
-                Atri(L, "arcsinh", Arcsinh);
-                Atri(L, "arccosh", Arccosh);
-                Atri(L, "arctanh", Arctanh);
-                Atri(L, "arccsch", Arccsch);
-                Atri(L, "arcsech", Arcsech);
-                Atri(L, "arccoth", Arccoth);
+                Tri(L, "Sin", Sin);
+                Tri(L, "Cos", Cos);
+                Tri(L, "Tan", Tan);
+                Tri(L, "Csc", Csc);
+                Tri(L, "Sec", Sec);
+                Tri(L, "Cot", Cot);
+                Tri(L, "Sinh", Sinh);
+                Tri(L, "Cosh", Cosh);
+                Tri(L, "Tanh", Tanh);
+                Tri(L, "Csch", Csch);
+                Tri(L, "Sech", Sech);
+                Tri(L, "Coth", Coth);
+                Atri(L, "Arcsin", Arcsin);
+                Atri(L, "Arccos", Arccos);
+                Atri(L, "Arctan", Arctan);
+                Atri(L, "Arccsc", Arccsc);
+                Atri(L, "Arcsec", Arcsec);
+                Atri(L, "Arccot", Arccot);
+                Atri(L, "Arcsinh", Arcsinh);
+                Atri(L, "Arccosh", Arccosh);
+                Atri(L, "Arctanh", Arctanh);
+                Atri(L, "Arccsch", Arccsch);
+                Atri(L, "Arcsech", Arcsech);
+                Atri(L, "Arccoth", Arccoth);
             }
             catch (Exception Ex) { Base.Exception(Ex); }
         }
