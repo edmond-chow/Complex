@@ -24,6 +24,7 @@
 #include <stdexcept>
 #include <functional>
 #include <NumString.h>
+inline constexpr const wchar_t* Ws = L" \t\n\v\f\r";
 inline std::wstring Str(double Num)
 {
 	std::wstringstream Rst;
@@ -32,9 +33,13 @@ inline std::wstring Str(double Num)
 };
 inline std::int64_t stoi64_t(const std::wstring& Str)
 {
+	if (Str.find_first_not_of(Ws) > 0)
+	{
+		throw std::invalid_argument{ "The string cannot be converted as a integer type." };
+	}
 	std::size_t Idx{ 0 };
 	long long Rst{ std::stoll(Str, &Idx) };
-	if (Idx < Str.size() || Str[0] == L' ')
+	if (Idx < Str.size())
 	{
 		throw std::invalid_argument{ "The string cannot be converted as a integer type." };
 	}
@@ -51,7 +56,6 @@ inline std::wstring Replace(const std::wstring& Ipt, const std::wstring& Sch, co
 	}
 	return Rst;
 };
-inline constexpr const wchar_t* Ws = L" \t\n\r\f\v";
 inline std::wstring Trim(const std::wstring& Ipt)
 {
 	std::wstring Rst = Ipt;
