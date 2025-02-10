@@ -20,6 +20,7 @@
 #include <regex>
 #include <sstream>
 #include <stdexcept>
+inline constexpr const wchar_t* Ws = L" \t\n\v\f\r";
 inline std::wstring Str(double Num)
 {
 	std::wstringstream Rst;
@@ -28,9 +29,13 @@ inline std::wstring Str(double Num)
 };
 inline std::size_t stos_t(const std::wstring& Str)
 {
+	if (Str.find_first_not_of(Ws) > 0)
+	{
+		throw std::invalid_argument{ "The string cannot be converted as a size type." };
+	}
 	std::size_t Idx{ 0 };
 	unsigned long long Rst{ std::stoull(Str, &Idx) };
-	if (Idx < Str.size() || Str[0] == L' ')
+	if (Idx < Str.size())
 	{
 		throw std::invalid_argument{ "The string cannot be converted as a size type." };
 	}
@@ -38,9 +43,13 @@ inline std::size_t stos_t(const std::wstring& Str)
 };
 inline double stod_t(const std::wstring& Str)
 {
+	if (Str.find_first_not_of(Ws) > 0)
+	{
+		throw std::invalid_argument{ "The string cannot be converted as a double type." };
+	}
 	std::size_t Idx{ 0 };
 	double Rst{ std::stod(Str, &Idx) };
-	if (Idx < Str.size() || Str[0] == L' ')
+	if (Idx < Str.size())
 	{
 		throw std::invalid_argument{ "The string cannot be converted as a double type." };
 	}
