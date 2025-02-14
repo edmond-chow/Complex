@@ -121,7 +121,7 @@ namespace Num
         }
         public static Seden operator +(Seden V)
         {
-            return Val(+V.Num());
+            return V.Clone();
         }
         public static Seden operator -(Seden V)
         {
