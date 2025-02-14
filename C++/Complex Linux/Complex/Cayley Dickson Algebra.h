@@ -70,6 +70,14 @@ public:
 		Rst <<= Shift;
 		return Rst;
 	};
+	bool Zero() const&
+	{
+		for (double D : Data)
+		{
+			if (D != 0) { return false; }
+		}
+		return true;
+	};
 	Number Retrieve(std::size_t Begin, std::size_t End) const&
 	{
 		std::size_t OriSize = Data.size();
@@ -144,6 +152,10 @@ public:
 	{
 		return !(U == V);
 	};
+	friend Number operator +(const Number& V)
+	{
+		return V;
+	};
 	friend Number operator +(const Number& U, const Number& V)
 	{
 		std::size_t UOriSize = U.Data.size();
@@ -193,6 +205,7 @@ public:
 		if (UOriSize != Near) { return U.Extend(Near) * V; }
 		else if (VOriSize != Near) { return U * V.Extend(Near); }
 		else if (Near == 1) { return Number{ U[0] * V[0] }; }
+		else if (U.Zero() || V.Zero()) { return Number(Near); }
 		Number UL = U.L();
 		Number UR = U.R();
 		Number VL = V.L();
