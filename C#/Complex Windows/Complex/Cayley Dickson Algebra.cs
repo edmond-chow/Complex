@@ -60,6 +60,17 @@ public class Number
             return Rst;
         }
     }
+    public bool Zero
+    {
+        get
+        {
+            foreach (double D in Data)
+            {
+                if (D != 0) { return false; }
+            }
+            return true;
+        }
+    }
     public Number Clone()
     {
         return new Number(Data);
@@ -115,7 +126,7 @@ public class Number
     public static bool operator ==(Number U, Number V)
     {
         if (ReferenceEquals(U, V)) { return true; }
-        else if (U == null || V == null) { return false; }
+        else if (U is null || V is null) { return false; }
         if (U.Data.Count > V.Data.Count) { return V == U; }
         for (int i = 0; i < U.Data.Count; ++i)
         {
@@ -130,6 +141,10 @@ public class Number
     public static bool operator !=(Number U, Number V)
     {
         return !(U == V);
+    }
+    public static Number operator +(Number V)
+    {
+        return V.Clone();
     }
     public static Number operator +(Number U, Number V)
     {
@@ -160,6 +175,7 @@ public class Number
         if (U.Data.Count != Near) { return U.Extend(Near) * V; }
         else if (V.Data.Count != Near) { return U * V.Extend(Near); }
         else if (Near == 1) {  return new Number(U[0] * V[0]); }
+        else if (U.Zero || V.Zero) { return new Number(Near); }
         Number L = U.L * V.L - ~V.R * U.R;
         Number R = V.R * U.L + U.R * ~V.L;
         return Merge(L, R);

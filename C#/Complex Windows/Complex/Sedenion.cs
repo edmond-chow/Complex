@@ -112,7 +112,7 @@ namespace Num
         public static bool operator ==(Seden U, Seden V)
         {
             if (ReferenceEquals(U, V)) { return true; }
-            else if (U == null || V == null) { return false; }
+            else if (U is null || V is null) { return false; }
             return U.Num() == V.Num();
         }
         public static bool operator !=(Seden U, Seden V)
@@ -121,7 +121,7 @@ namespace Num
         }
         public static Seden operator +(Seden V)
         {
-            return V;
+            return Val(+V.Num());
         }
         public static Seden operator -(Seden V)
         {
