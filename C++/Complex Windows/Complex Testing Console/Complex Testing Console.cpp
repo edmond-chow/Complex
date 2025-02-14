@@ -25,6 +25,14 @@ using namespace ComplexTestingConsole;
 using namespace Num;
 namespace CmplxBasis
 {
+	inline void Idt(const std::wstring& L, const wchar_t* R)
+	{
+		if (L == R)
+		{
+			Cmplx V = Val<Cmplx>(Base::Input(L"V = "));
+			Base::Output(ToModStr(V));
+		}
+	};
 	template <typename T>
 	void Mul(const std::wstring& L, const wchar_t* R, T(Gbl* F)(const Cmplx&, const Cmplx&))
 	{
@@ -153,7 +161,7 @@ namespace CmplxBasis
 	void CmplxConsole::Load() noexcept
 	{
 		Base::Startup(Base::GetTitle());
-		Base::Selection(L"=   +   -   *   /   ^   Power()   Root()   Log()");
+		Base::Selection(L"&   =   +   -   *   /   ^   Power()   Root()   Log()");
 		Base::Selection(L"Abs   Arg()   Conjg   Sgn   Inverse   Exp   Ln()   Dot   Outer   Even   Cross");
 		Base::Selection(L"Sin   Cos   Tan   Csc   Sec   Cot   Arcsin()   Arccos()   Arctan()   Arccsc()   Arcsec()   Arccot()");
 		Base::Selection(L"Sinh   Cosh   Tanh   Csch   Sech   Coth   Arcsinh()   Arccosh()   Arctanh()   Arccsch()   Arcsech()   Arccoth()");
@@ -163,6 +171,7 @@ namespace CmplxBasis
 			if (L.empty()) { continue; }
 			try
 			{
+				Idt(L, L"&");
 				Op(L, L"=", operator ==);
 				Op(L, L"+", operator +);
 				Op(L, L"-", operator -);

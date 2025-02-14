@@ -55,20 +55,56 @@ inline double stod_t(const std::wstring& Str)
 	}
 	return Rst;
 };
-inline constexpr const wchar_t SignBefore[] = LR"((-|\+|^))";
-inline constexpr const wchar_t UnsignedReal[] = LR"((\d+)(\.\d+|)([Ee](-|\+|)(\d+)|))";
-inline constexpr const wchar_t SignAfter[] = LR"((-|\+|$))";
-inline std::wstring AddGroup(const std::wstring& Pat, bool Opt)
+struct Terms
 {
-	return L"(" + Pat + (Opt ? L"|" : L"") + L")";
+private:
+	const std::vector<std::wstring>* Pt;
+	std::size_t Sz;
+public:
+	explicit Terms(const std::vector<std::wstring>& Rf)
+		: Pt{ &Rf }, Sz{ 0 }
+	{
+	};
+	explicit Terms(std::size_t Sz)
+		: Pt{ nullptr }, Sz{ Sz }
+	{
+	};
+	bool Null() const
+	{
+		return Pt == nullptr;
+	};
+	std::size_t Size() const
+	{
+		return Pt == nullptr ? Sz : Pt->size();
+	};
+	std::wstring operator [](std::size_t i) const
+	{
+		return Pt == nullptr ? L"e" + std::to_wstring(i) : (*Pt)[i];
+	};
 };
-inline std::wstring FollowedBy(const std::wstring& Pat, const std::wstring& Text)
+inline constexpr const wchar_t Beg[] = LR"((-|\+|^))";
+inline constexpr const wchar_t Sig[] = LR"(((\d+)(\.\d+|)([Ee](-|\+|)(\d+)|)|))";
+inline constexpr const wchar_t End[] = LR"((?=(-|\+|$)))";
+inline constexpr const std::size_t BegI = 1;
+inline constexpr const std::size_t SigI = 2;
+inline constexpr const std::size_t TrmI = 8;
+inline std::wstring Group(const Terms& Trm)
 {
-	return Pat + L"(?=" + Text + L")";
+	if (Trm.Null()) { return L"(e\\d+)"; }
+	std::wstringstream Rst;
+	Rst << L"(";
+	for (std::size_t i = 0; i < Trm.Size(); ++i)
+	{
+		Rst << (i == 0 ? L"" : L"|") << Trm[i];
+	}
+	Rst << L")";
+	return Rst.str();
 };
-inline std::wstring GetPattern(const std::wstring& Trm)
+inline std::wstring Pat(const Terms& Trm)
 {
-	return FollowedBy(SignBefore + AddGroup(UnsignedReal, !Trm.empty()), Trm + SignAfter);
+	std::wstringstream Rst;
+	Rst << Beg << Sig << Group(Trm) << End;
+	return Rst.str();
 };
 inline std::wstring Replace(const std::wstring& Ipt, const std::wstring& Sch, const std::wstring& Rpt)
 {
@@ -81,9 +117,9 @@ inline std::wstring Replace(const std::wstring& Ipt, const std::wstring& Sch, co
 	}
 	return Rst;
 };
-inline std::wstring ToString(const std::vector<double>& Num, const std::vector<std::wstring>& Trm)
+inline std::wstring ToString(const std::vector<double>& Num, const Terms& Trm)
 {
-	if (Num.size() != Trm.size()) { throw std::runtime_error{ "The branch should unreachable." }; }
+	if (Num.size() != Trm.Size()) { throw std::runtime_error{ "The branch should unreachable." }; }
 	std::wstringstream Rst;
 	bool Fst = true;
 	for (std::size_t i = 0; i < Num.size(); ++i)
@@ -103,41 +139,46 @@ template <typename N, typename... Ts>
 std::wstring ToString(N& Rst, bool Vec, Ts... As)
 {
 	std::vector<std::wstring> Trm{ As... };
-	std::vector<double> Num(Trm.size());
-	for (std::size_t i = 0, o = Vec ? 1 : 0; i < Trm.size(); ++i) { Num[i] = Rst[i + o]; }
-	return ToString(Num, Trm);
+	std::size_t Siz = Trm.size();
+	std::vector<double> Num(Siz);
+	for (std::size_t i = 0, o = Vec ? 1 : 0; i < Siz; ++i) { Num[i] = Rst[i + o]; }
+	return ToString(Num, Terms{ Trm });
 };
-inline std::vector<double> ToNumbers(const std::wstring& Val, const std::vector<std::wstring>& Trm)
+inline std::vector<double> ToNumbers(const std::wstring& Val, const Terms& Trm)
 {
-	std::vector<double> Num(Trm.size());
-	std::size_t Cnt = Val.length();
-	if (Cnt == 0) { throw std::invalid_argument{ "The string is empty." }; }
-	for (std::size_t i = 0; i < Num.size(); ++i)
+	std::size_t Siz = Trm.Size();
+	std::vector<double> Num(Siz);
+	std::wsmatch Mat;
+	std::wstring Suf{ Val };
+	std::regex_constants::match_flag_type Flg{ std::regex_constants::match_default };
+	while (std::regex_search(Suf, Mat, std::wregex{ Pat(Trm) }, Flg))
 	{
-		double Data = 0;
-		std::wstring Rest = Val;
-		std::wsmatch Mat;
-		std::regex_constants::match_flag_type Flag = std::regex_constants::match_default;
-		while (std::regex_search(Rest, Mat, std::wregex(GetPattern(Trm[i])), Flag))
+		std::wstring BegV = Mat.str(BegI);
+		std::wstring SigV = Mat.str(SigI);
+		std::wstring TrmV = Mat.str(TrmI);
+		std::wstring Cap = BegV + SigV;
+		std::size_t i{ 0 };
+		if (Trm.Null()) { i = stos_t(TrmV.substr(1)); }
+		else
 		{
-			std::wstring Cap = Mat.str();
-			Cnt -= Cap.length() + Trm[i].length();
-			if (Cap.empty() || Cap == L"+") { ++Data; }
-			else if (Cap == L"-") { --Data; }
-			else { Data += stod_t(Cap); }
-			Rest = Mat.suffix().str();
-			Flag |= std::regex_constants::match_not_bol;
+			while (Trm[i] != TrmV && i < Siz) { ++i; }
+			if (i == Siz) { throw std::runtime_error{ "The branch should unreachable." }; }
 		}
-		Num[i] = Data;
+		if (SigV.empty() && TrmV.empty()) { throw std::invalid_argument{ "The string is invalid." }; }
+		else if (Cap.empty() || Cap == L"+") { ++Num[i]; }
+		else if (Cap == L"-") { --Num[i]; }
+		else { Num[i] += stod_t(Cap); }
+		Suf = Mat.suffix().str();
+		Flg |= std::regex_constants::match_not_bol;
 	}
-	if (Cnt != 0) { throw std::invalid_argument{ "The string is invalid." }; }
+	if (Suf.size() != 0) { throw std::invalid_argument{ "The string is invalid." }; }
 	return Num;
 };
 template <typename N, typename... Ts>
 void ToNumbers(const std::wstring& Val, N& Rst, bool Vec, Ts... As)
 {
 	std::vector<std::wstring> Trm{ As... };
-	std::vector<double> Num = ToNumbers(Val, Trm);
+	std::vector<double> Num = ToNumbers(Val, Terms{ Trm });
 	for (std::size_t i = 0, o = Vec ? 1 : 0; i < Trm.size(); ++i) { Rst[i + o] = Num[i]; }
 };
 #pragma pack(push)

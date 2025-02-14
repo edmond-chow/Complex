@@ -761,13 +761,11 @@ namespace Num
 	{
 		std::size_t Dim = V.Size;
 		std::vector<double> Num(Dim);
-		std::vector<std::wstring> Trm(Dim, L"e");
 		for (std::size_t i = 0; i < Dim; ++i)
 		{
 			Num[i] = V.Data[i];
-			Trm[i] += std::to_wstring(i);
 		}
-		std::wstring Rst = ToString(Num, Trm);
+		std::wstring Rst = ToString(Num, Terms{ Dim });
 		return String{ Rst.data() };
 	};
 	Seden Gbl Seden::Val(const String& V)
@@ -775,18 +773,16 @@ namespace Num
 		std::wstring Str = Replace(V.Ptr(), L" ", L"");
 		if (Str == L"0") { return Seden::Zero; };
 		std::size_t Dim = 0;
-		std::wstring Rest = Str;
+		std::wstring Suf = Str;
 		std::wsmatch Mat;
-		while (std::regex_search(Rest, Mat, std::wregex(LR"(e(\d+)(?=-|\+|$))")))
+		while (std::regex_search(Suf, Mat, std::wregex(LR"(e(\d+)(?=-|\+|$))")))
 		{
 			std::size_t NewDim = stos_t(Mat.str(1));
 			if (NewDim > Dim) { Dim = NewDim; }
-			Rest = Mat.suffix().str();
+			Suf = Mat.suffix().str();
 		}
 		Dim = Near(Dim);
-		std::vector<std::wstring> Trm(Dim, L"e");
-		for (std::size_t i = 0; i < Dim; ++i) { Trm[i] += std::to_wstring(i); }
-		return Seden(ToNumbers(Str, Trm));
+		return Seden(ToNumbers(Str, Terms{ Dim }));
 	};
 }
 #pragma pop_macro("Ths")
