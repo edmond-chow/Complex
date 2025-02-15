@@ -63,12 +63,10 @@ private:
 public:
 	explicit Terms(const std::vector<std::wstring>& Rf)
 		: Pt{ &Rf }, Sz{ 0 }
-	{
-	};
+	{};
 	explicit Terms(std::size_t Sz)
 		: Pt{ nullptr }, Sz{ Sz }
-	{
-	};
+	{};
 	bool Null() const
 	{
 		return Pt == nullptr;
@@ -148,30 +146,33 @@ inline std::vector<double> ToNumbers(const std::wstring& Val, const Terms& Trm)
 {
 	std::size_t Siz = Trm.Size();
 	std::vector<double> Num(Siz);
+	std::wstring::const_iterator Suf{ Val.begin() };
+	std::wstring::const_iterator End{ Val.end() };
 	std::wsmatch Mat;
-	std::wstring Suf{ Val };
+	std::wregex Reg{ Pat(Trm) };
 	std::regex_constants::match_flag_type Flg{ std::regex_constants::match_default };
-	while (std::regex_search(Suf, Mat, std::wregex{ Pat(Trm) }, Flg))
+	while (std::regex_search(Suf, End, Mat, Reg, Flg))
 	{
-		std::wstring BegV = Mat.str(BegI);
-		std::wstring SigV = Mat.str(SigI);
-		std::wstring TrmV = Mat.str(TrmI);
-		std::wstring Cap = BegV + SigV;
+		if (Mat.prefix().matched) { throw std::invalid_argument{ "The string is invalid." }; }
+		std::wsmatch::const_reference BegV = Mat[BegI];
+		std::wsmatch::const_reference SigV = Mat[SigI];
+		std::wsmatch::const_reference TrmV = Mat[TrmI];
+		std::wstring Cap(BegV.first, SigV.second);
 		std::size_t i{ 0 };
-		if (Trm.Null()) { i = stos_t(TrmV.substr(1)); }
+		if (Trm.Null()) { i = stos_t(std::wstring(TrmV.first + 1, TrmV.second)); }
 		else
 		{
 			while (Trm[i] != TrmV && i < Siz) { ++i; }
 			if (i == Siz) { throw std::runtime_error{ "The branch should unreachable." }; }
 		}
-		if (SigV.empty() && TrmV.empty()) { throw std::invalid_argument{ "The string is invalid." }; }
+		if (!SigV.matched && !TrmV.matched) { throw std::invalid_argument{ "The string is invalid." }; }
 		else if (Cap.empty() || Cap == L"+") { ++Num[i]; }
 		else if (Cap == L"-") { --Num[i]; }
 		else { Num[i] += stod_t(Cap); }
-		Suf = Mat.suffix().str();
+		Suf = Mat.suffix().first;
 		Flg |= std::regex_constants::match_not_bol;
 	}
-	if (Suf.size() != 0) { throw std::invalid_argument{ "The string is invalid." }; }
+	if (Suf != End) { throw std::invalid_argument{ "The string is invalid." }; }
 	return Num;
 };
 template <typename N, typename... Ts>
