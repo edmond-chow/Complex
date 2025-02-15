@@ -58,26 +58,26 @@ inline double stod_t(const std::wstring& Str)
 struct Terms
 {
 private:
-	const std::vector<std::wstring>* Pt;
+	const std::vector<std::wstring>* Rf;
 	std::size_t Sz;
 public:
-	explicit Terms(const std::vector<std::wstring>& Rf)
-		: Pt{ &Rf }, Sz{ 0 }
+	explicit Terms(const std::vector<std::wstring>& Trm)
+		: Rf{ &Trm }, Sz{ 0 }
 	{};
-	explicit Terms(std::size_t Sz)
-		: Pt{ nullptr }, Sz{ Sz }
+	explicit Terms(std::size_t Dim)
+		: Rf{ nullptr }, Sz{ Dim }
 	{};
-	bool Null() const
+	bool Null() const&
 	{
-		return Pt == nullptr;
+		return Rf == nullptr;
 	};
-	std::size_t Size() const
+	std::size_t Size() const&
 	{
-		return Pt == nullptr ? Sz : Pt->size();
+		return Rf == nullptr ? Sz : Rf->size();
 	};
-	std::wstring operator [](std::size_t i) const
+	std::wstring operator [](std::size_t i) const&
 	{
-		return Pt == nullptr ? L"e" + std::to_wstring(i) : (*Pt)[i];
+		return Rf == nullptr ? L"e" + std::to_wstring(i) : (*Rf)[i];
 	};
 };
 inline constexpr const wchar_t Beg[] = LR"((-|\+|^))";

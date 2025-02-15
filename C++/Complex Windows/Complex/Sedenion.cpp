@@ -759,7 +759,7 @@ namespace Num
 	///
 	String Gbl Seden::Str(const Seden& V)
 	{
-		std::size_t Dim = V.Size;
+		std::size_t Dim{ V.Size };
 		std::vector<double> Num(Dim);
 		for (std::size_t i = 0; i < Dim; ++i)
 		{
@@ -772,14 +772,15 @@ namespace Num
 	{
 		std::wstring Str = Replace(V.Ptr(), L" ", L"");
 		if (Str == L"0") { return Seden::Zero; };
-		std::size_t Dim = 0;
-		std::wstring Suf = Str;
+		std::size_t Dim{ 0 };
+		std::wstring::const_iterator Suf{ Str.begin() };
+		std::wstring::const_iterator End{ Str.end() };
 		std::wsmatch Mat;
-		while (std::regex_search(Suf, Mat, std::wregex(LR"(e(\d+)(?=-|\+|$))")))
+		while (std::regex_search(Suf, End, Mat, std::wregex(LR"(e(\d+)(?=-|\+|$))")))
 		{
 			std::size_t NewDim = stos_t(Mat.str(1));
 			if (NewDim > Dim) { Dim = NewDim; }
-			Suf = Mat.suffix().str();
+			Suf = Mat.suffix().first;
 		}
 		Dim = Near(Dim);
 		return Seden(ToNumbers(Str, Terms{ Dim }));
