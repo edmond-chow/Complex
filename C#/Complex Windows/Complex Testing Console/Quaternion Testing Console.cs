@@ -22,6 +22,14 @@ using static Num.Quter;
 using static QuterBasis;
 internal static class QuterBasis
 {
+    internal static void Idt(string L, string R)
+    {
+        if (L == R)
+        {
+            Quter V = Val(Base.Input("V = "));
+            Base.Output(V.ToModStr());
+        }
+    }
     internal static void Mul<T>(string L, string R, Func<Quter, Quter, T> F)
     {
         if (L == R)
@@ -151,7 +159,7 @@ internal static class QuterConsole
     internal static void Load()
     {
         Base.Startup(Base.GetTitle());
-        Base.Selection("=   +   -   *   /   ^   Power()   Root()   Log()");
+        Base.Selection("&   =   +   -   *   /   ^   Power()   Root()   Log()");
         Base.Selection("Abs   Arg()   Conjg   Sgn   Inverse   Exp   Ln()   Dot   Outer   Even   Cross");
         Base.Selection("Sin   Cos   Tan   Csc   Sec   Cot   Arcsin()   Arccos()   Arctan()   Arccsc()   Arcsec()   Arccot()");
         Base.Selection("Sinh   Cosh   Tanh   Csch   Sech   Coth   Arcsinh()   Arccosh()   Arctanh()   Arccsch()   Arcsech()   Arccoth()");
@@ -161,6 +169,7 @@ internal static class QuterConsole
             if (L == "") { continue; }
             try
             {
+                Idt(L, "&");
                 Op(L, "=", (Quter U, Quter V) => { return U == V; });
                 Op(L, "+", (Quter U, Quter V) => { return U + V; });
                 Op(L, "-", (Quter U, Quter V) => { return U - V; });

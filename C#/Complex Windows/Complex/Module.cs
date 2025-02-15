@@ -14,6 +14,7 @@
  *   limitations under the License.
  */
 using System;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 internal static class Module
@@ -22,28 +23,65 @@ internal static class Module
     {
         double this[int i] { get; set; }
     }
-    private static readonly string SignBefore = @"(-|\+|^)";
-    private static readonly string UnsignedReal = @"(\d+)(\.\d+|)([Ee](-|\+|)(\d+)|)";
-    private static readonly string SignAfter = @"(-|\+|$)";
-    private static string AddGroup(this string Pat, bool Opt)
+    internal readonly struct Terms
     {
-        return "(" + Pat + (Opt ? "|" : "") + ")";
+        private readonly string[] Rf;
+        private readonly int Sz;
+        public Terms(string[] Trm)
+        {
+            Rf = Trm;
+            Sz = 0;
+        }
+        public Terms(int Dim)
+        {
+            Rf = null;
+            Sz = Dim;
+        }
+        public bool Null()
+        {
+            return Rf is null;
+        }
+        public int Size()
+        {
+            return Rf is null ? Sz : Rf.Length;
+        }
+        public string this[int i]
+        {
+            get
+            {
+                return Rf is null ? "e" + i.ToString() : Rf[i];
+            }
+        }
     }
-    private static string FollowedBy(this string Pat, string Chr)
+    private static readonly string Beg = @"(-|\+|^)";
+    private static readonly string Sig = @"((\d+)(\.\d+|)([Ee](-|\+|)(\d+)|)|)";
+    private static readonly string End = @"(?=(-|\+|$))";
+    private const int BegI = 1;
+    private const int SigI = 2;
+    private const int TrmI = 8;
+    private static string Group(this Terms Trm)
     {
-        return Pat + "(?=" + Chr + ")";
+        if (Trm.Null()) { return "(e\\d+)"; }
+        StringBuilder Rst = new StringBuilder();
+        Rst.Append("(");
+        for (int i = 0; i < Trm.Size(); ++i)
+        {
+            Rst.Append(i == 0 ? "" : "|").Append(Trm[i]);
+        }
+        Rst.Append(")");
+        return Rst.ToString();
     }
-    private static string GetPattern(string Trm)
+    private static string Pat(ref Terms Trm)
     {
-        return (SignBefore + UnsignedReal.AddGroup(Trm.Length > 0)).FollowedBy(Trm + SignAfter);
+        return Beg + Sig + Trm.Group() + End;
     }
     private static string Str(this double Num)
     {
         return Regex.Replace(Num.ToString("G17").ToLower(), "e-0(?=[1-9])", "e-");
     }
-    internal static string ToString(this double[] Num, params string[] Trm)
+    internal static string ToString(this double[] Num, ref Terms Trm)
     {
-        if (Num.Length != Trm.Length) { throw new NotImplementedException("The branch should unreachable."); }
+        if (Num.Length != Trm.Size()) { throw new NotImplementedException("The branch should unreachable."); }
         StringBuilder Rst = new StringBuilder();
         bool Fst = true;
         for (int i = 0; i < Num.Length; ++i)
@@ -61,33 +99,46 @@ internal static class Module
     }
     internal static string ToString<N>(ref N Rst, bool Vec, params string[] Trm) where N : INum
     {
+        Terms RTrm = new Terms(Trm);
         double[] Num = new double[Trm.Length];
         for (int i = 0, o = Vec ? 1 : 0; i < Num.Length; ++i) { Num[i] = Rst[i + o]; }
-        return Num.ToString(Trm);
+        return Num.ToString(ref RTrm);
     }
-    internal static double[] ToNumbers(this string Val, params string[] Trm)
+    internal static double[] ToNumbers(this string Val, ref Terms Trm)
     {
-        double[] Num = new double[Trm.Length];
-        int Cnt = Val.Length;
-        if (Cnt == 0) { throw new ArgumentException("The string is empty."); }
-        for (int i = 0; i < Num.Length; ++i)
+        int Siz = Trm.Size();
+        double[] Num = new double[Siz];
+        int Suf = 0;
+        string Reg = Pat(ref Trm);
+        Match Mat = Regex.Match(Val, Reg);
+        while (Mat.Success)
         {
-            MatchCollection Mat = new Regex(GetPattern(Trm[i])).Matches(Val);
-            for (int j = 0; j < Mat.Count; ++j)
+            if (Suf != Mat.Index) { throw new ArgumentException("The string is invalid."); }
+            string BegV = Mat.Groups[BegI].Value;
+            string SigV = Mat.Groups[SigI].Value;
+            string TrmV = Mat.Groups[TrmI].Value;
+            string Cap = BegV + SigV;
+            int i = 0;
+            if (Trm.Null()) { i = int.Parse(TrmV.Substring(1)); }
+            else
             {
-                string Cap = Mat[j].Value;
-                Cnt -= Cap.Length + Trm[i].Length;
-                if (Cap.Length == 0 || Cap == "+") { ++Num[i]; }
-                else if (Cap == "-") { --Num[i]; }
-                else { Num[i] += double.Parse(Cap); }
+                while (Trm[i] != TrmV && i < Siz) { ++i; }
+                if (i == Siz) { throw new NotImplementedException("The branch should unreachable."); }
             }
+            if (SigV.Length == 0 && TrmV.Length == 0) { throw new ArgumentException("The string is invalid."); }
+            else if (Cap.Length == 0 || Cap == "+") { ++Num[i]; }
+            else if (Cap == "-") { --Num[i]; }
+            else { Num[i] += double.Parse(Cap); }
+            Suf = Mat.Index + Mat.Length;
+            Mat = Mat.NextMatch();
         }
-        if (Cnt != 0) { throw new ArgumentException("The string is invalid."); }
+        if (Suf != Val.Length) { throw new ArgumentException("The string is invalid."); }
         return Num;
     }
     internal static void ToNumbers<N>(this string Val, ref N Rst, bool Vec, params string[] Trm) where N : INum
     {
-        double[] Num = Val.ToNumbers(Trm);
+        Terms RTrm = new Terms(Trm);
+        double[] Num = Val.ToNumbers(ref RTrm);
         for (int i = 0, o = Vec ? 1 : 0; i < Num.Length; ++i) { Rst[i + o] = Num[i]; }
     }
 }

@@ -22,6 +22,14 @@ using static SedenBasis;
 using static Num.Seden;
 internal static class SedenBasis
 {
+    internal static void Idt(string L, string R)
+    {
+        if (L == R)
+        {
+            Seden V = Val(Base.Input("V = "));
+            Base.Output(V.ToModStr());
+        }
+    }
     internal static void Mul<T>(string L, string R, Func<Seden, Seden, T> F)
     {
         if (L == R)
@@ -149,7 +157,7 @@ internal static class SedenConsole
     internal static void Load()
     {
         Base.Startup(Base.GetTitle());
-        Base.Selection("=   +   -   *   /   ^   Power()   Root()   Log()");
+        Base.Selection("&   =   +   -   *   /   ^   Power()   Root()   Log()");
         Base.Selection("Abs   Arg()   Conjg   Sgn   Inverse   Exp   Ln()   Dot   Outer   Even   Cross");
         Base.Selection("Sin   Cos   Tan   Csc   Sec   Cot   Arcsin()   Arccos()   Arctan()   Arccsc()   Arcsec()   Arccot()");
         Base.Selection("Sinh   Cosh   Tanh   Csch   Sech   Coth   Arcsinh()   Arccosh()   Arctanh()   Arccsch()   Arcsech()   Arccoth()");
@@ -159,6 +167,7 @@ internal static class SedenConsole
             if (L == "") { continue; }
             try
             {
+                Idt(L, "&");
                 Op(L, "=", (Seden U, Seden V) => { return U == V; });
                 Op(L, "+", (Seden U, Seden V) => { return U + V; });
                 Op(L, "-", (Seden U, Seden V) => { return U - V; });

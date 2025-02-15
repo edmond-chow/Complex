@@ -14,6 +14,7 @@
  *   limitations under the License.
  */
 using System.Text.RegularExpressions;
+using static Module;
 namespace Num
 {
     public class Seden
@@ -61,14 +62,7 @@ namespace Num
         }
         public override string ToString()
         {
-            double[] Numbers = new double[Data.Size];
-            string[] Terms = new string[Data.Size];
-            for (int i = 0; i < Data.Size; ++i)
-            {
-                Numbers[i] = Data[i];
-                Terms[i] = "e" + i.ToString();
-            }
-            return Numbers.ToString(Terms);
+            return Str(this);
         }
         public override bool Equals(object obj)
         {
@@ -507,23 +501,31 @@ namespace Num
         ///
         public static string Str(Seden V)
         {
-            return V.ToString();
+            int Dim = V.Data.Size;
+            double[] Num = new double[Dim];
+            for (int i = 0; i < Dim; ++i)
+            {
+                Num[i] = V.Data[i];
+            }
+            Terms RTrm = new Terms(Dim);
+            return Num.ToString(ref RTrm);
         }
         public static Seden Val(string V)
         {
             string Str = V.Replace(" ", "");
             if (Str == "0") { return Zero; }
-            MatchCollection Mat = new Regex(@"e(\d+)(?=-|\+|$)").Matches(Str);
             int Dim = 0;
-            for (int i = 0; i < Mat.Count; ++i)
+            string Reg = @"e(\d+)(?=-|\+|$)";
+            Match Mat = Regex.Match(Str, Reg);
+            while (Mat.Success)
             {
-                int NewDim = int.Parse(Mat[i].Groups[1].Value);
+                int NewDim = int.Parse(Mat.Groups[1].Value);
                 if (NewDim > Dim) { Dim = NewDim; }
+                Mat = Mat.NextMatch();
             }
             Dim = Near(Dim);
-            string[] Trm = new string[Dim];
-            for (int i = 0; i < Trm.Length; ++i) { Trm[i] = "e" + i.ToString(); }
-            double[] Num = Str.ToNumbers(Trm);
+            Terms RTrm = new Terms(Dim);
+            double[] Num = Str.ToNumbers(ref RTrm);
             return new Seden(Num);
         }
         ///

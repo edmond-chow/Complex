@@ -22,6 +22,14 @@ using static Num.Octon;
 using static OctonBasis;
 internal static class OctonBasis
 {
+    internal static void Idt(string L, string R)
+    {
+        if (L == R)
+        {
+            Octon V = Val(Base.Input("V = "));
+            Base.Output(V.ToModStr());
+        }
+    }
     internal static void Mul<T>(string L, string R, Func<Octon, Octon, T> F)
     {
         if (L == R)
@@ -151,7 +159,7 @@ internal static class OctonConsole
     internal static void Load()
     {
         Base.Startup(Base.GetTitle());
-        Base.Selection("=   +   -   *   /   ^   Power()   Root()   Log()");
+        Base.Selection("&   =   +   -   *   /   ^   Power()   Root()   Log()");
         Base.Selection("Abs   Arg()   Conjg   Sgn   Inverse   Exp   Ln()   Dot   Outer   Even   Cross");
         Base.Selection("Sin   Cos   Tan   Csc   Sec   Cot   Arcsin()   Arccos()   Arctan()   Arccsc()   Arcsec()   Arccot()");
         Base.Selection("Sinh   Cosh   Tanh   Csch   Sech   Coth   Arcsinh()   Arccosh()   Arctanh()   Arccsch()   Arcsech()   Arccoth()");
@@ -161,6 +169,7 @@ internal static class OctonConsole
             if (L == "") { continue; }
             try
             {
+                Idt(L, "&");
                 Op(L, "=", (Octon U, Octon V) => { return U == V; });
                 Op(L, "+", (Octon U, Octon V) => { return U + V; });
                 Op(L, "-", (Octon U, Octon V) => { return U - V; });
