@@ -16,6 +16,7 @@
 #pragma once
 #include <cstddef>
 #include <cstdint>
+#include <cmath>
 #include <iomanip>
 #include <string>
 #include <regex>
@@ -27,6 +28,8 @@
 inline constexpr const wchar_t* Ws = L" \t\n\v\f\r";
 inline std::wstring Str(double Num)
 {
+	if (std::isnan(Num)) { return L"-nan"; }
+	else if (std::isinf(Num)) { return std::signbit(Num) ? L"-inf" : L"inf"; }
 	std::wstringstream Rst;
 	Rst << std::defaultfloat << std::setprecision(17) << Num;
 	return std::regex_replace(Rst.str(), std::wregex(L"e-0(?=[1-9])"), L"e-");
