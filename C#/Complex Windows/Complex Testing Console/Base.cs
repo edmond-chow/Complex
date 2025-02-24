@@ -227,6 +227,9 @@ namespace ComplexTestingConsole
         }
         private static string Str(this double Num)
         {
+            if (double.IsNaN(Num)) { return "-nan"; }
+            else if (double.IsPositiveInfinity(Num)) { return "inf"; }
+            else if (double.IsNegativeInfinity(Num)) { return "-inf"; }
             return Regex.Replace(Num.ToString("G17").ToLower(), "e-0(?=[1-9])", "e-");
         }
         internal static string ToModStr(this object Obj)

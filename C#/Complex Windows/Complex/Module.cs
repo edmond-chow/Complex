@@ -53,7 +53,7 @@ internal static class Module
         }
     }
     private static readonly string Beg = @"(-|\+|^)";
-    private static readonly string Sig = @"((\d+)(\.\d+|)([Ee](-|\+|)(\d+)|)|)";
+    private static readonly string Sig = @"((\d+)(\.\d+|)([Ee](-|\+|)(\d+)|)|nan|inf|)";
     private static readonly string End = @"(?=(-|\+|$))";
     private const int BegI = 1;
     private const int SigI = 2;
@@ -76,6 +76,9 @@ internal static class Module
     }
     private static string Str(this double Num)
     {
+        if (double.IsNaN(Num)) { return "-nan"; }
+        else if (double.IsPositiveInfinity(Num)) { return "inf"; }
+        else if (double.IsNegativeInfinity(Num)) { return "-inf"; }
         return Regex.Replace(Num.ToString("G17").ToLower(), "e-0(?=[1-9])", "e-");
     }
     internal static string ToString(this double[] Num, ref Terms Trm)
@@ -125,6 +128,8 @@ internal static class Module
                 if (i == Siz) { throw new NotImplementedException("The branch should unreachable."); }
             }
             if (SigV.Length == 0 && TrmV.Length == 0) { throw new ArgumentException("The string is invalid."); }
+            else if (SigV == "nan") { Num[i] = double.NaN; }
+            else if (SigV == "inf") { Num[i] = BegV != "-" ? double.PositiveInfinity : double.NegativeInfinity; }
             else if (Cap.Length == 0 || Cap == "+") { ++Num[i]; }
             else if (Cap == "-") { --Num[i]; }
             else { Num[i] += double.Parse(Cap); }
