@@ -170,11 +170,12 @@ inline std::vector<double> ToNumbers(const std::wstring& Val, const Terms& Trm)
 			if (i == Siz) { throw std::runtime_error{ "The branch should unreachable." }; }
 		}
 		if (SigV.empty() && TrmV.empty()) { throw std::invalid_argument{"The string is invalid."}; }
-		else if (SigV == L"nan") { Num[i] = std::numeric_limits<double>::quiet_NaN(); }
+		else if (SigV == L"nan") { Num[i] += std::numeric_limits<double>::quiet_NaN(); }
 		else if (SigV == L"inf")
 		{
-			Num[i] = std::numeric_limits<double>::infinity();
-			if (BegV == L"-") { Num[i] = -Num[i]; }
+			double Inf = std::numeric_limits<double>::infinity();
+			if (BegV == L"-") { Inf = -Inf; }
+			Num[i] += Inf;
 		}
 		else if (Cap.empty() || Cap == L"+") { ++Num[i]; }
 		else if (Cap == L"-") { --Num[i]; }
