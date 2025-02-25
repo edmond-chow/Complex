@@ -128,8 +128,8 @@ internal static class Module
                 if (i == Siz) { throw new NotImplementedException("The branch should unreachable."); }
             }
             if (SigV.Length == 0 && TrmV.Length == 0) { throw new ArgumentException("The string is invalid."); }
-            else if (SigV == "nan") { Num[i] = double.NaN; }
-            else if (SigV == "inf") { Num[i] = BegV != "-" ? double.PositiveInfinity : double.NegativeInfinity; }
+            else if (SigV == "nan") { Num[i] += double.NaN; }
+            else if (SigV == "inf") { Num[i] += BegV != "-" ? double.PositiveInfinity : double.NegativeInfinity; }
             else if (Cap.Length == 0 || Cap == "+") { ++Num[i]; }
             else if (Cap == "-") { --Num[i]; }
             else { Num[i] += double.Parse(Cap); }
