@@ -5,7 +5,6 @@ Octonion, while even higher dimensional Number utilized for Sedenion, Pathion,
 Chingon, Routon, Voudon and so forth.
 
 # Interfaces
-
 The Cayley Dickson Algebra defines Number for general computational operation,
 the operator \* achieving the multiplication of 2 Numbers where the procedures
 first split the numbers into left and right portions then apply the operation
